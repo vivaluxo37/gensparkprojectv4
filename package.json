@@ -1,19 +1,29 @@
 {
-  "name": "webapp",
+  "name": "brokeranalysis",
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:sandbox": "wrangler pages dev dist --d1=brokeranalysis-production --local --ip 0.0.0.0 --port 3000",
     "build": "vite build",
-    "preview": "wrangler pages dev",
-    "deploy": "npm run build && wrangler pages deploy",
-    "cf-typegen": "wrangler types --env-interface CloudflareBindings"
+    "preview": "wrangler pages dev dist",
+    "deploy": "npm run build && wrangler pages deploy dist",
+    "deploy:prod": "npm run build && wrangler pages deploy dist --project-name brokeranalysis",
+    "cf-typegen": "wrangler types --env-interface CloudflareBindings",
+    "db:migrate:local": "wrangler d1 migrations apply brokeranalysis-production --local",
+    "db:migrate:prod": "wrangler d1 migrations apply brokeranalysis-production",
+    "db:seed": "wrangler d1 execute brokeranalysis-production --local --file=./seed.sql",
+    "db:reset": "rm -rf .wrangler/state/v3/d1 && npm run db:migrate:local && npm run db:seed",
+    "clean-port": "fuser -k 3000/tcp 2>/dev/null || true",
+    "test": "curl http://localhost:3000"
   },
   "dependencies": {
     "hono": "^4.9.5"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250829.0",
     "@hono/vite-build": "^1.2.0",
     "@hono/vite-dev-server": "^0.18.2",
+    "typescript": "^5.9.2",
     "vite": "^6.3.5",
     "wrangler": "^4.4.0"
   }
