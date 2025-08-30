@@ -11,5 +11,8 @@
       "database_name": "brokeranalysis-production",
       "database_id": "your-database-id-here"
     }
-  ]
+  ],
+  "vars": {
+    "ENVIRONMENT": "production"
+  }
 }

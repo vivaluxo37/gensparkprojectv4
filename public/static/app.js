@@ -9,9 +9,10 @@ class BrokerAnalysis {
         this.init();
     }
 
-    init() {
+    async init() {
         this.setupEventListeners();
         this.loadStats();
+        await this.loadEnhancedBrokers();
         this.initChatbot();
     }
 
@@ -81,6 +82,141 @@ class BrokerAnalysis {
         } catch (error) {
             console.error('Error loading stats:', error);
         }
+    }
+
+    async loadEnhancedBrokers() {
+        try {
+            // Initialize enhanced broker database if available
+            if (typeof EnhancedBrokerDatabase !== 'undefined') {
+                this.enhancedBrokerDB = new EnhancedBrokerDatabase();
+                await this.enhancedBrokerDB.init();
+                
+                // Update stats with enhanced broker count
+                const allBrokers = this.enhancedBrokerDB.getAllEnhancedBrokers();
+                const totalBrokersElement = document.getElementById('total-brokers');
+                if (totalBrokersElement && allBrokers.length > 0) {
+                    totalBrokersElement.textContent = `${allBrokers.length}+`;
+                }
+                
+                console.log(`✅ Enhanced broker database loaded: ${allBrokers.length} brokers`);
+                
+                // Store enhanced brokers for use by other components
+                window.enhancedBrokers = allBrokers;
+                
+                // Dispatch event to notify other components
+                window.dispatchEvent(new CustomEvent('enhancedBrokersLoaded', {
+                    detail: { brokers: allBrokers, count: allBrokers.length }
+                }));
+                
+                // Load featured brokers on homepage
+                this.loadFeaturedBrokers();
+                
+            } else {
+                console.warn('Enhanced broker database not available, falling back to API data');
+            }
+        } catch (error) {
+            console.error('Error loading enhanced brokers:', error);
+        }
+    }
+
+    loadFeaturedBrokers() {
+        // ADDITIVE: Display featured brokers from images with bonus information
+        const featuredBrokersContainer = document.getElementById('featured-brokers');
+        if (!featuredBrokersContainer || !this.enhancedBrokerDB) return;
+
+        // Get featured brokers from the images (the ones with bonuses)
+        const featuredBrokerIds = ['fxopen', 'roboforex', 'exness', 'xm-global', 'fxtm', 'fbs', 'quotex', 'instaforex'];
+        
+        const featuredBrokers = featuredBrokerIds.map(id => 
+            this.enhancedBrokerDB.getEnhancedBrokerById(id)
+        ).filter(broker => broker); // Filter out any null/undefined brokers
+
+        featuredBrokersContainer.innerHTML = '';
+
+        featuredBrokers.forEach(broker => {
+            const brokerCard = this.createFeaturedBrokerCard(broker);
+            featuredBrokersContainer.appendChild(brokerCard);
+        });
+    }
+
+    createFeaturedBrokerCard(broker) {
+        const card = document.createElement('div');
+        card.className = 'bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer';
+        card.onclick = () => window.location.href = `/broker/${broker.id}`;
+
+        const ratingStars = this.generateStars(broker.rating);
+        
+        card.innerHTML = `
+            <div class="p-6">
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-building text-gray-600 text-xl"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-lg font-semibold text-gray-900">${broker.name}</h3>
+                        <div class="flex items-center space-x-2">
+                            <div class="text-yellow-400">${ratingStars}</div>
+                            <span class="text-sm text-gray-600">${broker.rating}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                ${broker.bonusType ? `
+                    <div class="mb-4 p-3 bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg">
+                        <div class="flex items-center space-x-2 mb-1">
+                            <i class="fas fa-gift text-green-600 text-sm"></i>
+                            <span class="text-sm font-medium text-green-800">${broker.bonusType}</span>
+                        </div>
+                        <p class="text-sm text-green-700">Up to <strong>${broker.bonusAmount}</strong></p>
+                    </div>
+                ` : ''}
+                
+                <div class="space-y-2 text-sm text-gray-600 mb-4">
+                    <div class="flex justify-between">
+                        <span>Min Deposit:</span>
+                        <span class="font-medium">${broker.minimumDeposit ? '$' + broker.minimumDeposit : 'No minimum'}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Spreads From:</span>
+                        <span class="font-medium">${broker.spreads.major_pairs.min} pips</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Regulation:</span>
+                        <span class="font-medium">${broker.regulation[0]}</span>
+                    </div>
+                </div>
+                
+                <div class="flex space-x-2">
+                    <button onclick="event.stopPropagation(); window.location.href='/broker/${broker.id}'" class="flex-1 bg-blue-600 text-white py-2 px-3 rounded-lg text-sm hover:bg-blue-700 transition-colors">
+                        View Details
+                    </button>
+                    <button onclick="event.stopPropagation(); window.open('${broker.websiteUrl}', '_blank')" class="bg-gray-100 text-gray-700 py-2 px-3 rounded-lg text-sm hover:bg-gray-200 transition-colors">
+                        Visit
+                    </button>
+                </div>
+            </div>
+        `;
+
+        return card;
+    }
+
+    generateStars(rating) {
+        const fullStars = Math.floor(rating);
+        const halfStar = rating % 1 >= 0.5;
+        const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+        
+        let starsHtml = '';
+        for (let i = 0; i < fullStars; i++) {
+            starsHtml += '<i class="fas fa-star"></i>';
+        }
+        if (halfStar) {
+            starsHtml += '<i class="fas fa-star-half-alt"></i>';
+        }
+        for (let i = 0; i < emptyStars; i++) {
+            starsHtml += '<i class="far fa-star"></i>';
+        }
+        
+        return starsHtml;
     }
 
     showSection(sectionId) {

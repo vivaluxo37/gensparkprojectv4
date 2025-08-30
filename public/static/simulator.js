@@ -9,15 +9,73 @@ class TradingSimulator {
     }
 
     async init() {
+        // Wait for enhanced broker database to be available
+        await this.waitForEnhancedDatabase();
         await this.loadBrokers();
         this.setupEventListeners();
     }
 
+    async waitForEnhancedDatabase() {
+        // Wait up to 5 seconds for enhanced database to be available
+        let attempts = 0;
+        const maxAttempts = 50; // 5 seconds with 100ms intervals
+        
+        while (attempts < maxAttempts) {
+            if (typeof EnhancedBrokerDatabase !== 'undefined') {
+                console.log('✅ Enhanced broker database is available for simulator');
+                return;
+            }
+            await new Promise(resolve => setTimeout(resolve, 100));
+            attempts++;
+        }
+        
+        console.warn('⚠️ Enhanced broker database not available after 5 seconds, using fallback');
+    }
+
     async loadBrokers() {
         try {
+            // Priority 1: Use Enhanced Broker Database if available
+            if (typeof EnhancedBrokerDatabase !== 'undefined') {
+                const brokerDB = new EnhancedBrokerDatabase();
+                await brokerDB.init();
+                const enhancedBrokers = brokerDB.getAllEnhancedBrokers();
+                
+                // Convert enhanced broker format to simulator format
+                this.brokers = enhancedBrokers.map(broker => ({
+                    id: broker.id,
+                    name: broker.name,
+                    rating: broker.rating,
+                    // Spread data - use major pairs average for simulation
+                    min_spread_pips: broker.spreads.major_pairs.min,
+                    avg_spread_pips: broker.spreads.major_pairs.avg,
+                    max_spread_pips: broker.spreads.major_pairs.max,
+                    // Commission data
+                    commission: broker.commission.type === 'spread_only' ? 0 : 
+                               (broker.commission.value || 0),
+                    commission_per_lot: broker.commission.type === 'spread_only' ? 0 : 
+                                       (broker.commission.value || 0),
+                    commission_display: broker.commission.type === 'spread_only' ? '0%' : 
+                                       `$${broker.commission.value || 0}`,
+                    // Account type
+                    account_type: broker.commission.type === 'commission' ? 'Raw Spread' : 'Standard',
+                    spread_type: broker.commission.type === 'commission' ? 'Raw' : 
+                                broker.commission.type === 'spread_only' ? 'Fixed' : 'Variable',
+                    // Additional data for enhanced calculations
+                    execution_model: broker.executionModel,
+                    category: broker.category,
+                    regulation: broker.regulation
+                }));
+                
+                console.log(`✅ Simulator: Loaded ${this.brokers.length} brokers from enhanced database`);
+                return;
+            }
+            
+            // Fallback: Use legacy API
             const response = await fetch('/data/brokers.json');
             const data = await response.json();
-            this.brokers = data.brokers;
+            this.brokers = data.brokers || [];
+            console.log(`⚠️ Simulator: Loaded ${this.brokers.length} brokers from fallback API`);
+            
         } catch (error) {
             console.error('Error loading brokers:', error);
             this.brokers = [];

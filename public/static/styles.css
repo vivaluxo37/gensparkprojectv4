@@ -1,4 +1,5 @@
-/* BrokerAnalysis Custom Styles */
+/* BrokerAnalysis Custom Styles - 3-Color Theme */
+/* Colors: Yellow (#facc15), Blue (#2563eb), White (#ffffff) */
 
 /* Smooth scrolling for navigation */
 html {
@@ -24,69 +25,119 @@ html {
   animation: slideIn 0.5s ease-out forwards;
 }
 
-/* Custom gradient buttons */
+/* Custom gradient buttons - 3-color theme */
 .gradient-button {
-  background: linear-gradient(135deg, #3b82f6, #1e40af);
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  color: white;
   transition: all 0.3s ease;
 }
 
 .gradient-button:hover {
-  background: linear-gradient(135deg, #2563eb, #1e3a8a);
+  background: linear-gradient(135deg, #1d4ed8, #1e3a8a);
   transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
 }
 
-/* Broker cards */
+/* Yellow accent buttons */
+.accent-button {
+  background: #facc15;
+  color: #1e40af;
+  transition: all 0.3s ease;
+}
+
+.accent-button:hover {
+  background: #fde047;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(250, 204, 21, 0.3);
+}
+
+/* 3-Color Theme Utilities */
+.bg-yellow-100 {
+  background-color: #fef9c3 !important;
+}
+
+.text-blue-800 {
+  color: #1e40af !important;
+}
+
+.text-blue-600 {
+  color: #2563eb !important;
+}
+
+.text-blue-900 {
+  color: #1e3a8a !important;
+}
+
+.border-yellow-200 {
+  border-color: #fef08a !important;
+}
+
+.border-blue-200 {
+  border-color: #dbeafe !important;
+}
+
+/* Broker cards - 3-color theme */
 .broker-card {
   transition: all 0.3s ease;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #dbeafe;
+  background: white;
 }
 
 .broker-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-  border-color: #3b82f6;
+  box-shadow: 0 20px 40px rgba(37, 99, 235, 0.15);
+  border-color: #2563eb;
 }
 
 .rating-stars {
-  color: #fbbf24;
+  color: #facc15;
 }
 
-/* Progress bars */
+/* Progress bars - 3-color theme */
 .progress-bar {
-  background: linear-gradient(90deg, #3b82f6, #06b6d4);
+  background: linear-gradient(90deg, #2563eb, #1e40af);
   transition: width 0.5s ease;
 }
 
-/* Questionnaire steps */
+/* Questionnaire steps - 3-color theme */
 .step-indicator {
   transition: all 0.3s ease;
+  background: white;
+  border: 2px solid #dbeafe;
+  color: #1e40af;
 }
 
 .step-indicator.active {
-  background: #3b82f6;
+  background: #2563eb;
   color: white;
+  border-color: #2563eb;
 }
 
 .step-indicator.completed {
-  background: #10b981;
-  color: white;
+  background: #facc15;
+  color: #1e40af;
+  border-color: #facc15;
 }
 
-/* Comparison table */
+/* Comparison table - 3-color theme */
 .comparison-table td,
 .comparison-table th {
-  border: 1px solid #e5e7eb;
+  border: 1px solid #dbeafe;
   padding: 0.75rem;
+  background: white;
 }
 
 .comparison-table .best-value {
-  background-color: #dcfce7;
+  background-color: #eff6ff;
+  color: #1e40af;
   font-weight: 600;
+  border-color: #2563eb;
 }
 
 .comparison-table .highlight {
-  background-color: #fef3c7;
+  background-color: #fefce8;
+  color: #1e40af;
+  border-color: #facc15;
 }
 
 /* Chatbot styles */
@@ -98,16 +149,22 @@ html {
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
 }
 
-/* Form elements */
+/* Form elements - 3-color theme */
 .form-input {
   transition: all 0.3s ease;
-  border: 2px solid #e5e7eb;
+  border: 2px solid #dbeafe;
+  background: white;
+  color: #1e40af;
 }
 
 .form-input:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
   outline: none;
+}
+
+.form-input::placeholder {
+  color: #93c5fd;
 }
 
 /* Custom select dropdown */
@@ -140,9 +197,12 @@ html {
   }
 }
 
-/* Loading spinner */
+/* Loading spinner - 3-color theme */
 .loading-spinner {
-  border-top-color: #3b82f6;
+  border-top-color: #2563eb;
+  border-right-color: transparent;
+  border-bottom-color: #facc15;
+  border-left-color: transparent;
   animation: spin 1s ease-in-out infinite;
 }
 
@@ -150,19 +210,23 @@ html {
   to { transform: rotate(360deg); }
 }
 
-/* Success/Error states */
+/* Success/Error states - 3-color theme */
 .success-state {
-  background: linear-gradient(135deg, #10b981, #047857);
+  background: linear-gradient(135deg, #facc15, #eab308);
+  color: #1e40af;
 }
 
 .error-state {
-  background: linear-gradient(135deg, #ef4444, #dc2626);
+  background: linear-gradient(135deg, #1e40af, #1e3a8a);
+  color: white;
 }
 
-/* Feature highlights */
+/* Feature highlights - 3-color theme */
 .feature-highlight {
   position: relative;
   overflow: hidden;
+  background: white;
+  border: 1px solid #dbeafe;
 }
 
 .feature-highlight::before {
@@ -172,7 +236,7 @@ html {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  background: linear-gradient(90deg, transparent, rgba(250, 204, 21, 0.1), transparent);
   transition: left 0.5s;
 }
 
@@ -180,25 +244,25 @@ html {
   left: 100%;
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar - 3-color theme */
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #eff6ff;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #93c5fd;
   border-radius: 3px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #2563eb;
 }
 
-/* Tooltip */
+/* Tooltip - 3-color theme */
 .tooltip {
   position: relative;
 }
@@ -209,7 +273,7 @@ html {
   bottom: 100%;
   left: 50%;
   transform: translateX(-50%);
-  background: #1f2937;
+  background: #1e40af;
   color: white;
   padding: 0.5rem;
   border-radius: 0.375rem;
@@ -219,10 +283,168 @@ html {
   transition: all 0.3s ease;
   font-size: 0.875rem;
   z-index: 10;
+  border: 1px solid #facc15;
 }
 
 .tooltip:hover::after {
   opacity: 1;
   visibility: visible;
   transform: translateX(-50%) translateY(-5px);
+}
+
+/* Navigation Dropdown Styles - 3-color theme */
+.nav-menu-button {
+  position: relative;
+  transition: all 0.2s ease;
+  color: #1e40af;
+}
+
+.nav-menu-button:hover {
+  background-color: #eff6ff;
+  color: #2563eb;
+}
+
+.nav-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 250px;
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.15);
+  border: 1px solid #dbeafe;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.2s ease;
+  z-index: 50;
+}
+
+.group:hover .nav-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.nav-dropdown-item {
+  display: block;
+  padding: 0.75rem 1rem;
+  color: #1e40af;
+  text-decoration: none;
+  border-bottom: 1px solid #eff6ff;
+  transition: all 0.2s ease;
+}
+
+.nav-dropdown-item:hover {
+  background-color: #fefce8;
+  color: #1e40af;
+  padding-left: 1.25rem;
+  border-left: 3px solid #facc15;
+}
+
+.nav-dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.nav-submenu-header {
+  padding: 0.5rem 1rem;
+  background-color: #eff6ff;
+  font-weight: 600;
+  color: #1e40af;
+  border-bottom: 1px solid #dbeafe;
+  font-size: 0.875rem;
+}
+
+.nav-submenu-item {
+  padding: 0.5rem 1.5rem;
+  color: #2563eb;
+  font-size: 0.875rem;
+  border-bottom: 1px solid #f8fafc;
+}
+
+.nav-submenu-item:hover {
+  background-color: #fefce8;
+  color: #1e40af;
+  padding-left: 1.75rem;
+  border-left: 2px solid #facc15;
+}
+
+/* Mobile Navigation Styles - 3-color theme */
+.mobile-submenu {
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  background-color: #eff6ff;
+  border-left: 3px solid #facc15;
+}
+
+.mobile-submenu.hidden {
+  max-height: 0;
+}
+
+.mobile-submenu:not(.hidden) {
+  max-height: 500px;
+}
+
+.mobile-chevron {
+  transition: transform 0.2s ease;
+  color: #2563eb;
+}
+
+.mobile-chevron.rotate-180 {
+  transform: rotate(180deg);
+  color: #facc15;
+}
+
+.mobile-menu-toggle {
+  color: #1e40af;
+}
+
+.mobile-menu-toggle:hover {
+  background-color: #eff6ff;
+  color: #2563eb;
+}
+
+/* Enhanced dropdown positioning */
+@media (min-width: 768px) {
+  .nav-dropdown.wide {
+    min-width: 320px;
+  }
+  
+  .nav-dropdown.extra-wide {
+    min-width: 400px;
+  }
+  
+  /* Multi-column layout for large dropdowns */
+  .nav-dropdown-cols {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+  }
+  
+  .nav-dropdown-cols .nav-dropdown-item {
+    border-right: 1px solid #f3f4f6;
+  }
+  
+  .nav-dropdown-cols .nav-dropdown-item:nth-child(even) {
+    border-right: none;
+  }
+}
+
+/* Navigation logo hover effect */
+.nav-logo:hover {
+  transform: scale(1.05);
+  transition: transform 0.2s ease;
+}
+
+/* Active navigation state */
+.nav-menu-button.active {
+  background-color: #eff6ff;
+  color: #1e40af;
+}
+
+/* Navigation separator */
+.nav-separator {
+  height: 1px;
+  background-color: #e5e7eb;
+  margin: 0.5rem 0;
 }

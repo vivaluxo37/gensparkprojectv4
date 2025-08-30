@@ -16,7 +16,25 @@ class EnhancedSimulatorEngine {
 
     async loadEnhancedData() {
         try {
-            // Enhanced broker data with detailed cost structures
+            // Integration with Enhanced Broker Database
+            // Load comprehensive 67-broker database if available
+            if (window.EnhancedBrokerDatabase) {
+                const brokerDB = new window.EnhancedBrokerDatabase();
+                await brokerDB.init();
+                
+                // Convert enhanced broker profiles to simulator format
+                this.enhancedBrokerData = {};
+                const allBrokers = brokerDB.getAllEnhancedBrokers();
+                
+                allBrokers.forEach(broker => {
+                    this.enhancedBrokerData[broker.id] = this.convertBrokerProfile(broker);
+                });
+                
+                console.log(`✅ Loaded ${allBrokers.length} enhanced broker profiles for simulation`);
+                return;
+            }
+            
+            // Fallback: Use existing broker data if enhanced database not available
             this.enhancedBrokerData = {
                 "ic-markets": {
                     id: "ic-markets",
@@ -640,6 +658,37 @@ class EnhancedSimulatorEngine {
     // Get broker by ID
     getBroker(brokerId) {
         return this.enhancedBrokerData[brokerId];
+    }
+
+    // Convert enhanced broker profile to simulator format
+    convertBrokerProfile(brokerProfile) {
+        return {
+            id: brokerProfile.id,
+            name: brokerProfile.name,
+            category: brokerProfile.category,
+            rating: brokerProfile.rating,
+            spreads: brokerProfile.spreads,
+            commission: {
+                type: brokerProfile.commission.type === 'tiered' ? 'fixed' : brokerProfile.commission.type,
+                value: brokerProfile.commission.type === 'spread_only' ? 0.0 : brokerProfile.commission.value,
+                currency: brokerProfile.commission.currency
+            },
+            swapRates: brokerProfile.swapRates,
+            executionModel: brokerProfile.executionModel,
+            slippageProfile: brokerProfile.slippageProfile,
+            minimumDeposit: brokerProfile.minimumDeposit,
+            regulation: brokerProfile.regulation,
+            platforms: brokerProfile.platforms,
+            orderExecution: brokerProfile.orderExecution,
+            maxLeverage: brokerProfile.maxLeverage,
+            tradingInstruments: brokerProfile.tradingInstruments,
+            customerSupport: brokerProfile.customerSupport,
+            pros: brokerProfile.pros,
+            cons: brokerProfile.cons,
+            specialFeatures: brokerProfile.specialFeatures,
+            websiteUrl: brokerProfile.websiteUrl,
+            reviewSummary: brokerProfile.reviewSummary
+        };
     }
 }
 

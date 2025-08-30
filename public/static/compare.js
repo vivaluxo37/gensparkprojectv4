@@ -10,18 +10,93 @@ class CompareSelector {
     }
 
     async init() {
+        // Wait for enhanced broker database to be available
+        await this.waitForEnhancedDatabase();
         await this.loadBrokers();
         this.loadSavedComparison();
         this.setupEventListeners();
         this.updateDisplay();
     }
 
+    async waitForEnhancedDatabase() {
+        // Wait up to 5 seconds for enhanced database to be available
+        let attempts = 0;
+        const maxAttempts = 50; // 5 seconds with 100ms intervals
+        
+        while (attempts < maxAttempts) {
+            if (typeof EnhancedBrokerDatabase !== 'undefined') {
+                console.log('✅ Enhanced broker database is available for comparison');
+                return;
+            }
+            await new Promise(resolve => setTimeout(resolve, 100));
+            attempts++;
+        }
+        
+        console.warn('⚠️ Enhanced broker database not available after 5 seconds, using fallback');
+    }
+
     async loadBrokers() {
         try {
+            // Priority 1: Use Enhanced Broker Database if available
+            if (typeof EnhancedBrokerDatabase !== 'undefined') {
+                const brokerDB = new EnhancedBrokerDatabase();
+                await brokerDB.init();
+                const enhancedBrokers = brokerDB.getAllEnhancedBrokers();
+                
+                // Convert enhanced broker format to comparison page format
+                this.brokers = enhancedBrokers.map(broker => ({
+                    id: broker.id,
+                    name: broker.name,
+                    logo: broker.logo,
+                    rating: broker.rating,
+                    category: broker.category,
+                    founded: broker.founded,
+                    headquarters: broker.headquarters,
+                    min_deposit_usd: broker.minimumDeposit,
+                    is_regulated: broker.regulation && broker.regulation.length > 0,
+                    regulation: broker.regulation.join(', '),
+                    regulators: broker.regulation.join(', '),
+                    platforms: broker.platforms.join(', '),
+                    pros: broker.pros,
+                    cons: broker.cons,
+                    review: broker.reviewSummary,
+                    website_url: broker.websiteUrl,
+                    execution_model: broker.executionModel,
+                    max_leverage: broker.maxLeverage,
+                    customer_support: broker.customerSupport,
+                    // Spread data for comparison
+                    spreads_major: `${broker.spreads.major_pairs.min} - ${broker.spreads.major_pairs.max} pips`,
+                    spreads_minor: `${broker.spreads.minor_pairs.min} - ${broker.spreads.minor_pairs.max} pips`,
+                    spreads_exotic: `${broker.spreads.exotic_pairs.min} - ${broker.spreads.exotic_pairs.max} pips`,
+                    min_spread: broker.spreads.major_pairs.min,
+                    avg_spread: broker.spreads.major_pairs.avg,
+                    // Commission info
+                    commission: broker.commission.type === 'spread_only' ? '0%' : 
+                               `$${broker.commission.value || 0}`,
+                    commission_details: broker.commission.details,
+                    // Account types
+                    account_types: broker.accountTypes ? broker.accountTypes.join(', ') : 'Standard, Professional',
+                    // Computed fields
+                    spread_type: broker.commission.type === 'commission' ? 'Raw' : 
+                                broker.commission.type === 'spread_only' ? 'Fixed' : 'Variable',
+                    demo_account: true,
+                    social_trading: broker.specialFeatures ? 
+                                   broker.specialFeatures.some(f => f.toLowerCase().includes('social') || 
+                                                                   f.toLowerCase().includes('copy')) : false
+                }));
+                
+                this.availableBrokers = [...this.brokers];
+                console.log(`✅ Compare: Loaded ${this.brokers.length} brokers from enhanced database`);
+                return;
+            }
+            
+            // Fallback: Use legacy API
             const response = await fetch('/data/brokers.json');
             const data = await response.json();
-            this.brokers = data.brokers;
+            this.brokers = data.brokers || [];
             this.availableBrokers = [...this.brokers];
+            console.log(`⚠️ Compare: Loaded ${this.brokers.length} brokers from fallback API`);
+            
         } catch (error) {
             console.error('Error loading brokers:', error);
             this.brokers = [];

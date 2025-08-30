@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Enhanced Database Test</title>
+</head>
+<body>
+    <h1>Enhanced Broker Database Test</h1>
+    <div id="results"></div>
+
+    <script src="/static/enhanced-broker-database.js"></script>
+    <script>
+        async function testEnhancedDatabase() {
+            const results = document.getElementById('results');
+            results.innerHTML = 'Testing...<br>';
+
+            // Test 1: Check if class is available
+            if (typeof EnhancedBrokerDatabase === 'undefined') {
+                results.innerHTML += '❌ EnhancedBrokerDatabase class not found<br>';
+                return;
+            }
+            results.innerHTML += '✅ EnhancedBrokerDatabase class found<br>';
+
+            // Test 2: Try to create instance
+            try {
+                const db = new EnhancedBrokerDatabase();
+                results.innerHTML += '✅ Instance created<br>';
+
+                // Test 3: Try to initialize
+                await db.init();
+                results.innerHTML += '✅ Initialization complete<br>';
+
+                // Test 4: Get all brokers
+                const brokers = db.getAllEnhancedBrokers();
+                results.innerHTML += `✅ Found ${brokers.length} brokers<br>`;
+
+                // Test 5: List first few brokers
+                results.innerHTML += '<br>First few brokers:<br>';
+                brokers.slice(0, 5).forEach(broker => {
+                    results.innerHTML += `- ${broker.name} (${broker.id})<br>`;
+                });
+
+            } catch (error) {
+                results.innerHTML += `❌ Error: ${error.message}<br>`;
+                console.error('Enhanced database test error:', error);
+            }
+        }
+
+        // Run test when page loads
+        document.addEventListener('DOMContentLoaded', testEnhancedDatabase);
+    </script>
+</body>
+</html>

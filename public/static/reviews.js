@@ -9,17 +9,82 @@ class ReviewsPage {
     }
 
     async init() {
+        // Wait for enhanced broker database to be available
+        await this.waitForEnhancedDatabase();
         await this.loadBrokers();
         this.setupEventListeners();
         this.renderBrokers();
     }
 
+    async waitForEnhancedDatabase() {
+        // Wait up to 5 seconds for enhanced database to be available
+        let attempts = 0;
+        const maxAttempts = 50; // 5 seconds with 100ms intervals
+        
+        while (attempts < maxAttempts) {
+            if (typeof EnhancedBrokerDatabase !== 'undefined') {
+                return;
+            }
+            await new Promise(resolve => setTimeout(resolve, 100));
+            attempts++;
+        }
+        
+        console.warn('⚠️ Enhanced broker database not available after 5 seconds, using fallback');
+    }
+
     async loadBrokers() {
         try {
+            // Priority 1: Use Enhanced Broker Database if available
+            if (typeof EnhancedBrokerDatabase !== 'undefined') {
+                const brokerDB = new EnhancedBrokerDatabase();
+                await brokerDB.init();
+                const enhancedBrokers = brokerDB.getAllEnhancedBrokers();
+                
+                // Convert enhanced broker format to reviews page format
+                this.brokers = enhancedBrokers.map(broker => ({
+                    id: broker.id,
+                    name: broker.name,
+                    slug: broker.id,
+                    logo: broker.logo,
+                    rating: broker.rating,
+                    category: broker.category,
+                    founded: broker.founded,
+                    headquarters: broker.headquarters,
+                    min_deposit_usd: broker.minimumDeposit,
+                    is_regulated: broker.regulation && broker.regulation.length > 0,
+                    regulation: broker.regulation,
+                    platforms: broker.platforms,
+                    pros: broker.pros,
+                    cons: broker.cons,
+                    review: broker.reviewSummary,
+                    website_url: broker.websiteUrl,
+                    // Computed fields
+                    spread_type: broker.commission.type === 'commission' ? 'Raw' : 
+                                broker.commission.type === 'spread_only' ? 'Fixed' : 'Variable',
+                    min_spread_pips: broker.spreads.major_pairs.min,
+                    avg_spread_pips: broker.spreads.major_pairs.avg,
+                    commission: broker.commission.type === 'spread_only' ? '0%' : 
+                               `$${broker.commission.value || 0}`,
+                    demo_account: true,
+                    social_trading: broker.specialFeatures ? 
+                                   broker.specialFeatures.some(f => f.toLowerCase().includes('social') || 
+                                                                   f.toLowerCase().includes('copy')) : false,
+                    verified: broker.category === 'institutional' || broker.rating >= 4.3,
+                    verdict: `${broker.category.charAt(0).toUpperCase() + broker.category.slice(1)} broker with ${broker.regulation[0]} regulation`
+                }));
+                
+                this.filteredBrokers = [...this.brokers];
+                console.log(`✅ Reviews: Loaded ${this.brokers.length} brokers from enhanced database`);
+                return;
+            }
+            
+            // Fallback: Use legacy API
             const response = await fetch('/data/brokers.json');
             const data = await response.json();
-            this.brokers = data.brokers;
+            this.brokers = data.brokers || [];
             this.filteredBrokers = [...this.brokers];
+            console.log(`⚠️ Reviews: Loaded ${this.brokers.length} brokers from fallback API`);
+            
         } catch (error) {
             console.error('Error loading brokers:', error);
             this.brokers = [];

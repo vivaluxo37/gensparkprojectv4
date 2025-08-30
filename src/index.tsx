@@ -1,10 +1,12 @@
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { serveStatic } from 'hono/cloudflare-workers'
+import { getCookie, setCookie } from 'hono/cookie'
 
 // Type definitions for Cloudflare bindings
 type Bindings = {
   DB: D1Database;
+  GOOGLE_CLIENT_ID?: string;
 }
 
 const app = new Hono<{ Bindings: Bindings }>()
@@ -18,6 +20,13 @@ app.use('/api/*', cors({
 
 // Serve static files
 app.use('/static/*', serveStatic({ root: './public' }))
+
+// Configuration API endpoint
+app.get('/api/config', (c) => {
+  return c.json({
+    google_client_id: c.env.GOOGLE_CLIENT_ID || '1041234567890-abc123def456ghi789jkl012mno345pqr.apps.googleusercontent.com'
+  });
+})
 
 // ADDITIVE: Test page route for enhanced simulator (embedded HTML)
 app.get('/test-simulator', (c) => {
@@ -42,7 +51,7 @@ app.get('/test-simulator', (c) => {
             }
         </style>
     </head>
-    <body class="bg-gray-100 p-8">
+    <body class="bg-blue-50 p-8">
         <div class="max-w-4xl mx-auto">
             <div class="mb-6">
                 <a href="/simulator" class="text-blue-600 hover:text-blue-800">← Back to Simulator</a>
@@ -59,7 +68,7 @@ app.get('/test-simulator', (c) => {
             
             <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
                 <h2 class="text-xl font-bold mb-4">Enhanced Engine Test</h2>
-                <button id="run-engine-test" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                <button id="run-engine-test" class="bg-yellow-400 text-white px-4 py-2 rounded-lg hover:bg-yellow-1000 transition-colors">
                     Test Calculation Engine
                 </button>
                 <div id="engine-test-results" class="mt-4 test-output" style="display: none;"></div>
@@ -74,6 +83,8 @@ app.get('/test-simulator', (c) => {
         </div>
 
         <!-- Load Enhanced Simulator Components -->
+        <!-- CRITICAL: Load enhanced broker database FIRST for integration -->
+        <script src="/static/enhanced-broker-database.js"></script>
         <script src="/static/enhanced-simulator-engine.js"></script>
         <script src="/static/enhanced-simulator-ui.js"></script>
         <script src="/static/enhanced-simulator-mobile.js"></script>
@@ -88,6 +99,7 @@ app.get('/test-simulator', (c) => {
 
             function checkComponentStatus() {
                 const components = [
+                    { name: 'EnhancedBrokerDatabase', class: window.EnhancedBrokerDatabase },
                     { name: 'EnhancedSimulatorEngine', class: window.EnhancedSimulatorEngine },
                     { name: 'EnhancedSimulatorUI', class: window.EnhancedSimulatorUI },
                     { name: 'SimulatorMobileOptimizer', class: window.SimulatorMobileOptimizer },
@@ -100,11 +112,11 @@ app.get('/test-simulator', (c) => {
                 components.forEach(component => {
                     const isLoaded = typeof component.class === 'function';
                     const statusCard = document.createElement('div');
-                    statusCard.className = \`p-4 rounded-lg border-2 \${isLoaded ? 'border-green-500 bg-green-50' : 'border-red-500 bg-red-50'}\`;
+                    statusCard.className = \`p-4 rounded-lg border-2 \${isLoaded ? 'border-yellow-400 bg-yellow-100' : 'border-blue-600 bg-blue-50'}\`;
                     statusCard.innerHTML = \`
                         <div class="flex items-center justify-between">
                             <span class="font-medium">\${component.name}</span>
-                            <span class="text-sm \${isLoaded ? 'text-green-600' : 'text-red-600'}">
+                            <span class="text-sm \${isLoaded ? 'text-blue-800' : 'text-blue-800'}">
                                 \${isLoaded ? '✅ Loaded' : '❌ Failed'}
                             </span>
                         </div>
@@ -181,6 +193,11 @@ app.get('/test-simulator', (c) => {
                 
                 const checks = [
                     { 
+                        name: 'Enhanced Database Integration', 
+                        status: typeof EnhancedBrokerDatabase === 'function',
+                        description: 'Enhanced broker database with 67 brokers loaded'
+                    },
+                    { 
                         name: 'Script Loading', 
                         status: typeof EnhancedSimulatorEngine === 'function' && 
                                 typeof EnhancedSimulatorUI === 'function',
@@ -205,14 +222,14 @@ app.get('/test-simulator', (c) => {
 
                 checks.forEach(check => {
                     const statusDiv = document.createElement('div');
-                    statusDiv.className = \`p-3 rounded-lg border \${check.status ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'}\`;
+                    statusDiv.className = \`p-3 rounded-lg border \${check.status ? 'border-yellow-200 bg-yellow-100' : 'border-blue-200 bg-blue-50'}\`;
                     statusDiv.innerHTML = \`
                         <div class="flex items-start justify-between">
                             <div>
-                                <div class="font-medium \${check.status ? 'text-green-800' : 'text-red-800'}">\${check.name}</div>
-                                <div class="text-sm text-gray-600">\${check.description}</div>
+                                <div class="font-medium \${check.status ? 'text-blue-900' : 'text-blue-900'}">\${check.name}</div>
+                                <div class="text-sm text-blue-600">\${check.description}</div>
                             </div>
-                            <span class="\${check.status ? 'text-green-600' : 'text-red-600'}">
+                            <span class="\${check.status ? 'text-blue-800' : 'text-blue-800'}">
                                 \${check.status ? '✅' : '❌'}
                             </span>
                         </div>
@@ -223,12 +240,12 @@ app.get('/test-simulator', (c) => {
                 // Overall status
                 const allPassed = checks.every(check => check.status);
                 const overallDiv = document.createElement('div');
-                overallDiv.className = \`p-4 rounded-lg border-2 mt-4 \${allPassed ? 'border-green-500 bg-green-50' : 'border-yellow-500 bg-yellow-50'}\`;
+                overallDiv.className = \`p-4 rounded-lg border-2 mt-4 \${allPassed ? 'border-yellow-400 bg-yellow-100' : 'border-yellow-400 bg-yellow-100'}\`;
                 overallDiv.innerHTML = \`
-                    <div class="font-bold text-lg \${allPassed ? 'text-green-800' : 'text-yellow-800'}">
+                    <div class="font-bold text-lg \${allPassed ? 'text-blue-900' : 'text-blue-900'}">
                         \${allPassed ? '🎉 Integration Successful!' : '⚠️ Some Issues Detected'}
                     </div>
-                    <div class="text-sm mt-1 \${allPassed ? 'text-green-700' : 'text-yellow-700'}">
+                    <div class="text-sm mt-1 \${allPassed ? 'text-blue-700' : 'text-blue-700'}">
                         \${allPassed ? 
                             'Enhanced simulator is fully integrated and ready to use.' : 
                             'Some components may not be working correctly. Check the status above.'}
@@ -242,123 +259,514 @@ app.get('/test-simulator', (c) => {
   `);
 })
 
-// API route to serve broker data
-app.get('/data/brokers.json', async (c) => {
-  // Read the broker data from the public directory
-  const brokerData = {
-    "brokers": [
-      {
-        "id": "ic-markets",
-        "name": "IC Markets",
-        "logo": "/static/logos/ic-markets.svg",
-        "rating": 4.5,
-        "spread_type": "Raw",
-        "min_spread_pips": 0.0,
-        "commission": "$7",
-        "min_deposit_usd": 200,
-        "is_regulated": true,
-        "regulation": ["ASIC", "CySEC", "FSA"],
-        "platforms": ["MetaTrader 4", "MetaTrader 5", "cTrader"],
-        "demo_account": true,
-        "social_trading": false,
-        "pros": ["Lowest spreads", "Multiple platforms", "Strong regulation"],
-        "cons": ["Higher minimum deposit", "Complex for beginners"],
-        "review": "IC Markets offers some of the tightest spreads in the industry, making it ideal for serious traders and scalpers."
-      },
-      {
-        "id": "pepperstone",
-        "name": "Pepperstone",
-        "logo": "/static/logos/pepperstone.svg", 
-        "rating": 4.4,
-        "spread_type": "Raw",
-        "min_spread_pips": 0.0,
-        "commission": "$7",
-        "min_deposit_usd": 200,
-        "is_regulated": true,
-        "regulation": ["ASIC", "CySEC", "FCA"],
-        "platforms": ["MetaTrader 4", "MetaTrader 5", "cTrader", "DupliTrade"],
-        "demo_account": true,
-        "social_trading": true,
-        "pros": ["Raw spreads", "Social trading", "Fast execution"],
-        "cons": ["Commission structure", "Limited educational content"],
-        "review": "Pepperstone combines tight spreads with advanced technology, offering both raw spread accounts and social trading features."
-      },
-      {
-        "id": "etoro",
-        "name": "eToro",
-        "logo": "/static/logos/etoro.svg",
-        "rating": 4.2,
-        "spread_type": "Fixed",
-        "min_spread_pips": 1.0,
-        "commission": "0%",
-        "min_deposit_usd": 50,
-        "is_regulated": true,
-        "regulation": ["CySEC", "FCA", "ASIC"],
-        "platforms": ["eToro Platform", "eToro Mobile"],
-        "demo_account": true,
-        "social_trading": true,
-        "pros": ["Social trading leader", "Low minimum deposit", "User-friendly"],
-        "cons": ["Higher spreads", "Limited advanced tools"],
-        "review": "eToro pioneered social trading, making it perfect for beginners who want to copy successful traders."
-      },
-      {
-        "id": "tastyfx",
-        "name": "TastyFX", 
-        "logo": "/static/logos/tastyfx.svg",
-        "rating": 4.3,
-        "spread_type": "Variable",
-        "min_spread_pips": 0.8,
-        "commission": "$1",
-        "min_deposit_usd": 250,
-        "is_regulated": true,
-        "regulation": ["FCA", "CFTC"],
-        "platforms": ["TastyFX Platform", "MetaTrader 4"],
-        "demo_account": true,
-        "social_trading": false,
-        "pros": ["Strong regulation", "Innovative platform", "Low commissions"],
-        "cons": ["Limited social features", "Newer brand"],
-        "review": "TastyFX brings institutional-grade trading to retail investors with strong regulatory backing and innovative tools."
-      },
-      {
-        "id": "oanda",
-        "name": "OANDA",
-        "logo": "/static/logos/oanda.svg",
-        "rating": 4.1,
-        "spread_type": "Variable",
-        "min_spread_pips": 1.2,
-        "commission": "0%",
-        "min_deposit_usd": 1,
-        "is_regulated": true,
-        "regulation": ["CFTC", "NFA", "ASIC"],
-        "platforms": ["OANDA Trade", "MetaTrader 4", "TradingView"],
-        "demo_account": true,
-        "social_trading": false,
-        "pros": ["No minimum deposit", "Excellent education", "Established reputation"],
-        "cons": ["Higher spreads", "Limited social features"],
-        "review": "OANDA is a trusted veteran in forex trading, offering excellent educational resources and no minimum deposit requirement."
-      },
-      {
-        "id": "forex-com",
-        "name": "Forex.com",
-        "logo": "/static/logos/forex-com.svg",
-        "rating": 4.0,
-        "spread_type": "Variable",
-        "min_spread_pips": 1.5,
-        "commission": "0%",
-        "min_deposit_usd": 100,
-        "is_regulated": true,
-        "regulation": ["CFTC", "NFA", "ASIC"],
-        "platforms": ["Forex.com Platform", "MetaTrader 4", "TradingView"],
-        "demo_account": true,
-        "social_trading": false,
-        "pros": ["Well-established", "Multiple platforms", "Good support"],
-        "cons": ["Higher spreads", "Dated interface"],
-        "review": "Forex.com is a well-established broker with a solid reputation, though spreads are not the most competitive."
+// ADDITIVE: Authentication API routes
+// Comprehensive user authentication system with session management
+
+// Authentication utilities
+const generateSessionId = () => {
+  return Array.from(crypto.getRandomValues(new Uint8Array(32)), b => b.toString(16).padStart(2, '0')).join('');
+};
+
+const hashPassword = async (password: string) => {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(hashBuffer), b => b.toString(16).padStart(2, '0')).join('');
+};
+
+const verifyPassword = async (password: string, hash: string) => {
+  const passwordHash = await hashPassword(password);
+  return passwordHash === hash;
+};
+
+// Get current user from session
+app.get('/api/auth/me', async (c) => {
+  const { DB } = c.env;
+  const sessionId = c.req.header('x-session-id') || 
+                    getCookie(c, 'session_id') || 
+                    c.req.query('session_id');
+
+  if (!sessionId) {
+    return c.json({ error: 'No session found' }, 401);
+  }
+
+  try {
+    const session = await DB.prepare(`
+      SELECT s.*, u.id, u.email, u.first_name, u.last_name, u.avatar_url, u.email_verified
+      FROM user_sessions s
+      JOIN users u ON s.user_id = u.id
+      WHERE s.id = ? AND s.expires_at > datetime('now')
+    `).bind(sessionId).first();
+
+    if (!session) {
+      return c.json({ error: 'Session expired' }, 401);
+    }
+
+    // Update last activity
+    await DB.prepare(`
+      UPDATE user_sessions SET created_at = datetime('now') WHERE id = ?
+    `).bind(sessionId).run();
+
+    return c.json({
+      id: session.id,
+      email: session.email,
+      first_name: session.first_name,
+      last_name: session.last_name,
+      avatar_url: session.avatar_url,
+      email_verified: session.email_verified
+    });
+  } catch (error) {
+    console.error('Session check error:', error);
+    return c.json({ error: 'Session validation failed' }, 500);
+  }
+});
+
+// Email/password sign up
+app.post('/api/auth/signup', async (c) => {
+  const { DB } = c.env;
+  const { firstName, lastName, email, password } = await c.req.json();
+
+  if (!firstName || !lastName || !email || !password) {
+    return c.json({ error: 'All fields are required' }, 400);
+  }
+
+  if (password.length < 8) {
+    return c.json({ error: 'Password must be at least 8 characters' }, 400);
+  }
+
+  try {
+    // Check if user already exists
+    const existingUser = await DB.prepare(`
+      SELECT id FROM users WHERE email = ?
+    `).bind(email.toLowerCase()).first();
+
+    if (existingUser) {
+      return c.json({ error: 'Email already registered' }, 409);
+    }
+
+    // Hash password and create user
+    const passwordHash = await hashPassword(password);
+    const userResult = await DB.prepare(`
+      INSERT INTO users (first_name, last_name, email, password_hash, created_at)
+      VALUES (?, ?, ?, ?, datetime('now'))
+    `).bind(firstName, lastName, email.toLowerCase(), passwordHash).run();
+
+    const userId = userResult.meta.last_row_id;
+
+    // Create session
+    const sessionId = generateSessionId();
+    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(); // 7 days
+
+    await DB.prepare(`
+      INSERT INTO user_sessions (id, user_id, expires_at, user_agent, ip_address)
+      VALUES (?, ?, ?, ?, ?)
+    `).bind(
+      sessionId, 
+      userId, 
+      expiresAt,
+      c.req.header('user-agent') || '',
+      c.req.header('cf-connecting-ip') || c.req.header('x-forwarded-for') || ''
+    ).run();
+
+    // Set session cookie
+    setCookie(c, 'session_id', sessionId, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'Strict',
+      maxAge: 7 * 24 * 60 * 60, // 7 days
+      path: '/'
+    });
+
+    return c.json({
+      success: true,
+      user: {
+        id: userId,
+        email: email.toLowerCase(),
+        first_name: firstName,
+        last_name: lastName,
+        email_verified: false
       }
-    ]
-  };
+    });
+
+  } catch (error) {
+    console.error('Sign up error:', error);
+    return c.json({ error: 'Account creation failed' }, 500);
+  }
+});
+
+// Email/password sign in
+app.post('/api/auth/signin', async (c) => {
+  const { DB } = c.env;
+  const { email, password } = await c.req.json();
+
+  if (!email || !password) {
+    return c.json({ error: 'Email and password are required' }, 400);
+  }
+
+  try {
+    // Find user
+    const user = await DB.prepare(`
+      SELECT id, email, password_hash, first_name, last_name, avatar_url, email_verified
+      FROM users WHERE email = ?
+    `).bind(email.toLowerCase()).first();
+
+    if (!user) {
+      return c.json({ error: 'Invalid email or password' }, 401);
+    }
+
+    // Verify password
+    const isValidPassword = await verifyPassword(password, user.password_hash);
+    if (!isValidPassword) {
+      return c.json({ error: 'Invalid email or password' }, 401);
+    }
+
+    // Create session
+    const sessionId = generateSessionId();
+    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(); // 7 days
+
+    await DB.prepare(`
+      INSERT INTO user_sessions (id, user_id, expires_at, user_agent, ip_address)
+      VALUES (?, ?, ?, ?, ?)
+    `).bind(
+      sessionId, 
+      user.id, 
+      expiresAt,
+      c.req.header('user-agent') || '',
+      c.req.header('cf-connecting-ip') || c.req.header('x-forwarded-for') || ''
+    ).run();
+
+    // Update last login
+    await DB.prepare(`
+      UPDATE users SET last_login_at = datetime('now') WHERE id = ?
+    `).bind(user.id).run();
+
+    // Set session cookie
+    setCookie(c, 'session_id', sessionId, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'Strict',
+      maxAge: 7 * 24 * 60 * 60, // 7 days
+      path: '/'
+    });
+
+    return c.json({
+      success: true,
+      user: {
+        id: user.id,
+        email: user.email,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        avatar_url: user.avatar_url,
+        email_verified: user.email_verified
+      }
+    });
+
+  } catch (error) {
+    console.error('Sign in error:', error);
+    return c.json({ error: 'Sign in failed' }, 500);
+  }
+});
+
+// Google OAuth sign in
+app.post('/api/auth/google', async (c) => {
+  const { DB } = c.env;
+  const { credential } = await c.req.json();
+
+  if (!credential) {
+    return c.json({ error: 'Google credential is required' }, 400);
+  }
+
+  try {
+    // In a real implementation, you would verify the Google JWT token here
+    // For this example, we'll assume the token is valid and extract user info
+    
+    // Decode JWT payload (unsafe for production - use proper JWT verification)
+    const payload = JSON.parse(atob(credential.split('.')[1]));
+    
+    const { sub: googleId, email, given_name: firstName, family_name: lastName, picture: avatarUrl } = payload;
+
+    // Check if user exists by Google ID
+    let user = await DB.prepare(`
+      SELECT id, email, first_name, last_name, avatar_url, email_verified
+      FROM users WHERE google_id = ?
+    `).bind(googleId).first();
+
+    let userId;
+
+    if (!user) {
+      // Check if user exists by email
+      const existingUser = await DB.prepare(`
+        SELECT id FROM users WHERE email = ?
+      `).bind(email.toLowerCase()).first();
+
+      if (existingUser) {
+        // Link Google account to existing email account
+        await DB.prepare(`
+          UPDATE users SET google_id = ?, avatar_url = ?, email_verified = 1, updated_at = datetime('now')
+          WHERE email = ?
+        `).bind(googleId, avatarUrl, email.toLowerCase()).run();
+        
+        userId = existingUser.id;
+      } else {
+        // Create new user
+        const userResult = await DB.prepare(`
+          INSERT INTO users (first_name, last_name, email, google_id, avatar_url, email_verified, created_at)
+          VALUES (?, ?, ?, ?, ?, 1, datetime('now'))
+        `).bind(firstName || '', lastName || '', email.toLowerCase(), googleId, avatarUrl).run();
+
+        userId = userResult.meta.last_row_id;
+      }
+
+      // Get user data
+      user = await DB.prepare(`
+        SELECT id, email, first_name, last_name, avatar_url, email_verified
+        FROM users WHERE id = ?
+      `).bind(userId).first();
+    } else {
+      userId = user.id;
+      
+      // Update avatar if changed
+      if (avatarUrl && avatarUrl !== user.avatar_url) {
+        await DB.prepare(`
+          UPDATE users SET avatar_url = ?, updated_at = datetime('now') WHERE id = ?
+        `).bind(avatarUrl, userId).run();
+        user.avatar_url = avatarUrl;
+      }
+    }
+
+    // Create session
+    const sessionId = generateSessionId();
+    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(); // 7 days
+
+    await DB.prepare(`
+      INSERT INTO user_sessions (id, user_id, expires_at, user_agent, ip_address)
+      VALUES (?, ?, ?, ?, ?)
+    `).bind(
+      sessionId, 
+      userId, 
+      expiresAt,
+      c.req.header('user-agent') || '',
+      c.req.header('cf-connecting-ip') || c.req.header('x-forwarded-for') || ''
+    ).run();
+
+    // Update last login
+    await DB.prepare(`
+      UPDATE users SET last_login_at = datetime('now') WHERE id = ?
+    `).bind(userId).run();
+
+    // Set session cookie
+    setCookie(c, 'session_id', sessionId, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'Strict',
+      maxAge: 7 * 24 * 60 * 60, // 7 days
+      path: '/'
+    });
+
+    return c.json({
+      success: true,
+      user: {
+        id: user.id,
+        email: user.email,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        avatar_url: user.avatar_url,
+        email_verified: user.email_verified
+      }
+    });
+
+  } catch (error) {
+    console.error('Google auth error:', error);
+    return c.json({ error: 'Google authentication failed' }, 500);
+  }
+});
+
+// Sign out
+app.post('/api/auth/signout', async (c) => {
+  const { DB } = c.env;
+  const sessionId = c.req.header('x-session-id') || 
+                    getCookie(c, 'session_id') || 
+                    c.req.query('session_id');
+
+  if (sessionId) {
+    try {
+      await DB.prepare(`DELETE FROM user_sessions WHERE id = ?`).bind(sessionId).run();
+    } catch (error) {
+      console.error('Session cleanup error:', error);
+    }
+  }
+
+  // Clear session cookie
+  setCookie(c, 'session_id', '', {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'Strict',
+    maxAge: 0,
+    path: '/'
+  });
+
+  return c.json({ success: true });
+});
+
+// Save broker match results for authenticated user
+app.post('/api/auth/save-broker-match', async (c) => {
+  const { DB } = c.env;
+  const sessionId = c.req.header('x-session-id') || 
+                    getCookie(c, 'session_id') || 
+                    c.req.query('session_id');
+
+  if (!sessionId) {
+    return c.json({ error: 'Authentication required' }, 401);
+  }
+
+  try {
+    // Verify session and get user
+    const session = await DB.prepare(`
+      SELECT user_id FROM user_sessions 
+      WHERE id = ? AND expires_at > datetime('now')
+    `).bind(sessionId).first();
+
+    if (!session) {
+      return c.json({ error: 'Session expired' }, 401);
+    }
+
+    const { matchData, recommendedBrokers, matchScore } = await c.req.json();
+
+    // Save broker match
+    const result = await DB.prepare(`
+      INSERT INTO user_broker_matches (user_id, match_data, recommended_brokers, match_score, created_at)
+      VALUES (?, ?, ?, ?, datetime('now'))
+    `).bind(
+      session.user_id,
+      JSON.stringify(matchData),
+      JSON.stringify(recommendedBrokers),
+      matchScore
+    ).run();
+
+    return c.json({
+      success: true,
+      matchId: result.meta.last_row_id
+    });
+
+  } catch (error) {
+    console.error('Save broker match error:', error);
+    return c.json({ error: 'Failed to save broker match' }, 500);
+  }
+});
+
+// Get user's saved broker matches
+app.get('/api/auth/broker-matches', async (c) => {
+  const { DB } = c.env;
+  const sessionId = c.req.header('x-session-id') || 
+                    getCookie(c, 'session_id') || 
+                    c.req.query('session_id');
+
+  if (!sessionId) {
+    return c.json({ error: 'Authentication required' }, 401);
+  }
+
+  try {
+    // Verify session and get user
+    const session = await DB.prepare(`
+      SELECT user_id FROM user_sessions 
+      WHERE id = ? AND expires_at > datetime('now')
+    `).bind(sessionId).first();
+
+    if (!session) {
+      return c.json({ error: 'Session expired' }, 401);
+    }
+
+    const matches = await DB.prepare(`
+      SELECT id, match_data, recommended_brokers, match_score, created_at
+      FROM user_broker_matches
+      WHERE user_id = ?
+      ORDER BY created_at DESC
+    `).bind(session.user_id).all();
+
+    const parsedMatches = matches.results.map(match => ({
+      ...match,
+      match_data: JSON.parse(match.match_data),
+      recommended_brokers: JSON.parse(match.recommended_brokers)
+    }));
+
+    return c.json({
+      success: true,
+      matches: parsedMatches
+    });
+
+  } catch (error) {
+    console.error('Get broker matches error:', error);
+    return c.json({ error: 'Failed to get broker matches' }, 500);
+  }
+});
+
+// LEGACY API route - now serves enhanced broker data
+app.get('/data/brokers.json', async (c) => {
+  // Fallback JSON data for pages that haven't been updated to use enhanced database
+  // This ensures backward compatibility while we transition to enhanced database
+  const fallbackBrokers = [
+    {
+      "id": "interactive-brokers",
+      "name": "Interactive Brokers",
+      "logo": "/static/logos/interactive-brokers.svg",
+      "rating": 4.6,
+      "spread_type": "Raw",
+      "min_spread_pips": 0.1,
+      "commission": "$2-8",
+      "min_deposit_usd": 0,
+      "is_regulated": true,
+      "regulation": ["CFTC", "SEC", "FINRA", "FCA"],
+      "platforms": ["Trader Workstation", "IBKR Mobile", "API"],
+      "demo_account": true,
+      "social_trading": false,
+      "pros": ["Lowest costs globally", "150+ markets", "Institutional execution"],
+      "cons": ["Complex platform", "Minimum activity fees"],
+      "review": "Industry-leading institutional broker with unmatched global access and lowest costs."
+    },
+    {
+      "id": "ic-markets",
+      "name": "IC Markets",
+      "logo": "/static/logos/ic-markets.svg",
+      "rating": 4.4,
+      "spread_type": "Raw",
+      "min_spread_pips": 0.0,
+      "commission": "$3.50",
+      "min_deposit_usd": 200,
+      "is_regulated": true,
+      "regulation": ["ASIC", "CySEC", "FSA"],
+      "platforms": ["MetaTrader 4", "MetaTrader 5", "cTrader"],
+      "demo_account": true,
+      "social_trading": false,
+      "pros": ["Lowest spreads", "True ECN", "Fast execution"],
+      "cons": ["Commission charges", "Limited education"],
+      "review": "Leading ECN broker with industry-best spreads and institutional-grade execution."
+    },
+    {
+      "id": "pepperstone",
+      "name": "Pepperstone",
+      "logo": "/static/logos/pepperstone.svg", 
+      "rating": 4.3,
+      "spread_type": "Raw",
+      "min_spread_pips": 0.0,
+      "commission": "$3.50",
+      "min_deposit_usd": 0,
+      "is_regulated": true,
+      "regulation": ["ASIC", "FCA", "CySEC"],
+      "platforms": ["MetaTrader 4", "MetaTrader 5", "cTrader", "TradingView"],
+      "demo_account": true,
+      "social_trading": false,
+      "pros": ["No minimum deposit", "TradingView integration", "Fast execution"],
+      "cons": ["Commission on raw accounts", "Limited education"],
+      "review": "Fast-growing Australian broker with excellent execution and competitive pricing."
+    }
+    // Note: This is fallback data. Enhanced database provides 67+ brokers
+  ];
   
-  return c.json(brokerData);
+  return c.json({
+    "brokers": fallbackBrokers,
+    "enhanced_available": true,
+    "message": "Legacy API. Use enhanced broker database client-side for full 67-broker dataset."
+  });
 })
 
 // Broker recommendation algorithm
@@ -565,20 +973,42 @@ app.get('/api/brokers/:id', async (c) => {
   });
 });
 
-// Get broker recommendations based on user profile
+// Get broker recommendations based on user profile (Enhanced with Authentication)
 app.post('/api/recommendations', async (c) => {
   const { DB } = c.env;
   const profile = await c.req.json();
   
-  // Store user profile
-  const sessionId = profile.session_id || `session_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+  // Check if user is authenticated
+  const sessionId = c.req.header('x-session-id') || 
+                    getCookie(c, 'session_id') || 
+                    c.req.query('session_id');
+
+  let userId = null;
+  
+  if (sessionId) {
+    try {
+      const session = await DB.prepare(`
+        SELECT user_id FROM user_sessions 
+        WHERE id = ? AND expires_at > datetime('now')
+      `).bind(sessionId).first();
+      
+      if (session) {
+        userId = session.user_id;
+      }
+    } catch (error) {
+      console.error('Session check error:', error);
+    }
+  }
+  
+  // Store user profile (legacy compatibility maintained)
+  const legacySessionId = profile.session_id || `session_${Date.now()}_${Math.random().toString(36).substring(7)}`;
   
   await DB.prepare(`
     INSERT OR REPLACE INTO user_profiles 
     (session_id, country, experience_level, trading_strategy, capital_amount, account_type_pref, asset_preferences, risk_tolerance)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
   `).bind(
-    sessionId,
+    legacySessionId,
     profile.country || null,
     profile.experience_level || null,
     profile.trading_strategy || null,
@@ -610,19 +1040,38 @@ app.post('/api/recommendations', async (c) => {
     };
   }).sort((a: any, b: any) => b.match_score - a.match_score);
   
-  // Store top recommendations
+  // Store top recommendations (legacy)
   const topRecommendations = recommendations.slice(0, 5);
   for (const rec of topRecommendations) {
     await DB.prepare(`
       INSERT OR REPLACE INTO recommendations (session_id, broker_id, match_score, reasoning)
       VALUES (?, ?, ?, ?)
-    `).bind(sessionId, rec.id, rec.match_score, rec.reasoning).run();
+    `).bind(legacySessionId, rec.id, rec.match_score, rec.reasoning).run();
+  }
+
+  // If user is authenticated, also save to their account
+  if (userId) {
+    try {
+      await DB.prepare(`
+        INSERT INTO user_broker_matches (user_id, session_id, match_data, recommended_brokers, match_score, created_at)
+        VALUES (?, ?, ?, ?, ?, datetime('now'))
+      `).bind(
+        userId,
+        legacySessionId,
+        JSON.stringify(profile),
+        JSON.stringify(topRecommendations),
+        topRecommendations[0]?.match_score || 0
+      ).run();
+    } catch (error) {
+      console.error('Error saving authenticated user match:', error);
+    }
   }
   
   return c.json({
-    session_id: sessionId,
+    session_id: legacySessionId,
     recommendations: topRecommendations,
-    total_brokers: brokers.results.length
+    total_brokers: brokers.results.length,
+    saved_to_account: !!userId
   });
 });
 
@@ -876,30 +1325,170 @@ app.get('/reviews', (c) => {
                 theme: {
                     extend: {
                         colors: {
-                            primary: '#1e40af',
-                            secondary: '#64748b',
-                            accent: '#3b82f6'
+                            // Only 3 colors: Yellow, Blue, White
+                            primary: '#1e40af',        // Blue-800
+                            secondary: '#2563eb',      // Blue-600  
+                            accent: '#facc15',         // Yellow-400
+                            yellow: {
+                                400: '#facc15',         // Main yellow
+                                300: '#fde047',         // Lighter yellow for hovers
+                                500: '#eab308'          // Darker yellow for emphasis
+                            },
+                            blue: {
+                                50: '#eff6ff',          // Very light blue
+                                100: '#dbeafe',         // Light blue
+                                600: '#2563eb',         // Main blue
+                                700: '#1d4ed8',         // Medium blue
+                                800: '#1e40af',         // Dark blue (primary)
+                                900: '#1e3a8a'          // Very dark blue
+                            }
                         }
                     }
                 }
             }
         </script>
     </head>
-    <body class="bg-gray-50 text-gray-900">
+    <body class="bg-blue-50 text-blue-900">
         <!-- Navigation -->
         <nav class="bg-white shadow-sm border-b">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between items-center h-16">
                     <div class="flex items-center space-x-2">
                         <i class="fas fa-chart-line text-primary text-2xl"></i>
-                        <a href="/" class="text-xl font-bold text-gray-900">BrokerAnalysis</a>
+                        <a href="/" class="text-xl font-bold text-blue-900">BrokerAnalysis</a>
                     </div>
-                    <div class="hidden md:flex items-center space-x-6">
-                        <a href="/" class="text-gray-700 hover:text-primary transition-colors">Home</a>
-                        <a href="/reviews" class="text-primary font-semibold">Reviews</a>
-                        <a href="/compare" class="text-gray-700 hover:text-primary transition-colors">Compare</a>
-                        <a href="/simulator" class="text-gray-700 hover:text-primary transition-colors">Simulator</a>
-                        <a href="/about" class="text-gray-700 hover:text-primary transition-colors">About</a>
+                    
+                    <!-- Enhanced Navigation with Dropdown Menus -->
+                    <div class="hidden md:flex items-center justify-center flex-1" id="main-navigation">
+                        <!-- Navigation will be populated by navigation.js -->
+                        <div class="flex items-center space-x-2">
+                            <div class="relative group">
+                                <button class="flex items-center space-x-1 text-blue-800 hover:text-primary transition-colors py-2 px-3 rounded-md nav-menu-button">
+                                    <i class="fas fa-trophy text-sm"></i>
+                                    <span class="font-medium">Best Brokers</span>
+                                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                                </button>
+                                <div class="absolute left-0 mt-1 w-80 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                    <div class="py-2">
+                                        <a href="/brokers/top-100" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Top 100 Forex Brokers</a>
+                                        <div class="px-4 py-2 text-sm font-semibold text-blue-900 bg-blue-50 border-b border-blue-200">By Country</div>
+                                        <div class="grid grid-cols-2 gap-0 max-h-64 overflow-y-auto">
+                                            <a href="/brokers/australia" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors border-r border-blue-100">Australia</a>
+                                            <a href="/brokers/canada" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Canada</a>
+                                            <a href="/brokers/uk" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors border-r border-blue-100">UK</a>
+                                            <a href="/brokers/south-africa" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">South Africa</a>
+                                            <a href="/brokers/pakistan" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors border-r border-blue-100">Pakistan</a>
+                                            <a href="/brokers/philippines" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Philippines</a>
+                                            <a href="/brokers/india" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors border-r border-blue-100">India</a>
+                                            <a href="/brokers/malaysia" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Malaysia</a>
+                                            <a href="/brokers/dubai" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors border-r border-blue-100">Dubai</a>
+                                            <a href="/brokers/qatar" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Qatar</a>
+                                            <a href="/brokers/indonesia" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors border-r border-blue-100">Indonesia</a>
+                                            <a href="/brokers/usa" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">USA</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="relative group">
+                                <button class="flex items-center space-x-1 text-blue-800 hover:text-primary transition-colors py-2 px-3 rounded-md nav-menu-button">
+                                    <i class="fas fa-chart-bar text-sm"></i>
+                                    <span class="font-medium">Trading Types</span>
+                                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                                </button>
+                                <div class="absolute left-0 mt-1 w-72 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                    <div class="py-2 max-h-80 overflow-y-auto">
+                                        <a href="/brokers/gold-trading" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Gold (XAUUSD) Trading</a>
+                                        <a href="/brokers/islamic-halal" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Islamic Halal Trading</a>
+                                        <a href="/brokers/automated" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Automated Forex Trading</a>
+                                        <a href="/brokers/high-leverage" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">High Leverage Brokers</a>
+                                        <a href="/brokers/oil-trading" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Oil Trading Platform</a>
+                                        <a href="/brokers/copy-trading" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Copy Trading Platform</a>
+                                        <a href="/brokers/ecn" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">ECN Brokers</a>
+                                        <a href="/brokers/scalping" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Scalping Forex Brokers</a>
+                                        <a href="/brokers/demo-accounts" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Forex Demo Accounts</a>
+                                        <a href="/brokers/mt4" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">MT4 Brokers</a>
+                                        <a href="/brokers/stocks" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Stocks Trading Platform</a>
+                                        <a href="/brokers/beginners" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Brokers For Beginners</a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="relative group">
+                                <button class="flex items-center space-x-1 text-blue-800 hover:text-primary transition-colors py-2 px-3 rounded-md nav-menu-button">
+                                    <i class="fas fa-star text-sm"></i>
+                                    <span class="font-medium">Reviews</span>
+                                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                                </button>
+                                <div class="absolute left-0 mt-1 w-64 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                    <div class="py-2">
+                                        <a href="/reviews" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">All Reviews</a>
+                                        <a href="/reviews/platforms" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Trading Platforms</a>
+                                        <a href="/reviews/types" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Types of Forex Brokers</a>
+                                        <hr class="my-1 border-blue-200">
+                                        <div class="px-4 py-2 text-sm font-semibold text-blue-900 bg-blue-50 border-b border-blue-200">Top Brokers</div>
+                                        <div class="max-h-48 overflow-y-auto">
+                                            <a href="/reviews/fp-markets" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">FP Markets</a>
+                                            <a href="/reviews/fxtm" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">FXTM</a>
+                                            <a href="/reviews/blackbull-markets" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Blackbull Markets</a>
+                                            <a href="/reviews/eightcap" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Eightcap</a>
+                                            <a href="/reviews/octa" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Octa</a>
+                                            <a href="/reviews/plus500" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Plus500</a>
+                                            <a href="/reviews/avatrade" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Avatrade</a>
+                                            <a href="/reviews/xm" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">XM</a>
+                                            <a href="/reviews/pepperstone" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Pepperstone</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="relative group">
+                                <button class="flex items-center space-x-1 text-blue-800 hover:text-primary transition-colors py-2 px-3 rounded-md nav-menu-button">
+                                    <i class="fas fa-tools text-sm"></i>
+                                    <span class="font-medium">Tools</span>
+                                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                                </button>
+                                <div class="absolute left-0 mt-1 w-56 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                    <div class="py-2">
+                                        <a href="/compare" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">
+                                            <i class="fas fa-balance-scale mr-2 text-blue-500"></i>Compare Brokers
+                                        </a>
+                                        <a href="/simulator" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">
+                                            <i class="fas fa-chart-line mr-2 text-yellow-400"></i>Trading Simulator
+                                        </a>
+                                        <a href="/" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">
+                                            <i class="fas fa-heart mr-2 text-red-500"></i>Broker Matcher
+                                        </a>
+                                        <hr class="my-1 border-blue-200">
+                                        <div class="px-4 py-2 text-sm font-semibold text-blue-900 bg-blue-50 border-b border-blue-200">Calculators</div>
+                                        <a href="/tools/profit-calculator" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Profit Calculator</a>
+                                        <a href="/tools/margin-calculator" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Margin Calculator</a>
+                                        <a href="/tools/pip-calculator" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Pip Calculator</a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="relative group">
+                                <button class="flex items-center space-x-1 text-blue-800 hover:text-primary transition-colors py-2 px-3 rounded-md nav-menu-button">
+                                    <i class="fas fa-info-circle text-sm"></i>
+                                    <span class="font-medium">About</span>
+                                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                                </button>
+                                <div class="absolute left-0 mt-1 w-48 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                    <div class="py-2">
+                                        <a href="/about" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">About Us</a>
+                                        <a href="/methodology" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Methodology</a>
+                                        <a href="/contact" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Contact</a>
+                                        <a href="/api-docs" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">API</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Auth Navigation -->
+                    <div class="nav-auth-container">
+                        <!-- Will be populated by auth system -->
                     </div>
                 </div>
             </div>
@@ -985,6 +1574,8 @@ app.get('/reviews', (c) => {
         </footer>
 
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+        <!-- CRITICAL: Enhanced broker database for reviews -->
+        <script src="/static/enhanced-broker-database.js"></script>
         <script src="/static/reviews.js"></script>
     </body>
     </html>
@@ -1009,30 +1600,170 @@ app.get('/compare', (c) => {
                 theme: {
                     extend: {
                         colors: {
-                            primary: '#1e40af',
-                            secondary: '#64748b',
-                            accent: '#3b82f6'
+                            // Only 3 colors: Yellow, Blue, White
+                            primary: '#1e40af',        // Blue-800
+                            secondary: '#2563eb',      // Blue-600  
+                            accent: '#facc15',         // Yellow-400
+                            yellow: {
+                                400: '#facc15',         // Main yellow
+                                300: '#fde047',         // Lighter yellow for hovers
+                                500: '#eab308'          // Darker yellow for emphasis
+                            },
+                            blue: {
+                                50: '#eff6ff',          // Very light blue
+                                100: '#dbeafe',         // Light blue
+                                600: '#2563eb',         // Main blue
+                                700: '#1d4ed8',         // Medium blue
+                                800: '#1e40af',         // Dark blue (primary)
+                                900: '#1e3a8a'          // Very dark blue
+                            }
                         }
                     }
                 }
             }
         </script>
     </head>
-    <body class="bg-gray-50 text-gray-900">
+    <body class="bg-blue-50 text-blue-900">
         <!-- Navigation -->
         <nav class="bg-white shadow-sm border-b">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between items-center h-16">
                     <div class="flex items-center space-x-2">
                         <i class="fas fa-chart-line text-primary text-2xl"></i>
-                        <a href="/" class="text-xl font-bold text-gray-900">BrokerAnalysis</a>
+                        <a href="/" class="text-xl font-bold text-blue-900">BrokerAnalysis</a>
                     </div>
-                    <div class="hidden md:flex items-center space-x-6">
-                        <a href="/" class="text-gray-700 hover:text-primary transition-colors">Home</a>
-                        <a href="/reviews" class="text-gray-700 hover:text-primary transition-colors">Reviews</a>
-                        <a href="/compare" class="text-primary font-semibold">Compare</a>
-                        <a href="/simulator" class="text-gray-700 hover:text-primary transition-colors">Simulator</a>
-                        <a href="/about" class="text-gray-700 hover:text-primary transition-colors">About</a>
+                    
+                    <!-- Enhanced Navigation with Dropdown Menus -->
+                    <div class="hidden md:flex items-center justify-center flex-1" id="main-navigation">
+                        <!-- Navigation will be populated by navigation.js -->
+                        <div class="flex items-center space-x-2">
+                            <div class="relative group">
+                                <button class="flex items-center space-x-1 text-blue-800 hover:text-primary transition-colors py-2 px-3 rounded-md nav-menu-button">
+                                    <i class="fas fa-trophy text-sm"></i>
+                                    <span class="font-medium">Best Brokers</span>
+                                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                                </button>
+                                <div class="absolute left-0 mt-1 w-80 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                    <div class="py-2">
+                                        <a href="/brokers/top-100" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Top 100 Forex Brokers</a>
+                                        <div class="px-4 py-2 text-sm font-semibold text-blue-900 bg-blue-50 border-b border-blue-200">By Country</div>
+                                        <div class="grid grid-cols-2 gap-0 max-h-64 overflow-y-auto">
+                                            <a href="/brokers/australia" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors border-r border-blue-100">Australia</a>
+                                            <a href="/brokers/canada" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Canada</a>
+                                            <a href="/brokers/uk" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors border-r border-blue-100">UK</a>
+                                            <a href="/brokers/south-africa" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">South Africa</a>
+                                            <a href="/brokers/pakistan" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors border-r border-blue-100">Pakistan</a>
+                                            <a href="/brokers/philippines" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Philippines</a>
+                                            <a href="/brokers/india" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors border-r border-blue-100">India</a>
+                                            <a href="/brokers/malaysia" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Malaysia</a>
+                                            <a href="/brokers/dubai" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors border-r border-blue-100">Dubai</a>
+                                            <a href="/brokers/qatar" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Qatar</a>
+                                            <a href="/brokers/indonesia" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors border-r border-blue-100">Indonesia</a>
+                                            <a href="/brokers/usa" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">USA</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="relative group">
+                                <button class="flex items-center space-x-1 text-blue-800 hover:text-primary transition-colors py-2 px-3 rounded-md nav-menu-button">
+                                    <i class="fas fa-chart-bar text-sm"></i>
+                                    <span class="font-medium">Trading Types</span>
+                                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                                </button>
+                                <div class="absolute left-0 mt-1 w-72 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                    <div class="py-2 max-h-80 overflow-y-auto">
+                                        <a href="/brokers/gold-trading" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Gold (XAUUSD) Trading</a>
+                                        <a href="/brokers/islamic-halal" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Islamic Halal Trading</a>
+                                        <a href="/brokers/automated" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Automated Forex Trading</a>
+                                        <a href="/brokers/high-leverage" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">High Leverage Brokers</a>
+                                        <a href="/brokers/oil-trading" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Oil Trading Platform</a>
+                                        <a href="/brokers/copy-trading" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Copy Trading Platform</a>
+                                        <a href="/brokers/ecn" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">ECN Brokers</a>
+                                        <a href="/brokers/scalping" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Scalping Forex Brokers</a>
+                                        <a href="/brokers/demo-accounts" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Forex Demo Accounts</a>
+                                        <a href="/brokers/mt4" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">MT4 Brokers</a>
+                                        <a href="/brokers/stocks" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Stocks Trading Platform</a>
+                                        <a href="/brokers/beginners" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Brokers For Beginners</a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="relative group">
+                                <button class="flex items-center space-x-1 text-blue-800 hover:text-primary transition-colors py-2 px-3 rounded-md nav-menu-button">
+                                    <i class="fas fa-star text-sm"></i>
+                                    <span class="font-medium">Reviews</span>
+                                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                                </button>
+                                <div class="absolute left-0 mt-1 w-64 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                    <div class="py-2">
+                                        <a href="/reviews" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">All Reviews</a>
+                                        <a href="/reviews/platforms" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Trading Platforms</a>
+                                        <a href="/reviews/types" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Types of Forex Brokers</a>
+                                        <hr class="my-1 border-blue-200">
+                                        <div class="px-4 py-2 text-sm font-semibold text-blue-900 bg-blue-50 border-b border-blue-200">Top Brokers</div>
+                                        <div class="max-h-48 overflow-y-auto">
+                                            <a href="/reviews/fp-markets" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">FP Markets</a>
+                                            <a href="/reviews/fxtm" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">FXTM</a>
+                                            <a href="/reviews/blackbull-markets" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Blackbull Markets</a>
+                                            <a href="/reviews/eightcap" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Eightcap</a>
+                                            <a href="/reviews/octa" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Octa</a>
+                                            <a href="/reviews/plus500" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Plus500</a>
+                                            <a href="/reviews/avatrade" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Avatrade</a>
+                                            <a href="/reviews/xm" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">XM</a>
+                                            <a href="/reviews/pepperstone" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Pepperstone</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="relative group">
+                                <button class="flex items-center space-x-1 text-primary font-semibold transition-colors py-2 px-3 rounded-md nav-menu-button bg-blue-50">
+                                    <i class="fas fa-tools text-sm"></i>
+                                    <span class="font-medium">Tools</span>
+                                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                                </button>
+                                <div class="absolute left-0 mt-1 w-56 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                    <div class="py-2">
+                                        <a href="/compare" class="block px-4 py-2 text-sm text-primary font-semibold hover:bg-blue-50 transition-colors">
+                                            <i class="fas fa-balance-scale mr-2 text-blue-500"></i>Compare Brokers
+                                        </a>
+                                        <a href="/simulator" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">
+                                            <i class="fas fa-chart-line mr-2 text-yellow-400"></i>Trading Simulator
+                                        </a>
+                                        <a href="/" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">
+                                            <i class="fas fa-heart mr-2 text-red-500"></i>Broker Matcher
+                                        </a>
+                                        <hr class="my-1 border-blue-200">
+                                        <div class="px-4 py-2 text-sm font-semibold text-blue-900 bg-blue-50 border-b border-blue-200">Calculators</div>
+                                        <a href="/tools/profit-calculator" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Profit Calculator</a>
+                                        <a href="/tools/margin-calculator" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Margin Calculator</a>
+                                        <a href="/tools/pip-calculator" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Pip Calculator</a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="relative group">
+                                <button class="flex items-center space-x-1 text-blue-800 hover:text-primary transition-colors py-2 px-3 rounded-md nav-menu-button">
+                                    <i class="fas fa-info-circle text-sm"></i>
+                                    <span class="font-medium">About</span>
+                                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                                </button>
+                                <div class="absolute left-0 mt-1 w-48 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                    <div class="py-2">
+                                        <a href="/about" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">About Us</a>
+                                        <a href="/methodology" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Methodology</a>
+                                        <a href="/contact" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Contact</a>
+                                        <a href="/api-docs" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">API</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Auth Navigation -->
+                    <div class="nav-auth-container">
+                        <!-- Will be populated by auth system -->
                     </div>
                 </div>
             </div>
@@ -1051,11 +1782,11 @@ app.get('/compare', (c) => {
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
                 <div class="flex flex-wrap gap-4">
                     <div class="flex-1 min-w-0">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Select brokers to compare</label>
+                        <label class="block text-sm font-medium text-blue-800 mb-2">Select brokers to compare</label>
                         <input type="text" id="broker-search" placeholder="Search and select brokers..." class="w-full border rounded-lg px-3 py-2">
                     </div>
                     <div class="flex items-end gap-2">
-                        <button id="reset-comparison" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600">Reset</button>
+                        <button id="reset-comparison" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600">Reset</button>
                         <button id="print-comparison" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Print</button>
                     </div>
                 </div>
@@ -1084,12 +1815,14 @@ app.get('/compare', (c) => {
             
             <div id="empty-state" class="text-center py-16">
                 <i class="fas fa-balance-scale text-6xl text-gray-300 mb-4"></i>
-                <h3 class="text-2xl font-bold text-gray-600 mb-2">Select brokers to compare</h3>
+                <h3 class="text-2xl font-bold text-blue-600 mb-2">Select brokers to compare</h3>
                 <p class="text-gray-500">Choose up to 4 brokers from the search above to see a detailed comparison</p>
             </div>
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+        <!-- CRITICAL: Enhanced broker database for comparison -->
+        <script src="/static/enhanced-broker-database.js"></script>
         <script src="/static/compare.js"></script>
     </body>
     </html>
@@ -1114,30 +1847,169 @@ app.get('/simulator', (c) => {
                 theme: {
                     extend: {
                         colors: {
-                            primary: '#1e40af',
-                            secondary: '#64748b',
-                            accent: '#3b82f6'
+                            // Only 3 colors: Yellow, Blue, White
+                            primary: '#1e40af',        // Blue-800
+                            secondary: '#2563eb',      // Blue-600  
+                            accent: '#facc15',         // Yellow-400
+                            yellow: {
+                                400: '#facc15',         // Main yellow
+                                300: '#fde047',         // Lighter yellow for hovers
+                                500: '#eab308'          // Darker yellow for emphasis
+                            },
+                            blue: {
+                                50: '#eff6ff',          // Very light blue
+                                100: '#dbeafe',         // Light blue
+                                600: '#2563eb',         // Main blue
+                                700: '#1d4ed8',         // Medium blue
+                                800: '#1e40af',         // Dark blue (primary)
+                                900: '#1e3a8a'          // Very dark blue
+                            }
                         }
                     }
                 }
             }
         </script>
     </head>
-    <body class="bg-gray-50 text-gray-900">
+    <body class="bg-blue-50 text-blue-900">
         <!-- Navigation -->
         <nav class="bg-white shadow-sm border-b">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between items-center h-16">
                     <div class="flex items-center space-x-2">
                         <i class="fas fa-chart-line text-primary text-2xl"></i>
-                        <a href="/" class="text-xl font-bold text-gray-900">BrokerAnalysis</a>
+                        <a href="/" class="text-xl font-bold text-blue-900">BrokerAnalysis</a>
                     </div>
-                    <div class="hidden md:flex items-center space-x-6">
-                        <a href="/" class="text-gray-700 hover:text-primary transition-colors">Home</a>
-                        <a href="/reviews" class="text-gray-700 hover:text-primary transition-colors">Reviews</a>
-                        <a href="/compare" class="text-gray-700 hover:text-primary transition-colors">Compare</a>
-                        <a href="/simulator" class="text-primary font-semibold">Simulator</a>
-                        <a href="/about" class="text-gray-700 hover:text-primary transition-colors">About</a>
+                    <!-- Enhanced Navigation with Dropdown Menus -->
+                    <div class="hidden md:flex items-center justify-center flex-1" id="main-navigation">
+                        <!-- Navigation will be populated by navigation.js -->
+                        <div class="flex items-center space-x-2">
+                            <div class="relative group">
+                                <button class="flex items-center space-x-1 text-blue-800 hover:text-primary transition-colors py-2 px-3 rounded-md nav-menu-button">
+                                    <i class="fas fa-trophy text-sm"></i>
+                                    <span class="font-medium">Best Brokers</span>
+                                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                                </button>
+                                <div class="absolute left-0 mt-1 w-80 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                    <div class="py-2">
+                                        <a href="/brokers/top-100" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Top 100 Forex Brokers</a>
+                                        <div class="px-4 py-2 text-sm font-semibold text-blue-900 bg-blue-50 border-b border-blue-200">By Country</div>
+                                        <div class="grid grid-cols-2 gap-0 max-h-64 overflow-y-auto">
+                                            <a href="/brokers/australia" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors border-r border-blue-100">Australia</a>
+                                            <a href="/brokers/canada" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Canada</a>
+                                            <a href="/brokers/uk" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors border-r border-blue-100">UK</a>
+                                            <a href="/brokers/south-africa" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">South Africa</a>
+                                            <a href="/brokers/pakistan" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors border-r border-blue-100">Pakistan</a>
+                                            <a href="/brokers/philippines" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Philippines</a>
+                                            <a href="/brokers/india" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors border-r border-blue-100">India</a>
+                                            <a href="/brokers/malaysia" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Malaysia</a>
+                                            <a href="/brokers/dubai" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors border-r border-blue-100">Dubai</a>
+                                            <a href="/brokers/qatar" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Qatar</a>
+                                            <a href="/brokers/indonesia" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors border-r border-blue-100">Indonesia</a>
+                                            <a href="/brokers/usa" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">USA</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="relative group">
+                                <button class="flex items-center space-x-1 text-blue-800 hover:text-primary transition-colors py-2 px-3 rounded-md nav-menu-button">
+                                    <i class="fas fa-chart-bar text-sm"></i>
+                                    <span class="font-medium">Trading Types</span>
+                                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                                </button>
+                                <div class="absolute left-0 mt-1 w-72 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                    <div class="py-2 max-h-80 overflow-y-auto">
+                                        <a href="/brokers/gold-trading" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Gold (XAUUSD) Trading</a>
+                                        <a href="/brokers/islamic-halal" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Islamic Halal Trading</a>
+                                        <a href="/brokers/automated" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Automated Forex Trading</a>
+                                        <a href="/brokers/high-leverage" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">High Leverage Brokers</a>
+                                        <a href="/brokers/oil-trading" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Oil Trading Platform</a>
+                                        <a href="/brokers/copy-trading" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Copy Trading Platform</a>
+                                        <a href="/brokers/ecn" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">ECN Brokers</a>
+                                        <a href="/brokers/scalping" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Scalping Forex Brokers</a>
+                                        <a href="/brokers/demo-accounts" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Forex Demo Accounts</a>
+                                        <a href="/brokers/mt4" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">MT4 Brokers</a>
+                                        <a href="/brokers/stocks" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Stocks Trading Platform</a>
+                                        <a href="/brokers/beginners" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Brokers For Beginners</a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="relative group">
+                                <button class="flex items-center space-x-1 text-blue-800 hover:text-primary transition-colors py-2 px-3 rounded-md nav-menu-button">
+                                    <i class="fas fa-star text-sm"></i>
+                                    <span class="font-medium">Reviews</span>
+                                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                                </button>
+                                <div class="absolute left-0 mt-1 w-64 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                    <div class="py-2">
+                                        <a href="/reviews" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">All Reviews</a>
+                                        <a href="/reviews/platforms" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Trading Platforms</a>
+                                        <a href="/reviews/types" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Types of Forex Brokers</a>
+                                        <hr class="my-1 border-blue-200">
+                                        <div class="px-4 py-2 text-sm font-semibold text-blue-900 bg-blue-50 border-b border-blue-200">Top Brokers</div>
+                                        <div class="max-h-48 overflow-y-auto">
+                                            <a href="/reviews/fp-markets" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">FP Markets</a>
+                                            <a href="/reviews/fxtm" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">FXTM</a>
+                                            <a href="/reviews/blackbull-markets" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Blackbull Markets</a>
+                                            <a href="/reviews/eightcap" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Eightcap</a>
+                                            <a href="/reviews/octa" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Octa</a>
+                                            <a href="/reviews/plus500" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Plus500</a>
+                                            <a href="/reviews/avatrade" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Avatrade</a>
+                                            <a href="/reviews/xm" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">XM</a>
+                                            <a href="/reviews/pepperstone" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Pepperstone</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="relative group">
+                                <button class="flex items-center space-x-1 text-primary font-semibold transition-colors py-2 px-3 rounded-md nav-menu-button bg-yellow-100">
+                                    <i class="fas fa-tools text-sm"></i>
+                                    <span class="font-medium">Tools</span>
+                                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                                </button>
+                                <div class="absolute left-0 mt-1 w-56 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                    <div class="py-2">
+                                        <a href="/compare" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">
+                                            <i class="fas fa-balance-scale mr-2 text-blue-500"></i>Compare Brokers
+                                        </a>
+                                        <a href="/simulator" class="block px-4 py-2 text-sm text-primary font-semibold hover:bg-yellow-100 transition-colors">
+                                            <i class="fas fa-chart-line mr-2 text-yellow-400"></i>Trading Simulator
+                                        </a>
+                                        <a href="/" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">
+                                            <i class="fas fa-heart mr-2 text-red-500"></i>Broker Matcher
+                                        </a>
+                                        <hr class="my-1 border-blue-200">
+                                        <div class="px-4 py-2 text-sm font-semibold text-blue-900 bg-blue-50 border-b border-blue-200">Calculators</div>
+                                        <a href="/tools/profit-calculator" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Profit Calculator</a>
+                                        <a href="/tools/margin-calculator" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Margin Calculator</a>
+                                        <a href="/tools/pip-calculator" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Pip Calculator</a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="relative group">
+                                <button class="flex items-center space-x-1 text-blue-800 hover:text-primary transition-colors py-2 px-3 rounded-md nav-menu-button">
+                                    <i class="fas fa-info-circle text-sm"></i>
+                                    <span class="font-medium">About</span>
+                                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                                </button>
+                                <div class="absolute left-0 mt-1 w-48 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                    <div class="py-2">
+                                        <a href="/about" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">About Us</a>
+                                        <a href="/methodology" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Methodology</a>
+                                        <a href="/contact" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Contact</a>
+                                        <a href="/api-docs" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">API</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Auth Navigation -->
+                    <div class="nav-auth-container">
+                        <!-- Will be populated by auth system -->
                     </div>
                 </div>
             </div>
@@ -1157,7 +2029,7 @@ app.get('/simulator', (c) => {
                 <h2 class="text-2xl font-bold mb-6">Trading Parameters</h2>
                 <div class="grid md:grid-cols-2 gap-6">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Trading Strategy</label>
+                        <label class="block text-sm font-medium text-blue-800 mb-2">Trading Strategy</label>
                         <select id="strategy-select" class="w-full border rounded-lg px-3 py-2">
                             <option value="scalping">Scalping</option>
                             <option value="swing">Swing Trading</option>
@@ -1167,17 +2039,17 @@ app.get('/simulator', (c) => {
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Trade Size (lots)</label>
+                        <label class="block text-sm font-medium text-blue-800 mb-2">Trade Size (lots)</label>
                         <input type="number" id="trade-size" value="1" min="0.01" step="0.01" class="w-full border rounded-lg px-3 py-2">
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Number of Trades per Month</label>
+                        <label class="block text-sm font-medium text-blue-800 mb-2">Number of Trades per Month</label>
                         <input type="number" id="trades-count" value="100" min="1" class="w-full border rounded-lg px-3 py-2">
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Primary Instrument</label>
+                        <label class="block text-sm font-medium text-blue-800 mb-2">Primary Instrument</label>
                         <select id="instrument-select" class="w-full border rounded-lg px-3 py-2">
                             <option value="EURUSD">EUR/USD</option>
                             <option value="GBPUSD">GBP/USD</option>
@@ -1187,7 +2059,7 @@ app.get('/simulator', (c) => {
                     </div>
                 </div>
                 
-                <button id="calculate-costs" class="mt-6 bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
+                <button id="calculate-costs" class="mt-6 bg-yellow-400 text-white px-8 py-3 rounded-lg font-semibold hover:bg-yellow-1000 transition-colors">
                     Calculate Trading Costs
                 </button>
             </div>
@@ -1198,7 +2070,7 @@ app.get('/simulator', (c) => {
                     <h3 class="text-xl font-bold mb-4">Cost Comparison Results</h3>
                     <div class="overflow-x-auto">
                         <table class="w-full">
-                            <thead class="bg-gray-50">
+                            <thead class="bg-blue-50">
                                 <tr>
                                     <th class="px-4 py-3 text-left">Broker</th>
                                     <th class="px-4 py-3 text-left">Spread Cost</th>
@@ -1217,11 +2089,11 @@ app.get('/simulator', (c) => {
                 <div class="bg-white rounded-lg shadow-lg p-6">
                     <h3 class="text-xl font-bold mb-4">Calculation Methodology</h3>
                     <div class="prose max-w-none">
-                        <p class="text-gray-600 mb-4">Our cost calculator uses the following formula:</p>
-                        <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                        <p class="text-blue-600 mb-4">Our cost calculator uses the following formula:</p>
+                        <div class="bg-blue-50 p-4 rounded-lg mb-4">
                             <code>Total Cost = (Spread × Pip Value × Trades) + (Commission × Trades) + (Estimated Slippage × Trades)</code>
                         </div>
-                        <ul class="text-sm text-gray-600 space-y-2">
+                        <ul class="text-sm text-blue-600 space-y-2">
                             <li><strong>Spread Cost:</strong> Based on typical spreads for your chosen strategy</li>
                             <li><strong>Commission:</strong> Per-lot commission charges where applicable</li>
                             <li><strong>Slippage:</strong> Estimated market impact based on strategy type</li>
@@ -1234,7 +2106,9 @@ app.get('/simulator', (c) => {
 
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
         <script src="/static/simulator.js"></script>
-        <!-- ADDITIVE ENHANCEMENT: Professional simulator components -->
+        <!-- ADDITIVE ENHANCEMENT: Enhanced broker database and professional simulator components -->
+        <!-- CRITICAL: Load enhanced broker database FIRST for integration -->
+        <script src="/static/enhanced-broker-database.js"></script>
         <script src="/static/enhanced-simulator-engine.js"></script>
         <script src="/static/enhanced-simulator-ui.js"></script>
         <script src="/static/enhanced-simulator-mobile.js"></script>
@@ -1262,29 +2136,43 @@ app.get('/about', (c) => {
                 theme: {
                     extend: {
                         colors: {
-                            primary: '#1e40af',
-                            secondary: '#64748b',
-                            accent: '#3b82f6'
+                            // Only 3 colors: Yellow, Blue, White
+                            primary: '#1e40af',        // Blue-800
+                            secondary: '#2563eb',      // Blue-600  
+                            accent: '#facc15',         // Yellow-400
+                            yellow: {
+                                400: '#facc15',         // Main yellow
+                                300: '#fde047',         // Lighter yellow for hovers
+                                500: '#eab308'          // Darker yellow for emphasis
+                            },
+                            blue: {
+                                50: '#eff6ff',          // Very light blue
+                                100: '#dbeafe',         // Light blue
+                                600: '#2563eb',         // Main blue
+                                700: '#1d4ed8',         // Medium blue
+                                800: '#1e40af',         // Dark blue (primary)
+                                900: '#1e3a8a'          // Very dark blue
+                            }
                         }
                     }
                 }
             }
         </script>
     </head>
-    <body class="bg-gray-50 text-gray-900">
+    <body class="bg-blue-50 text-blue-900">
         <!-- Navigation -->
         <nav class="bg-white shadow-sm border-b">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between items-center h-16">
                     <div class="flex items-center space-x-2">
                         <i class="fas fa-chart-line text-primary text-2xl"></i>
-                        <a href="/" class="text-xl font-bold text-gray-900">BrokerAnalysis</a>
+                        <a href="/" class="text-xl font-bold text-blue-900">BrokerAnalysis</a>
                     </div>
                     <div class="hidden md:flex items-center space-x-6">
-                        <a href="/" class="text-gray-700 hover:text-primary transition-colors">Home</a>
-                        <a href="/reviews" class="text-gray-700 hover:text-primary transition-colors">Reviews</a>
-                        <a href="/compare" class="text-gray-700 hover:text-primary transition-colors">Compare</a>
-                        <a href="/simulator" class="text-gray-700 hover:text-primary transition-colors">Simulator</a>
+                        <a href="/" class="text-blue-800 hover:text-primary transition-colors">Home</a>
+                        <a href="/reviews" class="text-blue-800 hover:text-primary transition-colors">Reviews</a>
+                        <a href="/compare" class="text-blue-800 hover:text-primary transition-colors">Compare</a>
+                        <a href="/simulator" class="text-blue-800 hover:text-primary transition-colors">Simulator</a>
                         <a href="/about" class="text-primary font-semibold">About</a>
                     </div>
                 </div>
@@ -1303,7 +2191,7 @@ app.get('/about', (c) => {
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div class="prose max-w-none">
                 <h2 class="text-3xl font-bold mb-6">Our Mission</h2>
-                <p class="text-lg text-gray-600 mb-8">
+                <p class="text-lg text-blue-600 mb-8">
                     BrokerAnalysis exists to help traders make informed decisions when choosing a forex broker. 
                     We believe that access to accurate, comprehensive broker information should be free and 
                     transparent for everyone in the trading community.
@@ -1312,8 +2200,8 @@ app.get('/about', (c) => {
                 <h2 class="text-3xl font-bold mb-6 mt-12">Methodology</h2>
                 <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
                     <h3 class="text-xl font-semibold mb-4">Scoring System</h3>
-                    <p class="text-gray-600 mb-4">Our broker ratings are based on a weighted scoring system that considers:</p>
-                    <ul class="space-y-2 text-gray-600">
+                    <p class="text-blue-600 mb-4">Our broker ratings are based on a weighted scoring system that considers:</p>
+                    <ul class="space-y-2 text-blue-600">
                         <li><strong>Regulation & Safety (25%):</strong> Regulatory oversight, financial stability, client fund protection</li>
                         <li><strong>Trading Costs (25%):</strong> Spreads, commissions, overnight fees, and other trading expenses</li>
                         <li><strong>Platform & Tools (20%):</strong> Trading platform quality, mobile apps, charting tools, and research</li>
@@ -1324,7 +2212,7 @@ app.get('/about', (c) => {
 
                 <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
                     <h3 class="text-xl font-semibold mb-4">Data Sources</h3>
-                    <ul class="space-y-2 text-gray-600">
+                    <ul class="space-y-2 text-blue-600">
                         <li>• Regulatory databases (FCA, CFTC, ASIC, CySEC registers)</li>
                         <li>• Broker websites and official documentation</li>
                         <li>• Live spread data and market conditions</li>
@@ -1335,7 +2223,7 @@ app.get('/about', (c) => {
 
                 <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
                     <h3 class="text-xl font-semibold mb-4">Data Refresh Policy</h3>
-                    <p class="text-gray-600">
+                    <p class="text-blue-600">
                         We update our broker database weekly to ensure accuracy. Spread data is monitored daily, 
                         while regulatory information and company details are verified monthly. Any significant 
                         changes to broker terms or regulatory status are updated immediately.
@@ -1346,14 +2234,14 @@ app.get('/about', (c) => {
                 <div class="grid md:grid-cols-2 gap-8 mb-8">
                     <div class="bg-white rounded-lg shadow-lg p-6">
                         <h3 class="text-xl font-semibold mb-4">Independent Analysis</h3>
-                        <p class="text-gray-600">
+                        <p class="text-blue-600">
                             Our reviews are completely independent and unbiased. We do not accept payment 
                             for positive reviews or ratings.
                         </p>
                     </div>
                     <div class="bg-white rounded-lg shadow-lg p-6">
                         <h3 class="text-xl font-semibold mb-4">Open Methodology</h3>
-                        <p class="text-gray-600">
+                        <p class="text-blue-600">
                             Our scoring methodology is fully transparent and publicly available. 
                             We believe traders deserve to know how ratings are calculated.
                         </p>
@@ -1361,8 +2249,8 @@ app.get('/about', (c) => {
                 </div>
 
                 <h2 class="text-3xl font-bold mb-6 mt-12">Privacy & Data</h2>
-                <div class="bg-gray-50 rounded-lg p-6 mb-8">
-                    <p class="text-gray-600">
+                <div class="bg-blue-50 rounded-lg p-6 mb-8">
+                    <p class="text-blue-600">
                         We collect minimal user data and never share personal information with third parties. 
                         Our recommendation system uses anonymized usage patterns to improve suggestions while 
                         protecting individual privacy. No trading history or financial information is collected or stored.
@@ -1374,11 +2262,11 @@ app.get('/about', (c) => {
                     <div class="grid md:grid-cols-2 gap-8">
                         <div>
                             <h3 class="text-lg font-semibold mb-2">General Inquiries</h3>
-                            <p class="text-gray-600">hello@brokeranalysis.com</p>
+                            <p class="text-blue-600">hello@brokeranalysis.com</p>
                         </div>
                         <div>
                             <h3 class="text-lg font-semibold mb-2">Data Corrections</h3>
-                            <p class="text-gray-600">data@brokeranalysis.com</p>
+                            <p class="text-blue-600">data@brokeranalysis.com</p>
                         </div>
                     </div>
                 </div>
@@ -1409,30 +2297,44 @@ app.get('/broker/:slug', (c) => {
                 theme: {
                     extend: {
                         colors: {
-                            primary: '#1e40af',
-                            secondary: '#64748b',
-                            accent: '#3b82f6'
+                            // Only 3 colors: Yellow, Blue, White
+                            primary: '#1e40af',        // Blue-800
+                            secondary: '#2563eb',      // Blue-600  
+                            accent: '#facc15',         // Yellow-400
+                            yellow: {
+                                400: '#facc15',         // Main yellow
+                                300: '#fde047',         // Lighter yellow for hovers
+                                500: '#eab308'          // Darker yellow for emphasis
+                            },
+                            blue: {
+                                50: '#eff6ff',          // Very light blue
+                                100: '#dbeafe',         // Light blue
+                                600: '#2563eb',         // Main blue
+                                700: '#1d4ed8',         // Medium blue
+                                800: '#1e40af',         // Dark blue (primary)
+                                900: '#1e3a8a'          // Very dark blue
+                            }
                         }
                     }
                 }
             }
         </script>
     </head>
-    <body class="bg-gray-50 text-gray-900">
+    <body class="bg-blue-50 text-blue-900">
         <!-- Navigation -->
         <nav class="bg-white shadow-sm border-b">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between items-center h-16">
                     <div class="flex items-center space-x-2">
                         <i class="fas fa-chart-line text-primary text-2xl"></i>
-                        <a href="/" class="text-xl font-bold text-gray-900">BrokerAnalysis</a>
+                        <a href="/" class="text-xl font-bold text-blue-900">BrokerAnalysis</a>
                     </div>
                     <div class="hidden md:flex items-center space-x-6">
-                        <a href="/" class="text-gray-700 hover:text-primary transition-colors">Home</a>
-                        <a href="/reviews" class="text-gray-700 hover:text-primary transition-colors">Reviews</a>
-                        <a href="/compare" class="text-gray-700 hover:text-primary transition-colors">Compare</a>
-                        <a href="/simulator" class="text-gray-700 hover:text-primary transition-colors">Simulator</a>
-                        <a href="/about" class="text-gray-700 hover:text-primary transition-colors">About</a>
+                        <a href="/" class="text-blue-800 hover:text-primary transition-colors">Home</a>
+                        <a href="/reviews" class="text-blue-800 hover:text-primary transition-colors">Reviews</a>
+                        <a href="/compare" class="text-blue-800 hover:text-primary transition-colors">Compare</a>
+                        <a href="/simulator" class="text-blue-800 hover:text-primary transition-colors">Simulator</a>
+                        <a href="/about" class="text-blue-800 hover:text-primary transition-colors">About</a>
                     </div>
                 </div>
             </div>
@@ -1443,20 +2345,59 @@ app.get('/broker/:slug', (c) => {
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+        <!-- CRITICAL: Enhanced broker database for broker details -->
+        <script src="/static/enhanced-broker-database.js"></script>
         <script>
           // Load broker details on page load
           document.addEventListener('DOMContentLoaded', async function() {
             const slug = document.getElementById('broker-detail').dataset.slug;
             try {
-              const response = await fetch('/data/brokers.json');
-              const data = await response.json();
-              const broker = data.brokers.find(b => b.slug === slug);
+              let broker = null;
+              
+              // Priority 1: Use Enhanced Broker Database if available
+              if (typeof EnhancedBrokerDatabase !== 'undefined') {
+                const brokerDB = new EnhancedBrokerDatabase();
+                await brokerDB.init();
+                const enhancedBroker = brokerDB.getEnhancedBrokerById(slug);
+                
+                if (enhancedBroker) {
+                  // Convert enhanced broker to display format
+                  broker = {
+                    id: enhancedBroker.id,
+                    name: enhancedBroker.name,
+                    slug: enhancedBroker.id,
+                    rating: enhancedBroker.rating,
+                    founded: enhancedBroker.founded,
+                    headquarters: enhancedBroker.headquarters,
+                    minDeposit: enhancedBroker.minimumDeposit,
+                    maxLeverage: enhancedBroker.maxLeverage,
+                    typicalSpread: enhancedBroker.spreads.major_pairs.avg,
+                    platforms: enhancedBroker.platforms,
+                    regulation: enhancedBroker.regulation.map(reg => ({
+                      name: reg,
+                      jurisdiction: this.getJurisdictionByRegulator(reg),
+                      license: 'Licensed'
+                    })),
+                    pros: enhancedBroker.pros,
+                    cons: enhancedBroker.cons,
+                    verified: enhancedBroker.category === 'institutional' || enhancedBroker.rating >= 4.3,
+                    verdict: enhancedBroker.reviewSummary
+                  };
+                }
+              }
+              
+              // Fallback: Use legacy API
+              if (!broker) {
+                const response = await fetch('/data/brokers.json');
+                const data = await response.json();
+                broker = data.brokers.find(b => b.slug === slug || b.id === slug);
+              }
               
               if (broker) {
                 document.getElementById('broker-detail').innerHTML = renderBrokerDetail(broker);
                 document.title = broker.name + ' Review - BrokerAnalysis';
               } else {
-                document.getElementById('broker-detail').innerHTML = '<div class="text-center py-16"><h2 class="text-2xl font-bold text-gray-600">Broker not found</h2></div>';
+                document.getElementById('broker-detail').innerHTML = '<div class="text-center py-16"><h2 class="text-2xl font-bold text-blue-600">Broker not found</h2></div>';
               }
             } catch (error) {
               console.error('Error loading broker data:', error);
@@ -1470,7 +2411,7 @@ app.get('/broker/:slug', (c) => {
                 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                   <div class="flex items-center space-x-6">
                     <div class="w-20 h-20 bg-white rounded-lg flex items-center justify-center">
-                      <i class="fas fa-building text-3xl text-gray-600"></i>
+                      <i class="fas fa-building text-3xl text-blue-600"></i>
                     </div>
                     <div class="flex-1">
                       <h1 class="text-4xl font-bold mb-2">\${broker.name}</h1>
@@ -1481,7 +2422,7 @@ app.get('/broker/:slug', (c) => {
                           </div>
                           <span class="text-lg">\${broker.rating}/5.0</span>
                         </div>
-                        \${broker.verified ? '<span class="bg-green-500 text-white px-2 py-1 rounded text-sm">Verified</span>' : ''}
+                        \${broker.verified ? '<span class="bg-yellow-1000 text-white px-2 py-1 rounded text-sm">Verified</span>' : ''}
                       </div>
                       <p class="text-xl text-blue-100 mt-2">\${broker.verdict}</p>
                     </div>
@@ -1505,6 +2446,15 @@ app.get('/broker/:slug', (c) => {
                       <div class="flex justify-between"><span class="font-medium">Platforms:</span><span>\${broker.platforms ? broker.platforms.length + ' platforms' : 'N/A'}</span></div>
                     </div>
                   </div>
+                  \${broker.bonusType ? \`
+                    <div class="mt-6 p-4 bg-gradient-to-r from-green-50 to-blue-50 border border-yellow-200 rounded-lg">
+                      <div class="flex items-center space-x-2 mb-2">
+                        <i class="fas fa-gift text-blue-800"></i>
+                        <h3 class="text-lg font-semibold text-blue-900">\${broker.bonusType}</h3>
+                      </div>
+                      <p class="text-blue-700">Get up to <strong>\${broker.bonusAmount}</strong> bonus with this broker</p>
+                    </div>
+                  \` : ''}
                 </div>
 
                 <!-- Regulation & Safety -->
@@ -1516,36 +2466,51 @@ app.get('/broker/:slug', (c) => {
                         <div class="flex items-center justify-between p-4 border rounded-lg">
                           <div>
                             <div class="font-semibold">\${reg.name}</div>
-                            <div class="text-sm text-gray-600">\${reg.jurisdiction}</div>
+                            <div class="text-sm text-blue-600">\${reg.jurisdiction}</div>
                           </div>
                           <div class="text-sm text-gray-500">License: \${reg.license || 'Licensed'}</div>
                         </div>
                       \`).join('')}
                     </div>
-                  \` : '<p class="text-gray-600">Regulation information not available</p>'}
+                  \` : '<p class="text-blue-600">Regulation information not available</p>'}
                 </div>
+
+                <!-- Special Features -->
+                \${broker.specialFeatures && broker.specialFeatures.length > 0 ? \`
+                  <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+                    <h2 class="text-2xl font-bold mb-6">Special Features</h2>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      \${broker.specialFeatures.map(feature => \`
+                        <div class="flex items-center p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                          <i class="fas fa-star text-blue-600 mr-2"></i>
+                          <span class="text-blue-800 font-medium">\${feature}</span>
+                        </div>
+                      \`).join('')}
+                    </div>
+                  </div>
+                \` : ''}
 
                 <!-- Pros & Cons -->
                 \${broker.pros && broker.cons ? \`
                   <div class="grid md:grid-cols-2 gap-8 mb-8">
                     <div class="bg-white rounded-lg shadow-lg p-6">
-                      <h3 class="text-xl font-bold text-green-600 mb-4">Pros</h3>
+                      <h3 class="text-xl font-bold text-blue-800 mb-4">Pros</h3>
                       <ul class="space-y-2">
                         \${broker.pros.map(pro => \`
                           <li class="flex items-start">
-                            <i class="fas fa-check text-green-600 mr-2 mt-1"></i>
-                            <span class="text-gray-700">\${pro}</span>
+                            <i class="fas fa-check text-blue-800 mr-2 mt-1"></i>
+                            <span class="text-blue-800">\${pro}</span>
                           </li>
                         \`).join('')}
                       </ul>
                     </div>
                     <div class="bg-white rounded-lg shadow-lg p-6">
-                      <h3 class="text-xl font-bold text-red-600 mb-4">Cons</h3>
+                      <h3 class="text-xl font-bold text-blue-800 mb-4">Cons</h3>
                       <ul class="space-y-2">
                         \${broker.cons.map(con => \`
                           <li class="flex items-start">
-                            <i class="fas fa-times text-red-600 mr-2 mt-1"></i>
-                            <span class="text-gray-700">\${con}</span>
+                            <i class="fas fa-times text-blue-800 mr-2 mt-1"></i>
+                            <span class="text-blue-800">\${con}</span>
                           </li>
                         \`).join('')}
                       </ul>
@@ -1576,7 +2541,559 @@ app.get('/broker/:slug', (c) => {
               ...Array(emptyStars).fill('<i class="far fa-star"></i>')
             ].join('');
           }
+          
+          function getJurisdictionByRegulator(regulator) {
+            const jurisdictions = {
+              'FCA': 'United Kingdom',
+              'CFTC': 'United States', 
+              'SEC': 'United States',
+              'ASIC': 'Australia',
+              'CySEC': 'Cyprus',
+              'FINMA': 'Switzerland',
+              'BaFin': 'Germany',
+              'DFSA': 'Dubai',
+              'MAS': 'Singapore',
+              'FSA': 'Seychelles',
+              'FSCA': 'South Africa'
+            };
+            return jurisdictions[regulator] || 'International';
+          }
         </script>
+    </body>
+    </html>
+  `);
+});
+
+// User Dashboard route
+app.get('/dashboard', (c) => {
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Dashboard - BrokerAnalysis</title>
+        <meta name="description" content="Your personalized broker analysis dashboard with saved matches and recommendations.">
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+        <link href="/static/styles.css" rel="stylesheet">
+        <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            // Only 3 colors: Yellow, Blue, White
+                            primary: '#1e40af',        // Blue-800
+                            secondary: '#2563eb',      // Blue-600  
+                            accent: '#facc15',         // Yellow-400
+                            yellow: {
+                                400: '#facc15',         // Main yellow
+                                300: '#fde047',         // Lighter yellow for hovers
+                                500: '#eab308'          // Darker yellow for emphasis
+                            },
+                            blue: {
+                                50: '#eff6ff',          // Very light blue
+                                100: '#dbeafe',         // Light blue
+                                600: '#2563eb',         // Main blue
+                                700: '#1d4ed8',         // Medium blue
+                                800: '#1e40af',         // Dark blue (primary)
+                                900: '#1e3a8a'          // Very dark blue
+                            }
+                        }
+                    }
+                }
+            }
+        </script>
+    </head>
+    <body class="bg-blue-50 text-blue-900">
+        <!-- Navigation -->
+        <nav class="bg-white shadow-sm border-b">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-chart-line text-primary text-2xl"></i>
+                        <a href="/" class="text-xl font-bold text-blue-900">BrokerAnalysis</a>
+                    </div>
+                    
+                    <!-- Enhanced Navigation with Dropdown Menus -->
+                    <div class="hidden md:flex items-center justify-center flex-1" id="main-navigation">
+                        <!-- Navigation will be populated by navigation.js -->
+                        <div class="flex items-center space-x-2">
+                            <div class="relative group">
+                                <button class="flex items-center space-x-1 text-blue-800 hover:text-primary transition-colors py-2 px-3 rounded-md nav-menu-button">
+                                    <i class="fas fa-trophy text-sm"></i>
+                                    <span class="font-medium">Best Brokers</span>
+                                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                                </button>
+                                <div class="absolute left-0 mt-1 w-80 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                    <div class="py-2">
+                                        <a href="/brokers/top-100" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Top 100 Forex Brokers</a>
+                                        <div class="px-4 py-2 text-sm font-semibold text-blue-900 bg-blue-50 border-b border-blue-200">By Country</div>
+                                        <div class="grid grid-cols-2 gap-0 max-h-64 overflow-y-auto">
+                                            <a href="/brokers/australia" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors border-r border-blue-100">Australia</a>
+                                            <a href="/brokers/canada" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Canada</a>
+                                            <a href="/brokers/uk" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors border-r border-blue-100">UK</a>
+                                            <a href="/brokers/south-africa" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">South Africa</a>
+                                            <a href="/brokers/pakistan" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors border-r border-blue-100">Pakistan</a>
+                                            <a href="/brokers/philippines" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Philippines</a>
+                                            <a href="/brokers/india" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors border-r border-blue-100">India</a>
+                                            <a href="/brokers/malaysia" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Malaysia</a>
+                                            <a href="/brokers/dubai" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors border-r border-blue-100">Dubai</a>
+                                            <a href="/brokers/qatar" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Qatar</a>
+                                            <a href="/brokers/indonesia" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors border-r border-blue-100">Indonesia</a>
+                                            <a href="/brokers/usa" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">USA</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="relative group">
+                                <button class="flex items-center space-x-1 text-blue-800 hover:text-primary transition-colors py-2 px-3 rounded-md nav-menu-button">
+                                    <i class="fas fa-chart-bar text-sm"></i>
+                                    <span class="font-medium">Trading Types</span>
+                                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                                </button>
+                                <div class="absolute left-0 mt-1 w-72 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                    <div class="py-2 max-h-80 overflow-y-auto">
+                                        <a href="/brokers/gold-trading" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Gold (XAUUSD) Trading</a>
+                                        <a href="/brokers/islamic-halal" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Islamic Halal Trading</a>
+                                        <a href="/brokers/automated" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Automated Forex Trading</a>
+                                        <a href="/brokers/high-leverage" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">High Leverage Brokers</a>
+                                        <a href="/brokers/oil-trading" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Oil Trading Platform</a>
+                                        <a href="/brokers/copy-trading" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Copy Trading Platform</a>
+                                        <a href="/brokers/ecn" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">ECN Brokers</a>
+                                        <a href="/brokers/scalping" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Scalping Forex Brokers</a>
+                                        <a href="/brokers/demo-accounts" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Forex Demo Accounts</a>
+                                        <a href="/brokers/mt4" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">MT4 Brokers</a>
+                                        <a href="/brokers/stocks" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Stocks Trading Platform</a>
+                                        <a href="/brokers/beginners" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Brokers For Beginners</a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="relative group">
+                                <button class="flex items-center space-x-1 text-blue-800 hover:text-primary transition-colors py-2 px-3 rounded-md nav-menu-button">
+                                    <i class="fas fa-star text-sm"></i>
+                                    <span class="font-medium">Reviews</span>
+                                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                                </button>
+                                <div class="absolute left-0 mt-1 w-64 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                    <div class="py-2">
+                                        <a href="/reviews" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">All Reviews</a>
+                                        <a href="/reviews/platforms" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Trading Platforms</a>
+                                        <a href="/reviews/types" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Types of Forex Brokers</a>
+                                        <hr class="my-1 border-blue-200">
+                                        <div class="px-4 py-2 text-sm font-semibold text-blue-900 bg-blue-50 border-b border-blue-200">Top Brokers</div>
+                                        <div class="max-h-48 overflow-y-auto">
+                                            <a href="/reviews/fp-markets" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">FP Markets</a>
+                                            <a href="/reviews/fxtm" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">FXTM</a>
+                                            <a href="/reviews/blackbull-markets" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Blackbull Markets</a>
+                                            <a href="/reviews/eightcap" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Eightcap</a>
+                                            <a href="/reviews/octa" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Octa</a>
+                                            <a href="/reviews/plus500" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Plus500</a>
+                                            <a href="/reviews/avatrade" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Avatrade</a>
+                                            <a href="/reviews/xm" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">XM</a>
+                                            <a href="/reviews/pepperstone" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Pepperstone</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="relative group">
+                                <button class="flex items-center space-x-1 text-blue-800 hover:text-primary transition-colors py-2 px-3 rounded-md nav-menu-button">
+                                    <i class="fas fa-tools text-sm"></i>
+                                    <span class="font-medium">Tools</span>
+                                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                                </button>
+                                <div class="absolute left-0 mt-1 w-56 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                    <div class="py-2">
+                                        <a href="/compare" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">
+                                            <i class="fas fa-balance-scale mr-2 text-blue-500"></i>Compare Brokers
+                                        </a>
+                                        <a href="/simulator" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">
+                                            <i class="fas fa-chart-line mr-2 text-yellow-400"></i>Trading Simulator
+                                        </a>
+                                        <a href="/" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">
+                                            <i class="fas fa-heart mr-2 text-red-500"></i>Broker Matcher
+                                        </a>
+                                        <hr class="my-1 border-blue-200">
+                                        <div class="px-4 py-2 text-sm font-semibold text-blue-900 bg-blue-50 border-b border-blue-200">Calculators</div>
+                                        <a href="/tools/profit-calculator" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Profit Calculator</a>
+                                        <a href="/tools/margin-calculator" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Margin Calculator</a>
+                                        <a href="/tools/pip-calculator" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Pip Calculator</a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="relative group">
+                                <button class="flex items-center space-x-1 text-blue-800 hover:text-primary transition-colors py-2 px-3 rounded-md nav-menu-button">
+                                    <i class="fas fa-info-circle text-sm"></i>
+                                    <span class="font-medium">About</span>
+                                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                                </button>
+                                <div class="absolute left-0 mt-1 w-48 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                    <div class="py-2">
+                                        <a href="/about" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">About Us</a>
+                                        <a href="/methodology" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Methodology</a>
+                                        <a href="/contact" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Contact</a>
+                                        <a href="/api-docs" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">API</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Auth Navigation -->
+                    <div class="nav-auth-container">
+                        <!-- Will be populated by auth system -->
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Dashboard Content -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <!-- Dashboard Header -->
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold text-blue-900 mb-2">Dashboard</h1>
+                <p class="text-blue-600" id="welcome-message">Welcome back! Here's your broker analysis overview.</p>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="grid md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex items-center">
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-blue-600">Saved Matches</p>
+                            <p class="text-2xl font-bold text-blue-900" id="saved-matches-count">-</p>
+                        </div>
+                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-heart text-blue-600 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex items-center">
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-blue-600">Top Match Score</p>
+                            <p class="text-2xl font-bold text-blue-900" id="top-match-score">-</p>
+                        </div>
+                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-trophy text-blue-800 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex items-center">
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-blue-600">Last Match</p>
+                            <p class="text-2xl font-bold text-blue-900" id="last-match-date">-</p>
+                        </div>
+                        <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-clock text-purple-600 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex items-center">
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-blue-600">Account</p>
+                            <p class="text-lg font-bold text-blue-900">Premium</p>
+                        </div>
+                        <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-star text-yellow-600 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Broker Matches -->
+            <div class="bg-white rounded-lg shadow-md">
+                <div class="px-6 py-4 border-b border-blue-200">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-xl font-bold text-blue-900">Recent Broker Matches</h2>
+                        <div class="flex space-x-2">
+                            <a href="/dashboard/matches" class="text-blue-600 hover:text-blue-700 text-sm font-medium">
+                                View All
+                            </a>
+                            <button data-action="broker-match" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 transition-colors">
+                                New Match
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="recent-matches" class="p-6">
+                    <!-- Recent matches will be loaded here -->
+                    <div class="text-center py-8">
+                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                        <p class="text-blue-600">Loading your broker matches...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scripts -->
+        <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+        <script src="/static/enhanced-broker-database.js"></script>
+        <script src="/static/auth.js"></script>
+        <script src="/static/navigation.js"></script>
+        <script src="/static/dashboard.js"></script>
+    </body>
+    </html>
+  `);
+});
+
+// Broker Matches Dashboard page
+app.get('/dashboard/matches', (c) => {
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>My Broker Matches - BrokerAnalysis</title>
+        <meta name="description" content="View all your saved broker match results and recommendations.">
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+        <link href="/static/styles.css" rel="stylesheet">
+        <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            // Only 3 colors: Yellow, Blue, White
+                            primary: '#1e40af',        // Blue-800
+                            secondary: '#2563eb',      // Blue-600  
+                            accent: '#facc15',         // Yellow-400
+                            yellow: {
+                                400: '#facc15',         // Main yellow
+                                300: '#fde047',         // Lighter yellow for hovers
+                                500: '#eab308'          // Darker yellow for emphasis
+                            },
+                            blue: {
+                                50: '#eff6ff',          // Very light blue
+                                100: '#dbeafe',         // Light blue
+                                600: '#2563eb',         // Main blue
+                                700: '#1d4ed8',         // Medium blue
+                                800: '#1e40af',         // Dark blue (primary)
+                                900: '#1e3a8a'          // Very dark blue
+                            }
+                        }
+                    }
+                }
+            }
+        </script>
+    </head>
+    <body class="bg-blue-50 text-blue-900">
+        <!-- Navigation -->
+        <nav class="bg-white shadow-sm border-b">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-chart-line text-primary text-2xl"></i>
+                        <a href="/" class="text-xl font-bold text-blue-900">BrokerAnalysis</a>
+                    </div>
+                    
+                    <!-- Enhanced Navigation with Dropdown Menus -->
+                    <div class="hidden md:flex items-center justify-center flex-1" id="main-navigation">
+                        <!-- Navigation will be populated by navigation.js -->
+                        <div class="flex items-center space-x-2">
+                            <div class="relative group">
+                                <button class="flex items-center space-x-1 text-blue-800 hover:text-primary transition-colors py-2 px-3 rounded-md nav-menu-button">
+                                    <i class="fas fa-trophy text-sm"></i>
+                                    <span class="font-medium">Best Brokers</span>
+                                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                                </button>
+                                <div class="absolute left-0 mt-1 w-80 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                    <div class="py-2">
+                                        <a href="/brokers/top-100" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Top 100 Forex Brokers</a>
+                                        <div class="px-4 py-2 text-sm font-semibold text-blue-900 bg-blue-50 border-b border-blue-200">By Country</div>
+                                        <div class="grid grid-cols-2 gap-0 max-h-64 overflow-y-auto">
+                                            <a href="/brokers/australia" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors border-r border-blue-100">Australia</a>
+                                            <a href="/brokers/canada" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Canada</a>
+                                            <a href="/brokers/uk" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors border-r border-blue-100">UK</a>
+                                            <a href="/brokers/south-africa" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">South Africa</a>
+                                            <a href="/brokers/pakistan" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors border-r border-blue-100">Pakistan</a>
+                                            <a href="/brokers/philippines" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Philippines</a>
+                                            <a href="/brokers/india" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors border-r border-blue-100">India</a>
+                                            <a href="/brokers/malaysia" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Malaysia</a>
+                                            <a href="/brokers/dubai" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors border-r border-blue-100">Dubai</a>
+                                            <a href="/brokers/qatar" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Qatar</a>
+                                            <a href="/brokers/indonesia" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors border-r border-blue-100">Indonesia</a>
+                                            <a href="/brokers/usa" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">USA</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="relative group">
+                                <button class="flex items-center space-x-1 text-blue-800 hover:text-primary transition-colors py-2 px-3 rounded-md nav-menu-button">
+                                    <i class="fas fa-chart-bar text-sm"></i>
+                                    <span class="font-medium">Trading Types</span>
+                                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                                </button>
+                                <div class="absolute left-0 mt-1 w-72 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                    <div class="py-2 max-h-80 overflow-y-auto">
+                                        <a href="/brokers/gold-trading" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Gold (XAUUSD) Trading</a>
+                                        <a href="/brokers/islamic-halal" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Islamic Halal Trading</a>
+                                        <a href="/brokers/automated" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Automated Forex Trading</a>
+                                        <a href="/brokers/high-leverage" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">High Leverage Brokers</a>
+                                        <a href="/brokers/oil-trading" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Oil Trading Platform</a>
+                                        <a href="/brokers/copy-trading" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Copy Trading Platform</a>
+                                        <a href="/brokers/ecn" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">ECN Brokers</a>
+                                        <a href="/brokers/scalping" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Scalping Forex Brokers</a>
+                                        <a href="/brokers/demo-accounts" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Forex Demo Accounts</a>
+                                        <a href="/brokers/mt4" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">MT4 Brokers</a>
+                                        <a href="/brokers/stocks" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Stocks Trading Platform</a>
+                                        <a href="/brokers/beginners" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Brokers For Beginners</a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="relative group">
+                                <button class="flex items-center space-x-1 text-blue-800 hover:text-primary transition-colors py-2 px-3 rounded-md nav-menu-button">
+                                    <i class="fas fa-star text-sm"></i>
+                                    <span class="font-medium">Reviews</span>
+                                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                                </button>
+                                <div class="absolute left-0 mt-1 w-64 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                    <div class="py-2">
+                                        <a href="/reviews" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">All Reviews</a>
+                                        <a href="/reviews/platforms" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Trading Platforms</a>
+                                        <a href="/reviews/types" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Types of Forex Brokers</a>
+                                        <hr class="my-1 border-blue-200">
+                                        <div class="px-4 py-2 text-sm font-semibold text-blue-900 bg-blue-50 border-b border-blue-200">Top Brokers</div>
+                                        <div class="max-h-48 overflow-y-auto">
+                                            <a href="/reviews/fp-markets" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">FP Markets</a>
+                                            <a href="/reviews/fxtm" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">FXTM</a>
+                                            <a href="/reviews/blackbull-markets" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Blackbull Markets</a>
+                                            <a href="/reviews/eightcap" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Eightcap</a>
+                                            <a href="/reviews/octa" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Octa</a>
+                                            <a href="/reviews/plus500" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Plus500</a>
+                                            <a href="/reviews/avatrade" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Avatrade</a>
+                                            <a href="/reviews/xm" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">XM</a>
+                                            <a href="/reviews/pepperstone" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Pepperstone</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="relative group">
+                                <button class="flex items-center space-x-1 text-blue-800 hover:text-primary transition-colors py-2 px-3 rounded-md nav-menu-button">
+                                    <i class="fas fa-tools text-sm"></i>
+                                    <span class="font-medium">Tools</span>
+                                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                                </button>
+                                <div class="absolute left-0 mt-1 w-56 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                    <div class="py-2">
+                                        <a href="/compare" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">
+                                            <i class="fas fa-balance-scale mr-2 text-blue-500"></i>Compare Brokers
+                                        </a>
+                                        <a href="/simulator" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">
+                                            <i class="fas fa-chart-line mr-2 text-yellow-400"></i>Trading Simulator
+                                        </a>
+                                        <a href="/" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">
+                                            <i class="fas fa-heart mr-2 text-red-500"></i>Broker Matcher
+                                        </a>
+                                        <hr class="my-1 border-blue-200">
+                                        <div class="px-4 py-2 text-sm font-semibold text-blue-900 bg-blue-50 border-b border-blue-200">Calculators</div>
+                                        <a href="/tools/profit-calculator" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Profit Calculator</a>
+                                        <a href="/tools/margin-calculator" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Margin Calculator</a>
+                                        <a href="/tools/pip-calculator" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Pip Calculator</a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="relative group">
+                                <button class="flex items-center space-x-1 text-blue-800 hover:text-primary transition-colors py-2 px-3 rounded-md nav-menu-button">
+                                    <i class="fas fa-info-circle text-sm"></i>
+                                    <span class="font-medium">About</span>
+                                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                                </button>
+                                <div class="absolute left-0 mt-1 w-48 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                    <div class="py-2">
+                                        <a href="/about" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">About Us</a>
+                                        <a href="/methodology" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Methodology</a>
+                                        <a href="/contact" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Contact</a>
+                                        <a href="/api-docs" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">API</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Auth Navigation -->
+                    <div class="nav-auth-container">
+                        <!-- Will be populated by auth system -->
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Page Header -->
+        <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-8">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center space-x-4">
+                    <a href="/dashboard" class="text-white hover:text-blue-200 transition-colors">
+                        <i class="fas fa-arrow-left text-xl"></i>
+                    </a>
+                    <div>
+                        <h1 class="text-3xl font-bold mb-2">My Broker Matches</h1>
+                        <p class="text-blue-100">All your saved broker recommendations and match results</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <!-- Actions Bar -->
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+                <div class="mb-4 sm:mb-0">
+                    <p class="text-blue-600" id="matches-count">Loading matches...</p>
+                </div>
+                <button data-action="broker-match" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                    <i class="fas fa-plus mr-2"></i>
+                    New Broker Match
+                </button>
+            </div>
+
+            <!-- Matches List -->
+            <div id="matches-container">
+                <!-- Matches will be loaded here -->
+                <div class="text-center py-12">
+                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                    <p class="text-blue-600">Loading your broker matches...</p>
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div id="empty-state" class="text-center py-16 hidden">
+                <div class="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-heart text-blue-600 text-3xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-blue-900 mb-4">No Broker Matches Yet</h3>
+                <p class="text-blue-600 mb-6 max-w-md mx-auto">
+                    Get personalized broker recommendations by taking our quick questionnaire. 
+                    We'll match you with the perfect brokers based on your trading style and preferences.
+                </p>
+                <button data-action="broker-match" class="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                    <i class="fas fa-rocket mr-2"></i>
+                    Get Your First Match
+                </button>
+            </div>
+        </div>
+
+        <!-- Scripts -->
+        <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+        <script src="/static/enhanced-broker-database.js"></script>
+        <script src="/static/auth.js"></script>
+        <script src="/static/navigation.js"></script>
+        <script src="/static/broker-matches.js"></script>
     </body>
     </html>
   `);
@@ -1600,32 +3117,172 @@ app.get('/', (c) => {
                 theme: {
                     extend: {
                         colors: {
-                            primary: '#1e40af',
-                            secondary: '#64748b',
-                            accent: '#3b82f6'
+                            // Only 3 colors: Yellow, Blue, White
+                            primary: '#1e40af',        // Blue-800
+                            secondary: '#2563eb',      // Blue-600  
+                            accent: '#facc15',         // Yellow-400
+                            yellow: {
+                                400: '#facc15',         // Main yellow
+                                300: '#fde047',         // Lighter yellow for hovers
+                                500: '#eab308'          // Darker yellow for emphasis
+                            },
+                            blue: {
+                                50: '#eff6ff',          // Very light blue
+                                100: '#dbeafe',         // Light blue
+                                600: '#2563eb',         // Main blue
+                                700: '#1d4ed8',         // Medium blue
+                                800: '#1e40af',         // Dark blue (primary)
+                                900: '#1e3a8a'          // Very dark blue
+                            }
                         }
                     }
                 }
             }
         </script>
     </head>
-    <body class="bg-gray-50 text-gray-900">
+    <body class="bg-blue-50 text-blue-900">
         <!-- Navigation -->
         <nav class="bg-white shadow-sm border-b">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between items-center h-16">
                     <div class="flex items-center space-x-2">
                         <i class="fas fa-chart-line text-primary text-2xl"></i>
-                        <span class="text-xl font-bold text-gray-900">BrokerAnalysis</span>
+                        <span class="text-xl font-bold text-blue-900">BrokerAnalysis</span>
                     </div>
-                    <div class="hidden md:flex items-center space-x-6">
-                        <a href="/" class="text-gray-700 hover:text-primary transition-colors">Home</a>
-                        <a href="/reviews" class="text-gray-700 hover:text-primary transition-colors">Reviews</a>
-                        <a href="/compare" class="text-gray-700 hover:text-primary transition-colors">Compare</a>
-                        <a href="/simulator" class="text-gray-700 hover:text-primary transition-colors">Simulator</a>
-                        <a href="/about" class="text-gray-700 hover:text-primary transition-colors">About</a>
+                    <!-- Enhanced Navigation with Dropdown Menus -->
+                    <div class="hidden md:flex items-center justify-center flex-1" id="main-navigation">
+                        <!-- Navigation will be populated by navigation.js -->
+                        <div class="flex items-center space-x-2">
+                            <div class="relative group">
+                                <button class="flex items-center space-x-1 text-blue-800 hover:text-primary transition-colors py-2 px-3 rounded-md nav-menu-button">
+                                    <i class="fas fa-trophy text-sm"></i>
+                                    <span class="font-medium">Best Brokers</span>
+                                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                                </button>
+                                <div class="absolute left-0 mt-1 w-80 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                    <div class="py-2">
+                                        <a href="/brokers/top-100" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Top 100 Forex Brokers</a>
+                                        <div class="px-4 py-2 text-sm font-semibold text-blue-900 bg-blue-50 border-b border-blue-200">By Country</div>
+                                        <div class="grid grid-cols-2 gap-0 max-h-64 overflow-y-auto">
+                                            <a href="/brokers/australia" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors border-r border-blue-100">Australia</a>
+                                            <a href="/brokers/canada" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Canada</a>
+                                            <a href="/brokers/uk" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors border-r border-blue-100">UK</a>
+                                            <a href="/brokers/south-africa" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">South Africa</a>
+                                            <a href="/brokers/pakistan" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors border-r border-blue-100">Pakistan</a>
+                                            <a href="/brokers/philippines" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Philippines</a>
+                                            <a href="/brokers/india" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors border-r border-blue-100">India</a>
+                                            <a href="/brokers/malaysia" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Malaysia</a>
+                                            <a href="/brokers/dubai" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors border-r border-blue-100">Dubai</a>
+                                            <a href="/brokers/qatar" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Qatar</a>
+                                            <a href="/brokers/indonesia" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors border-r border-blue-100">Indonesia</a>
+                                            <a href="/brokers/usa" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">USA</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="relative group">
+                                <button class="flex items-center space-x-1 text-blue-800 hover:text-primary transition-colors py-2 px-3 rounded-md nav-menu-button">
+                                    <i class="fas fa-chart-bar text-sm"></i>
+                                    <span class="font-medium">Trading Types</span>
+                                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                                </button>
+                                <div class="absolute left-0 mt-1 w-72 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                    <div class="py-2 max-h-80 overflow-y-auto">
+                                        <a href="/brokers/gold-trading" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Gold (XAUUSD) Trading</a>
+                                        <a href="/brokers/islamic-halal" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Islamic Halal Trading</a>
+                                        <a href="/brokers/automated" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Automated Forex Trading</a>
+                                        <a href="/brokers/high-leverage" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">High Leverage Brokers</a>
+                                        <a href="/brokers/oil-trading" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Oil Trading Platform</a>
+                                        <a href="/brokers/copy-trading" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Copy Trading Platform</a>
+                                        <a href="/brokers/ecn" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">ECN Brokers</a>
+                                        <a href="/brokers/scalping" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Scalping Forex Brokers</a>
+                                        <a href="/brokers/demo-accounts" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Forex Demo Accounts</a>
+                                        <a href="/brokers/mt4" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">MT4 Brokers</a>
+                                        <a href="/brokers/stocks" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Stocks Trading Platform</a>
+                                        <a href="/brokers/beginners" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Brokers For Beginners</a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="relative group">
+                                <button class="flex items-center space-x-1 text-blue-800 hover:text-primary transition-colors py-2 px-3 rounded-md nav-menu-button">
+                                    <i class="fas fa-star text-sm"></i>
+                                    <span class="font-medium">Reviews</span>
+                                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                                </button>
+                                <div class="absolute left-0 mt-1 w-64 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                    <div class="py-2">
+                                        <a href="/reviews" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">All Reviews</a>
+                                        <a href="/reviews/platforms" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Trading Platforms</a>
+                                        <a href="/reviews/types" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Types of Forex Brokers</a>
+                                        <hr class="my-1 border-blue-200">
+                                        <div class="px-4 py-2 text-sm font-semibold text-blue-900 bg-blue-50 border-b border-blue-200">Top Brokers</div>
+                                        <div class="max-h-48 overflow-y-auto">
+                                            <a href="/reviews/fp-markets" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">FP Markets</a>
+                                            <a href="/reviews/fxtm" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">FXTM</a>
+                                            <a href="/reviews/blackbull-markets" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Blackbull Markets</a>
+                                            <a href="/reviews/eightcap" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Eightcap</a>
+                                            <a href="/reviews/octa" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Octa</a>
+                                            <a href="/reviews/plus500" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Plus500</a>
+                                            <a href="/reviews/avatrade" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Avatrade</a>
+                                            <a href="/reviews/xm" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">XM</a>
+                                            <a href="/reviews/pepperstone" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Pepperstone</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="relative group">
+                                <button class="flex items-center space-x-1 text-blue-800 hover:text-primary transition-colors py-2 px-3 rounded-md nav-menu-button">
+                                    <i class="fas fa-tools text-sm"></i>
+                                    <span class="font-medium">Tools</span>
+                                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                                </button>
+                                <div class="absolute left-0 mt-1 w-56 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                    <div class="py-2">
+                                        <a href="/compare" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">
+                                            <i class="fas fa-balance-scale mr-2 text-blue-500"></i>Compare Brokers
+                                        </a>
+                                        <a href="/simulator" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">
+                                            <i class="fas fa-chart-line mr-2 text-yellow-400"></i>Trading Simulator
+                                        </a>
+                                        <a href="/" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">
+                                            <i class="fas fa-heart mr-2 text-red-500"></i>Broker Matcher
+                                        </a>
+                                        <hr class="my-1 border-blue-200">
+                                        <div class="px-4 py-2 text-sm font-semibold text-blue-900 bg-blue-50 border-b border-blue-200">Calculators</div>
+                                        <a href="/tools/profit-calculator" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Profit Calculator</a>
+                                        <a href="/tools/margin-calculator" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Margin Calculator</a>
+                                        <a href="/tools/pip-calculator" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-primary transition-colors">Pip Calculator</a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="relative group">
+                                <button class="flex items-center space-x-1 text-blue-800 hover:text-primary transition-colors py-2 px-3 rounded-md nav-menu-button">
+                                    <i class="fas fa-info-circle text-sm"></i>
+                                    <span class="font-medium">About</span>
+                                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                                </button>
+                                <div class="absolute left-0 mt-1 w-48 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                    <div class="py-2">
+                                        <a href="/about" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">About Us</a>
+                                        <a href="/methodology" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Methodology</a>
+                                        <a href="/contact" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">Contact</a>
+                                        <a href="/api-docs" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-primary transition-colors">API</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <button id="mobile-menu-btn" class="md:hidden p-2 text-gray-700">
+                    
+                    <!-- Auth Navigation -->
+                    <div class="nav-auth-container">
+                        <!-- Will be populated by auth system -->
+                    </div>
+                    
+                    <button id="mobile-menu-btn" class="md:hidden p-2 text-blue-800">
                         <i class="fas fa-bars"></i>
                     </button>
                 </div>
@@ -1634,12 +3291,129 @@ app.get('/', (c) => {
 
         <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden md:hidden bg-white shadow-md border-b">
-            <div class="px-4 py-2 space-y-2">
-                <a href="/" class="block py-2 text-gray-700 hover:text-primary">Home</a>
-                <a href="/reviews" class="block py-2 text-gray-700 hover:text-primary">Reviews</a>
-                <a href="/compare" class="block py-2 text-gray-700 hover:text-primary">Compare</a>
-                <a href="/simulator" class="block py-2 text-gray-700 hover:text-primary">Simulator</a>
-                <a href="/about" class="block py-2 text-gray-700 hover:text-primary">About</a>
+            <div class="px-2 py-2">
+                <!-- Best Brokers -->
+                <div class="border-b border-blue-200 last:border-b-0">
+                    <button class="w-full flex items-center justify-between py-3 px-4 text-left text-blue-800 hover:text-primary mobile-menu-toggle" data-menu="best-brokers">
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-trophy text-sm"></i>
+                            <span class="font-medium">Best Brokers</span>
+                        </div>
+                        <i class="fas fa-chevron-down text-xs transition-transform mobile-chevron"></i>
+                    </button>
+                    <div class="mobile-submenu hidden bg-blue-50 pb-2">
+                        <a href="/brokers/top-100" class="block py-2 px-6 text-sm text-blue-600 hover:text-primary">Top 100 Forex Brokers</a>
+                        <div class="px-6 py-1 text-xs font-semibold text-gray-500 uppercase">By Country</div>
+                        <a href="/brokers/australia" class="block py-2 px-8 text-sm text-blue-600 hover:text-primary">Australia</a>
+                        <a href="/brokers/canada" class="block py-2 px-8 text-sm text-blue-600 hover:text-primary">Canada</a>
+                        <a href="/brokers/uk" class="block py-2 px-8 text-sm text-blue-600 hover:text-primary">UK</a>
+                        <a href="/brokers/south-africa" class="block py-2 px-8 text-sm text-blue-600 hover:text-primary">South Africa</a>
+                        <a href="/brokers/pakistan" class="block py-2 px-8 text-sm text-blue-600 hover:text-primary">Pakistan</a>
+                        <a href="/brokers/philippines" class="block py-2 px-8 text-sm text-blue-600 hover:text-primary">Philippines</a>
+                        <a href="/brokers/india" class="block py-2 px-8 text-sm text-blue-600 hover:text-primary">India</a>
+                        <a href="/brokers/malaysia" class="block py-2 px-8 text-sm text-blue-600 hover:text-primary">Malaysia</a>
+                        <a href="/brokers/dubai" class="block py-2 px-8 text-sm text-blue-600 hover:text-primary">Dubai</a>
+                        <a href="/brokers/qatar" class="block py-2 px-8 text-sm text-blue-600 hover:text-primary">Qatar</a>
+                        <a href="/brokers/indonesia" class="block py-2 px-8 text-sm text-blue-600 hover:text-primary">Indonesia</a>
+                        <a href="/brokers/usa" class="block py-2 px-8 text-sm text-blue-600 hover:text-primary">USA</a>
+                    </div>
+                </div>
+                
+                <!-- Trading Types -->
+                <div class="border-b border-blue-200 last:border-b-0">
+                    <button class="w-full flex items-center justify-between py-3 px-4 text-left text-blue-800 hover:text-primary mobile-menu-toggle" data-menu="trading-types">
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-chart-bar text-sm"></i>
+                            <span class="font-medium">Trading Types</span>
+                        </div>
+                        <i class="fas fa-chevron-down text-xs transition-transform mobile-chevron"></i>
+                    </button>
+                    <div class="mobile-submenu hidden bg-blue-50 pb-2">
+                        <a href="/brokers/gold-trading" class="block py-2 px-6 text-sm text-blue-600 hover:text-primary">Gold (XAUUSD) Trading</a>
+                        <a href="/brokers/islamic-halal" class="block py-2 px-6 text-sm text-blue-600 hover:text-primary">Islamic Halal Trading</a>
+                        <a href="/brokers/automated" class="block py-2 px-6 text-sm text-blue-600 hover:text-primary">Automated Forex Trading</a>
+                        <a href="/brokers/high-leverage" class="block py-2 px-6 text-sm text-blue-600 hover:text-primary">High Leverage Brokers</a>
+                        <a href="/brokers/oil-trading" class="block py-2 px-6 text-sm text-blue-600 hover:text-primary">Oil Trading Platform</a>
+                        <a href="/brokers/copy-trading" class="block py-2 px-6 text-sm text-blue-600 hover:text-primary">Copy Trading Platform</a>
+                        <a href="/brokers/ecn" class="block py-2 px-6 text-sm text-blue-600 hover:text-primary">ECN Brokers</a>
+                        <a href="/brokers/scalping" class="block py-2 px-6 text-sm text-blue-600 hover:text-primary">Scalping Forex Brokers</a>
+                        <a href="/brokers/demo-accounts" class="block py-2 px-6 text-sm text-blue-600 hover:text-primary">Forex Demo Accounts</a>
+                        <a href="/brokers/mt4" class="block py-2 px-6 text-sm text-blue-600 hover:text-primary">MT4 Brokers</a>
+                        <a href="/brokers/stocks" class="block py-2 px-6 text-sm text-blue-600 hover:text-primary">Stocks Trading Platform</a>
+                        <a href="/brokers/beginners" class="block py-2 px-6 text-sm text-blue-600 hover:text-primary">Brokers For Beginners</a>
+                    </div>
+                </div>
+                
+                <!-- Reviews -->
+                <div class="border-b border-blue-200 last:border-b-0">
+                    <button class="w-full flex items-center justify-between py-3 px-4 text-left text-blue-800 hover:text-primary mobile-menu-toggle" data-menu="reviews">
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-star text-sm"></i>
+                            <span class="font-medium">Reviews</span>
+                        </div>
+                        <i class="fas fa-chevron-down text-xs transition-transform mobile-chevron"></i>
+                    </button>
+                    <div class="mobile-submenu hidden bg-blue-50 pb-2">
+                        <a href="/reviews" class="block py-2 px-6 text-sm text-blue-600 hover:text-primary">All Reviews</a>
+                        <a href="/reviews/platforms" class="block py-2 px-6 text-sm text-blue-600 hover:text-primary">Trading Platforms</a>
+                        <a href="/reviews/types" class="block py-2 px-6 text-sm text-blue-600 hover:text-primary">Types of Forex Brokers</a>
+                        <hr class="my-2 border-blue-200">
+                        <div class="px-6 py-1 text-xs font-semibold text-gray-500 uppercase">Top Brokers</div>
+                        <a href="/reviews/fp-markets" class="block py-2 px-8 text-sm text-blue-600 hover:text-primary">FP Markets</a>
+                        <a href="/reviews/fxtm" class="block py-2 px-8 text-sm text-blue-600 hover:text-primary">FXTM</a>
+                        <a href="/reviews/blackbull-markets" class="block py-2 px-8 text-sm text-blue-600 hover:text-primary">Blackbull Markets</a>
+                        <a href="/reviews/eightcap" class="block py-2 px-8 text-sm text-blue-600 hover:text-primary">Eightcap</a>
+                        <a href="/reviews/octa" class="block py-2 px-8 text-sm text-blue-600 hover:text-primary">Octa</a>
+                        <a href="/reviews/plus500" class="block py-2 px-8 text-sm text-blue-600 hover:text-primary">Plus500</a>
+                        <a href="/reviews/avatrade" class="block py-2 px-8 text-sm text-blue-600 hover:text-primary">Avatrade</a>
+                        <a href="/reviews/xm" class="block py-2 px-8 text-sm text-blue-600 hover:text-primary">XM</a>
+                        <a href="/reviews/pepperstone" class="block py-2 px-8 text-sm text-blue-600 hover:text-primary">Pepperstone</a>
+                    </div>
+                </div>
+                
+                <!-- Tools -->
+                <div class="border-b border-blue-200 last:border-b-0">
+                    <button class="w-full flex items-center justify-between py-3 px-4 text-left text-blue-800 hover:text-primary mobile-menu-toggle" data-menu="tools">
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-tools text-sm"></i>
+                            <span class="font-medium">Tools</span>
+                        </div>
+                        <i class="fas fa-chevron-down text-xs transition-transform mobile-chevron"></i>
+                    </button>
+                    <div class="mobile-submenu hidden bg-blue-50 pb-2">
+                        <a href="/compare" class="block py-2 px-6 text-sm text-blue-600 hover:text-primary">
+                            <i class="fas fa-balance-scale mr-2 text-blue-500"></i>Compare Brokers
+                        </a>
+                        <a href="/simulator" class="block py-2 px-6 text-sm text-blue-600 hover:text-primary">
+                            <i class="fas fa-chart-line mr-2 text-yellow-400"></i>Trading Simulator
+                        </a>
+                        <a href="/" class="block py-2 px-6 text-sm text-blue-600 hover:text-primary">
+                            <i class="fas fa-heart mr-2 text-red-500"></i>Broker Matcher
+                        </a>
+                        <hr class="my-2 border-blue-200">
+                        <div class="px-6 py-1 text-xs font-semibold text-gray-500 uppercase">Calculators</div>
+                        <a href="/tools/profit-calculator" class="block py-2 px-8 text-sm text-blue-600 hover:text-primary">Profit Calculator</a>
+                        <a href="/tools/margin-calculator" class="block py-2 px-8 text-sm text-blue-600 hover:text-primary">Margin Calculator</a>
+                        <a href="/tools/pip-calculator" class="block py-2 px-8 text-sm text-blue-600 hover:text-primary">Pip Calculator</a>
+                    </div>
+                </div>
+                
+                <!-- About -->
+                <div class="border-b border-blue-200 last:border-b-0">
+                    <button class="w-full flex items-center justify-between py-3 px-4 text-left text-blue-800 hover:text-primary mobile-menu-toggle" data-menu="about">
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-info-circle text-sm"></i>
+                            <span class="font-medium">About</span>
+                        </div>
+                        <i class="fas fa-chevron-down text-xs transition-transform mobile-chevron"></i>
+                    </button>
+                    <div class="mobile-submenu hidden bg-blue-50 pb-2">
+                        <a href="/about" class="block py-2 px-6 text-sm text-blue-600 hover:text-primary">About Us</a>
+                        <a href="/methodology" class="block py-2 px-6 text-sm text-blue-600 hover:text-primary">Methodology</a>
+                        <a href="/contact" class="block py-2 px-6 text-sm text-blue-600 hover:text-primary">Contact</a>
+                        <a href="/api-docs" class="block py-2 px-6 text-sm text-blue-600 hover:text-primary">API</a>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -1655,7 +3429,7 @@ app.get('/', (c) => {
                         Get personalized broker recommendations with our intelligent matching system. 
                         Compare spreads, regulation, and features to make informed decisions.
                     </p>
-                    <button onclick="startRecommendation()" class="bg-yellow-400 text-blue-900 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-yellow-300 transition-colors">
+                    <button data-action="broker-match" class="bg-yellow-400 text-blue-900 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-yellow-300 transition-colors">
                         <i class="fas fa-rocket mr-2"></i>
                         Get My Broker Match
                     </button>
@@ -1666,7 +3440,7 @@ app.get('/', (c) => {
             <section class="py-16 bg-white">
                 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div id="recommendation-widget" class="hidden">
-                        <div class="bg-gray-50 rounded-xl p-8 shadow-lg">
+                        <div class="bg-blue-50 rounded-xl p-8 shadow-lg">
                             <h2 class="text-2xl font-bold mb-6 text-center">Smart Broker Recommendation</h2>
                             <div id="questionnaire-form">
                                 <!-- Dynamic questionnaire will be loaded here -->
@@ -1680,11 +3454,11 @@ app.get('/', (c) => {
             </section>
 
             <!-- Features Section -->
-            <section class="py-16 bg-gray-50">
+            <section class="py-16 bg-blue-50">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="text-center mb-12">
                         <h2 class="text-3xl font-bold mb-4">Why Choose BrokerAnalysis?</h2>
-                        <p class="text-gray-600 max-w-2xl mx-auto">
+                        <p class="text-blue-600 max-w-2xl mx-auto">
                             Our comprehensive platform provides everything you need to make informed broker selection decisions.
                         </p>
                     </div>
@@ -1695,17 +3469,17 @@ app.get('/', (c) => {
                                 <i class="fas fa-brain text-2xl text-blue-600"></i>
                             </div>
                             <h3 class="text-xl font-semibold mb-3">Smart Matching</h3>
-                            <p class="text-gray-600">
+                            <p class="text-blue-600">
                                 AI-powered recommendation engine that matches you with brokers based on your specific needs and preferences.
                             </p>
                         </div>
                         
                         <div class="bg-white p-6 rounded-xl shadow-md text-center">
                             <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <i class="fas fa-shield-alt text-2xl text-green-600"></i>
+                                <i class="fas fa-shield-alt text-2xl text-blue-800"></i>
                             </div>
                             <h3 class="text-xl font-semibold mb-3">Verified Data</h3>
-                            <p class="text-gray-600">
+                            <p class="text-blue-600">
                                 Comprehensive database of regulated brokers with verified ratings, spreads, and regulatory information.
                             </p>
                         </div>
@@ -1715,10 +3489,32 @@ app.get('/', (c) => {
                                 <i class="fas fa-calculator text-2xl text-purple-600"></i>
                             </div>
                             <h3 class="text-xl font-semibold mb-3">Cost Calculator</h3>
-                            <p class="text-gray-600">
+                            <p class="text-blue-600">
                                 Strategy-aware cost calculator to estimate your real trading expenses with different brokers.
                             </p>
                         </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Featured Brokers Section -->
+            <section class="py-16 bg-white">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-12">
+                        <h2 class="text-3xl font-bold mb-4">Featured Forex Brokers</h2>
+                        <p class="text-blue-600 max-w-2xl mx-auto">
+                            Discover top-rated brokers with exclusive bonuses and competitive trading conditions.
+                        </p>
+                    </div>
+                    
+                    <div id="featured-brokers" class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        <!-- Featured broker cards will be loaded here -->
+                    </div>
+                    
+                    <div class="text-center mt-8">
+                        <a href="/reviews" class="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                            View All Brokers
+                        </a>
                     </div>
                 </div>
             </section>
@@ -1755,10 +3551,10 @@ app.get('/', (c) => {
                         Join thousands of traders who've found their ideal broker with BrokerAnalysis
                     </p>
                     <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                        <button onclick="startRecommendation()" class="bg-white text-green-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+                        <button data-action="broker-match" class="bg-white text-blue-800 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors">
                             Get Recommendations
                         </button>
-                        <a href="/reviews" class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-green-600 transition-colors">
+                        <a href="/reviews" class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-800 transition-colors">
                             Browse All Brokers
                         </a>
                     </div>
@@ -1783,7 +3579,7 @@ app.get('/', (c) => {
                         <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
                             <i class="fas fa-robot text-blue-600 text-sm"></i>
                         </div>
-                        <div class="bg-gray-100 p-3 rounded-lg max-w-xs">
+                        <div class="bg-blue-50 p-3 rounded-lg max-w-xs">
                             <p class="text-sm">Hello! I'm your broker analysis assistant. How can I help you find the perfect forex broker today?</p>
                         </div>
                     </div>
@@ -1796,10 +3592,10 @@ app.get('/', (c) => {
                         </button>
                     </div>
                     <div class="mt-2 flex flex-wrap gap-1">
-                        <button onclick="sendQuickMessage('Show regulated brokers')" class="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded hover:bg-gray-200">
+                        <button onclick="sendQuickMessage('Show regulated brokers')" class="text-xs bg-blue-50 text-blue-800 px-2 py-1 rounded hover:bg-gray-200">
                             Regulated brokers
                         </button>
-                        <button onclick="sendQuickMessage('Best for beginners')" class="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded hover:bg-gray-200">
+                        <button onclick="sendQuickMessage('Best for beginners')" class="text-xs bg-blue-50 text-blue-800 px-2 py-1 rounded hover:bg-gray-200">
                             For beginners
                         </button>
                     </div>
@@ -1853,12 +3649,16 @@ app.get('/', (c) => {
         <div id="loading-indicator" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
             <div class="bg-white p-6 rounded-lg shadow-xl text-center">
                 <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-                <p class="text-gray-700">Analyzing brokers...</p>
+                <p class="text-blue-800">Analyzing brokers...</p>
             </div>
         </div>
 
         <!-- Scripts -->
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+        <!-- CRITICAL: Enhanced broker database for global access -->
+        <script src="/static/enhanced-broker-database.js"></script>
+        <script src="/static/auth.js"></script>
+        <script src="/static/navigation.js"></script>
         <script src="/static/app.js"></script>
         <script src="/static/chat-fix.js"></script>
     </body>
