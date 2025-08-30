@@ -19,6 +19,125 @@ app.use('/api/*', cors({
 // Serve static files
 app.use('/static/*', serveStatic({ root: './public' }))
 
+// API route to serve broker data
+app.get('/data/brokers.json', async (c) => {
+  // Read the broker data from the public directory
+  const brokerData = {
+    "brokers": [
+      {
+        "id": "ic-markets",
+        "name": "IC Markets",
+        "logo": "/static/logos/ic-markets.svg",
+        "rating": 4.5,
+        "spread_type": "Raw",
+        "min_spread_pips": 0.0,
+        "commission": "$7",
+        "min_deposit_usd": 200,
+        "is_regulated": true,
+        "regulation": ["ASIC", "CySEC", "FSA"],
+        "platforms": ["MetaTrader 4", "MetaTrader 5", "cTrader"],
+        "demo_account": true,
+        "social_trading": false,
+        "pros": ["Lowest spreads", "Multiple platforms", "Strong regulation"],
+        "cons": ["Higher minimum deposit", "Complex for beginners"],
+        "review": "IC Markets offers some of the tightest spreads in the industry, making it ideal for serious traders and scalpers."
+      },
+      {
+        "id": "pepperstone",
+        "name": "Pepperstone",
+        "logo": "/static/logos/pepperstone.svg", 
+        "rating": 4.4,
+        "spread_type": "Raw",
+        "min_spread_pips": 0.0,
+        "commission": "$7",
+        "min_deposit_usd": 200,
+        "is_regulated": true,
+        "regulation": ["ASIC", "CySEC", "FCA"],
+        "platforms": ["MetaTrader 4", "MetaTrader 5", "cTrader", "DupliTrade"],
+        "demo_account": true,
+        "social_trading": true,
+        "pros": ["Raw spreads", "Social trading", "Fast execution"],
+        "cons": ["Commission structure", "Limited educational content"],
+        "review": "Pepperstone combines tight spreads with advanced technology, offering both raw spread accounts and social trading features."
+      },
+      {
+        "id": "etoro",
+        "name": "eToro",
+        "logo": "/static/logos/etoro.svg",
+        "rating": 4.2,
+        "spread_type": "Fixed",
+        "min_spread_pips": 1.0,
+        "commission": "0%",
+        "min_deposit_usd": 50,
+        "is_regulated": true,
+        "regulation": ["CySEC", "FCA", "ASIC"],
+        "platforms": ["eToro Platform", "eToro Mobile"],
+        "demo_account": true,
+        "social_trading": true,
+        "pros": ["Social trading leader", "Low minimum deposit", "User-friendly"],
+        "cons": ["Higher spreads", "Limited advanced tools"],
+        "review": "eToro pioneered social trading, making it perfect for beginners who want to copy successful traders."
+      },
+      {
+        "id": "tastyfx",
+        "name": "TastyFX", 
+        "logo": "/static/logos/tastyfx.svg",
+        "rating": 4.3,
+        "spread_type": "Variable",
+        "min_spread_pips": 0.8,
+        "commission": "$1",
+        "min_deposit_usd": 250,
+        "is_regulated": true,
+        "regulation": ["FCA", "CFTC"],
+        "platforms": ["TastyFX Platform", "MetaTrader 4"],
+        "demo_account": true,
+        "social_trading": false,
+        "pros": ["Strong regulation", "Innovative platform", "Low commissions"],
+        "cons": ["Limited social features", "Newer brand"],
+        "review": "TastyFX brings institutional-grade trading to retail investors with strong regulatory backing and innovative tools."
+      },
+      {
+        "id": "oanda",
+        "name": "OANDA",
+        "logo": "/static/logos/oanda.svg",
+        "rating": 4.1,
+        "spread_type": "Variable",
+        "min_spread_pips": 1.2,
+        "commission": "0%",
+        "min_deposit_usd": 1,
+        "is_regulated": true,
+        "regulation": ["CFTC", "NFA", "ASIC"],
+        "platforms": ["OANDA Trade", "MetaTrader 4", "TradingView"],
+        "demo_account": true,
+        "social_trading": false,
+        "pros": ["No minimum deposit", "Excellent education", "Established reputation"],
+        "cons": ["Higher spreads", "Limited social features"],
+        "review": "OANDA is a trusted veteran in forex trading, offering excellent educational resources and no minimum deposit requirement."
+      },
+      {
+        "id": "forex-com",
+        "name": "Forex.com",
+        "logo": "/static/logos/forex-com.svg",
+        "rating": 4.0,
+        "spread_type": "Variable",
+        "min_spread_pips": 1.5,
+        "commission": "0%",
+        "min_deposit_usd": 100,
+        "is_regulated": true,
+        "regulation": ["CFTC", "NFA", "ASIC"],
+        "platforms": ["Forex.com Platform", "MetaTrader 4", "TradingView"],
+        "demo_account": true,
+        "social_trading": false,
+        "pros": ["Well-established", "Multiple platforms", "Good support"],
+        "cons": ["Higher spreads", "Dated interface"],
+        "review": "Forex.com is a well-established broker with a solid reputation, though spreads are not the most competitive."
+      }
+    ]
+  };
+  
+  return c.json(brokerData);
+})
+
 // Broker recommendation algorithm
 const calculateBrokerScore = (broker: any, profile: any): number => {
   let score = broker.rating * 20; // Base score from rating
