@@ -1315,11 +1315,44 @@ app.get('/reviews', (c) => {
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Broker Reviews - BrokerAnalysis</title>
-        <meta name="description" content="Compare detailed reviews of top forex brokers. Read verified ratings, pros, cons, and user feedback.">
+        <title>Forex Broker Reviews 2025 - Detailed Analysis & Ratings | BrokerAnalysis</title>
+        <meta name="description" content="Read comprehensive reviews of top forex brokers. Detailed analysis of spreads, regulation, platforms, and trading conditions. Find the best broker for your needs.">
+        <meta name="keywords" content="forex broker reviews, broker ratings, forex broker analysis, trading platform reviews, regulated brokers, IC Markets review, Pepperstone review">
+        
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website">
+        <meta property="og:title" content="Forex Broker Reviews 2025 - Detailed Analysis & Ratings">
+        <meta property="og:description" content="Read comprehensive reviews of top forex brokers. Detailed analysis of spreads, regulation, platforms, and trading conditions.">
+        <meta property="og:image" content="https://brokeranalysis.pages.dev/static/images/reviews-og-image.png">
+        <meta property="og:url" content="https://brokeranalysis.pages.dev/reviews">
+        
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:title" content="Forex Broker Reviews 2025 - Detailed Analysis & Ratings">
+        <meta property="twitter:description" content="Read comprehensive reviews of top forex brokers. Detailed analysis of spreads, regulation, platforms, and trading conditions.">
+        <meta property="twitter:image" content="https://brokeranalysis.pages.dev/static/images/reviews-og-image.png">
+        
+        <link rel="canonical" href="https://brokeranalysis.pages.dev/reviews">
+        
+        <!-- Preconnect to external domains -->
+        <link rel="preconnect" href="https://cdn.tailwindcss.com">
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+        
         <script src="https://cdn.tailwindcss.com"></script>
         <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
         <link href="/static/styles.css" rel="stylesheet">
+        
+        <!-- Structured Data - Organization -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "name": "BrokerAnalysis",
+          "url": "https://brokeranalysis.pages.dev",
+          "logo": "https://brokeranalysis.pages.dev/static/images/brokeranalysis-logo.png"
+        }
+        </script>
+        
         <script>
             tailwind.config = {
                 theme: {
@@ -1349,6 +1382,9 @@ app.get('/reviews', (c) => {
         </script>
     </head>
     <body class="bg-blue-50 text-blue-900">
+        <!-- Skip Navigation -->
+        <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-blue-600 focus:text-white focus:px-4 py-2 focus:rounded">Skip to main content</a>
+        
         <!-- Navigation -->
         <nav class="bg-white shadow-sm border-b">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1363,10 +1399,13 @@ app.get('/reviews', (c) => {
                         <!-- Navigation will be populated by navigation.js -->
                         <div class="flex items-center space-x-2">
                             <div class="relative group">
-                                <button class="flex items-center space-x-1 text-blue-800 hover:text-primary transition-colors py-2 px-3 rounded-md nav-menu-button">
-                                    <i class="fas fa-trophy text-sm"></i>
+                                <button class="flex items-center space-x-1 text-blue-800 hover:text-primary transition-colors py-2 px-3 rounded-md nav-menu-button" 
+                                        aria-label="Best Brokers menu" 
+                                        aria-expanded="false" 
+                                        aria-haspopup="true">
+                                    <i class="fas fa-trophy text-sm" aria-hidden="true"></i>
                                     <span class="font-medium">Best Brokers</span>
-                                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                                    <i class="fas fa-chevron-down text-xs ml-1" aria-hidden="true"></i>
                                 </button>
                                 <div class="absolute left-0 mt-1 w-80 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                                     <div class="py-2">
@@ -1519,7 +1558,9 @@ app.get('/reviews', (c) => {
                         <option value="4.0">4.0+ Stars</option>
                         <option value="3.5">3.5+ Stars</option>
                     </select>
-                    <input type="text" id="search-input" placeholder="Search brokers..." class="border rounded-lg px-3 py-2 flex-1 min-w-0">
+                    <label for="search-input" class="sr-only">Search forex brokers</label>
+                    <input type="text" id="search-input" placeholder="Search brokers..." class="border rounded-lg px-3 py-2 flex-1 min-w-0" aria-describedby="search-help">
+                    <div id="search-help" class="sr-only">Enter broker name, regulation, or trading feature to search</div>
                 </div>
             </div>
         </div>
@@ -1576,7 +1617,8 @@ app.get('/reviews', (c) => {
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
         <!-- CRITICAL: Enhanced broker database for reviews -->
         <script src="/static/enhanced-broker-database.js"></script>
-        <script src="/static/reviews.js"></script>
+        <script src="/static/seo-utils.js"></script>
+        <script src="/static/reviews.js" defer></script>
     </body>
     </html>
   `);
@@ -1590,8 +1632,24 @@ app.get('/compare', (c) => {
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Compare Brokers - BrokerAnalysis</title>
-        <meta name="description" content="Compare up to 4 forex brokers side by side. Analyze spreads, commissions, features, and regulation.">
+        <title>Compare Forex Brokers Side-by-Side - Spreads, Fees & Features | BrokerAnalysis</title>
+        <meta name="description" content="Compare up to 4 forex brokers side-by-side. Analyze spreads, commissions, regulation, and trading features to make informed decisions.">
+        <meta name="keywords" content="compare forex brokers, broker comparison, forex spreads comparison, trading costs comparison, IC Markets vs Pepperstone, forex broker features">
+        
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website">
+        <meta property="og:title" content="Compare Forex Brokers Side-by-Side - Spreads, Fees & Features">
+        <meta property="og:description" content="Compare up to 4 forex brokers side-by-side. Analyze spreads, commissions, regulation, and trading features to make informed decisions.">
+        <meta property="og:image" content="https://brokeranalysis.pages.dev/static/images/compare-og-image.png">
+        <meta property="og:url" content="https://brokeranalysis.pages.dev/compare">
+        
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:title" content="Compare Forex Brokers Side-by-Side - Spreads, Fees & Features">
+        <meta property="twitter:description" content="Compare up to 4 forex brokers side-by-side. Analyze spreads, commissions, regulation, and trading features.">
+        <meta property="twitter:image" content="https://brokeranalysis.pages.dev/static/images/compare-og-image.png">
+        
+        <link rel="canonical" href="https://brokeranalysis.pages.dev/compare">
         <script src="https://cdn.tailwindcss.com"></script>
         <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
         <link href="/static/styles.css" rel="stylesheet">
@@ -1638,10 +1696,13 @@ app.get('/compare', (c) => {
                         <!-- Navigation will be populated by navigation.js -->
                         <div class="flex items-center space-x-2">
                             <div class="relative group">
-                                <button class="flex items-center space-x-1 text-blue-800 hover:text-primary transition-colors py-2 px-3 rounded-md nav-menu-button">
-                                    <i class="fas fa-trophy text-sm"></i>
+                                <button class="flex items-center space-x-1 text-blue-800 hover:text-primary transition-colors py-2 px-3 rounded-md nav-menu-button" 
+                                        aria-label="Best Brokers menu" 
+                                        aria-expanded="false" 
+                                        aria-haspopup="true">
+                                    <i class="fas fa-trophy text-sm" aria-hidden="true"></i>
                                     <span class="font-medium">Best Brokers</span>
-                                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                                    <i class="fas fa-chevron-down text-xs ml-1" aria-hidden="true"></i>
                                 </button>
                                 <div class="absolute left-0 mt-1 w-80 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                                     <div class="py-2">
@@ -1783,7 +1844,9 @@ app.get('/compare', (c) => {
                 <div class="flex flex-wrap gap-4">
                     <div class="flex-1 min-w-0">
                         <label class="block text-sm font-medium text-blue-800 mb-2">Select brokers to compare</label>
-                        <input type="text" id="broker-search" placeholder="Search and select brokers..." class="w-full border rounded-lg px-3 py-2">
+                        <label for="broker-search" class="sr-only">Search and select brokers to compare</label>
+                        <input type="text" id="broker-search" placeholder="Search and select brokers..." class="w-full border rounded-lg px-3 py-2" aria-describedby="broker-search-help">
+                        <div id="broker-search-help" class="sr-only">Start typing broker name to see suggestions. Select up to 4 brokers to compare.</div>
                     </div>
                     <div class="flex items-end gap-2">
                         <button id="reset-comparison" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600">Reset</button>
@@ -1837,8 +1900,24 @@ app.get('/simulator', (c) => {
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Trading Cost Simulator - BrokerAnalysis</title>
-        <meta name="description" content="Calculate and compare real trading costs across different brokers based on your strategy and trading volume.">
+        <title>Forex Trading Cost Calculator - Compare Real Trading Costs | BrokerAnalysis</title>
+        <meta name="description" content="Calculate real forex trading costs with our advanced simulator. Compare spreads, commissions, and slippage across multiple brokers based on your trading strategy.">
+        <meta name="keywords" content="forex cost calculator, trading cost simulator, spread calculator, commission calculator, forex trading costs, scalping calculator, swing trading costs">
+        
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website">
+        <meta property="og:title" content="Forex Trading Cost Calculator - Compare Real Trading Costs">
+        <meta property="og:description" content="Calculate real forex trading costs with our advanced simulator. Compare spreads, commissions, and slippage across multiple brokers.">
+        <meta property="og:image" content="https://brokeranalysis.pages.dev/static/images/simulator-og-image.png">
+        <meta property="og:url" content="https://brokeranalysis.pages.dev/simulator">
+        
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:title" content="Forex Trading Cost Calculator - Compare Real Trading Costs">
+        <meta property="twitter:description" content="Calculate real forex trading costs with our advanced simulator. Compare spreads, commissions, and slippage.">
+        <meta property="twitter:image" content="https://brokeranalysis.pages.dev/static/images/simulator-og-image.png">
+        
+        <link rel="canonical" href="https://brokeranalysis.pages.dev/simulator">
         <script src="https://cdn.tailwindcss.com"></script>
         <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
         <link href="/static/styles.css" rel="stylesheet">
@@ -1884,10 +1963,13 @@ app.get('/simulator', (c) => {
                         <!-- Navigation will be populated by navigation.js -->
                         <div class="flex items-center space-x-2">
                             <div class="relative group">
-                                <button class="flex items-center space-x-1 text-blue-800 hover:text-primary transition-colors py-2 px-3 rounded-md nav-menu-button">
-                                    <i class="fas fa-trophy text-sm"></i>
+                                <button class="flex items-center space-x-1 text-blue-800 hover:text-primary transition-colors py-2 px-3 rounded-md nav-menu-button" 
+                                        aria-label="Best Brokers menu" 
+                                        aria-expanded="false" 
+                                        aria-haspopup="true">
+                                    <i class="fas fa-trophy text-sm" aria-hidden="true"></i>
                                     <span class="font-medium">Best Brokers</span>
-                                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                                    <i class="fas fa-chevron-down text-xs ml-1" aria-hidden="true"></i>
                                 </button>
                                 <div class="absolute left-0 mt-1 w-80 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                                     <div class="py-2">
@@ -2029,33 +2111,37 @@ app.get('/simulator', (c) => {
                 <h2 class="text-2xl font-bold mb-6">Trading Parameters</h2>
                 <div class="grid md:grid-cols-2 gap-6">
                     <div>
-                        <label class="block text-sm font-medium text-blue-800 mb-2">Trading Strategy</label>
-                        <select id="strategy-select" class="w-full border rounded-lg px-3 py-2">
+                        <label for="strategy-select" class="block text-sm font-medium text-blue-800 mb-2">Trading Strategy</label>
+                        <select id="strategy-select" class="w-full border rounded-lg px-3 py-2" aria-describedby="strategy-help">
                             <option value="scalping">Scalping</option>
                             <option value="swing">Swing Trading</option>
                             <option value="algo">Algorithmic</option>
                             <option value="daytrading">Day Trading</option>
                         </select>
+                        <div id="strategy-help" class="sr-only">Select your preferred trading strategy to get accurate cost calculations</div>
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-blue-800 mb-2">Trade Size (lots)</label>
-                        <input type="number" id="trade-size" value="1" min="0.01" step="0.01" class="w-full border rounded-lg px-3 py-2">
+                        <label for="trade-size" class="block text-sm font-medium text-blue-800 mb-2">Trade Size (lots)</label>
+                        <input type="number" id="trade-size" value="1" min="0.01" step="0.01" class="w-full border rounded-lg px-3 py-2" aria-describedby="trade-size-help">
+                        <div id="trade-size-help" class="sr-only">Enter your typical trade size in lots (minimum 0.01)</div>
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-blue-800 mb-2">Number of Trades per Month</label>
-                        <input type="number" id="trades-count" value="100" min="1" class="w-full border rounded-lg px-3 py-2">
+                        <label for="trades-count" class="block text-sm font-medium text-blue-800 mb-2">Number of Trades per Month</label>
+                        <input type="number" id="trades-count" value="100" min="1" class="w-full border rounded-lg px-3 py-2" aria-describedby="trades-help">
+                        <div id="trades-help" class="sr-only">Enter how many trades you execute per month on average</div>
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-blue-800 mb-2">Primary Instrument</label>
-                        <select id="instrument-select" class="w-full border rounded-lg px-3 py-2">
+                        <label for="instrument-select" class="block text-sm font-medium text-blue-800 mb-2">Primary Instrument</label>
+                        <select id="instrument-select" class="w-full border rounded-lg px-3 py-2" aria-describedby="instrument-help">
                             <option value="EURUSD">EUR/USD</option>
                             <option value="GBPUSD">GBP/USD</option>
                             <option value="USDJPY">USD/JPY</option>
                             <option value="AUDUSD">AUD/USD</option>
                         </select>
+                        <div id="instrument-help" class="sr-only">Select the main currency pair you trade</div>
                     </div>
                 </div>
                 
@@ -2126,8 +2212,24 @@ app.get('/about', (c) => {
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>About - BrokerAnalysis</title>
-        <meta name="description" content="Learn about our methodology, data sources, and mission to help traders find the perfect forex broker.">
+        <title>About BrokerAnalysis - Our Methodology & Mission | BrokerAnalysis</title>
+        <meta name="description" content="Learn about our transparent methodology for rating forex brokers. Discover our mission to help traders make informed decisions with unbiased broker analysis.">
+        <meta name="keywords" content="about brokeranalysis, broker rating methodology, forex broker analysis, trading platform reviews, broker comparison methodology">
+        
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website">
+        <meta property="og:title" content="About BrokerAnalysis - Our Methodology & Mission">
+        <meta property="og:description" content="Learn about our transparent methodology for rating forex brokers. Discover our mission to help traders make informed decisions.">
+        <meta property="og:image" content="https://brokeranalysis.pages.dev/static/images/about-og-image.png">
+        <meta property="og:url" content="https://brokeranalysis.pages.dev/about">
+        
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:title" content="About BrokerAnalysis - Our Methodology & Mission">
+        <meta property="twitter:description" content="Learn about our transparent methodology for rating forex brokers. Discover our mission to help traders make informed decisions.">
+        <meta property="twitter:image" content="https://brokeranalysis.pages.dev/static/images/about-og-image.png">
+        
+        <link rel="canonical" href="https://brokeranalysis.pages.dev/about">
         <script src="https://cdn.tailwindcss.com"></script>
         <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
         <link href="/static/styles.css" rel="stylesheet">
@@ -2620,10 +2722,13 @@ app.get('/dashboard', (c) => {
                         <!-- Navigation will be populated by navigation.js -->
                         <div class="flex items-center space-x-2">
                             <div class="relative group">
-                                <button class="flex items-center space-x-1 text-blue-800 hover:text-primary transition-colors py-2 px-3 rounded-md nav-menu-button">
-                                    <i class="fas fa-trophy text-sm"></i>
+                                <button class="flex items-center space-x-1 text-blue-800 hover:text-primary transition-colors py-2 px-3 rounded-md nav-menu-button" 
+                                        aria-label="Best Brokers menu" 
+                                        aria-expanded="false" 
+                                        aria-haspopup="true">
+                                    <i class="fas fa-trophy text-sm" aria-hidden="true"></i>
                                     <span class="font-medium">Best Brokers</span>
-                                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                                    <i class="fas fa-chevron-down text-xs ml-1" aria-hidden="true"></i>
                                 </button>
                                 <div class="absolute left-0 mt-1 w-80 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                                     <div class="py-2">
@@ -2903,10 +3008,13 @@ app.get('/dashboard/matches', (c) => {
                         <!-- Navigation will be populated by navigation.js -->
                         <div class="flex items-center space-x-2">
                             <div class="relative group">
-                                <button class="flex items-center space-x-1 text-blue-800 hover:text-primary transition-colors py-2 px-3 rounded-md nav-menu-button">
-                                    <i class="fas fa-trophy text-sm"></i>
+                                <button class="flex items-center space-x-1 text-blue-800 hover:text-primary transition-colors py-2 px-3 rounded-md nav-menu-button" 
+                                        aria-label="Best Brokers menu" 
+                                        aria-expanded="false" 
+                                        aria-haspopup="true">
+                                    <i class="fas fa-trophy text-sm" aria-hidden="true"></i>
                                     <span class="font-medium">Best Brokers</span>
-                                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                                    <i class="fas fa-chevron-down text-xs ml-1" aria-hidden="true"></i>
                                 </button>
                                 <div class="absolute left-0 mt-1 w-80 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                                     <div class="py-2">
@@ -3107,11 +3215,66 @@ app.get('/', (c) => {
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>BrokerAnalysis - Find Your Perfect Forex Broker</title>
-        <meta name="description" content="Compare and find the best forex brokers with our intelligent recommendation system. Detailed reviews, ratings, and personalized broker matching.">
+        <title>Best Forex Brokers 2025 - Compare 67+ Regulated Brokers | BrokerAnalysis</title>
+        <meta name="description" content="Find the perfect forex broker with our intelligent matching system. Compare spreads, regulation, and features of 67+ top-rated brokers. Get personalized recommendations now.">
+        <meta name="keywords" content="forex brokers, best forex brokers 2025, regulated forex brokers, forex broker comparison, forex trading, broker reviews, forex spreads, trading platforms">
+        <meta name="author" content="BrokerAnalysis">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <!-- Canonical URL -->
+        <link rel="canonical" href="https://brokeranalysis.pages.dev/">
+        
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="https://brokeranalysis.pages.dev/">
+        <meta property="og:title" content="Best Forex Brokers 2025 - Compare 67+ Regulated Brokers">
+        <meta property="og:description" content="Find the perfect forex broker with our intelligent matching system. Compare spreads, regulation, and features of 67+ top-rated brokers.">
+        <meta property="og:image" content="https://brokeranalysis.pages.dev/static/images/brokeranalysis-og-image.png">
+        <meta property="og:site_name" content="BrokerAnalysis">
+        
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:url" content="https://brokeranalysis.pages.dev/">
+        <meta property="twitter:title" content="Best Forex Brokers 2025 - Compare 67+ Regulated Brokers">
+        <meta property="twitter:description" content="Find the perfect forex broker with our intelligent matching system. Compare spreads, regulation, and features of 67+ top-rated brokers.">
+        <meta property="twitter:image" content="https://brokeranalysis.pages.dev/static/images/brokeranalysis-og-image.png">
+        
+        <!-- Favicon and App Icons -->
+        <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
+        <link rel="icon" type="image/png" sizes="32x32" href="/static/images/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/static/images/favicon-16x16.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/static/images/apple-touch-icon.png">
+        
+        <!-- Preconnect to external domains -->
+        <link rel="preconnect" href="https://cdn.tailwindcss.com">
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+        
+        <!-- CSS -->
         <script src="https://cdn.tailwindcss.com"></script>
         <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
         <link href="/static/styles.css" rel="stylesheet">
+        
+        <!-- Structured Data - Organization -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "name": "BrokerAnalysis",
+          "url": "https://brokeranalysis.pages.dev",
+          "logo": "https://brokeranalysis.pages.dev/static/images/brokeranalysis-logo.png",
+          "description": "Find and compare the best forex brokers with our intelligent recommendation system. Detailed reviews, ratings, and personalized broker matching.",
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "customer service",
+            "email": "hello@brokeranalysis.com"
+          },
+          "sameAs": [
+            "https://twitter.com/brokeranalysis",
+            "https://linkedin.com/company/brokeranalysis"
+          ]
+        }
+        </script>
         <script>
             tailwind.config = {
                 theme: {
@@ -3141,12 +3304,17 @@ app.get('/', (c) => {
         </script>
     </head>
     <body class="bg-blue-50 text-blue-900">
+        <!-- Skip Navigation for Accessibility -->
+        <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-blue-600 focus:text-white focus:px-4 focus:py-2 focus:rounded">
+            Skip to main content
+        </a>
+        
         <!-- Navigation -->
-        <nav class="bg-white shadow-sm border-b">
+        <nav class="bg-white shadow-sm border-b" role="navigation" aria-label="Main navigation">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between items-center h-16">
                     <div class="flex items-center space-x-2">
-                        <i class="fas fa-chart-line text-primary text-2xl"></i>
+                        <i class="fas fa-chart-line text-primary text-2xl" aria-hidden="true"></i>
                         <span class="text-xl font-bold text-blue-900">BrokerAnalysis</span>
                     </div>
                     <!-- Enhanced Navigation with Dropdown Menus -->
@@ -3154,10 +3322,13 @@ app.get('/', (c) => {
                         <!-- Navigation will be populated by navigation.js -->
                         <div class="flex items-center space-x-2">
                             <div class="relative group">
-                                <button class="flex items-center space-x-1 text-blue-800 hover:text-primary transition-colors py-2 px-3 rounded-md nav-menu-button">
-                                    <i class="fas fa-trophy text-sm"></i>
+                                <button class="flex items-center space-x-1 text-blue-800 hover:text-primary transition-colors py-2 px-3 rounded-md nav-menu-button" 
+                                        aria-label="Best Brokers menu" 
+                                        aria-expanded="false" 
+                                        aria-haspopup="true">
+                                    <i class="fas fa-trophy text-sm" aria-hidden="true"></i>
                                     <span class="font-medium">Best Brokers</span>
-                                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                                    <i class="fas fa-chevron-down text-xs ml-1" aria-hidden="true"></i>
                                 </button>
                                 <div class="absolute left-0 mt-1 w-80 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                                     <div class="py-2">
@@ -3282,15 +3453,15 @@ app.get('/', (c) => {
                         <!-- Will be populated by auth system -->
                     </div>
                     
-                    <button id="mobile-menu-btn" class="md:hidden p-2 text-blue-800">
-                        <i class="fas fa-bars"></i>
+                    <button id="mobile-menu-btn" class="md:hidden p-2 text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2" aria-label="Open mobile navigation menu" aria-expanded="false" aria-controls="mobile-menu">
+                        <i class="fas fa-bars" aria-hidden="true"></i>
                     </button>
                 </div>
             </div>
         </nav>
 
         <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white shadow-md border-b">
+        <div id="mobile-menu" class="hidden md:hidden bg-white shadow-md border-b" role="navigation" aria-label="Mobile navigation menu">
             <div class="px-2 py-2">
                 <!-- Best Brokers -->
                 <div class="border-b border-blue-200 last:border-b-0">
@@ -3418,12 +3589,12 @@ app.get('/', (c) => {
         </div>
 
         <!-- Main Content -->
-        <div id="app" class="min-h-screen">
+        <main id="main-content" class="min-h-screen">
             <!-- Hero Section -->
             <section id="home" class="bg-gradient-to-br from-blue-600 to-blue-800 text-white py-20">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                     <h1 class="text-4xl md:text-6xl font-bold mb-6">
-                        Find Your Perfect <span class="text-yellow-400">Forex Broker</span>
+                        Find the Best <span class="text-yellow-400">Forex Brokers</span> in 2025
                     </h1>
                     <p class="text-xl md:text-2xl mb-8 text-blue-100 max-w-3xl mx-auto">
                         Get personalized broker recommendations with our intelligent matching system. 
@@ -3560,18 +3731,156 @@ app.get('/', (c) => {
                     </div>
                 </div>
             </section>
-        </div>
+
+            <!-- FAQ Section with Structured Data -->
+            <section class="faq-section py-16 bg-blue-50" id="faq">
+                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-12">
+                        <h2 class="text-3xl font-bold mb-4 text-blue-900">Frequently Asked Questions</h2>
+                        <p class="text-blue-600 max-w-2xl mx-auto">
+                            Get answers to common questions about forex brokers and our recommendation process.
+                        </p>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="bg-white border border-blue-200 rounded-lg">
+                            <button class="faq-toggle w-full text-left p-6 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2" 
+                                    data-faq="0" 
+                                    aria-expanded="false"
+                                    aria-controls="faq-answer-0">
+                                <div class="flex items-center justify-between">
+                                    <h3 class="text-lg font-semibold text-blue-900">What makes a forex broker trustworthy?</h3>
+                                    <i class="fas fa-chevron-down text-blue-600 transition-transform faq-chevron" aria-hidden="true"></i>
+                                </div>
+                            </button>
+                            <div id="faq-answer-0" class="faq-answer hidden px-6 pb-6">
+                                <p class="text-blue-700">A trustworthy forex broker is regulated by reputable financial authorities (FCA, ASIC, CFTC), offers transparent pricing, provides client fund protection, and has a proven track record of reliable operations.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white border border-blue-200 rounded-lg">
+                            <button class="faq-toggle w-full text-left p-6 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2" 
+                                    data-faq="1" 
+                                    aria-expanded="false"
+                                    aria-controls="faq-answer-1">
+                                <div class="flex items-center justify-between">
+                                    <h3 class="text-lg font-semibold text-blue-900">How do I choose the best forex broker for my needs?</h3>
+                                    <i class="fas fa-chevron-down text-blue-600 transition-transform faq-chevron" aria-hidden="true"></i>
+                                </div>
+                            </button>
+                            <div id="faq-answer-1" class="faq-answer hidden px-6 pb-6">
+                                <p class="text-blue-700">Consider your trading style, capital requirements, preferred platforms, and regulatory preferences. Use our broker matching tool to get personalized recommendations based on your specific needs.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white border border-blue-200 rounded-lg">
+                            <button class="faq-toggle w-full text-left p-6 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2" 
+                                    data-faq="2" 
+                                    aria-expanded="false"
+                                    aria-controls="faq-answer-2">
+                                <div class="flex items-center justify-between">
+                                    <h3 class="text-lg font-semibold text-blue-900">What are the typical costs of forex trading?</h3>
+                                    <i class="fas fa-chevron-down text-blue-600 transition-transform faq-chevron" aria-hidden="true"></i>
+                                </div>
+                            </button>
+                            <div id="faq-answer-2" class="faq-answer hidden px-6 pb-6">
+                                <p class="text-blue-700">Forex trading costs include spreads, commissions, overnight fees (swap), and potential slippage. Use our cost calculator to estimate your trading expenses with different brokers.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white border border-blue-200 rounded-lg">
+                            <button class="faq-toggle w-full text-left p-6 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2" 
+                                    data-faq="3" 
+                                    aria-expanded="false"
+                                    aria-controls="faq-answer-3">
+                                <div class="flex items-center justify-between">
+                                    <h3 class="text-lg font-semibold text-blue-900">Are all forex brokers regulated?</h3>
+                                    <i class="fas fa-chevron-down text-blue-600 transition-transform faq-chevron" aria-hidden="true"></i>
+                                </div>
+                            </button>
+                            <div id="faq-answer-3" class="faq-answer hidden px-6 pb-6">
+                                <p class="text-blue-700">No, not all forex brokers are regulated. Always verify a broker's regulatory status before opening an account. We only feature regulated brokers with proper oversight from financial authorities.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white border border-blue-200 rounded-lg">
+                            <button class="faq-toggle w-full text-left p-6 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2" 
+                                    data-faq="4" 
+                                    aria-expanded="false"
+                                    aria-controls="faq-answer-4">
+                                <div class="flex items-center justify-between">
+                                    <h3 class="text-lg font-semibold text-blue-900">How often do you update broker information?</h3>
+                                    <i class="fas fa-chevron-down text-blue-600 transition-transform faq-chevron" aria-hidden="true"></i>
+                                </div>
+                            </button>
+                            <div id="faq-answer-4" class="faq-answer hidden px-6 pb-6">
+                                <p class="text-blue-700">We update broker data weekly, including spreads, terms, and conditions. Regulatory information is verified monthly, and any significant changes are updated immediately.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- FAQ Structured Data -->
+                <script type="application/ld+json">
+                {
+                  "@context": "https://schema.org",
+                  "@type": "FAQPage",
+                  "mainEntity": [
+                    {
+                      "@type": "Question",
+                      "name": "What makes a forex broker trustworthy?",
+                      "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "A trustworthy forex broker is regulated by reputable financial authorities (FCA, ASIC, CFTC), offers transparent pricing, provides client fund protection, and has a proven track record of reliable operations."
+                      }
+                    },
+                    {
+                      "@type": "Question",
+                      "name": "How do I choose the best forex broker for my needs?",
+                      "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Consider your trading style, capital requirements, preferred platforms, and regulatory preferences. Use our broker matching tool to get personalized recommendations based on your specific needs."
+                      }
+                    },
+                    {
+                      "@type": "Question",
+                      "name": "What are the typical costs of forex trading?",
+                      "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Forex trading costs include spreads, commissions, overnight fees (swap), and potential slippage. Use our cost calculator to estimate your trading expenses with different brokers."
+                      }
+                    },
+                    {
+                      "@type": "Question",
+                      "name": "Are all forex brokers regulated?",
+                      "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "No, not all forex brokers are regulated. Always verify a broker's regulatory status before opening an account. We only feature regulated brokers with proper oversight from financial authorities."
+                      }
+                    },
+                    {
+                      "@type": "Question",
+                      "name": "How often do you update broker information?",
+                      "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "We update broker data weekly, including spreads, terms, and conditions. Regulatory information is verified monthly, and any significant changes are updated immediately."
+                      }
+                    }
+                  ]
+                }
+                </script>
+            </section>
+        </main>
 
         <!-- Chatbot Widget -->
         <div id="chatbot-widget" class="fixed bottom-6 right-6 z-50">
-            <button id="chatbot-toggle" class="bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition-colors">
-                <i class="fas fa-comments text-xl"></i>
+            <button id="chatbot-toggle" class="bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-4 focus:ring-blue-300" aria-label="Open chatbot assistant" aria-expanded="false">
+                <i class="fas fa-comments text-xl" aria-hidden="true"></i>
             </button>
             <div id="chatbot-window" class="hidden absolute bottom-16 right-0 w-80 bg-white rounded-lg shadow-xl border">
                 <div class="bg-blue-600 text-white p-4 rounded-t-lg flex justify-between items-center">
                     <span class="font-semibold">BrokerAnalysis Assistant</span>
-                    <button id="chatbot-close" class="text-white hover:text-gray-200">
-                        <i class="fas fa-times"></i>
+                    <button id="chatbot-close" class="text-white hover:text-gray-200 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600" aria-label="Close chatbot">
+                        <i class="fas fa-times" aria-hidden="true"></i>
                     </button>
                 </div>
                 <div id="chatbot-messages" class="h-64 overflow-y-auto p-4 space-y-3">
@@ -3586,9 +3895,11 @@ app.get('/', (c) => {
                 </div>
                 <div class="p-4 border-t">
                     <div class="flex space-x-2">
-                        <input type="text" id="chatbot-input" placeholder="Ask about brokers..." class="flex-1 p-2 border rounded-lg text-sm">
-                        <button id="chatbot-send" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700">
-                            <i class="fas fa-paper-plane"></i>
+                        <label for="chatbot-input" class="sr-only">Ask a question about forex brokers</label>
+                        <input type="text" id="chatbot-input" placeholder="Ask about brokers..." class="flex-1 p-2 border rounded-lg text-sm" aria-describedby="chatbot-input-help">
+                        <div id="chatbot-input-help" class="sr-only">Ask questions about forex brokers, regulations, or trading features</div>
+                        <button id="chatbot-send" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" aria-label="Send message">
+                            <i class="fas fa-paper-plane" aria-hidden="true"></i>
                         </button>
                     </div>
                     <div class="mt-2 flex flex-wrap gap-1">
@@ -3657,13 +3968,342 @@ app.get('/', (c) => {
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
         <!-- CRITICAL: Enhanced broker database for global access -->
         <script src="/static/enhanced-broker-database.js"></script>
+        <script src="/static/seo-utils.js"></script>
+        <script src="/static/breadcrumbs.js"></script>
         <script src="/static/auth.js"></script>
         <script src="/static/navigation.js"></script>
         <script src="/static/app.js"></script>
-        <script src="/static/chat-fix.js"></script>
+        <script src="/static/chat-fix.js" defer></script>
+        
+        <!-- FAQ Toggle Functionality -->
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // FAQ toggle functionality
+            document.querySelectorAll('.faq-toggle').forEach(button => {
+                button.addEventListener('click', function() {
+                    const faqIndex = this.dataset.faq;
+                    const answer = document.getElementById('faq-answer-' + faqIndex);
+                    const chevron = this.querySelector('.faq-chevron');
+                    const isExpanded = this.getAttribute('aria-expanded') === 'true';
+                    
+                    if (isExpanded) {
+                        answer.classList.add('hidden');
+                        this.setAttribute('aria-expanded', 'false');
+                        chevron.style.transform = 'rotate(0deg)';
+                    } else {
+                        answer.classList.remove('hidden');
+                        this.setAttribute('aria-expanded', 'true');
+                        chevron.style.transform = 'rotate(180deg)';
+                    }
+                });
+            });
+        });
+        </script>
     </body>
     </html>
   `)
+});
+
+// SEO and Technical Enhancement Routes
+
+// Robots.txt endpoint
+app.get('/robots.txt', (c) => {
+  const robotsTxt = `User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: ${c.req.header('host') ? `https://${c.req.header('host')}/sitemap.xml` : 'https://brokeranalysis.pages.dev/sitemap.xml'}
+
+# Block admin and internal paths
+Disallow: /api/
+Disallow: /dashboard/
+Disallow: /test-simulator
+
+# Allow important pages
+Allow: /
+Allow: /reviews
+Allow: /compare  
+Allow: /simulator
+Allow: /about
+Allow: /broker/*
+
+# Crawl delay
+Crawl-delay: 1`;
+
+  return new Response(robotsTxt, {
+    headers: {
+      'Content-Type': 'text/plain',
+      'Cache-Control': 'public, max-age=86400'
+    }
+  });
+});
+
+// XML Sitemap endpoint
+app.get('/sitemap.xml', async (c) => {
+  const { DB } = c.env;
+  const baseUrl = c.req.header('host') ? `https://${c.req.header('host')}` : 'https://brokeranalysis.pages.dev';
+  
+  // Static pages
+  const staticPages = [
+    { url: '/', priority: '1.0', changefreq: 'daily' },
+    { url: '/reviews', priority: '0.9', changefreq: 'weekly' },
+    { url: '/compare', priority: '0.8', changefreq: 'weekly' },
+    { url: '/simulator', priority: '0.8', changefreq: 'monthly' },
+    { url: '/about', priority: '0.6', changefreq: 'monthly' }
+  ];
+
+  let brokerPages = [];
+  
+  // Dynamic broker pages (if database is available)
+  try {
+    if (DB) {
+      const brokers = await DB.prepare('SELECT id, slug, updated_at FROM brokers LIMIT 100').all();
+      brokerPages = brokers.results.map(broker => ({
+        url: `/broker/${broker.slug || broker.id}`,
+        priority: '0.7',
+        changefreq: 'weekly',
+        lastmod: broker.updated_at || new Date().toISOString()
+      }));
+    }
+  } catch (error) {
+    console.log('Database not available for sitemap generation');
+  }
+
+  const allPages = [...staticPages, ...brokerPages];
+
+  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${allPages.map(page => `  <url>
+    <loc>${baseUrl}${page.url}</loc>
+    <changefreq>${page.changefreq}</changefreq>
+    <priority>${page.priority}</priority>
+    ${page.lastmod ? `<lastmod>${page.lastmod.split('T')[0]}</lastmod>` : ''}
+  </url>`).join('\n')}
+</urlset>`;
+
+  return new Response(sitemap, {
+    headers: {
+      'Content-Type': 'application/xml',
+      'Cache-Control': 'public, max-age=86400'
+    }
+  });
+});
+
+// SEO Landing Pages - Country/Region Specific Pages
+
+// Australia forex brokers page
+app.get('/brokers/australia', (c) => {
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Best Forex Brokers in Australia 2025 - ASIC Regulated | BrokerAnalysis</title>
+        <meta name="description" content="Find the best ASIC regulated forex brokers in Australia. Compare spreads, regulation, and features of top Australian forex brokers for 2025.">
+        <meta name="keywords" content="Australia forex brokers, ASIC regulated brokers, best forex brokers Australia, Australian forex trading, ASIC forex brokers">
+        
+        <!-- Open Graph -->
+        <meta property="og:title" content="Best Forex Brokers in Australia 2025 - ASIC Regulated">
+        <meta property="og:description" content="Find the best ASIC regulated forex brokers in Australia. Compare spreads, regulation, and features.">
+        <meta property="og:url" content="https://brokeranalysis.pages.dev/brokers/australia">
+        <meta property="og:type" content="website">
+        
+        <link rel="canonical" href="https://brokeranalysis.pages.dev/brokers/australia">
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+        <link href="/static/styles.css" rel="stylesheet">
+        
+        <!-- Structured Data -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "name": "Best Forex Brokers in Australia 2025",
+          "description": "Find the best ASIC regulated forex brokers in Australia",
+          "url": "https://brokeranalysis.pages.dev/brokers/australia"
+        }
+        </script>
+    </head>
+    <body class="bg-blue-50 text-blue-900">
+        <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-blue-600 focus:text-white focus:px-4 py-2 focus:rounded">Skip to main content</a>
+        
+        <nav class="bg-white shadow-sm border-b">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-chart-line text-blue-600 text-2xl"></i>
+                        <a href="/" class="text-xl font-bold text-blue-900">BrokerAnalysis</a>
+                    </div>
+                    <div class="hidden md:flex items-center space-x-6">
+                        <a href="/" class="text-blue-800 hover:text-blue-600">Home</a>
+                        <a href="/reviews" class="text-blue-800 hover:text-blue-600">Reviews</a>
+                        <a href="/compare" class="text-blue-800 hover:text-blue-600">Compare</a>
+                        <a href="/simulator" class="text-blue-800 hover:text-blue-600">Simulator</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <main id="main-content">
+            <div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
+                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <h1 class="text-4xl font-bold mb-4">Best Forex Brokers in Australia 2025</h1>
+                    <p class="text-xl text-blue-100">ASIC regulated brokers with competitive spreads and Australian support</p>
+                </div>
+            </div>
+
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="prose max-w-none">
+                    <h2 class="text-2xl font-bold mb-6">Why Choose ASIC Regulated Brokers?</h2>
+                    <p class="text-blue-600 mb-8">
+                        The Australian Securities and Investments Commission (ASIC) provides robust regulatory oversight 
+                        for forex brokers operating in Australia. ASIC regulation ensures client fund protection, 
+                        transparent pricing, and adherence to strict operational standards.
+                    </p>
+
+                    <h2 class="text-2xl font-bold mb-6">Top ASIC Regulated Forex Brokers</h2>
+                    <div class="grid gap-6 mb-8">
+                        <div class="bg-white rounded-lg shadow-lg p-6">
+                            <h3 class="text-xl font-semibold mb-4">IC Markets</h3>
+                            <div class="flex items-center mb-4">
+                                <div class="text-yellow-400 mr-2">★★★★★</div>
+                                <span>4.4/5.0</span>
+                            </div>
+                            <ul class="text-blue-600 space-y-2">
+                                <li>• ASIC License: 335692</li>
+                                <li>• True ECN execution</li>
+                                <li>• Raw spreads from 0.0 pips</li>
+                                <li>• $200 minimum deposit</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg shadow-lg p-6">
+                            <h3 class="text-xl font-semibold mb-4">Pepperstone</h3>
+                            <div class="flex items-center mb-4">
+                                <div class="text-yellow-400 mr-2">★★★★☆</div>
+                                <span>4.3/5.0</span>
+                            </div>
+                            <ul class="text-blue-600 space-y-2">
+                                <li>• ASIC License: 414530</li>
+                                <li>• TradingView integration</li>
+                                <li>• No minimum deposit</li>
+                                <li>• Fast execution speeds</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg shadow-lg p-6">
+                            <h3 class="text-xl font-semibold mb-4">FP Markets</h3>
+                            <div class="flex items-center mb-4">
+                                <div class="text-yellow-400 mr-2">★★★★☆</div>
+                                <span>4.2/5.0</span>
+                            </div>
+                            <ul class="text-blue-600 space-y-2">
+                                <li>• ASIC License: 286354</li>
+                                <li>• $100 minimum deposit</li>
+                                <li>• Multiple trading platforms</li>
+                                <li>• Australian customer support</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h2 class="text-2xl font-bold mb-6">Australian Forex Trading Regulations</h2>
+                    <p class="text-blue-600 mb-6">
+                        ASIC enforces strict regulations including maximum leverage limits (30:1 for major pairs), 
+                        negative balance protection, and mandatory client fund segregation. These protections 
+                        make Australia one of the safest jurisdictions for forex trading.
+                    </p>
+
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mt-8">
+                        <h3 class="text-lg font-semibold mb-4">Ready to Compare Australian Brokers?</h3>
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <a href="/compare" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors text-center">
+                                Compare Brokers
+                            </a>
+                            <a href="/simulator" class="border-2 border-blue-600 text-blue-600 px-6 py-3 rounded-lg hover:bg-blue-600 hover:text-white transition-colors text-center">
+                                Calculate Costs
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <script src="/static/breadcrumbs.js"></script>
+        <script src="/static/seo-utils.js"></script>
+    </body>
+    </html>
+  `);
+});
+
+// UK forex brokers page  
+app.get('/brokers/uk', (c) => {
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Best FCA Regulated Forex Brokers UK 2025 | BrokerAnalysis</title>
+        <meta name="description" content="Find the best FCA regulated forex brokers in the UK. Compare spreads, regulation, and features of top British forex brokers for 2025.">
+        <meta name="keywords" content="UK forex brokers, FCA regulated brokers, best forex brokers UK, British forex trading, FCA forex brokers">
+        
+        <meta property="og:title" content="Best FCA Regulated Forex Brokers UK 2025">
+        <meta property="og:description" content="Find the best FCA regulated forex brokers in the UK. Compare spreads, regulation, and features.">
+        <meta property="og:url" content="https://brokeranalysis.pages.dev/brokers/uk">
+        
+        <link rel="canonical" href="https://brokeranalysis.pages.dev/brokers/uk">
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="/static/styles.css" rel="stylesheet">
+    </head>
+    <body class="bg-blue-50 text-blue-900">
+        <a href="#main-content" class="sr-only focus:not-sr-only">Skip to main content</a>
+        
+        <nav class="bg-white shadow-sm border-b">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-chart-line text-blue-600 text-2xl"></i>
+                        <a href="/" class="text-xl font-bold text-blue-900">BrokerAnalysis</a>
+                    </div>
+                    <div class="hidden md:flex items-center space-x-6">
+                        <a href="/" class="text-blue-800 hover:text-blue-600">Home</a>
+                        <a href="/reviews" class="text-blue-800 hover:text-blue-600">Reviews</a>
+                        <a href="/compare" class="text-blue-800 hover:text-blue-600">Compare</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <main id="main-content">
+            <div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
+                <div class="max-w-4xl mx-auto px-4 text-center">
+                    <h1 class="text-4xl font-bold mb-4">Best FCA Regulated Forex Brokers UK 2025</h1>
+                    <p class="text-xl text-blue-100">Trusted brokers with FCA oversight and UK customer protection</p>
+                </div>
+            </div>
+
+            <div class="max-w-4xl mx-auto px-4 py-12">
+                <h2 class="text-2xl font-bold mb-6">Why Choose FCA Regulated Brokers?</h2>
+                <p class="text-blue-600 mb-8">
+                    The Financial Conduct Authority (FCA) is one of the world's most respected financial regulators. 
+                    FCA regulation ensures compensation scheme protection, segregated client funds, and strict 
+                    operational oversight for maximum trader protection.
+                </p>
+
+                <div class="bg-blue-50 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold mb-4">Ready to find your perfect UK broker?</h3>
+                    <a href="/" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
+                        Get Broker Recommendations
+                    </a>
+                </div>
+            </div>
+        </main>
+
+        <script src="/static/breadcrumbs.js"></script>
+    </body>
+    </html>
+  `);
 });
 
 export default app

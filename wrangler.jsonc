@@ -1,7 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "brokeranalysis",
-  "main": "src/index.tsx",
+  "name": "project-03dc598e",
   "compatibility_date": "2025-08-29",
   "pages_build_output_dir": "./dist",
   "compatibility_flags": ["nodejs_compat"],
@@ -13,6 +12,7 @@
     }
   ],
   "vars": {
-    "ENVIRONMENT": "production"
+    "ENVIRONMENT": "production",
+    "GOOGLE_CLIENT_ID": "your-google-client-id-here.apps.googleusercontent.com"
   }
 }

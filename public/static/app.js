@@ -14,6 +14,8 @@ class BrokerAnalysis {
         this.loadStats();
         await this.loadEnhancedBrokers();
         this.initChatbot();
+        this.addInternalLinks();
+        this.improveAccessibility();
     }
 
     setupEventListeners() {
@@ -745,6 +747,179 @@ class BrokerAnalysis {
         } else {
             indicator.classList.add('hidden');
         }
+    }
+
+    /**
+     * Add contextual internal links throughout the site
+     */
+    addInternalLinks() {
+        const currentPath = window.location.pathname;
+        
+        // Add internal links based on context
+        const linkSuggestions = {
+            '/': {
+                'compare': 'Compare top forex brokers side-by-side',
+                'simulator': 'Calculate your exact trading costs',
+                'reviews': 'Read detailed broker reviews'
+            },
+            '/reviews': {
+                'compare': 'Compare these brokers directly',
+                'simulator': 'Calculate costs with reviewed brokers',
+                '/': 'Get personalized broker recommendations'
+            },
+            '/compare': {
+                'reviews': 'Read detailed reviews of these brokers',
+                'simulator': 'Calculate exact costs for comparison',
+                '/': 'Find more brokers to compare'
+            },
+            '/simulator': {
+                'compare': 'Compare brokers side-by-side',
+                'reviews': 'Read reviews of cost-effective brokers',
+                '/': 'Get matched with low-cost brokers'
+            }
+        };
+
+        // Add contextual links to appropriate sections
+        this.insertContextualLinks(linkSuggestions[currentPath] || {});
+    }
+
+    insertContextualLinks(suggestions) {
+        Object.keys(suggestions).forEach(path => {
+            const description = suggestions[path];
+            const linkHtml = `
+                <div class="internal-link-suggestion bg-blue-50 border border-blue-200 rounded-lg p-4 my-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h4 class="font-semibold text-blue-900">${this.getPageTitle(path)}</h4>
+                            <p class="text-blue-600 text-sm">${description}</p>
+                        </div>
+                        <a href="${path}" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 transition-colors">
+                            Visit
+                        </a>
+                    </div>
+                </div>
+            `;
+            
+            // Insert near relevant content sections
+            const targetSections = document.querySelectorAll('.bg-white.rounded-lg.shadow-lg');
+            if (targetSections.length > 0) {
+                const lastSection = targetSections[targetSections.length - 1];
+                lastSection.insertAdjacentHTML('afterend', linkHtml);
+            }
+        });
+    }
+
+    getPageTitle(path) {
+        const titles = {
+            '/': 'Broker Matcher',
+            '/reviews': 'Broker Reviews',
+            '/compare': 'Broker Comparison',
+            '/simulator': 'Trading Calculator',
+            '/about': 'About Us'
+        };
+        return titles[path] || 'Learn More';
+    }
+
+    /**
+     * Improve accessibility throughout the site
+     */
+    improveAccessibility() {
+        // Add ARIA labels to buttons without them
+        this.addMissingAriaLabels();
+        
+        // Improve keyboard navigation
+        this.enhanceKeyboardNavigation();
+        
+        // Add focus management for dropdowns
+        this.improveFocusManagement();
+        
+        // Add live regions for dynamic content
+        this.addLiveRegions();
+    }
+
+    addMissingAriaLabels() {
+        // Find buttons without aria-label or aria-labelledby
+        const buttons = document.querySelectorAll('button:not([aria-label]):not([aria-labelledby])');
+        buttons.forEach(button => {
+            const text = button.textContent.trim();
+            const icon = button.querySelector('i[class*="fa-"]');
+            
+            if (!text && icon) {
+                // Button only has icon, add descriptive label
+                const iconClass = icon.className;
+                let label = 'Button';
+                
+                if (iconClass.includes('fa-search')) label = 'Search';
+                else if (iconClass.includes('fa-times')) label = 'Close';
+                else if (iconClass.includes('fa-bars')) label = 'Menu';
+                else if (iconClass.includes('fa-chevron')) label = 'Toggle menu';
+                
+                button.setAttribute('aria-label', label);
+            }
+        });
+    }
+
+    enhanceKeyboardNavigation() {
+        // Add Enter key support for clickable elements
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && e.target.matches('[data-action], .clickable')) {
+                e.target.click();
+            }
+            
+            // Escape key closes modals/dropdowns
+            if (e.key === 'Escape') {
+                this.closeOpenDropdowns();
+            }
+        });
+    }
+
+    improveFocusManagement() {
+        // Track focus for dropdown menus
+        const dropdownButtons = document.querySelectorAll('.nav-menu-button');
+        dropdownButtons.forEach(button => {
+            button.addEventListener('focus', () => {
+                button.setAttribute('aria-expanded', 'false');
+            });
+            
+            button.addEventListener('blur', (e) => {
+                // Delay to check if focus moved to dropdown content
+                setTimeout(() => {
+                    if (!e.relatedTarget?.closest('.group')) {
+                        button.setAttribute('aria-expanded', 'false');
+                    }
+                }, 100);
+            });
+        });
+    }
+
+    addLiveRegions() {
+        // Add live region for dynamic content announcements
+        if (!document.getElementById('live-region')) {
+            const liveRegion = document.createElement('div');
+            liveRegion.id = 'live-region';
+            liveRegion.setAttribute('aria-live', 'polite');
+            liveRegion.setAttribute('aria-atomic', 'true');
+            liveRegion.className = 'sr-only';
+            document.body.appendChild(liveRegion);
+        }
+    }
+
+    announceToScreenReader(message) {
+        const liveRegion = document.getElementById('live-region');
+        if (liveRegion) {
+            liveRegion.textContent = message;
+            
+            // Clear after announcement
+            setTimeout(() => {
+                liveRegion.textContent = '';
+            }, 1000);
+        }
+    }
+
+    closeOpenDropdowns() {
+        document.querySelectorAll('[aria-expanded="true"]').forEach(element => {
+            element.setAttribute('aria-expanded', 'false');
+        });
     }
 }
 
