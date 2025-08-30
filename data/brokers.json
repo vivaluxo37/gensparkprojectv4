@@ -1,0 +1,343 @@
+{
+  "brokers": [
+    {
+      "id": 1,
+      "slug": "tastyfx",
+      "name": "TastyFX",
+      "logo": "/static/logos/tastyfx.png",
+      "rating": 4.8,
+      "reviewsCount": 847,
+      "verified": true,
+      "founded": 2001,
+      "headquarters": "London, UK",
+      "minDeposit": 250,
+      "minDepositCurrency": "USD",
+      "maxLeverage": "1:50",
+      "typicalSpread": 0.9,
+      "commission": 0,
+      "estimatedSlippage": 0.2,
+      "instruments": ["Forex", "CFDs", "Indices", "Commodities"],
+      "platforms": ["TastyFX Web", "TastyFX Mobile", "MetaTrader 4"],
+      "regulation": [
+        {"name": "FCA", "license": "115234", "jurisdiction": "UK"},
+        {"name": "CFTC", "license": "0339826", "jurisdiction": "US"}
+      ],
+      "pros": [
+        "Excellent mobile trading platform",
+        "Strong regulatory oversight",
+        "Competitive spreads on major pairs"
+      ],
+      "cons": [
+        "High minimum deposit requirement",
+        "Limited copy trading options"
+      ],
+      "verdict": "Premium broker with excellent mobile platform and strong regulation",
+      "fees": {
+        "inactivity": "No fee",
+        "withdrawal": "No fee",
+        "deposit": "No fee"
+      },
+      "accountTypes": [
+        {
+          "name": "Standard",
+          "minDeposit": 250,
+          "spreads": "from 0.6 pips",
+          "commission": "None"
+        }
+      ],
+      "deposits": ["Bank Wire", "Credit Card", "ACH Transfer"],
+      "withdrawals": ["Bank Wire", "ACH Transfer"],
+      "sources": [
+        {"name": "FCA Register", "url": "https://register.fca.org.uk/"},
+        {"name": "Company Website", "url": "https://tastyfx.com"}
+      ]
+    },
+    {
+      "id": 2,
+      "slug": "forex-com",
+      "name": "Forex.com",
+      "logo": "/static/logos/forex-com.png",
+      "rating": 4.6,
+      "reviewsCount": 1203,
+      "verified": true,
+      "founded": 1999,
+      "headquarters": "New York, USA",
+      "minDeposit": 100,
+      "minDepositCurrency": "USD",
+      "maxLeverage": "1:50",
+      "typicalSpread": 1.2,
+      "commission": 0,
+      "estimatedSlippage": 0.3,
+      "instruments": ["Forex", "CFDs", "Indices", "Commodities", "Crypto"],
+      "platforms": ["Advanced Trading Platform", "Forex.com Mobile", "MetaTrader 4", "MetaTrader 5"],
+      "regulation": [
+        {"name": "CFTC", "license": "0339826", "jurisdiction": "US"},
+        {"name": "FCA", "license": "190864", "jurisdiction": "UK"}
+      ],
+      "pros": [
+        "Well-established with strong reputation",
+        "Multiple platform options",
+        "Good educational resources"
+      ],
+      "cons": [
+        "Higher spreads compared to ECN brokers",
+        "Limited cryptocurrency offerings"
+      ],
+      "verdict": "Reliable established broker with comprehensive platform options",
+      "fees": {
+        "inactivity": "$15/month after 12 months",
+        "withdrawal": "$15 wire fee",
+        "deposit": "No fee"
+      },
+      "accountTypes": [
+        {
+          "name": "Standard",
+          "minDeposit": 100,
+          "spreads": "from 0.8 pips",
+          "commission": "None"
+        },
+        {
+          "name": "Premium", 
+          "minDeposit": 25000,
+          "spreads": "from 0.6 pips",
+          "commission": "None"
+        }
+      ],
+      "deposits": ["Bank Wire", "Credit Card", "PayPal"],
+      "withdrawals": ["Bank Wire", "PayPal"],
+      "sources": [
+        {"name": "CFTC Registration", "url": "https://www.nfa.futures.org/"},
+        {"name": "Company Website", "url": "https://forex.com"}
+      ]
+    },
+    {
+      "id": 3,
+      "slug": "oanda",
+      "name": "OANDA",
+      "logo": "/static/logos/oanda.png",
+      "rating": 4.5,
+      "reviewsCount": 956,
+      "verified": true,
+      "founded": 1996,
+      "headquarters": "Toronto, Canada",
+      "minDeposit": 0,
+      "minDepositCurrency": "USD",
+      "maxLeverage": "1:50",
+      "typicalSpread": 1.0,
+      "commission": 0,
+      "estimatedSlippage": 0.2,
+      "instruments": ["Forex", "CFDs", "Indices", "Commodities"],
+      "platforms": ["OANDA Trade", "OANDA Mobile", "MetaTrader 4", "TradingView"],
+      "regulation": [
+        {"name": "CFTC", "license": "0325821", "jurisdiction": "US"},
+        {"name": "FCA", "license": "542574", "jurisdiction": "UK"},
+        {"name": "ASIC", "license": "412981", "jurisdiction": "AU"}
+      ],
+      "pros": [
+        "No minimum deposit requirement",
+        "Excellent execution quality",
+        "Comprehensive API for algo trading"
+      ],
+      "cons": [
+        "Limited leverage compared to others",
+        "No MetaTrader 5 platform"
+      ],
+      "verdict": "Excellent choice for algorithmic traders and beginners",
+      "fees": {
+        "inactivity": "No fee",
+        "withdrawal": "No fee",
+        "deposit": "No fee"
+      },
+      "accountTypes": [
+        {
+          "name": "Core Pricing",
+          "minDeposit": 0,
+          "spreads": "from 0.7 pips",
+          "commission": "None"
+        }
+      ],
+      "deposits": ["Bank Transfer", "Credit Card"],
+      "withdrawals": ["Bank Transfer"],
+      "sources": [
+        {"name": "CFTC Registration", "url": "https://www.nfa.futures.org/"},
+        {"name": "Company Website", "url": "https://oanda.com"}
+      ]
+    },
+    {
+      "id": 4,
+      "slug": "interactive-brokers",
+      "name": "Interactive Brokers",
+      "logo": "/static/logos/ib.png",
+      "rating": 4.7,
+      "reviewsCount": 678,
+      "verified": true,
+      "founded": 1978,
+      "headquarters": "Connecticut, USA",
+      "minDeposit": 0,
+      "minDepositCurrency": "USD",
+      "maxLeverage": "1:40",
+      "typicalSpread": 0.2,
+      "commission": 2.5,
+      "estimatedSlippage": 0.1,
+      "instruments": ["Forex", "Stocks", "Futures", "Options", "Bonds"],
+      "platforms": ["Trader Workstation", "IBKR Mobile", "Client Portal"],
+      "regulation": [
+        {"name": "SEC", "license": "SEC-8-69288", "jurisdiction": "US"},
+        {"name": "CFTC", "license": "0382560", "jurisdiction": "US"},
+        {"name": "FCA", "license": "208159", "jurisdiction": "UK"}
+      ],
+      "pros": [
+        "Extremely low commissions and spreads",
+        "Access to global markets",
+        "Professional-grade trading tools"
+      ],
+      "cons": [
+        "Complex platform not suitable for beginners",
+        "High inactivity fees for small accounts"
+      ],
+      "verdict": "Best for professional traders seeking lowest costs",
+      "fees": {
+        "inactivity": "$20/month if balance <$2000",
+        "withdrawal": "No fee",
+        "deposit": "No fee"
+      },
+      "accountTypes": [
+        {
+          "name": "Pro",
+          "minDeposit": 0,
+          "spreads": "from 0.1 pips",
+          "commission": "$2.50/lot"
+        }
+      ],
+      "deposits": ["Bank Wire", "ACH Transfer"],
+      "withdrawals": ["Bank Wire", "ACH Transfer"],
+      "sources": [
+        {"name": "SEC Registration", "url": "https://sec.gov/"},
+        {"name": "Company Website", "url": "https://interactivebrokers.com"}
+      ]
+    },
+    {
+      "id": 5,
+      "slug": "pepperstone",
+      "name": "Pepperstone",
+      "logo": "/static/logos/pepperstone.png",
+      "rating": 4.5,
+      "reviewsCount": 743,
+      "verified": true,
+      "founded": 2010,
+      "headquarters": "Melbourne, Australia",
+      "minDeposit": 0,
+      "minDepositCurrency": "USD",
+      "maxLeverage": "1:500",
+      "typicalSpread": 0.1,
+      "commission": 7.0,
+      "estimatedSlippage": 0.1,
+      "instruments": ["Forex", "CFDs", "Indices", "Commodities", "Crypto"],
+      "platforms": ["MetaTrader 4", "MetaTrader 5", "cTrader", "TradingView"],
+      "regulation": [
+        {"name": "ASIC", "license": "414530", "jurisdiction": "AU"},
+        {"name": "FCA", "license": "684312", "jurisdiction": "UK"}
+      ],
+      "pros": [
+        "Ultra-tight spreads on Raw account",
+        "Fast execution speeds",
+        "Multiple platform options"
+      ],
+      "cons": [
+        "No US clients accepted",
+        "Higher commission on Raw accounts"
+      ],
+      "verdict": "Excellent for scalpers and high-frequency traders",
+      "fees": {
+        "inactivity": "No fee",
+        "withdrawal": "No fee",
+        "deposit": "No fee"
+      },
+      "accountTypes": [
+        {
+          "name": "Standard",
+          "minDeposit": 0,
+          "spreads": "from 1.0 pips",
+          "commission": "None"
+        },
+        {
+          "name": "Raw",
+          "minDeposit": 200,
+          "spreads": "from 0.0 pips",
+          "commission": "$7/lot"
+        }
+      ],
+      "deposits": ["Credit Card", "Bank Transfer", "PayPal", "Skrill"],
+      "withdrawals": ["Bank Transfer", "Credit Card"],
+      "sources": [
+        {"name": "ASIC Register", "url": "https://asic.gov.au/"},
+        {"name": "Company Website", "url": "https://pepperstone.com"}
+      ]
+    },
+    {
+      "id": 6,
+      "slug": "ic-markets",
+      "name": "IC Markets",
+      "logo": "/static/logos/icmarkets.png", 
+      "rating": 4.6,
+      "reviewsCount": 892,
+      "verified": true,
+      "founded": 2007,
+      "headquarters": "Sydney, Australia",
+      "minDeposit": 200,
+      "minDepositCurrency": "USD",
+      "maxLeverage": "1:500",
+      "typicalSpread": 0.1,
+      "commission": 7.0,
+      "estimatedSlippage": 0.1,
+      "instruments": ["Forex", "CFDs", "Indices", "Commodities", "Crypto"],
+      "platforms": ["MetaTrader 4", "MetaTrader 5", "cTrader", "WebTrader"],
+      "regulation": [
+        {"name": "ASIC", "license": "335692", "jurisdiction": "AU"},
+        {"name": "CySEC", "license": "362/18", "jurisdiction": "CY"}
+      ],
+      "pros": [
+        "Raw spreads from 0.0 pips",
+        "Fast execution with low latency",
+        "Strong regulation and reputation"
+      ],
+      "cons": [
+        "Higher minimum deposit for Raw account",
+        "No social trading features"
+      ],
+      "verdict": "Top choice for serious traders seeking tight spreads",
+      "fees": {
+        "inactivity": "No fee",
+        "withdrawal": "No fee", 
+        "deposit": "No fee"
+      },
+      "accountTypes": [
+        {
+          "name": "Standard",
+          "minDeposit": 200,
+          "spreads": "from 1.0 pips",
+          "commission": "None"
+        },
+        {
+          "name": "Raw Spread",
+          "minDeposit": 200,
+          "spreads": "from 0.0 pips",
+          "commission": "$7/lot"
+        }
+      ],
+      "deposits": ["Credit Card", "Bank Transfer", "Skrill", "Neteller"],
+      "withdrawals": ["Bank Transfer", "Credit Card"],
+      "sources": [
+        {"name": "ASIC Register", "url": "https://asic.gov.au/"},
+        {"name": "Company Website", "url": "https://icmarkets.com"}
+      ]
+    }
+  ],
+  "metadata": {
+    "lastUpdated": "2025-08-29",
+    "version": "1.0.0",
+    "totalBrokers": 6,
+    "dataSource": "Comprehensive broker analysis",
+    "refreshFrequency": "Weekly"
+  }
+}
