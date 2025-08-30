@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Simulator Test Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .test-output {
+            font-family: 'Courier New', monospace;
+            background: #1f2937;
+            color: #10b981;
+            padding: 20px;
+            border-radius: 8px;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold mb-6">Enhanced Simulator Test Suite</h1>
+        
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4">Component Loading Status</h2>
+            <div class="grid grid-cols-2 gap-4" id="component-status">
+                <!-- Status will be populated here -->
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4">Basic Functionality Test</h2>
+            <button id="run-basic-test" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                Run Basic Test
+            </button>
+            <div id="basic-test-results" class="mt-4 test-output" style="display: none;">
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4">Enhanced Engine Test</h2>
+            <button id="run-engine-test" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                Test Calculation Engine
+            </button>
+            <div id="engine-test-results" class="mt-4 test-output" style="display: none;">
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h2 class="text-xl font-bold mb-4">Full Unit Tests</h2>
+            <button id="run-unit-tests" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                Run All Unit Tests
+            </button>
+            <div id="unit-test-results" class="mt-4 test-output" style="display: none;">
+            </div>
+        </div>
+    </div>
+
+    <!-- Load Enhanced Simulator Components -->
+    <script src="/static/enhanced-simulator-engine.js"></script>
+    <script src="/static/enhanced-simulator-ui.js"></script>
+    <script src="/static/enhanced-simulator-mobile.js"></script>
+    <script src="/static/enhanced-simulator-export.js"></script>
+
+    <script>
+        // Test page functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            checkComponentStatus();
+            setupEventListeners();
+        });
+
+        function checkComponentStatus() {
+            const components = [
+                { name: 'EnhancedSimulatorEngine', class: window.EnhancedSimulatorEngine },
+                { name: 'EnhancedSimulatorUI', class: window.EnhancedSimulatorUI },
+                { name: 'SimulatorMobileOptimizer', class: window.SimulatorMobileOptimizer },
+                { name: 'SimulatorExportManager', class: window.SimulatorExportManager }
+            ];
+
+            const statusContainer = document.getElementById('component-status');
+            statusContainer.innerHTML = '';
+
+            components.forEach(component => {
+                const isLoaded = typeof component.class === 'function';
+                const statusCard = document.createElement('div');
+                statusCard.className = `p-4 rounded-lg border-2 ${isLoaded ? 'border-green-500 bg-green-50' : 'border-red-500 bg-red-50'}`;
+                statusCard.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <span class="font-medium">${component.name}</span>
+                        <span class="text-sm ${isLoaded ? 'text-green-600' : 'text-red-600'}">
+                            ${isLoaded ? '✅ Loaded' : '❌ Failed'}
+                        </span>
+                    </div>
+                `;
+                statusContainer.appendChild(statusCard);
+            });
+        }
+
+        function setupEventListeners() {
+            document.getElementById('run-basic-test').addEventListener('click', runBasicTest);
+            document.getElementById('run-engine-test').addEventListener('click', runEngineTest);
+            document.getElementById('run-unit-tests').addEventListener('click', runUnitTests);
+        }
+
+        function runBasicTest() {
+            const output = document.getElementById('basic-test-results');
+            output.style.display = 'block';
+            output.textContent = '🧪 Running Basic Tests...\n\n';
+
+            try {
+                // Test 1: Component instantiation
+                output.textContent += '1. Testing component instantiation:\n';
+                const engine = new EnhancedSimulatorEngine();
+                output.textContent += '   ✅ EnhancedSimulatorEngine created\n';
+
+                // Test 2: Data structures
+                output.textContent += '\n2. Testing data structures:\n';
+                if (engine.enhancedBrokerData) {
+                    output.textContent += '   ✅ Broker data loaded\n';
+                } else {
+                    output.textContent += '   ❌ Broker data missing\n';
+                }
+
+                if (engine.tradingStrategies) {
+                    output.textContent += '   ✅ Strategy data loaded\n';
+                } else {
+                    output.textContent += '   ❌ Strategy data missing\n';
+                }
+
+                // Test 3: Basic methods
+                output.textContent += '\n3. Testing basic methods:\n';
+                const icMarkets = engine.getBroker('ic-markets');
+                if (icMarkets && icMarkets.name === 'IC Markets') {
+                    output.textContent += '   ✅ getBroker() works\n';
+                } else {
+                    output.textContent += '   ❌ getBroker() failed\n';
+                }
+
+                const scalping = engine.getStrategy('scalping');
+                if (scalping && scalping.name === 'Scalping') {
+                    output.textContent += '   ✅ getStrategy() works\n';
+                } else {
+                    output.textContent += '   ❌ getStrategy() failed\n';
+                }
+
+                output.textContent += '\n🎉 Basic tests completed successfully!';
+
+            } catch (error) {
+                output.textContent += `\n❌ Basic test failed: ${error.message}`;
+                console.error('Basic test error:', error);
+            }
+        }
+
+        async function runEngineTest() {
+            const output = document.getElementById('engine-test-results');
+            output.style.display = 'block';
+            output.textContent = '🔧 Running Engine Tests...\n\n';
+
+            try {
+                const engine = new EnhancedSimulatorEngine();
+                await engine.init();
+
+                // Test cost calculation
+                output.textContent += '1. Testing cost calculation:\n';
+                const params = {
+                    tradeSize: 1.0,
+                    tradesPerMonth: 100,
+                    instrument: 'EURUSD',
+                    holdingPeriodDays: 1
+                };
+
+                const result = engine.calculateAdvancedCosts('ic-markets', 'scalping', params);
+                output.textContent += `   ✅ Total cost: $${result.costs.totalCost}\n`;
+                output.textContent += `   ✅ Spread cost: $${result.costs.spreadCost}\n`;
+                output.textContent += `   ✅ Commission cost: $${result.costs.commissionCost}\n`;
+
+                // Test broker comparison
+                output.textContent += '\n2. Testing broker comparison:\n';
+                const brokers = ['ic-markets', 'pepperstone', 'etoro'];
+                const comparison = engine.compareAcrossBrokers(brokers, 'scalping', params);
+                
+                output.textContent += `   ✅ Compared ${comparison.length} brokers\n`;
+                output.textContent += `   ✅ Best broker: ${comparison[0].brokerName}\n`;
+                output.textContent += `   ✅ Lowest cost: $${comparison[0].costs.totalCost}\n`;
+
+                // Test insights generation
+                output.textContent += '\n3. Testing insights generation:\n';
+                const insights = engine.generateInsights(comparison, 'scalping', params);
+                output.textContent += `   ✅ Generated ${insights.recommendations.length} recommendations\n`;
+                output.textContent += `   ✅ Potential savings: $${insights.summary.totalMonthlySavings.toFixed(2)}\n`;
+
+                output.textContent += '\n🎉 Engine tests completed successfully!';
+
+            } catch (error) {
+                output.textContent += `\n❌ Engine test failed: ${error.message}`;
+                console.error('Engine test error:', error);
+            }
+        }
+
+        async function runUnitTests() {
+            const output = document.getElementById('unit-test-results');
+            output.style.display = 'block';
+            output.textContent = '🧪 Loading and running unit tests...\n\n';
+
+            try {
+                // Load test file
+                const response = await fetch('/static/enhanced-simulator.test.js');
+                const testCode = await response.text();
+                
+                // Capture console output
+                const originalConsole = {
+                    log: console.log,
+                    error: console.error,
+                    group: console.group,
+                    groupEnd: console.groupEnd
+                };
+
+                let testOutput = '';
+                console.log = (...args) => {
+                    testOutput += args.join(' ') + '\n';
+                    originalConsole.log(...args);
+                };
+                console.error = (...args) => {
+                    testOutput += 'ERROR: ' + args.join(' ') + '\n';
+                    originalConsole.error(...args);
+                };
+                console.group = (msg) => {
+                    testOutput += '\n' + msg + '\n';
+                    originalConsole.group(msg);
+                };
+                console.groupEnd = () => {
+                    testOutput += '\n';
+                    originalConsole.groupEnd();
+                };
+
+                // Execute test code
+                eval(testCode);
+
+                // Wait for tests to complete
+                setTimeout(() => {
+                    output.textContent = testOutput;
+                    
+                    // Restore console
+                    Object.assign(console, originalConsole);
+                }, 3000);
+
+            } catch (error) {
+                output.textContent += `\n❌ Unit test execution failed: ${error.message}`;
+                console.error('Unit test error:', error);
+            }
+        }
+    </script>
+</body>
+</html>

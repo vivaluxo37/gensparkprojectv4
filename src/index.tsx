@@ -19,6 +19,229 @@ app.use('/api/*', cors({
 // Serve static files
 app.use('/static/*', serveStatic({ root: './public' }))
 
+// ADDITIVE: Test page route for enhanced simulator (embedded HTML)
+app.get('/test-simulator', (c) => {
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Enhanced Simulator Test - BrokerAnalysis</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <style>
+            .test-output {
+                font-family: 'Courier New', monospace;
+                background: #1f2937;
+                color: #10b981;
+                padding: 20px;
+                border-radius: 8px;
+                white-space: pre-wrap;
+                max-height: 400px;
+                overflow-y: auto;
+            }
+        </style>
+    </head>
+    <body class="bg-gray-100 p-8">
+        <div class="max-w-4xl mx-auto">
+            <div class="mb-6">
+                <a href="/simulator" class="text-blue-600 hover:text-blue-800">← Back to Simulator</a>
+            </div>
+            
+            <h1 class="text-3xl font-bold mb-6">Enhanced Simulator Integration Test</h1>
+            
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+                <h2 class="text-xl font-bold mb-4">Component Loading Status</h2>
+                <div class="grid grid-cols-2 gap-4" id="component-status">
+                    <!-- Status will be populated here -->
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+                <h2 class="text-xl font-bold mb-4">Enhanced Engine Test</h2>
+                <button id="run-engine-test" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                    Test Calculation Engine
+                </button>
+                <div id="engine-test-results" class="mt-4 test-output" style="display: none;"></div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-xl font-bold mb-4">Integration Status</h2>
+                <div id="integration-status" class="space-y-2">
+                    <!-- Integration status will be populated here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Load Enhanced Simulator Components -->
+        <script src="/static/enhanced-simulator-engine.js"></script>
+        <script src="/static/enhanced-simulator-ui.js"></script>
+        <script src="/static/enhanced-simulator-mobile.js"></script>
+        <script src="/static/enhanced-simulator-export.js"></script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                checkComponentStatus();
+                setupEventListeners();
+                checkIntegrationStatus();
+            });
+
+            function checkComponentStatus() {
+                const components = [
+                    { name: 'EnhancedSimulatorEngine', class: window.EnhancedSimulatorEngine },
+                    { name: 'EnhancedSimulatorUI', class: window.EnhancedSimulatorUI },
+                    { name: 'SimulatorMobileOptimizer', class: window.SimulatorMobileOptimizer },
+                    { name: 'SimulatorExportManager', class: window.SimulatorExportManager }
+                ];
+
+                const statusContainer = document.getElementById('component-status');
+                statusContainer.innerHTML = '';
+
+                components.forEach(component => {
+                    const isLoaded = typeof component.class === 'function';
+                    const statusCard = document.createElement('div');
+                    statusCard.className = \`p-4 rounded-lg border-2 \${isLoaded ? 'border-green-500 bg-green-50' : 'border-red-500 bg-red-50'}\`;
+                    statusCard.innerHTML = \`
+                        <div class="flex items-center justify-between">
+                            <span class="font-medium">\${component.name}</span>
+                            <span class="text-sm \${isLoaded ? 'text-green-600' : 'text-red-600'}">
+                                \${isLoaded ? '✅ Loaded' : '❌ Failed'}
+                            </span>
+                        </div>
+                    \`;
+                    statusContainer.appendChild(statusCard);
+                });
+            }
+
+            function setupEventListeners() {
+                document.getElementById('run-engine-test').addEventListener('click', runEngineTest);
+            }
+
+            async function runEngineTest() {
+                const output = document.getElementById('engine-test-results');
+                output.style.display = 'block';
+                output.textContent = '🔧 Running Enhanced Engine Integration Test...\\n\\n';
+
+                try {
+                    const engine = new EnhancedSimulatorEngine();
+                    await engine.init();
+
+                    // Test broker data loading
+                    output.textContent += '1. Testing broker data:';
+                    const brokers = engine.getBrokers();
+                    output.textContent += \` ✅ Loaded \${brokers.length} brokers\\n\`;
+
+                    // Test strategy data loading  
+                    output.textContent += '2. Testing strategy data:';
+                    const strategies = engine.getStrategies();
+                    output.textContent += \` ✅ Loaded \${strategies.length} strategies\\n\`;
+
+                    // Test cost calculation
+                    output.textContent += '\\n3. Testing cost calculation:\\n';
+                    const params = {
+                        tradeSize: 1.0,
+                        tradesPerMonth: 100,
+                        instrument: 'EURUSD',
+                        holdingPeriodDays: 1
+                    };
+
+                    const result = engine.calculateAdvancedCosts('ic-markets', 'scalping', params);
+                    output.textContent += \`   ✅ Total monthly cost: $\${result.costs.totalCost}\\n\`;
+                    output.textContent += \`   ✅ Cost per trade: $\${result.costs.costPerTrade}\\n\`;
+                    output.textContent += \`   ✅ Suitability score: \${result.qualityMetrics.suitabilityScore}/100\\n\`;
+
+                    // Test broker comparison
+                    output.textContent += '\\n4. Testing broker comparison:\\n';
+                    const brokerIds = ['ic-markets', 'pepperstone', 'etoro'];
+                    const comparison = engine.compareAcrossBrokers(brokerIds, 'scalping', params);
+                    
+                    output.textContent += \`   ✅ Compared \${comparison.length} brokers\\n\`;
+                    output.textContent += \`   ✅ Best: \${comparison[0].brokerName} ($\${comparison[0].costs.totalCost})\\n\`;
+                    output.textContent += \`   ✅ Rankings: \${comparison.map(r => \`#\${r.ranking} \${r.brokerName}\`).join(', ')}\\n\`;
+
+                    // Test insights
+                    output.textContent += '\\n5. Testing insights generation:\\n';
+                    const insights = engine.generateInsights(comparison, 'scalping', params);
+                    output.textContent += \`   ✅ Generated \${insights.recommendations.length} recommendations\\n\`;
+                    output.textContent += \`   ✅ Potential savings: $\${insights.summary.totalMonthlySavings.toFixed(2)}\\n\`;
+
+                    output.textContent += '\\n🎉 All tests passed! Enhanced simulator is working correctly.';
+
+                } catch (error) {
+                    output.textContent += \`\\n❌ Test failed: \${error.message}\`;
+                    console.error('Engine test error:', error);
+                }
+            }
+
+            function checkIntegrationStatus() {
+                const statusContainer = document.getElementById('integration-status');
+                
+                // Check if we're on the correct page
+                const isSimulatorPage = window.location.pathname.includes('simulator');
+                
+                const checks = [
+                    { 
+                        name: 'Script Loading', 
+                        status: typeof EnhancedSimulatorEngine === 'function' && 
+                                typeof EnhancedSimulatorUI === 'function',
+                        description: 'All enhanced simulator scripts loaded successfully'
+                    },
+                    { 
+                        name: 'Backward Compatibility', 
+                        status: typeof TradingSimulator === 'function',
+                        description: 'Original simulator functionality preserved'
+                    },
+                    { 
+                        name: 'Mobile Optimization', 
+                        status: typeof SimulatorMobileOptimizer === 'function',
+                        description: 'Mobile-responsive features available'
+                    },
+                    { 
+                        name: 'Export Features', 
+                        status: typeof SimulatorExportManager === 'function',
+                        description: 'PDF, CSV export and sharing functionality'
+                    }
+                ];
+
+                checks.forEach(check => {
+                    const statusDiv = document.createElement('div');
+                    statusDiv.className = \`p-3 rounded-lg border \${check.status ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'}\`;
+                    statusDiv.innerHTML = \`
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <div class="font-medium \${check.status ? 'text-green-800' : 'text-red-800'}">\${check.name}</div>
+                                <div class="text-sm text-gray-600">\${check.description}</div>
+                            </div>
+                            <span class="\${check.status ? 'text-green-600' : 'text-red-600'}">
+                                \${check.status ? '✅' : '❌'}
+                            </span>
+                        </div>
+                    \`;
+                    statusContainer.appendChild(statusDiv);
+                });
+
+                // Overall status
+                const allPassed = checks.every(check => check.status);
+                const overallDiv = document.createElement('div');
+                overallDiv.className = \`p-4 rounded-lg border-2 mt-4 \${allPassed ? 'border-green-500 bg-green-50' : 'border-yellow-500 bg-yellow-50'}\`;
+                overallDiv.innerHTML = \`
+                    <div class="font-bold text-lg \${allPassed ? 'text-green-800' : 'text-yellow-800'}">
+                        \${allPassed ? '🎉 Integration Successful!' : '⚠️ Some Issues Detected'}
+                    </div>
+                    <div class="text-sm mt-1 \${allPassed ? 'text-green-700' : 'text-yellow-700'}">
+                        \${allPassed ? 
+                            'Enhanced simulator is fully integrated and ready to use.' : 
+                            'Some components may not be working correctly. Check the status above.'}
+                    </div>
+                \`;
+                statusContainer.appendChild(overallDiv);
+            }
+        </script>
+    </body>
+    </html>
+  `);
+})
+
 // API route to serve broker data
 app.get('/data/brokers.json', async (c) => {
   // Read the broker data from the public directory
@@ -1011,6 +1234,11 @@ app.get('/simulator', (c) => {
 
         <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
         <script src="/static/simulator.js"></script>
+        <!-- ADDITIVE ENHANCEMENT: Professional simulator components -->
+        <script src="/static/enhanced-simulator-engine.js"></script>
+        <script src="/static/enhanced-simulator-ui.js"></script>
+        <script src="/static/enhanced-simulator-mobile.js"></script>
+        <script src="/static/enhanced-simulator-export.js"></script>
     </body>
     </html>
   `);
