@@ -18,6 +18,7 @@ import { renderPhilippinesCountryPage } from '../components/PhilippinesCountryPa
 import { renderPakistanCountryPage } from '../components/PakistanCountryPage.js';
 import { renderIndiaCountryPage } from '../components/IndiaCountryPage.js';
 import { renderCanadaCountryPage } from '../components/CanadaCountryPage.js';
+import { renderAustraliaCountryPage } from '../components/AustraliaCountryPage.js';
 
 const pageRoutes = new Hono<{ Bindings: Bindings }>();
 
@@ -334,6 +335,30 @@ pageRoutes.get('/countries/canada', (c) => {
       <meta property="og:type" content="website" />
       <link rel="alternate" hreflang="en" href="${getCurrentDomain(c.req.raw)}/countries/canada" />
       <link rel="alternate" hreflang="fr" href="${getCurrentDomain(c.req.raw)}/countries/canada" />
+    `
+  }));
+});
+
+// Individual Country Pages - Australia
+pageRoutes.get('/countries/australia', (c) => {
+  return c.html(renderLayout(renderAustraliaCountryPage({
+    canonicalUrl: '/countries/australia',
+    request: c.req.raw
+  }), {
+    title: 'Best Forex Brokers in Australia 2025 - ASIC Regulated | BrokerAnalysis',
+    description: 'Compare the best ASIC regulated forex brokers for Australian traders in 2025. Find top-rated brokers with competitive spreads from 0.0 pips, advanced platforms, and AUD support.',
+    keywords: 'forex brokers Australia, ASIC regulated, Australian traders, MetaTrader, forex trading Australia, AUD trading, IC Markets, Pepperstone, IG Markets, CMC Markets, Vantage FX',
+    canonicalUrl: '/countries/australia',
+    request: c.req.raw,
+    additionalHead: `
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+      <meta name="geo.region" content="AU" />
+      <meta name="geo.placename" content="Australia" />
+      <meta name="robots" content="index, follow, max-image-preview:large" />
+      <meta property="og:locale" content="en_AU" />
+      <meta property="og:type" content="website" />
+      <link rel="alternate" hreflang="en" href="${getCurrentDomain(c.req.raw)}/countries/australia" />
     `
   }));
 });
