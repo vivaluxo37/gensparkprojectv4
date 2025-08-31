@@ -1,6 +1,7 @@
 // Enhanced Broker Review Component - Comprehensive like dailyforex.com and forexbrokers.com
 import type { ComprehensiveBroker } from '../types';
 import { getCurrentDomain } from '../utils';
+import { generateBrokerLogo, generateLogoScript } from './BrokerLogo.js';
 
 export function generateComprehensiveBrokerReviewHTML(broker: ComprehensiveBroker, request?: Request): string {
   const domain = getCurrentDomain(request);

@@ -10,6 +10,7 @@ import { renderFAQ } from '../components/FAQ.js';
 import { renderBrokersDirectoryPage } from '../components/BrokersDirectoryPage.js';
 import { renderCountriesDirectoryPage } from '../components/CountriesDirectoryPage.js';
 import { renderRegulatorPage } from '../components/RegulatorPage.js';
+import { renderUSACountryPage } from '../components/USACountryPage.js';
 
 const pageRoutes = new Hono<{ Bindings: Bindings }>();
 
@@ -253,6 +254,31 @@ regulatorRoutes.forEach(regulator => {
       request: c.req.raw
     }));
   });
+});
+
+// Individual Country Pages - USA
+pageRoutes.get('/countries/usa', (c) => {
+  return c.html(renderLayout(renderUSACountryPage({
+    canonicalUrl: '/countries/usa',
+    request: c.req.raw
+  }), {
+    title: 'Best Forex Brokers in USA 2025 - CFTC/NFA Regulated | BrokerAnalysis',
+    description: 'Compare top US forex brokers with CFTC/NFA regulation. Find the best spreads, platforms, and trading conditions for American forex traders. Updated 2025.',
+    keywords: 'USA forex brokers, US forex trading, CFTC regulated brokers, NFA forex brokers, American forex brokers, Interactive Brokers, TD Ameritrade, Charles Schwab, E*TRADE, Forex.com, OANDA',
+    canonicalUrl: '/countries/usa',
+    request: c.req.raw,
+    additionalHead: `
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+      <meta name="geo.region" content="US" />
+      <meta name="geo.placename" content="United States" />
+      <meta name="robots" content="index, follow, max-image-preview:large" />
+      <meta property="og:locale" content="en_US" />
+      <meta property="og:type" content="website" />
+      <meta property="article:publisher" content="https://www.facebook.com/brokeranalysis" />
+      <link rel="alternate" hreflang="en" href="${getCurrentDomain(c.req.raw)}/countries/usa" />
+    `
+  }));
 });
 
 // Reviews listing page

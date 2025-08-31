@@ -1,6 +1,7 @@
 // Comprehensive Brokers Directory Page - Main broker listing with SEO optimization
 import type { Broker } from '../types';
 import { getCurrentDomain, generateMetaTags } from '../utils';
+import { generateBrokerLogo, generateLogoScript } from './BrokerLogo.js';
 
 export function renderBrokersDirectoryPage(brokers: Broker[], options: {
   canonicalUrl?: string;
@@ -20,10 +21,13 @@ export function renderBrokersDirectoryPage(brokers: Broker[], options: {
     <div class="bg-white rounded-lg shadow-md border hover:shadow-lg transition-all duration-300 p-6">
       <div class="flex items-start justify-between mb-4">
         <div class="flex items-center">
-          <img src="${broker.logo_url || '/static/images/brokers/default-logo.svg'}" 
-               alt="${broker.name} logo" 
-               class="w-16 h-16 object-contain rounded mr-4"
-               onerror="this.src='/static/images/brokers/default-logo.svg'">
+          ${generateBrokerLogo({
+            brokerName: broker.name,
+            logoUrl: broker.logo_url,
+            slug: broker.slug,
+            size: 'lg',
+            className: 'mr-4'
+          })}
           <div>
             <h3 class="text-xl font-semibold text-gray-900 mb-1">
               <a href="/review/${broker.slug}" class="hover:text-blue-600 transition-colors">
@@ -375,6 +379,8 @@ export function renderBrokersDirectoryPage(brokers: Broker[], options: {
                 window.location = url.toString();
             }
         </script>
+        
+        ${generateLogoScript()}
     </body>
     </html>
   `;
