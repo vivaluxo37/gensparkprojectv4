@@ -17,6 +17,7 @@ import { renderSouthAfricaCountryPage } from '../components/SouthAfricaCountryPa
 import { renderPhilippinesCountryPage } from '../components/PhilippinesCountryPage.js';
 import { renderPakistanCountryPage } from '../components/PakistanCountryPage.js';
 import { renderIndiaCountryPage } from '../components/IndiaCountryPage.js';
+import { renderCanadaCountryPage } from '../components/CanadaCountryPage.js';
 
 const pageRoutes = new Hono<{ Bindings: Bindings }>();
 
@@ -308,6 +309,31 @@ pageRoutes.get('/countries/india', (c) => {
       <meta property="og:type" content="website" />
       <link rel="alternate" hreflang="en" href="${getCurrentDomain(c.req.raw)}/countries/india" />
       <link rel="alternate" hreflang="hi" href="${getCurrentDomain(c.req.raw)}/countries/india" />
+    `
+  }));
+});
+
+// Individual Country Pages - Canada
+pageRoutes.get('/countries/canada', (c) => {
+  return c.html(renderLayout(renderCanadaCountryPage({
+    canonicalUrl: '/countries/canada',
+    request: c.req.raw
+  }), {
+    title: 'Best Forex Brokers in Canada 2025 - CIRO Regulated | BrokerAnalysis',
+    description: 'Compare the best forex brokers for Canadian traders in 2025. Find top-rated brokers with CIRO regulation, CIPF protection, competitive spreads, and CAD support.',
+    keywords: 'forex brokers Canada, CIRO regulated, Canadian traders, MetaTrader, forex trading Canada, CAD trading, Interactive Brokers, OANDA, Questrade, XM Group, Pepperstone',
+    canonicalUrl: '/countries/canada',
+    request: c.req.raw,
+    additionalHead: `
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+      <meta name="geo.region" content="CA" />
+      <meta name="geo.placename" content="Canada" />
+      <meta name="robots" content="index, follow, max-image-preview:large" />
+      <meta property="og:locale" content="en_CA" />
+      <meta property="og:type" content="website" />
+      <link rel="alternate" hreflang="en" href="${getCurrentDomain(c.req.raw)}/countries/canada" />
+      <link rel="alternate" hreflang="fr" href="${getCurrentDomain(c.req.raw)}/countries/canada" />
     `
   }));
 });
