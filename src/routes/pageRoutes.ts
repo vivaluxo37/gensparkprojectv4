@@ -273,25 +273,164 @@ pageRoutes.get('/compare', (c) => {
         ${generateFooter()}
         
         <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                loadBrokerSelectionOptions();
-                setupComparisonTool();
-            });
-            
+            class ComparisonTool {
+                constructor() {
+                    this.brokers = [];
+                    this.selectedBrokers = [];
+                    this.init();
+                }
+
+                async init() {
+                    await this.loadBrokers();
+                    this.setupSelectors();
+                    this.setupEventListeners();
+                }
+
+                async loadBrokers() {
+                    try {
+                        const response = await fetch('/api/brokers?limit=100');
+                        const data = await response.json();
+                        this.brokers = data.brokers || [];
+                        console.log('Loaded brokers:', this.brokers.length);
+                    } catch (error) {
+                        console.error('Failed to load brokers:', error);
+                    }
+                }
+
+                setupSelectors() {
+                    const container = document.getElementById('broker-selection');
+                    container.innerHTML = '';
+                    
+                    for (let i = 1; i <= 4; i++) {
+                        const selectorDiv = document.createElement('div');
+                        selectorDiv.className = 'bg-gray-50 p-4 rounded-lg';
+                        selectorDiv.innerHTML = \`
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Broker \${i}</label>
+                            <select id="broker-\${i}" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                                <option value="">Select a broker</option>
+                                \${this.brokers.map(broker => 
+                                    \`<option value="\${broker.id}">\${broker.name}</option>\`
+                                ).join('')}
+                            </select>
+                        \`;
+                        container.appendChild(selectorDiv);
+                    }
+                }
+
+                setupEventListeners() {
+                    const compareButton = document.getElementById('compare-button');
+                    compareButton.addEventListener('click', () => this.compareBrokers());
+
+                    // Add change listeners to selectors
+                    for (let i = 1; i <= 4; i++) {
+                        const selector = document.getElementById(\`broker-\${i}\`);
+                        selector.addEventListener('change', () => this.updateCompareButton());
+                    }
+                }
+
+                updateCompareButton() {
+                    const selectedIds = [];
+                    for (let i = 1; i <= 4; i++) {
+                        const selector = document.getElementById(\`broker-\${i}\`);
+                        if (selector.value) {
+                            selectedIds.push(selector.value);
+                        }
+                    }
+
+                    const compareButton = document.getElementById('compare-button');
+                    compareButton.disabled = selectedIds.length < 2;
+                    compareButton.textContent = \`Compare \${selectedIds.length} Brokers\`;
+                }
+
+                async compareBrokers() {
+                    const selectedIds = [];
+                    for (let i = 1; i <= 4; i++) {
+                        const selector = document.getElementById(\`broker-\${i}\`);
+                        if (selector.value) {
+                            selectedIds.push(selector.value);
+                        }
+                    }
+
+                    if (selectedIds.length < 2) {
+                        alert('Please select at least 2 brokers to compare');
+                        return;
+                    }
+
+                    try {
+                        const response = await fetch(\`/api/compare?brokers=\${selectedIds.join(',')}\`);
+                        const data = await response.json();
+                        this.displayComparison(data.brokers);
+                    } catch (error) {
+                        console.error('Comparison failed:', error);
+                        alert('Failed to load comparison data');
+                    }
+                }
+
+                displayComparison(brokers) {
+                    const resultsContainer = document.getElementById('comparison-results');
+                    const tableContainer = document.getElementById('comparison-table');
+                    
+                    if (!brokers || brokers.length === 0) {
+                        tableContainer.innerHTML = '<p>No comparison data available</p>';
+                        return;
+                    }
+
+                    // Create comparison table
+                    let tableHTML = \`
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full border border-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-4 py-2 text-left">Criteria</th>
+                                        \${brokers.map(broker => 
+                                            \`<th class="px-4 py-2 text-center">\${broker.name}</th>\`
+                                        ).join('')}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                    \`;
+
+                    // Add comparison rows
+                    const criteria = [
+                        {label: 'Overall Rating', key: 'rating', formatter: (v) => \`\${v}/5 ⭐\`},
+                        {label: 'Min Deposit', key: 'min_deposit_usd', formatter: (v) => \`$\${v}\`},
+                        {label: 'Max Leverage', key: 'max_leverage', formatter: (v) => v},
+                        {label: 'Spread Type', key: 'spread_type', formatter: (v) => v},
+                        {label: 'Regulation Score', key: 'regulation_trust_score', formatter: (v) => \`\${v}/10\`},
+                        {label: 'Fees Score', key: 'fees_score', formatter: (v) => \`\${v}/10\`}
+                    ];
+
+                    criteria.forEach(criterion => {
+                        tableHTML += \`
+                            <tr class="border-t">
+                                <td class="px-4 py-2 font-medium">\${criterion.label}</td>
+                                \${brokers.map(broker => 
+                                    \`<td class="px-4 py-2 text-center">\${criterion.formatter(broker[criterion.key] || 'N/A')}</td>\`
+                                ).join('')}
+                            </tr>
+                        \`;
+                    });
+
+                    tableHTML += \`
+                                </tbody>
+                            </table>
+                        </div>
+                    \`;
+
+                    tableContainer.innerHTML = tableHTML;
+                    resultsContainer.classList.remove('hidden');
+                }
+            }
+
             function loadComparison(brokerSlugs) {
-                // Load predefined comparison
+                // This would need to be implemented for predefined comparisons
                 console.log('Loading comparison for:', brokerSlugs);
+                // For now, we'll skip this functionality
             }
-            
-            function loadBrokerSelectionOptions() {
-                // Load broker options for dropdowns
-                console.log('Loading broker selection options');
-            }
-            
-            function setupComparisonTool() {
-                // Setup comparison functionality
-                console.log('Setting up comparison tool');
-            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                new ComparisonTool();
+            });
         </script>
     </body>
     </html>
@@ -452,20 +591,52 @@ pageRoutes.get('/contact', (c) => {
                 form.addEventListener('submit', function(e) {
                     e.preventDefault();
                     
+                    // Basic form validation
+                    const name = document.getElementById('name').value.trim();
+                    const email = document.getElementById('email').value.trim();
+                    const subject = document.getElementById('subject').value;
+                    const message = document.getElementById('message').value.trim();
+                    
+                    if (!name || !email || !subject || !message) {
+                        alert('Please fill in all required fields');
+                        return;
+                    }
+                    
+                    // Email validation
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(email)) {
+                        alert('Please enter a valid email address');
+                        return;
+                    }
+                    
                     // Show success message (in real implementation, send to backend)
                     const button = form.querySelector('button[type="submit"]');
                     const originalText = button.innerHTML;
                     
-                    button.innerHTML = '<i class="fas fa-check mr-2"></i>Message Sent!';
+                    button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Sending...';
                     button.disabled = true;
-                    button.classList.add('bg-green-600');
                     
+                    // Simulate API call
                     setTimeout(() => {
-                        button.innerHTML = originalText;
-                        button.disabled = false;
-                        button.classList.remove('bg-green-600');
-                        form.reset();
-                    }, 3000);
+                        button.innerHTML = '<i class="fas fa-check mr-2"></i>Message Sent!';
+                        button.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+                        button.classList.add('bg-green-600');
+                        
+                        // Show success message
+                        const successMsg = document.createElement('div');
+                        successMsg.className = 'mt-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded';
+                        successMsg.innerHTML = '<i class="fas fa-check-circle mr-2"></i>Thank you! Your message has been sent. We\'ll get back to you within 24 hours.';
+                        form.appendChild(successMsg);
+                        
+                        setTimeout(() => {
+                            button.innerHTML = originalText;
+                            button.disabled = false;
+                            button.classList.remove('bg-green-600');
+                            button.classList.add('bg-blue-600', 'hover:bg-blue-700');
+                            form.reset();
+                            successMsg.remove();
+                        }, 5000);
+                    }, 1500);
                 });
             }
         </script>

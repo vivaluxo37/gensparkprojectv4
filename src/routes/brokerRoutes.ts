@@ -48,10 +48,7 @@ brokerRoutes.get('/review/:slug', async (c) => {
     }
     
     // Generate comprehensive broker review page
-    return c.html(generateComprehensiveBrokerReviewHTML(broker, {
-      canonicalUrl: `/review/${slug}`,
-      request: c.req.raw
-    }));
+    return c.html(generateComprehensiveBrokerReviewHTML(broker, c.req.raw));
   } catch (error) {
     console.error('Error loading broker review:', error);
     return c.html('Error loading broker review', 500);
