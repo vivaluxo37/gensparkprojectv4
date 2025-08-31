@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+/* Test if Tailwind utilities are working */
+.test-class {
+  @apply bg-blue-500 text-white p-4 rounded;
+}

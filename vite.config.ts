@@ -10,5 +10,21 @@ export default defineConfig({
       adapter,
       entry: 'src/index.tsx'
     })
-  ]
+  ],
+  css: {
+    postcss: './postcss.config.js'
+  },
+  build: {
+    cssCodeSplit: true,
+    rollupOptions: {
+      output: {
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name && assetInfo.name.endsWith('.css')) {
+            return 'static/css/[name]-[hash][extname]'
+          }
+          return 'static/[name]-[hash][extname]'
+        }
+      }
+    }
+  }
 })

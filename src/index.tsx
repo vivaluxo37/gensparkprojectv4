@@ -2,6 +2,7 @@ import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { serveStatic } from 'hono/cloudflare-workers'
 import { getCookie, setCookie } from 'hono/cookie'
+import './styles.css'
 
 // Type definitions for Cloudflare bindings
 type Bindings = {
@@ -37,7 +38,6 @@ app.get('/test-simulator', (c) => {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Enhanced Simulator Test - BrokerAnalysis</title>
-        <script src="https://cdn.tailwindcss.com"></script>
         <style>
             .test-output {
                 font-family: 'Courier New', monospace;
@@ -1323,22 +1323,19 @@ app.get('/reviews', (c) => {
         <meta property="og:type" content="website">
         <meta property="og:title" content="Forex Broker Reviews 2025 - Detailed Analysis & Ratings">
         <meta property="og:description" content="Read comprehensive reviews of top forex brokers. Detailed analysis of spreads, regulation, platforms, and trading conditions.">
-        <meta property="og:image" content="https://brokeranalysis.pages.dev/static/images/reviews-og-image.png">
-        <meta property="og:url" content="https://brokeranalysis.pages.dev/reviews">
+        <meta property="og:image" content="https://brokeranalysis.com/static/images/reviews-og-image.png">
+        <meta property="og:url" content="https://brokeranalysis.com/reviews">
         
         <!-- Twitter -->
         <meta property="twitter:card" content="summary_large_image">
         <meta property="twitter:title" content="Forex Broker Reviews 2025 - Detailed Analysis & Ratings">
         <meta property="twitter:description" content="Read comprehensive reviews of top forex brokers. Detailed analysis of spreads, regulation, platforms, and trading conditions.">
-        <meta property="twitter:image" content="https://brokeranalysis.pages.dev/static/images/reviews-og-image.png">
+        <meta property="twitter:image" content="https://brokeranalysis.com/static/images/reviews-og-image.png">
         
-        <link rel="canonical" href="https://brokeranalysis.pages.dev/reviews">
+        <link rel="canonical" href="https://brokeranalysis.com/reviews">
         
         <!-- Preconnect to external domains -->
-        <link rel="preconnect" href="https://cdn.tailwindcss.com">
         <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-        
-        <script src="https://cdn.tailwindcss.com"></script>
         <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
         <link href="/static/styles.css" rel="stylesheet">
         
@@ -1348,38 +1345,12 @@ app.get('/reviews', (c) => {
           "@context": "https://schema.org",
           "@type": "Organization",
           "name": "BrokerAnalysis",
-          "url": "https://brokeranalysis.pages.dev",
-          "logo": "https://brokeranalysis.pages.dev/static/images/brokeranalysis-logo.png"
+          "url": "https://brokeranalysis.com",
+          "logo": "https://brokeranalysis.com/static/images/brokeranalysis-logo.png"
         }
         </script>
         
-        <script>
-            tailwind.config = {
-                theme: {
-                    extend: {
-                        colors: {
-                            // Only 3 colors: Yellow, Blue, White
-                            primary: '#1e40af',        // Blue-800
-                            secondary: '#2563eb',      // Blue-600  
-                            accent: '#facc15',         // Yellow-400
-                            yellow: {
-                                400: '#facc15',         // Main yellow
-                                300: '#fde047',         // Lighter yellow for hovers
-                                500: '#eab308'          // Darker yellow for emphasis
-                            },
-                            blue: {
-                                50: '#eff6ff',          // Very light blue
-                                100: '#dbeafe',         // Light blue
-                                600: '#2563eb',         // Main blue
-                                700: '#1d4ed8',         // Medium blue
-                                800: '#1e40af',         // Dark blue (primary)
-                                900: '#1e3a8a'          // Very dark blue
-                            }
-                        }
-                    }
-                }
-            }
-        </script>
+
     </head>
     <body class="bg-blue-50 text-blue-900">
         <!-- Skip Navigation -->
@@ -1640,46 +1611,18 @@ app.get('/compare', (c) => {
         <meta property="og:type" content="website">
         <meta property="og:title" content="Compare Forex Brokers Side-by-Side - Spreads, Fees & Features">
         <meta property="og:description" content="Compare up to 4 forex brokers side-by-side. Analyze spreads, commissions, regulation, and trading features to make informed decisions.">
-        <meta property="og:image" content="https://brokeranalysis.pages.dev/static/images/compare-og-image.png">
-        <meta property="og:url" content="https://brokeranalysis.pages.dev/compare">
+        <meta property="og:image" content="https://brokeranalysis.com/static/images/compare-og-image.png">
+        <meta property="og:url" content="https://brokeranalysis.com/compare">
         
         <!-- Twitter -->
         <meta property="twitter:card" content="summary_large_image">
         <meta property="twitter:title" content="Compare Forex Brokers Side-by-Side - Spreads, Fees & Features">
         <meta property="twitter:description" content="Compare up to 4 forex brokers side-by-side. Analyze spreads, commissions, regulation, and trading features.">
-        <meta property="twitter:image" content="https://brokeranalysis.pages.dev/static/images/compare-og-image.png">
+        <meta property="twitter:image" content="https://brokeranalysis.com/static/images/compare-og-image.png">
         
-        <link rel="canonical" href="https://brokeranalysis.pages.dev/compare">
-        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="canonical" href="https://brokeranalysis.com/compare">
         <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
         <link href="/static/styles.css" rel="stylesheet">
-        <script>
-            tailwind.config = {
-                theme: {
-                    extend: {
-                        colors: {
-                            // Only 3 colors: Yellow, Blue, White
-                            primary: '#1e40af',        // Blue-800
-                            secondary: '#2563eb',      // Blue-600  
-                            accent: '#facc15',         // Yellow-400
-                            yellow: {
-                                400: '#facc15',         // Main yellow
-                                300: '#fde047',         // Lighter yellow for hovers
-                                500: '#eab308'          // Darker yellow for emphasis
-                            },
-                            blue: {
-                                50: '#eff6ff',          // Very light blue
-                                100: '#dbeafe',         // Light blue
-                                600: '#2563eb',         // Main blue
-                                700: '#1d4ed8',         // Medium blue
-                                800: '#1e40af',         // Dark blue (primary)
-                                900: '#1e3a8a'          // Very dark blue
-                            }
-                        }
-                    }
-                }
-            }
-        </script>
     </head>
     <body class="bg-blue-50 text-blue-900">
         <!-- Navigation -->
@@ -1908,46 +1851,18 @@ app.get('/simulator', (c) => {
         <meta property="og:type" content="website">
         <meta property="og:title" content="Forex Trading Cost Calculator - Compare Real Trading Costs">
         <meta property="og:description" content="Calculate real forex trading costs with our advanced simulator. Compare spreads, commissions, and slippage across multiple brokers.">
-        <meta property="og:image" content="https://brokeranalysis.pages.dev/static/images/simulator-og-image.png">
-        <meta property="og:url" content="https://brokeranalysis.pages.dev/simulator">
+        <meta property="og:image" content="https://brokeranalysis.com/static/images/simulator-og-image.png">
+        <meta property="og:url" content="https://brokeranalysis.com/simulator">
         
         <!-- Twitter -->
         <meta property="twitter:card" content="summary_large_image">
         <meta property="twitter:title" content="Forex Trading Cost Calculator - Compare Real Trading Costs">
         <meta property="twitter:description" content="Calculate real forex trading costs with our advanced simulator. Compare spreads, commissions, and slippage.">
-        <meta property="twitter:image" content="https://brokeranalysis.pages.dev/static/images/simulator-og-image.png">
+        <meta property="twitter:image" content="https://brokeranalysis.com/static/images/simulator-og-image.png">
         
-        <link rel="canonical" href="https://brokeranalysis.pages.dev/simulator">
-        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="canonical" href="https://brokeranalysis.com/simulator">
         <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
         <link href="/static/styles.css" rel="stylesheet">
-        <script>
-            tailwind.config = {
-                theme: {
-                    extend: {
-                        colors: {
-                            // Only 3 colors: Yellow, Blue, White
-                            primary: '#1e40af',        // Blue-800
-                            secondary: '#2563eb',      // Blue-600  
-                            accent: '#facc15',         // Yellow-400
-                            yellow: {
-                                400: '#facc15',         // Main yellow
-                                300: '#fde047',         // Lighter yellow for hovers
-                                500: '#eab308'          // Darker yellow for emphasis
-                            },
-                            blue: {
-                                50: '#eff6ff',          // Very light blue
-                                100: '#dbeafe',         // Light blue
-                                600: '#2563eb',         // Main blue
-                                700: '#1d4ed8',         // Medium blue
-                                800: '#1e40af',         // Dark blue (primary)
-                                900: '#1e3a8a'          // Very dark blue
-                            }
-                        }
-                    }
-                }
-            }
-        </script>
     </head>
     <body class="bg-blue-50 text-blue-900">
         <!-- Navigation -->
@@ -2220,46 +2135,20 @@ app.get('/about', (c) => {
         <meta property="og:type" content="website">
         <meta property="og:title" content="About BrokerAnalysis - Our Methodology & Mission">
         <meta property="og:description" content="Learn about our transparent methodology for rating forex brokers. Discover our mission to help traders make informed decisions.">
-        <meta property="og:image" content="https://brokeranalysis.pages.dev/static/images/about-og-image.png">
-        <meta property="og:url" content="https://brokeranalysis.pages.dev/about">
+        <meta property="og:image" content="https://brokeranalysis.com/static/images/about-og-image.png">
+        <meta property="og:url" content="https://brokeranalysis.com/about">
         
         <!-- Twitter -->
         <meta property="twitter:card" content="summary_large_image">
         <meta property="twitter:title" content="About BrokerAnalysis - Our Methodology & Mission">
         <meta property="twitter:description" content="Learn about our transparent methodology for rating forex brokers. Discover our mission to help traders make informed decisions.">
-        <meta property="twitter:image" content="https://brokeranalysis.pages.dev/static/images/about-og-image.png">
+        <meta property="twitter:image" content="https://brokeranalysis.com/static/images/about-og-image.png">
         
-        <link rel="canonical" href="https://brokeranalysis.pages.dev/about">
-        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="canonical" href="https://brokeranalysis.com/about">
+
         <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
         <link href="/static/styles.css" rel="stylesheet">
-        <script>
-            tailwind.config = {
-                theme: {
-                    extend: {
-                        colors: {
-                            // Only 3 colors: Yellow, Blue, White
-                            primary: '#1e40af',        // Blue-800
-                            secondary: '#2563eb',      // Blue-600  
-                            accent: '#facc15',         // Yellow-400
-                            yellow: {
-                                400: '#facc15',         // Main yellow
-                                300: '#fde047',         // Lighter yellow for hovers
-                                500: '#eab308'          // Darker yellow for emphasis
-                            },
-                            blue: {
-                                50: '#eff6ff',          // Very light blue
-                                100: '#dbeafe',         // Light blue
-                                600: '#2563eb',         // Main blue
-                                700: '#1d4ed8',         // Medium blue
-                                800: '#1e40af',         // Dark blue (primary)
-                                900: '#1e3a8a'          // Very dark blue
-                            }
-                        }
-                    }
-                }
-            }
-        </script>
+
     </head>
     <body class="bg-blue-50 text-blue-900">
         <!-- Navigation -->
@@ -2391,36 +2280,10 @@ app.get('/broker/:slug', (c) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Broker Review - BrokerAnalysis</title>
         <meta name="description" content="Detailed review and analysis of forex broker">
-        <script src="https://cdn.tailwindcss.com"></script>
+
         <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
         <link href="/static/styles.css" rel="stylesheet">
-        <script>
-            tailwind.config = {
-                theme: {
-                    extend: {
-                        colors: {
-                            // Only 3 colors: Yellow, Blue, White
-                            primary: '#1e40af',        // Blue-800
-                            secondary: '#2563eb',      // Blue-600  
-                            accent: '#facc15',         // Yellow-400
-                            yellow: {
-                                400: '#facc15',         // Main yellow
-                                300: '#fde047',         // Lighter yellow for hovers
-                                500: '#eab308'          // Darker yellow for emphasis
-                            },
-                            blue: {
-                                50: '#eff6ff',          // Very light blue
-                                100: '#dbeafe',         // Light blue
-                                600: '#2563eb',         // Main blue
-                                700: '#1d4ed8',         // Medium blue
-                                800: '#1e40af',         // Dark blue (primary)
-                                900: '#1e3a8a'          // Very dark blue
-                            }
-                        }
-                    }
-                }
-            }
-        </script>
+
     </head>
     <body class="bg-blue-50 text-blue-900">
         <!-- Navigation -->
@@ -2676,36 +2539,10 @@ app.get('/dashboard', (c) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Dashboard - BrokerAnalysis</title>
         <meta name="description" content="Your personalized broker analysis dashboard with saved matches and recommendations.">
-        <script src="https://cdn.tailwindcss.com"></script>
+
         <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
         <link href="/static/styles.css" rel="stylesheet">
-        <script>
-            tailwind.config = {
-                theme: {
-                    extend: {
-                        colors: {
-                            // Only 3 colors: Yellow, Blue, White
-                            primary: '#1e40af',        // Blue-800
-                            secondary: '#2563eb',      // Blue-600  
-                            accent: '#facc15',         // Yellow-400
-                            yellow: {
-                                400: '#facc15',         // Main yellow
-                                300: '#fde047',         // Lighter yellow for hovers
-                                500: '#eab308'          // Darker yellow for emphasis
-                            },
-                            blue: {
-                                50: '#eff6ff',          // Very light blue
-                                100: '#dbeafe',         // Light blue
-                                600: '#2563eb',         // Main blue
-                                700: '#1d4ed8',         // Medium blue
-                                800: '#1e40af',         // Dark blue (primary)
-                                900: '#1e3a8a'          // Very dark blue
-                            }
-                        }
-                    }
-                }
-            }
-        </script>
+
     </head>
     <body class="bg-blue-50 text-blue-900">
         <!-- Navigation -->
@@ -2962,36 +2799,10 @@ app.get('/dashboard/matches', (c) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>My Broker Matches - BrokerAnalysis</title>
         <meta name="description" content="View all your saved broker match results and recommendations.">
-        <script src="https://cdn.tailwindcss.com"></script>
+
         <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
         <link href="/static/styles.css" rel="stylesheet">
-        <script>
-            tailwind.config = {
-                theme: {
-                    extend: {
-                        colors: {
-                            // Only 3 colors: Yellow, Blue, White
-                            primary: '#1e40af',        // Blue-800
-                            secondary: '#2563eb',      // Blue-600  
-                            accent: '#facc15',         // Yellow-400
-                            yellow: {
-                                400: '#facc15',         // Main yellow
-                                300: '#fde047',         // Lighter yellow for hovers
-                                500: '#eab308'          // Darker yellow for emphasis
-                            },
-                            blue: {
-                                50: '#eff6ff',          // Very light blue
-                                100: '#dbeafe',         // Light blue
-                                600: '#2563eb',         // Main blue
-                                700: '#1d4ed8',         // Medium blue
-                                800: '#1e40af',         // Dark blue (primary)
-                                900: '#1e3a8a'          // Very dark blue
-                            }
-                        }
-                    }
-                }
-            }
-        </script>
+
     </head>
     <body class="bg-blue-50 text-blue-900">
         <!-- Navigation -->
@@ -3222,22 +3033,22 @@ app.get('/', (c) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         <!-- Canonical URL -->
-        <link rel="canonical" href="https://brokeranalysis.pages.dev/">
+        <link rel="canonical" href="https://brokeranalysis.com/">
         
         <!-- Open Graph / Facebook -->
         <meta property="og:type" content="website">
-        <meta property="og:url" content="https://brokeranalysis.pages.dev/">
+        <meta property="og:url" content="https://brokeranalysis.com/">
         <meta property="og:title" content="Best Forex Brokers 2025 - Compare 67+ Regulated Brokers">
         <meta property="og:description" content="Find the perfect forex broker with our intelligent matching system. Compare spreads, regulation, and features of 67+ top-rated brokers.">
-        <meta property="og:image" content="https://brokeranalysis.pages.dev/static/images/brokeranalysis-og-image.png">
+        <meta property="og:image" content="https://brokeranalysis.com/static/images/brokeranalysis-og-image.png">
         <meta property="og:site_name" content="BrokerAnalysis">
         
         <!-- Twitter -->
         <meta property="twitter:card" content="summary_large_image">
-        <meta property="twitter:url" content="https://brokeranalysis.pages.dev/">
+        <meta property="twitter:url" content="https://brokeranalysis.com/">
         <meta property="twitter:title" content="Best Forex Brokers 2025 - Compare 67+ Regulated Brokers">
         <meta property="twitter:description" content="Find the perfect forex broker with our intelligent matching system. Compare spreads, regulation, and features of 67+ top-rated brokers.">
-        <meta property="twitter:image" content="https://brokeranalysis.pages.dev/static/images/brokeranalysis-og-image.png">
+        <meta property="twitter:image" content="https://brokeranalysis.com/static/images/brokeranalysis-og-image.png">
         
         <!-- Favicon and App Icons -->
         <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
@@ -3246,12 +3057,12 @@ app.get('/', (c) => {
         <link rel="apple-touch-icon" sizes="180x180" href="/static/images/apple-touch-icon.png">
         
         <!-- Preconnect to external domains -->
-        <link rel="preconnect" href="https://cdn.tailwindcss.com">
+        <link href="/static/styles.css" rel="stylesheet">
         <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
         <link rel="dns-prefetch" href="https://fonts.googleapis.com">
         
         <!-- CSS -->
-        <script src="https://cdn.tailwindcss.com"></script>
+
         <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
         <link href="/static/styles.css" rel="stylesheet">
         
@@ -3261,8 +3072,8 @@ app.get('/', (c) => {
           "@context": "https://schema.org",
           "@type": "Organization",
           "name": "BrokerAnalysis",
-          "url": "https://brokeranalysis.pages.dev",
-          "logo": "https://brokeranalysis.pages.dev/static/images/brokeranalysis-logo.png",
+          "url": "https://brokeranalysis.com",
+        "logo": "https://brokeranalysis.com/static/images/brokeranalysis-logo.png",
           "description": "Find and compare the best forex brokers with our intelligent recommendation system. Detailed reviews, ratings, and personalized broker matching.",
           "contactPoint": {
             "@type": "ContactPoint",
@@ -3275,33 +3086,7 @@ app.get('/', (c) => {
           ]
         }
         </script>
-        <script>
-            tailwind.config = {
-                theme: {
-                    extend: {
-                        colors: {
-                            // Only 3 colors: Yellow, Blue, White
-                            primary: '#1e40af',        // Blue-800
-                            secondary: '#2563eb',      // Blue-600  
-                            accent: '#facc15',         // Yellow-400
-                            yellow: {
-                                400: '#facc15',         // Main yellow
-                                300: '#fde047',         // Lighter yellow for hovers
-                                500: '#eab308'          // Darker yellow for emphasis
-                            },
-                            blue: {
-                                50: '#eff6ff',          // Very light blue
-                                100: '#dbeafe',         // Light blue
-                                600: '#2563eb',         // Main blue
-                                700: '#1d4ed8',         // Medium blue
-                                800: '#1e40af',         // Dark blue (primary)
-                                900: '#1e3a8a'          // Very dark blue
-                            }
-                        }
-                    }
-                }
-            }
-        </script>
+
     </head>
     <body class="bg-blue-50 text-blue-900">
         <!-- Skip Navigation for Accessibility -->
@@ -4012,7 +3797,7 @@ app.get('/robots.txt', (c) => {
 Allow: /
 
 # Sitemap
-Sitemap: ${c.req.header('host') ? `https://${c.req.header('host')}/sitemap.xml` : 'https://brokeranalysis.pages.dev/sitemap.xml'}
+Sitemap: ${c.req.header('host') ? `https://${c.req.header('host')}/sitemap.xml` : 'https://brokeranalysis.com/sitemap.xml'}
 
 # Block admin and internal paths
 Disallow: /api/
@@ -4041,7 +3826,7 @@ Crawl-delay: 1`;
 // XML Sitemap endpoint
 app.get('/sitemap.xml', async (c) => {
   const { DB } = c.env;
-  const baseUrl = c.req.header('host') ? `https://${c.req.header('host')}` : 'https://brokeranalysis.pages.dev';
+  const baseUrl = c.req.header('host') ? `https://${c.req.header('host')}` : 'https://brokeranalysis.com';
   
   // Static pages
   const staticPages = [
@@ -4106,11 +3891,11 @@ app.get('/brokers/australia', (c) => {
         <!-- Open Graph -->
         <meta property="og:title" content="Best Forex Brokers in Australia 2025 - ASIC Regulated">
         <meta property="og:description" content="Find the best ASIC regulated forex brokers in Australia. Compare spreads, regulation, and features.">
-        <meta property="og:url" content="https://brokeranalysis.pages.dev/brokers/australia">
+        <meta property="og:url" content="https://brokeranalysis.com/brokers/australia">
         <meta property="og:type" content="website">
         
-        <link rel="canonical" href="https://brokeranalysis.pages.dev/brokers/australia">
-        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="canonical" href="https://brokeranalysis.com/brokers/australia">
+
         <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
         <link href="/static/styles.css" rel="stylesheet">
         
@@ -4121,7 +3906,7 @@ app.get('/brokers/australia', (c) => {
           "@type": "WebPage",
           "name": "Best Forex Brokers in Australia 2025",
           "description": "Find the best ASIC regulated forex brokers in Australia",
-          "url": "https://brokeranalysis.pages.dev/brokers/australia"
+          "url": "https://brokeranalysis.com/brokers/australia"
         }
         </script>
     </head>
@@ -4250,10 +4035,10 @@ app.get('/brokers/uk', (c) => {
         
         <meta property="og:title" content="Best FCA Regulated Forex Brokers UK 2025">
         <meta property="og:description" content="Find the best FCA regulated forex brokers in the UK. Compare spreads, regulation, and features.">
-        <meta property="og:url" content="https://brokeranalysis.pages.dev/brokers/uk">
+        <meta property="og:url" content="https://brokeranalysis.com/brokers/uk">
         
-        <link rel="canonical" href="https://brokeranalysis.pages.dev/brokers/uk">
-        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="canonical" href="https://brokeranalysis.com/brokers/uk">
+
         <link href="/static/styles.css" rel="stylesheet">
     </head>
     <body class="bg-blue-50 text-blue-900">
@@ -4301,6 +4086,5590 @@ app.get('/brokers/uk', (c) => {
         </main>
 
         <script src="/static/breadcrumbs.js"></script>
+    </body>
+    </html>
+  `);
+});
+
+// Canada broker page
+app.get('/brokers/canada', (c) => {
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Best Forex Brokers in Canada 2025 - IIROC Regulated | BrokerAnalysis</title>
+        <meta name="description" content="Find the best IIROC regulated forex brokers in Canada. Compare spreads, regulation, and features of top Canadian forex brokers for 2025.">
+        <meta name="keywords" content="Canada forex brokers, IIROC regulated brokers, best forex brokers Canada, Canadian forex trading, IIROC forex brokers">
+        
+        <!-- Open Graph -->
+        <meta property="og:title" content="Best Forex Brokers in Canada 2025 - IIROC Regulated">
+        <meta property="og:description" content="Find the best IIROC regulated forex brokers in Canada. Compare spreads, regulation, and features.">
+        <meta property="og:url" content="https://brokeranalysis.com/brokers/canada">
+        <meta property="og:type" content="website">
+        <meta property="og:image" content="https://brokeranalysis.com/static/images/brokeranalysis-og-image.png">
+        
+        <link rel="canonical" href="https://brokeranalysis.com/brokers/canada">
+        <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
+
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+        <link href="/static/styles.css" rel="stylesheet">
+        
+        <!-- Structured Data -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "name": "Best Forex Brokers in Canada 2025",
+          "description": "Find the best IIROC regulated forex brokers in Canada",
+          "url": "https://brokeranalysis.com/brokers/canada"
+        }
+        </script>
+    </head>
+    <body class="bg-blue-50 text-blue-900">
+        <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-blue-600 focus:text-white focus:px-4 py-2 focus:rounded">Skip to main content</a>
+        
+        <nav class="bg-white shadow-sm border-b">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-chart-line text-blue-600 text-2xl"></i>
+                        <a href="/" class="text-xl font-bold text-blue-900">BrokerAnalysis</a>
+                    </div>
+                    <div class="hidden md:flex items-center space-x-6">
+                        <a href="/" class="text-blue-800 hover:text-blue-600">Home</a>
+                        <a href="/reviews" class="text-blue-800 hover:text-blue-600">Reviews</a>
+                        <a href="/compare" class="text-blue-800 hover:text-blue-600">Compare</a>
+                        <a href="/simulator" class="text-blue-800 hover:text-blue-600">Simulator</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <main id="main-content">
+            <div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
+                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <h1 class="text-4xl font-bold mb-4">Best Forex Brokers in Canada 2025</h1>
+                    <p class="text-xl text-blue-100">IIROC regulated brokers with competitive spreads and Canadian support</p>
+                </div>
+            </div>
+
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="prose max-w-none">
+                    <h2 class="text-2xl font-bold mb-6">Why Choose IIROC Regulated Brokers?</h2>
+                    <p class="text-blue-600 mb-8">
+                        The Investment Industry Regulatory Organization of Canada (IIROC) provides comprehensive regulatory oversight 
+                        for forex brokers operating in Canada. IIROC regulation ensures investor protection, 
+                        transparent pricing, and adherence to strict operational standards.
+                    </p>
+
+                    <h2 class="text-2xl font-bold mb-6">Top IIROC Regulated Forex Brokers</h2>
+                    <div class="grid gap-6 mb-8">
+                        <div class="bg-white rounded-lg shadow-lg p-6">
+                            <h3 class="text-xl font-semibold mb-4">OANDA</h3>
+                            <div class="flex items-center mb-4">
+                                <div class="text-yellow-400 mr-2">★★★★★</div>
+                                <span>4.3/5.0</span>
+                            </div>
+                            <ul class="text-blue-600 space-y-2">
+                                <li>• IIROC regulated</li>
+                                <li>• No minimum deposit</li>
+                                <li>• Competitive spreads</li>
+                                <li>• Advanced trading platform</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg shadow-lg p-6">
+                            <h3 class="text-xl font-semibold mb-4">Interactive Brokers</h3>
+                            <div class="flex items-center mb-4">
+                                <div class="text-yellow-400 mr-2">★★★★☆</div>
+                                <span>4.2/5.0</span>
+                            </div>
+                            <ul class="text-blue-600 space-y-2">
+                                <li>• IIROC regulated</li>
+                                <li>• Low commission structure</li>
+                                <li>• Global market access</li>
+                                <li>• Professional trading tools</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="bg-blue-50 rounded-lg p-6">
+                        <h3 class="text-lg font-semibold mb-4">Ready to find your perfect Canadian broker?</h3>
+                        <a href="/" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
+                            Get Broker Recommendations
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <script src="/static/breadcrumbs.js"></script>
+    </body>
+    </html>
+  `);
+});
+
+// South Africa broker page
+app.get('/brokers/south-africa', (c) => {
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Best Forex Brokers in South Africa 2025 - FSCA Regulated | BrokerAnalysis</title>
+        <meta name="description" content="Find the best FSCA regulated forex brokers in South Africa. Compare spreads, regulation, and features of top South African forex brokers for 2025.">
+        <meta name="keywords" content="South Africa forex brokers, FSCA regulated brokers, best forex brokers South Africa, South African forex trading">
+        
+        <meta property="og:title" content="Best Forex Brokers in South Africa 2025 - FSCA Regulated">
+        <meta property="og:description" content="Find the best FSCA regulated forex brokers in South Africa. Compare spreads, regulation, and features.">
+        <meta property="og:url" content="https://brokeranalysis.com/brokers/south-africa">
+        <meta property="og:type" content="website">
+        <meta property="og:image" content="https://brokeranalysis.com/static/images/brokeranalysis-og-image.png">
+        
+        <link rel="canonical" href="https://brokeranalysis.com/brokers/south-africa">
+        <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
+
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+        <link href="/static/styles.css" rel="stylesheet">
+        
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "name": "Best Forex Brokers in South Africa 2025",
+          "description": "Find the best FSCA regulated forex brokers in South Africa",
+          "url": "https://brokeranalysis.com/brokers/south-africa"
+        }
+        </script>
+    </head>
+    <body class="bg-blue-50 text-blue-900">
+        <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-blue-600 focus:text-white focus:px-4 py-2 focus:rounded">Skip to main content</a>
+        
+        <nav class="bg-white shadow-sm border-b">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-chart-line text-blue-600 text-2xl"></i>
+                        <a href="/" class="text-xl font-bold text-blue-900">BrokerAnalysis</a>
+                    </div>
+                    <div class="hidden md:flex items-center space-x-6">
+                        <a href="/" class="text-blue-800 hover:text-blue-600">Home</a>
+                        <a href="/reviews" class="text-blue-800 hover:text-blue-600">Reviews</a>
+                        <a href="/compare" class="text-blue-800 hover:text-blue-600">Compare</a>
+                        <a href="/simulator" class="text-blue-800 hover:text-blue-600">Simulator</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <main id="main-content">
+            <div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
+                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <h1 class="text-4xl font-bold mb-4">Best Forex Brokers in South Africa 2025</h1>
+                    <p class="text-xl text-blue-100">FSCA regulated brokers with competitive spreads and local support</p>
+                </div>
+            </div>
+
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <h2 class="text-2xl font-bold mb-6">Why Choose FSCA Regulated Brokers?</h2>
+                <p class="text-blue-600 mb-8">
+                    The Financial Sector Conduct Authority (FSCA) provides robust regulatory oversight 
+                    for forex brokers operating in South Africa. FSCA regulation ensures client fund protection, 
+                    transparent pricing, and adherence to strict operational standards.
+                </p>
+
+                <h2 class="text-2xl font-bold mb-6">Top FSCA Regulated Forex Brokers</h2>
+                <div class="grid gap-6 mb-8">
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h3 class="text-xl font-semibold mb-4">HotForex</h3>
+                        <div class="flex items-center mb-4">
+                            <div class="text-yellow-400 mr-2">★★★★☆</div>
+                            <span>4.1/5.0</span>
+                        </div>
+                        <ul class="text-blue-600 space-y-2">
+                            <li>• FSCA License: 46632</li>
+                            <li>• Multiple account types</li>
+                            <li>• Local ZAR deposits</li>
+                            <li>• Educational resources</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bg-blue-50 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold mb-4">Ready to find your perfect South African broker?</h3>
+                    <a href="/" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
+                        Get Broker Recommendations
+                    </a>
+                </div>
+            </div>
+        </main>
+
+        <script src="/static/breadcrumbs.js"></script>
+    </body>
+    </html>
+  `);
+});
+
+// Pakistan broker page
+app.get('/brokers/pakistan', (c) => {
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Best Forex Brokers in Pakistan 2025 - SECP Regulated | BrokerAnalysis</title>
+        <meta name="description" content="Find the best SECP regulated forex brokers in Pakistan. Compare spreads, regulation, and features of top Pakistani forex brokers for 2025.">
+        <meta name="keywords" content="Pakistan forex brokers, SECP regulated brokers, best forex brokers Pakistan, Pakistani forex trading">
+        
+        <meta property="og:title" content="Best Forex Brokers in Pakistan 2025 - SECP Regulated">
+        <meta property="og:description" content="Find the best SECP regulated forex brokers in Pakistan. Compare spreads, regulation, and features.">
+        <meta property="og:url" content="https://brokeranalysis.com/brokers/pakistan">
+        <meta property="og:type" content="website">
+        <meta property="og:image" content="https://brokeranalysis.com/static/images/brokeranalysis-og-image.png">
+        
+        <link rel="canonical" href="https://brokeranalysis.com/brokers/pakistan">
+        <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
+
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+        <link href="/static/styles.css" rel="stylesheet">
+        
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "name": "Best Forex Brokers in Pakistan 2025",
+          "description": "Find the best SECP regulated forex brokers in Pakistan",
+          "url": "https://brokeranalysis.com/brokers/pakistan"
+        }
+        </script>
+    </head>
+    <body class="bg-blue-50 text-blue-900">
+        <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-blue-600 focus:text-white focus:px-4 py-2 focus:rounded">Skip to main content</a>
+        
+        <nav class="bg-white shadow-sm border-b">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-chart-line text-blue-600 text-2xl"></i>
+                        <a href="/" class="text-xl font-bold text-blue-900">BrokerAnalysis</a>
+                    </div>
+                    <div class="hidden md:flex items-center space-x-6">
+                        <a href="/" class="text-blue-800 hover:text-blue-600">Home</a>
+                        <a href="/reviews" class="text-blue-800 hover:text-blue-600">Reviews</a>
+                        <a href="/compare" class="text-blue-800 hover:text-blue-600">Compare</a>
+                        <a href="/simulator" class="text-blue-800 hover:text-blue-600">Simulator</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <main id="main-content">
+            <div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
+                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <h1 class="text-4xl font-bold mb-4">Best Forex Brokers in Pakistan 2025</h1>
+                    <p class="text-xl text-blue-100">SECP regulated brokers with competitive spreads and local support</p>
+                </div>
+            </div>
+
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <h2 class="text-2xl font-bold mb-6">Why Choose SECP Regulated Brokers?</h2>
+                <p class="text-blue-600 mb-8">
+                    The Securities and Exchange Commission of Pakistan (SECP) provides regulatory oversight 
+                    for forex brokers operating in Pakistan. SECP regulation ensures investor protection, 
+                    transparent pricing, and adherence to operational standards.
+                </p>
+
+                <div class="bg-blue-50 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold mb-4">Ready to find your perfect Pakistani broker?</h3>
+                    <a href="/" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
+                        Get Broker Recommendations
+                    </a>
+                </div>
+            </div>
+        </main>
+
+        <script src="/static/breadcrumbs.js"></script>
+    </body>
+    </html>
+  `);
+});
+
+// Philippines broker page
+app.get('/brokers/philippines', (c) => {
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Best Forex Brokers in Philippines 2025 - BSP Regulated | BrokerAnalysis</title>
+        <meta name="description" content="Find the best BSP regulated forex brokers in Philippines. Compare spreads, regulation, and features of top Filipino forex brokers for 2025.">
+        <meta name="keywords" content="Philippines forex brokers, BSP regulated brokers, best forex brokers Philippines, Filipino forex trading">
+        
+        <meta property="og:title" content="Best Forex Brokers in Philippines 2025 - BSP Regulated">
+        <meta property="og:description" content="Find the best BSP regulated forex brokers in Philippines. Compare spreads, regulation, and features.">
+        <meta property="og:url" content="https://brokeranalysis.com/brokers/philippines">
+        <meta property="og:type" content="website">
+        <meta property="og:image" content="https://brokeranalysis.com/static/images/brokeranalysis-og-image.png">
+        
+        <link rel="canonical" href="https://brokeranalysis.com/brokers/philippines">
+        <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
+
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+        <link href="/static/styles.css" rel="stylesheet">
+        
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "name": "Best Forex Brokers in Philippines 2025",
+          "description": "Find the best BSP regulated forex brokers in Philippines",
+          "url": "https://brokeranalysis.com/brokers/philippines"
+        }
+        </script>
+    </head>
+    <body class="bg-blue-50 text-blue-900">
+        <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-blue-600 focus:text-white focus:px-4 py-2 focus:rounded">Skip to main content</a>
+        
+        <nav class="bg-white shadow-sm border-b">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-chart-line text-blue-600 text-2xl"></i>
+                        <a href="/" class="text-xl font-bold text-blue-900">BrokerAnalysis</a>
+                    </div>
+                    <div class="hidden md:flex items-center space-x-6">
+                        <a href="/" class="text-blue-800 hover:text-blue-600">Home</a>
+                        <a href="/reviews" class="text-blue-800 hover:text-blue-600">Reviews</a>
+                        <a href="/compare" class="text-blue-800 hover:text-blue-600">Compare</a>
+                        <a href="/simulator" class="text-blue-800 hover:text-blue-600">Simulator</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <main id="main-content">
+            <div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
+                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <h1 class="text-4xl font-bold mb-4">Best Forex Brokers in Philippines 2025</h1>
+                    <p class="text-xl text-blue-100">BSP regulated brokers with competitive spreads and local support</p>
+                </div>
+            </div>
+
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <h2 class="text-2xl font-bold mb-6">Why Choose BSP Regulated Brokers?</h2>
+                <p class="text-blue-600 mb-8">
+                    The Bangko Sentral ng Pilipinas (BSP) provides regulatory oversight 
+                    for forex brokers operating in the Philippines. BSP regulation ensures investor protection, 
+                    transparent pricing, and adherence to operational standards.
+                </p>
+
+                <div class="bg-blue-50 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold mb-4">Ready to find your perfect Filipino broker?</h3>
+                    <a href="/" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
+                        Get Broker Recommendations
+                    </a>
+                </div>
+            </div>
+        </main>
+
+        <script src="/static/breadcrumbs.js"></script>
+    </body>
+    </html>
+  `);
+});
+
+// India broker page
+app.get('/brokers/india', (c) => {
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Best Forex Brokers in India 2025 - SEBI Regulated | BrokerAnalysis</title>
+        <meta name="description" content="Find the best SEBI regulated forex brokers in India. Compare spreads, regulation, and features of top Indian forex brokers for 2025.">
+        <meta name="keywords" content="India forex brokers, SEBI regulated brokers, best forex brokers India, Indian forex trading">
+        
+        <meta property="og:title" content="Best Forex Brokers in India 2025 - SEBI Regulated">
+        <meta property="og:description" content="Find the best SEBI regulated forex brokers in India. Compare spreads, regulation, and features.">
+        <meta property="og:url" content="https://brokeranalysis.com/brokers/india">
+        <meta property="og:type" content="website">
+        <meta property="og:image" content="https://brokeranalysis.com/static/images/brokeranalysis-og-image.png">
+        
+        <link rel="canonical" href="https://brokeranalysis.com/brokers/india">
+        <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
+
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+        <link href="/static/styles.css" rel="stylesheet">
+        
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "name": "Best Forex Brokers in India 2025",
+          "description": "Find the best SEBI regulated forex brokers in India",
+          "url": "https://brokeranalysis.com/brokers/india"
+        }
+        </script>
+    </head>
+    <body class="bg-blue-50 text-blue-900">
+        <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-blue-600 focus:text-white focus:px-4 py-2 focus:rounded">Skip to main content</a>
+        
+        <nav class="bg-white shadow-sm border-b">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-chart-line text-blue-600 text-2xl"></i>
+                        <a href="/" class="text-xl font-bold text-blue-900">BrokerAnalysis</a>
+                    </div>
+                    <div class="hidden md:flex items-center space-x-6">
+                        <a href="/" class="text-blue-800 hover:text-blue-600">Home</a>
+                        <a href="/reviews" class="text-blue-800 hover:text-blue-600">Reviews</a>
+                        <a href="/compare" class="text-blue-800 hover:text-blue-600">Compare</a>
+                        <a href="/simulator" class="text-blue-800 hover:text-blue-600">Simulator</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <main id="main-content">
+            <div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
+                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <h1 class="text-4xl font-bold mb-4">Best Forex Brokers in India 2025</h1>
+                    <p class="text-xl text-blue-100">SEBI regulated brokers with competitive spreads and local support</p>
+                </div>
+            </div>
+
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <h2 class="text-2xl font-bold mb-6">Why Choose SEBI Regulated Brokers?</h2>
+                <p class="text-blue-600 mb-8">
+                    The Securities and Exchange Board of India (SEBI) provides regulatory oversight 
+                    for forex brokers operating in India. SEBI regulation ensures investor protection, 
+                    transparent pricing, and adherence to strict operational standards.
+                </p>
+
+                <h2 class="text-2xl font-bold mb-6">Top SEBI Regulated Forex Brokers</h2>
+                <div class="grid gap-6 mb-8">
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h3 class="text-xl font-semibold mb-4">Zerodha</h3>
+                        <div class="flex items-center mb-4">
+                            <div class="text-yellow-400 mr-2">★★★★★</div>
+                            <span>4.5/5.0</span>
+                        </div>
+                        <ul class="text-blue-600 space-y-2">
+                            <li>• SEBI Registered</li>
+                            <li>• Zero brokerage on equity delivery</li>
+                            <li>• Advanced trading platforms</li>
+                            <li>• Educational resources</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bg-blue-50 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold mb-4">Ready to find your perfect Indian broker?</h3>
+                    <a href="/" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
+                        Get Broker Recommendations
+                    </a>
+                </div>
+            </div>
+        </main>
+
+        <script src="/static/breadcrumbs.js"></script>
+    </body>
+    </html>
+  `);
+});
+
+// Malaysia broker page
+app.get('/brokers/malaysia', (c) => {
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Best Forex Brokers in Malaysia 2025 - BNM Regulated | BrokerAnalysis</title>
+        <meta name="description" content="Find the best BNM regulated forex brokers in Malaysia. Compare spreads, regulation, and features of top Malaysian forex brokers for 2025.">
+        <meta name="keywords" content="Malaysia forex brokers, BNM regulated brokers, best forex brokers Malaysia, Malaysian forex trading, Bank Negara Malaysia">
+        
+        <!-- Open Graph -->
+        <meta property="og:title" content="Best Forex Brokers in Malaysia 2025 - BNM Regulated">
+        <meta property="og:description" content="Find the best BNM regulated forex brokers in Malaysia. Compare spreads, regulation, and features.">
+        <meta property="og:url" content="https://brokeranalysis.com/brokers/malaysia">
+        <meta property="og:type" content="website">
+        <meta property="og:image" content="https://brokeranalysis.com/static/images/brokeranalysis-og-image.png">
+        
+        <link rel="canonical" href="https://brokeranalysis.com/brokers/malaysia">
+        <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
+
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+        <link href="/static/styles.css" rel="stylesheet">
+        
+        <!-- Structured Data -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "name": "Best Forex Brokers in Malaysia 2025",
+          "description": "Find the best BNM regulated forex brokers in Malaysia",
+          "url": "https://brokeranalysis.com/brokers/malaysia"
+        }
+        </script>
+    </head>
+    <body class="bg-blue-50 text-blue-900">
+        <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-blue-600 focus:text-white focus:px-4 py-2 focus:rounded">Skip to main content</a>
+        
+        <nav class="bg-white shadow-sm border-b">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-chart-line text-blue-600 text-2xl"></i>
+                        <a href="/" class="text-xl font-bold text-blue-900">BrokerAnalysis</a>
+                    </div>
+                    <div class="hidden md:flex items-center space-x-6">
+                        <a href="/" class="text-blue-800 hover:text-blue-600">Home</a>
+                        <a href="/reviews" class="text-blue-800 hover:text-blue-600">Reviews</a>
+                        <a href="/compare" class="text-blue-800 hover:text-blue-600">Compare</a>
+                        <a href="/simulator" class="text-blue-800 hover:text-blue-600">Simulator</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <main id="main-content">
+            <div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
+                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <h1 class="text-4xl font-bold mb-4">Best Forex Brokers in Malaysia 2025</h1>
+                    <p class="text-xl text-blue-100">BNM regulated brokers with competitive spreads and Malaysian support</p>
+                </div>
+            </div>
+
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="prose max-w-none">
+                    <h2 class="text-2xl font-bold mb-6">Why Choose BNM Regulated Brokers?</h2>
+                    <p class="text-blue-600 mb-8">
+                        Bank Negara Malaysia (BNM) provides comprehensive regulatory oversight 
+                        for forex brokers operating in Malaysia. BNM regulation ensures investor protection, 
+                        transparent pricing, and adherence to strict operational standards for Malaysian traders.
+                    </p>
+
+                    <h2 class="text-2xl font-bold mb-6">Top Forex Brokers for Malaysian Traders</h2>
+                    <div class="grid gap-6 mb-8">
+                        <div class="bg-white rounded-lg shadow-lg p-6">
+                            <h3 class="text-xl font-semibold mb-4">FXTM</h3>
+                            <div class="flex items-center mb-4">
+                                <div class="text-yellow-400 mr-2">★★★★★</div>
+                                <span>4.3/5.0</span>
+                            </div>
+                            <ul class="text-blue-600 space-y-2">
+                                <li>• CySEC and FCA regulated</li>
+                                <li>• Accepts Malaysian residents</li>
+                                <li>• Competitive spreads from 1.3 pips</li>
+                                <li>• Multiple trading platforms</li>
+                                <li>• Local Malaysian support</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg shadow-lg p-6">
+                            <h3 class="text-xl font-semibold mb-4">Pepperstone</h3>
+                            <div class="flex items-center mb-4">
+                                <div class="text-yellow-400 mr-2">★★★★☆</div>
+                                <span>4.2/5.0</span>
+                            </div>
+                            <ul class="text-blue-600 space-y-2">
+                                <li>• ASIC and FCA regulated</li>
+                                <li>• ECN execution model</li>
+                                <li>• Spreads from 0.0 pips</li>
+                                <li>• MT4, MT5, cTrader platforms</li>
+                                <li>• Malaysian ringgit deposits</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg shadow-lg p-6">
+                            <h3 class="text-xl font-semibold mb-4">FP Markets</h3>
+                            <div class="flex items-center mb-4">
+                                <div class="text-yellow-400 mr-2">★★★★☆</div>
+                                <span>4.1/5.0</span>
+                            </div>
+                            <ul class="text-blue-600 space-y-2">
+                                <li>• ASIC regulated</li>
+                                <li>• Raw spread accounts available</li>
+                                <li>• Fast execution speeds</li>
+                                <li>• Educational resources</li>
+                                <li>• 24/7 customer support</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h2 class="text-2xl font-bold mb-6">Forex Trading Regulations in Malaysia</h2>
+                    <p class="text-blue-600 mb-6">
+                        Forex trading in Malaysia is legal but regulated. While BNM doesn't directly license retail forex brokers, 
+                        Malaysian traders can legally trade with offshore brokers that are properly regulated by recognized authorities 
+                        such as ASIC, FCA, or CySEC.
+                    </p>
+
+                    <h2 class="text-2xl font-bold mb-6">Key Features for Malaysian Traders</h2>
+                    <div class="bg-blue-50 rounded-lg p-6 mb-8">
+                        <ul class="text-blue-600 space-y-3">
+                            <li>• <strong>Local Currency Support:</strong> MYR deposit and withdrawal options</li>
+                            <li>• <strong>Islamic Accounts:</strong> Swap-free trading for Muslim traders</li>
+                            <li>• <strong>Local Support:</strong> Customer service in Bahasa Malaysia</li>
+                            <li>• <strong>Competitive Spreads:</strong> Low trading costs for major pairs</li>
+                            <li>• <strong>Multiple Platforms:</strong> MT4, MT5, and proprietary platforms</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-blue-50 rounded-lg p-6">
+                        <h3 class="text-lg font-semibold mb-4">Ready to find your perfect Malaysian broker?</h3>
+                        <a href="/" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
+                            Get Broker Recommendations
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <script src="/static/breadcrumbs.js"></script>
+    </body>
+    </html>
+  `);
+});
+
+// Dubai broker page
+app.get('/brokers/dubai', (c) => {
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Best Forex Brokers in Dubai 2025 - DFSA Regulated | BrokerAnalysis</title>
+        <meta name="description" content="Find the best DFSA regulated forex brokers in Dubai and UAE. Compare spreads, regulation, and features of top Middle East forex brokers for 2025.">
+        <meta name="keywords" content="Dubai forex brokers, DFSA regulated brokers, UAE forex brokers, best forex brokers Dubai, Middle East forex trading">
+        
+        <!-- Open Graph -->
+        <meta property="og:title" content="Best Forex Brokers in Dubai 2025 - DFSA Regulated">
+        <meta property="og:description" content="Find the best DFSA regulated forex brokers in Dubai and UAE. Compare spreads, regulation, and features.">
+        <meta property="og:url" content="https://brokeranalysis.com/brokers/dubai">
+        <meta property="og:type" content="website">
+        <meta property="og:image" content="https://brokeranalysis.com/static/images/brokeranalysis-og-image.png">
+        
+        <link rel="canonical" href="https://brokeranalysis.com/brokers/dubai">
+        <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
+
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+        <link href="/static/styles.css" rel="stylesheet">
+        
+        <!-- Structured Data -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "name": "Best Forex Brokers in Dubai 2025",
+          "description": "Find the best DFSA regulated forex brokers in Dubai and UAE",
+          "url": "https://brokeranalysis.com/brokers/dubai"
+        }
+        </script>
+    </head>
+    <body class="bg-blue-50 text-blue-900">
+        <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-blue-600 focus:text-white focus:px-4 py-2 focus:rounded">Skip to main content</a>
+        
+        <nav class="bg-white shadow-sm border-b">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-chart-line text-blue-600 text-2xl"></i>
+                        <a href="/" class="text-xl font-bold text-blue-900">BrokerAnalysis</a>
+                    </div>
+                    <div class="hidden md:flex items-center space-x-6">
+                        <a href="/" class="text-blue-800 hover:text-blue-600">Home</a>
+                        <a href="/reviews" class="text-blue-800 hover:text-blue-600">Reviews</a>
+                        <a href="/compare" class="text-blue-800 hover:text-blue-600">Compare</a>
+                        <a href="/simulator" class="text-blue-800 hover:text-blue-600">Simulator</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <main id="main-content">
+            <div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
+                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <h1 class="text-4xl font-bold mb-4">Best Forex Brokers in Dubai 2025</h1>
+                    <p class="text-xl text-blue-100">DFSA regulated brokers with competitive spreads and Middle East support</p>
+                </div>
+            </div>
+
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="prose max-w-none">
+                    <h2 class="text-2xl font-bold mb-6">Why Choose DFSA Regulated Brokers?</h2>
+                    <p class="text-blue-600 mb-8">
+                        The Dubai Financial Services Authority (DFSA) provides world-class regulatory oversight 
+                        for forex brokers operating in the Dubai International Financial Centre (DIFC). 
+                        DFSA regulation ensures high standards of investor protection, transparent operations, 
+                        and adherence to international best practices for traders in the UAE and Middle East.
+                    </p>
+
+                    <h2 class="text-2xl font-bold mb-6">Top Forex Brokers for Dubai Traders</h2>
+                    <div class="grid gap-6 mb-8">
+                        <div class="bg-white rounded-lg shadow-lg p-6">
+                            <h3 class="text-xl font-semibold mb-4">IG Markets</h3>
+                            <div class="flex items-center mb-4">
+                                <div class="text-yellow-400 mr-2">★★★★★</div>
+                                <span>4.4/5.0</span>
+                            </div>
+                            <ul class="text-blue-600 space-y-2">
+                                <li>• DFSA regulated in Dubai</li>
+                                <li>• Over 50 years of experience</li>
+                                <li>• Competitive spreads from 0.6 pips</li>
+                                <li>• Advanced trading platforms</li>
+                                <li>• Arabic language support</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg shadow-lg p-6">
+                            <h3 class="text-xl font-semibold mb-4">ADSS</h3>
+                            <div class="flex items-center mb-4">
+                                <div class="text-yellow-400 mr-2">★★★★☆</div>
+                                <span>4.2/5.0</span>
+                            </div>
+                            <ul class="text-blue-600 space-y-2">
+                                <li>• DFSA and ADGM regulated</li>
+                                <li>• Local UAE presence</li>
+                                <li>• Islamic trading accounts</li>
+                                <li>• AED deposit options</li>
+                                <li>• Regional market expertise</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg shadow-lg p-6">
+                            <h3 class="text-xl font-semibold mb-4">Saxo Bank</h3>
+                            <div class="flex items-center mb-4">
+                                <div class="text-yellow-400 mr-2">★★★★☆</div>
+                                <span>4.3/5.0</span>
+                            </div>
+                            <ul class="text-blue-600 space-y-2">
+                                <li>• DFSA regulated</li>
+                                <li>• Premium trading technology</li>
+                                <li>• Institutional-grade execution</li>
+                                <li>• Comprehensive research</li>
+                                <li>• Multi-asset trading</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h2 class="text-2xl font-bold mb-6">Forex Trading Regulations in UAE</h2>
+                    <p class="text-blue-600 mb-6">
+                        Forex trading in the UAE is legal and regulated by multiple authorities. The DFSA regulates 
+                        brokers in the DIFC, while the Securities and Commodities Authority (SCA) oversees 
+                        mainland UAE operations. The Abu Dhabi Global Market (ADGM) also provides regulatory 
+                        oversight for financial services in Abu Dhabi.
+                    </p>
+
+                    <h2 class="text-2xl font-bold mb-6">Key Features for UAE Traders</h2>
+                    <div class="bg-blue-50 rounded-lg p-6 mb-8">
+                        <ul class="text-blue-600 space-y-3">
+                            <li>• <strong>Local Currency Support:</strong> AED deposit and withdrawal options</li>
+                            <li>• <strong>Islamic Accounts:</strong> Sharia-compliant swap-free trading</li>
+                            <li>• <strong>Arabic Support:</strong> Customer service in Arabic language</li>
+                            <li>• <strong>Regional Expertise:</strong> Understanding of Middle East markets</li>
+                            <li>• <strong>Time Zone Alignment:</strong> Support during Gulf trading hours</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-blue-50 rounded-lg p-6">
+                        <h3 class="text-lg font-semibold mb-4">Ready to find your perfect Dubai broker?</h3>
+                        <a href="/" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
+                            Get Broker Recommendations
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <script src="/static/breadcrumbs.js"></script>
+    </body>
+    </html>
+  `);
+});
+
+// Qatar broker page
+app.get('/brokers/qatar', (c) => {
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Best Forex Brokers in Qatar 2025 - QFC Regulated | BrokerAnalysis</title>
+        <meta name="description" content="Find the best QFC and QFCRA regulated forex brokers in Qatar. Compare spreads, regulation, and features of top Qatari forex brokers for 2025.">
+        <meta name="keywords" content="Qatar forex brokers, QFC regulated brokers, QFCRA brokers, best forex brokers Qatar, Doha forex trading">
+        
+        <!-- Open Graph -->
+        <meta property="og:title" content="Best Forex Brokers in Qatar 2025 - QFC Regulated">
+        <meta property="og:description" content="Find the best QFC and QFCRA regulated forex brokers in Qatar. Compare spreads, regulation, and features.">
+        <meta property="og:url" content="https://brokeranalysis.com/brokers/qatar">
+        <meta property="og:type" content="website">
+        <meta property="og:image" content="https://brokeranalysis.com/static/images/brokeranalysis-og-image.png">
+        
+        <link rel="canonical" href="https://brokeranalysis.com/brokers/qatar">
+        <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
+
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+        <link href="/static/styles.css" rel="stylesheet">
+        
+        <!-- Structured Data -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "name": "Best Forex Brokers in Qatar 2025",
+          "description": "Find the best QFC and QFCRA regulated forex brokers in Qatar",
+          "url": "https://brokeranalysis.com/brokers/qatar"
+        }
+        </script>
+    </head>
+    <body class="bg-blue-50 text-blue-900">
+        <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-blue-600 focus:text-white focus:px-4 py-2 focus:rounded">Skip to main content</a>
+        
+        <nav class="bg-white shadow-sm border-b">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-chart-line text-blue-600 text-2xl"></i>
+                        <a href="/" class="text-xl font-bold text-blue-900">BrokerAnalysis</a>
+                    </div>
+                    <div class="hidden md:flex items-center space-x-6">
+                        <a href="/" class="text-blue-800 hover:text-blue-600">Home</a>
+                        <a href="/reviews" class="text-blue-800 hover:text-blue-600">Reviews</a>
+                        <a href="/compare" class="text-blue-800 hover:text-blue-600">Compare</a>
+                        <a href="/simulator" class="text-blue-800 hover:text-blue-600">Simulator</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <main id="main-content">
+            <div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
+                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <h1 class="text-4xl font-bold mb-4">Best Forex Brokers in Qatar 2025</h1>
+                    <p class="text-xl text-blue-100">QFC and QFCRA regulated brokers with competitive spreads and Gulf region support</p>
+                </div>
+            </div>
+
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="prose max-w-none">
+                    <h2 class="text-2xl font-bold mb-6">Why Choose QFC Regulated Brokers?</h2>
+                    <p class="text-blue-600 mb-8">
+                        The Qatar Financial Centre Regulatory Authority (QFCRA) provides comprehensive 
+                        regulatory oversight for forex brokers operating in Qatar. QFC regulation ensures 
+                        high standards of investor protection, transparent operations, and adherence to 
+                        international best practices for traders in Qatar and the Gulf region.
+                    </p>
+
+                    <h2 class="text-2xl font-bold mb-6">Top Forex Brokers for Qatar Traders</h2>
+                    <div class="grid gap-6 mb-8">
+                        <div class="bg-white rounded-lg shadow-lg p-6">
+                            <h3 class="text-xl font-semibold mb-4">XTB</h3>
+                            <div class="flex items-center mb-4">
+                                <div class="text-yellow-400 mr-2">★★★★★</div>
+                                <span>4.5/5.0</span>
+                            </div>
+                            <ul class="text-blue-600 space-y-2">
+                                <li>• QFC regulated in Qatar</li>
+                                <li>• Award-winning trading platform</li>
+                                <li>• Competitive spreads from 0.1 pips</li>
+                                <li>• Arabic language support</li>
+                                <li>• QAR deposit options</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg shadow-lg p-6">
+                            <h3 class="text-xl font-semibold mb-4">CMC Markets</h3>
+                            <div class="flex items-center mb-4">
+                                <div class="text-yellow-400 mr-2">★★★★☆</div>
+                                <span>4.3/5.0</span>
+                            </div>
+                            <ul class="text-blue-600 space-y-2">
+                                <li>• QFC regulated</li>
+                                <li>• Advanced charting tools</li>
+                                <li>• No dealing desk execution</li>
+                                <li>• Educational resources</li>
+                                <li>• Gulf market expertise</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg shadow-lg p-6">
+                            <h3 class="text-xl font-semibold mb-4">IG Markets</h3>
+                            <div class="flex items-center mb-4">
+                                <div class="text-yellow-400 mr-2">★★★★☆</div>
+                                <span>4.2/5.0</span>
+                            </div>
+                            <ul class="text-blue-600 space-y-2">
+                                <li>• QFC regulated</li>
+                                <li>• 50+ years experience</li>
+                                <li>• Professional trading tools</li>
+                                <li>• Islamic trading accounts</li>
+                                <li>• Local customer support</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h2 class="text-2xl font-bold mb-6">Forex Trading Regulations in Qatar</h2>
+                    <p class="text-blue-600 mb-6">
+                        Forex trading in Qatar is legal and regulated by the Qatar Financial Centre 
+                        Regulatory Authority (QFCRA). The QFC provides a world-class regulatory framework 
+                        that follows international standards and best practices. Traders in Qatar can 
+                        access global forex markets through QFC-licensed brokers with confidence.
+                    </p>
+
+                    <h2 class="text-2xl font-bold mb-6">Key Features for Qatar Traders</h2>
+                    <div class="bg-blue-50 rounded-lg p-6 mb-8">
+                        <ul class="text-blue-600 space-y-3">
+                            <li>• <strong>Local Currency Support:</strong> QAR deposit and withdrawal options</li>
+                            <li>• <strong>Islamic Accounts:</strong> Sharia-compliant swap-free trading</li>
+                            <li>• <strong>Arabic Support:</strong> Customer service in Arabic language</li>
+                            <li>• <strong>Gulf Expertise:</strong> Understanding of regional markets</li>
+                            <li>• <strong>Time Zone Alignment:</strong> Support during Gulf trading hours</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-blue-50 rounded-lg p-6">
+                        <h3 class="text-lg font-semibold mb-4">Ready to find your perfect Qatar broker?</h3>
+                        <a href="/" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
+                            Get Broker Recommendations
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <script src="/static/breadcrumbs.js"></script>
+    </body>
+    </html>
+  `);
+});
+
+// Indonesia broker page
+app.get('/brokers/indonesia', (c) => {
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Best Forex Brokers in Indonesia 2025 - BAPPEBTI Regulated | BrokerAnalysis</title>
+        <meta name="description" content="Find the best BAPPEBTI regulated forex brokers in Indonesia. Compare spreads, regulation, and features of top Indonesian forex brokers for 2025.">
+        <meta name="keywords" content="Indonesia forex brokers, BAPPEBTI regulated brokers, best forex brokers Indonesia, Jakarta forex trading, Indonesian rupiah">
+        
+        <!-- Open Graph -->
+        <meta property="og:title" content="Best Forex Brokers in Indonesia 2025 - BAPPEBTI Regulated">
+        <meta property="og:description" content="Find the best BAPPEBTI regulated forex brokers in Indonesia. Compare spreads, regulation, and features.">
+        <meta property="og:url" content="https://brokeranalysis.com/brokers/indonesia">
+        <meta property="og:type" content="website">
+        <meta property="og:image" content="https://brokeranalysis.com/static/images/brokeranalysis-og-image.png">
+        
+        <link rel="canonical" href="https://brokeranalysis.com/brokers/indonesia">
+        <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
+
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+        <link href="/static/styles.css" rel="stylesheet">
+        
+        <!-- Structured Data -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "name": "Best Forex Brokers in Indonesia 2025",
+          "description": "Find the best BAPPEBTI regulated forex brokers in Indonesia",
+          "url": "https://brokeranalysis.com/brokers/indonesia"
+        }
+        </script>
+    </head>
+    <body class="bg-blue-50 text-blue-900">
+        <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-blue-600 focus:text-white focus:px-4 py-2 focus:rounded">Skip to main content</a>
+        
+        <nav class="bg-white shadow-sm border-b">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-chart-line text-blue-600 text-2xl"></i>
+                        <a href="/" class="text-xl font-bold text-blue-900">BrokerAnalysis</a>
+                    </div>
+                    <div class="hidden md:flex items-center space-x-6">
+                        <a href="/" class="text-blue-800 hover:text-blue-600">Home</a>
+                        <a href="/reviews" class="text-blue-800 hover:text-blue-600">Reviews</a>
+                        <a href="/compare" class="text-blue-800 hover:text-blue-600">Compare</a>
+                        <a href="/simulator" class="text-blue-800 hover:text-blue-600">Simulator</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <main id="main-content">
+            <div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
+                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <h1 class="text-4xl font-bold mb-4">Best Forex Brokers in Indonesia 2025</h1>
+                    <p class="text-xl text-blue-100">BAPPEBTI regulated brokers with competitive spreads and Indonesian rupiah support</p>
+                </div>
+            </div>
+
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="prose max-w-none">
+                    <h2 class="text-2xl font-bold mb-6">Why Choose BAPPEBTI Regulated Brokers?</h2>
+                    <p class="text-blue-600 mb-8">
+                        The Commodity Futures Trading Regulatory Agency (BAPPEBTI) is Indonesia's 
+                        primary regulatory authority for forex and commodity trading. BAPPEBTI regulation 
+                        ensures high standards of investor protection, transparent operations, and adherence 
+                        to Indonesian financial regulations for local traders.
+                    </p>
+
+                    <h2 class="text-2xl font-bold mb-6">Top Forex Brokers for Indonesian Traders</h2>
+                    <div class="grid gap-6 mb-8">
+                        <div class="bg-white rounded-lg shadow-lg p-6">
+                            <h3 class="text-xl font-semibold mb-4">Monex Investindo Futures</h3>
+                            <div class="flex items-center mb-4">
+                                <div class="text-yellow-400 mr-2">★★★★☆</div>
+                                <span>4.2/5.0</span>
+                            </div>
+                            <ul class="text-blue-600 space-y-2">
+                                <li>• BAPPEBTI regulated in Indonesia</li>
+                                <li>• Local Indonesian presence</li>
+                                <li>• IDR deposit and withdrawal</li>
+                                <li>• Bahasa Indonesia support</li>
+                                <li>• Local banking integration</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg shadow-lg p-6">
+                            <h3 class="text-xl font-semibold mb-4">PT Kontak Perkasa Futures</h3>
+                            <div class="flex items-center mb-4">
+                                <div class="text-yellow-400 mr-2">★★★★☆</div>
+                                <span>4.1/5.0</span>
+                            </div>
+                            <ul class="text-blue-600 space-y-2">
+                                <li>• BAPPEBTI licensed</li>
+                                <li>• MetaTrader 4 platform</li>
+                                <li>• Indonesian rupiah accounts</li>
+                                <li>• Local customer service</li>
+                                <li>• Educational resources in Bahasa</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg shadow-lg p-6">
+                            <h3 class="text-xl font-semibold mb-4">PT Millennium Penata Futures</h3>
+                            <div class="flex items-center mb-4">
+                                <div class="text-yellow-400 mr-2">★★★★☆</div>
+                                <span>4.0/5.0</span>
+                            </div>
+                            <ul class="text-blue-600 space-y-2">
+                                <li>• BAPPEBTI regulated</li>
+                                <li>• Established Indonesian broker</li>
+                                <li>• Local market expertise</li>
+                                <li>• IDR trading accounts</li>
+                                <li>• Jakarta office presence</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h2 class="text-2xl font-bold mb-6">Forex Trading Regulations in Indonesia</h2>
+                    <p class="text-blue-600 mb-6">
+                        Forex trading in Indonesia is legal and regulated by BAPPEBTI under the Ministry 
+                        of Trade. Indonesian residents can trade forex through BAPPEBTI-licensed brokers. 
+                        The regulatory framework ensures investor protection and maintains market integrity 
+                        while allowing access to global currency markets.
+                    </p>
+
+                    <h2 class="text-2xl font-bold mb-6">Key Features for Indonesian Traders</h2>
+                    <div class="bg-blue-50 rounded-lg p-6 mb-8">
+                        <ul class="text-blue-600 space-y-3">
+                            <li>• <strong>Local Currency Support:</strong> IDR deposit and withdrawal options</li>
+                            <li>• <strong>Language Support:</strong> Customer service in Bahasa Indonesia</li>
+                            <li>• <strong>Local Banking:</strong> Integration with Indonesian banks</li>
+                            <li>• <strong>Regulatory Compliance:</strong> BAPPEBTI oversight and protection</li>
+                            <li>• <strong>Time Zone Alignment:</strong> Support during Indonesian trading hours</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-blue-50 rounded-lg p-6">
+                        <h3 class="text-lg font-semibold mb-4">Ready to find your perfect Indonesian broker?</h3>
+                        <a href="/" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
+                            Get Broker Recommendations
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <script src="/static/breadcrumbs.js"></script>
+    </body>
+    </html>
+  `);
+});
+
+// USA broker page
+app.get('/brokers/usa', (c) => {
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Best Forex Brokers in USA 2025 - CFTC/NFA Regulated | BrokerAnalysis</title>
+        <meta name="description" content="Find the best CFTC and NFA regulated forex brokers in the USA. Compare spreads, regulation, and features of top American forex brokers for 2025.">
+        <meta name="keywords" content="USA forex brokers, CFTC regulated brokers, NFA brokers, best forex brokers USA, American forex trading">
+        
+        <!-- Open Graph -->
+        <meta property="og:title" content="Best Forex Brokers in USA 2025 - CFTC/NFA Regulated">
+        <meta property="og:description" content="Find the best CFTC and NFA regulated forex brokers in the USA. Compare spreads, regulation, and features.">
+        <meta property="og:url" content="https://brokeranalysis.com/brokers/usa">
+        <meta property="og:type" content="website">
+        <meta property="og:image" content="https://brokeranalysis.com/static/images/brokeranalysis-og-image.png">
+        
+        <link rel="canonical" href="https://brokeranalysis.com/brokers/usa">
+        <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
+
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+        <link href="/static/styles.css" rel="stylesheet">
+        
+        <!-- Structured Data -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "name": "Best Forex Brokers in USA 2025",
+          "description": "Find the best CFTC and NFA regulated forex brokers in the USA",
+          "url": "https://brokeranalysis.com/brokers/usa"
+        }
+        </script>
+    </head>
+    <body class="bg-blue-50 text-blue-900">
+        <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-blue-600 focus:text-white focus:px-4 py-2 focus:rounded">Skip to main content</a>
+        
+        <nav class="bg-white shadow-sm border-b">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-chart-line text-blue-600 text-2xl"></i>
+                        <a href="/" class="text-xl font-bold text-blue-900">BrokerAnalysis</a>
+                    </div>
+                    <div class="hidden md:flex items-center space-x-6">
+                        <a href="/" class="text-blue-800 hover:text-blue-600">Home</a>
+                        <a href="/reviews" class="text-blue-800 hover:text-blue-600">Reviews</a>
+                        <a href="/compare" class="text-blue-800 hover:text-blue-600">Compare</a>
+                        <a href="/simulator" class="text-blue-800 hover:text-blue-600">Simulator</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <main id="main-content">
+            <div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
+                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <h1 class="text-4xl font-bold mb-4">Best Forex Brokers in USA 2025</h1>
+                    <p class="text-xl text-blue-100">CFTC and NFA regulated brokers with competitive spreads and US dollar support</p>
+                </div>
+            </div>
+
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="prose max-w-none">
+                    <h2 class="text-2xl font-bold mb-6">Why Choose CFTC/NFA Regulated Brokers?</h2>
+                    <p class="text-blue-600 mb-8">
+                        The Commodity Futures Trading Commission (CFTC) and National Futures Association (NFA) 
+                        provide the highest standards of regulatory oversight for forex brokers in the United States. 
+                        CFTC/NFA regulation ensures maximum investor protection, transparent operations, and strict 
+                        adherence to US financial regulations for American traders.
+                    </p>
+
+                    <h2 class="text-2xl font-bold mb-6">Top Forex Brokers for US Traders</h2>
+                    <div class="grid gap-6 mb-8">
+                        <div class="bg-white rounded-lg shadow-lg p-6">
+                            <h3 class="text-xl font-semibold mb-4">OANDA</h3>
+                            <div class="flex items-center mb-4">
+                                <div class="text-yellow-400 mr-2">★★★★★</div>
+                                <span>4.5/5.0</span>
+                            </div>
+                            <ul class="text-blue-600 space-y-2">
+                                <li>• CFTC regulated and NFA member</li>
+                                <li>• Over 25 years of experience</li>
+                                <li>• Competitive spreads from 1.2 pips</li>
+                                <li>• Advanced trading platforms</li>
+                                <li>• Excellent customer support</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg shadow-lg p-6">
+                            <h3 class="text-xl font-semibold mb-4">FOREX.com</h3>
+                            <div class="flex items-center mb-4">
+                                <div class="text-yellow-400 mr-2">★★★★☆</div>
+                                <span>4.3/5.0</span>
+                            </div>
+                            <ul class="text-blue-600 space-y-2">
+                                <li>• CFTC regulated and NFA member</li>
+                                <li>• MetaTrader 4 and proprietary platforms</li>
+                                <li>• Comprehensive research tools</li>
+                                <li>• Educational resources</li>
+                                <li>• Mobile trading apps</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg shadow-lg p-6">
+                            <h3 class="text-xl font-semibold mb-4">Interactive Brokers</h3>
+                            <div class="flex items-center mb-4">
+                                <div class="text-yellow-400 mr-2">★★★★☆</div>
+                                <span>4.4/5.0</span>
+                            </div>
+                            <ul class="text-blue-600 space-y-2">
+                                <li>• CFTC regulated and NFA member</li>
+                                <li>• Low-cost trading structure</li>
+                                <li>• Professional trading tools</li>
+                                <li>• Global market access</li>
+                                <li>• Institutional-grade execution</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h2 class="text-2xl font-bold mb-6">Forex Trading Regulations in USA</h2>
+                    <p class="text-blue-600 mb-6">
+                        Forex trading in the United States is heavily regulated by the CFTC and NFA. 
+                        US residents can only trade with CFTC-registered and NFA-member brokers. 
+                        The regulatory framework includes strict capital requirements, segregated client funds, 
+                        and comprehensive reporting to ensure the highest level of trader protection.
+                    </p>
+
+                    <h2 class="text-2xl font-bold mb-6">Key Features for US Traders</h2>
+                    <div class="bg-blue-50 rounded-lg p-6 mb-8">
+                        <ul class="text-blue-600 space-y-3">
+                            <li>• <strong>FIFO Rule Compliance:</strong> First-in, first-out order execution</li>
+                            <li>• <strong>No Hedging Restrictions:</strong> Limited hedging capabilities per US regulations</li>
+                            <li>• <strong>Maximum Leverage:</strong> 50:1 for major pairs, 20:1 for minors</li>
+                            <li>• <strong>Segregated Funds:</strong> Client funds held separately from broker capital</li>
+                            <li>• <strong>Negative Balance Protection:</strong> Cannot lose more than account balance</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-blue-50 rounded-lg p-6">
+                        <h3 class="text-lg font-semibold mb-4">Ready to find your perfect US broker?</h3>
+                        <a href="/" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
+                            Get Broker Recommendations
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <script src="/static/breadcrumbs.js"></script>
+    </body>
+    </html>
+  `);
+});
+
+// FP Markets Review Page
+app.get('/reviews/fp-markets', (c) => {
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>FP Markets Review 2025 - Detailed Analysis & Rating | BrokerAnalysis</title>
+        <meta name="description" content="Comprehensive FP Markets review 2025. Analysis of spreads, regulation, platforms, and trading conditions. ASIC regulated with tight spreads from 0.0 pips.">
+        <meta name="keywords" content="FP Markets review, FP Markets broker, ASIC regulated broker, tight spreads, MetaTrader 4, MetaTrader 5, cTrader">
+        
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="article">
+        <meta property="og:title" content="FP Markets Review 2025 - Detailed Analysis & Rating">
+        <meta property="og:description" content="Comprehensive FP Markets review 2025. ASIC regulated broker with tight spreads from 0.0 pips and multiple trading platforms.">
+        <meta property="og:image" content="https://brokeranalysis.com/static/images/fp-markets-review-og.png">
+        <meta property="og:url" content="https://brokeranalysis.com/reviews/fp-markets">
+        
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:title" content="FP Markets Review 2025 - Detailed Analysis & Rating">
+        <meta property="twitter:description" content="Comprehensive FP Markets review 2025. ASIC regulated broker with tight spreads from 0.0 pips.">
+        <meta property="twitter:image" content="https://brokeranalysis.com/static/images/fp-markets-review-og.png">
+        
+        <link rel="canonical" href="https://brokeranalysis.com/reviews/fp-markets">
+        
+        <!-- Preconnect to external domains -->
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+        <link href="/static/styles.css" rel="stylesheet">
+        
+        <!-- Structured Data - Review -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "Review",
+          "itemReviewed": {
+            "@type": "FinancialProduct",
+            "name": "FP Markets",
+            "description": "ASIC regulated forex and CFD broker",
+            "provider": {
+              "@type": "Organization",
+              "name": "First Prudential Markets Pty Ltd",
+              "url": "https://fpmarkets.com"
+            }
+          },
+          "reviewRating": {
+            "@type": "Rating",
+            "ratingValue": "4.5",
+            "bestRating": "5",
+            "worstRating": "1"
+          },
+          "author": {
+            "@type": "Organization",
+            "name": "BrokerAnalysis",
+            "url": "https://brokeranalysis.com"
+          },
+          "datePublished": "2025-01-01",
+          "reviewBody": "FP Markets is an ASIC regulated broker offering competitive spreads from 0.0 pips, multiple trading platforms including MetaTrader 4, MetaTrader 5, and cTrader. Strong regulation and excellent execution make it suitable for both beginners and professional traders."
+        }
+        </script>
+        
+        <!-- Breadcrumb Structured Data -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://brokeranalysis.com"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Reviews",
+              "item": "https://brokeranalysis.com/reviews"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "FP Markets Review",
+              "item": "https://brokeranalysis.com/reviews/fp-markets"
+            }
+          ]
+        }
+        </script>
+    </head>
+    <body class="bg-blue-50 text-blue-900">
+        <a href="#main-content" class="sr-only focus:not-sr-only">Skip to main content</a>
+        
+        <!-- Navigation -->
+        <nav class="bg-white shadow-sm border-b">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-chart-line text-blue-600 text-2xl"></i>
+                        <a href="/" class="text-xl font-bold text-blue-900">BrokerAnalysis</a>
+                    </div>
+                    <div class="hidden md:flex items-center space-x-6">
+                        <a href="/" class="text-blue-800 hover:text-blue-600">Home</a>
+                        <a href="/reviews" class="text-blue-800 hover:text-blue-600">Reviews</a>
+                        <a href="/compare" class="text-blue-800 hover:text-blue-600">Compare</a>
+                        <a href="/simulator" class="text-blue-800 hover:text-blue-600">Simulator</a>
+                    </div>
+                    <div class="md:hidden">
+                        <button class="text-blue-800">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Breadcrumbs -->
+        <div class="bg-white border-b">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+                <nav class="flex" aria-label="Breadcrumb">
+                    <ol class="flex items-center space-x-2 text-sm">
+                        <li><a href="/" class="text-blue-600 hover:text-blue-800">Home</a></li>
+                        <li><i class="fas fa-chevron-right text-gray-400 mx-2"></i></li>
+                        <li><a href="/reviews" class="text-blue-600 hover:text-blue-800">Reviews</a></li>
+                        <li><i class="fas fa-chevron-right text-gray-400 mx-2"></i></li>
+                        <li class="text-gray-500">FP Markets Review</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <main id="main-content">
+            <!-- Hero Section -->
+            <div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
+                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h1 class="text-4xl font-bold mb-4">FP Markets Review 2025</h1>
+                            <p class="text-xl text-blue-100 mb-6">ASIC regulated broker with competitive spreads and multiple platforms</p>
+                            <div class="flex items-center space-x-4">
+                                <div class="flex items-center">
+                                    <div class="text-yellow-400 text-xl mr-2">★★★★★</div>
+                                    <span class="text-lg font-semibold">4.5/5.0</span>
+                                </div>
+                                <div class="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                                    ASIC Regulated
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hidden md:block">
+                            <img src="/static/logos/fp-markets.png" alt="FP Markets Logo" class="h-16 w-auto">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="bg-white py-8 border-b">
+                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-blue-600">0.0</div>
+                            <div class="text-sm text-gray-600">Min Spread (pips)</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-blue-600">$100</div>
+                            <div class="text-sm text-gray-600">Min Deposit</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-blue-600">1:500</div>
+                            <div class="text-sm text-gray-600">Max Leverage</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-blue-600">2009</div>
+                            <div class="text-sm text-gray-600">Founded</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Main Review Content -->
+                    <div class="lg:col-span-2">
+                        <!-- Overview -->
+                        <section class="mb-12">
+                            <h2 class="text-3xl font-bold mb-6">FP Markets Overview</h2>
+                            <p class="text-blue-600 mb-6 text-lg leading-relaxed">
+                                FP Markets is an Australian-based forex and CFD broker established in 2009. 
+                                Regulated by ASIC (Australian Securities and Investments Commission), 
+                                FP Markets has built a strong reputation for competitive pricing, 
+                                reliable execution, and comprehensive trading platforms.
+                            </p>
+                            <p class="text-blue-600 mb-6 leading-relaxed">
+                                The broker offers multiple account types to suit different trading styles, 
+                                from beginners to professional traders. With spreads starting from 0.0 pips 
+                                on their Raw account and access to MetaTrader 4, MetaTrader 5, and cTrader platforms, 
+                                FP Markets provides a comprehensive trading environment.
+                            </p>
+                        </section>
+
+                        <!-- Pros and Cons -->
+                        <section class="mb-12">
+                            <h2 class="text-3xl font-bold mb-6">Pros and Cons</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="bg-green-50 rounded-lg p-6">
+                                    <h3 class="text-xl font-semibold text-green-800 mb-4 flex items-center">
+                                        <i class="fas fa-check-circle mr-2"></i>
+                                        Pros
+                                    </h3>
+                                    <ul class="space-y-2 text-green-700">
+                                        <li class="flex items-start">
+                                            <i class="fas fa-plus text-green-500 mt-1 mr-2 text-sm"></i>
+                                            Tight spreads from 0.0 pips on Raw account
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fas fa-plus text-green-500 mt-1 mr-2 text-sm"></i>
+                                            Strong ASIC regulation and oversight
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fas fa-plus text-green-500 mt-1 mr-2 text-sm"></i>
+                                            Multiple trading platforms (MT4, MT5, cTrader)
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fas fa-plus text-green-500 mt-1 mr-2 text-sm"></i>
+                                            Fast execution speeds
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fas fa-plus text-green-500 mt-1 mr-2 text-sm"></i>
+                                            Comprehensive educational resources
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fas fa-plus text-green-500 mt-1 mr-2 text-sm"></i>
+                                            24/7 customer support
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="bg-red-50 rounded-lg p-6">
+                                    <h3 class="text-xl font-semibold text-red-800 mb-4 flex items-center">
+                                        <i class="fas fa-times-circle mr-2"></i>
+                                        Cons
+                                    </h3>
+                                    <ul class="space-y-2 text-red-700">
+                                        <li class="flex items-start">
+                                            <i class="fas fa-minus text-red-500 mt-1 mr-2 text-sm"></i>
+                                            Commission charges on Raw account
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fas fa-minus text-red-500 mt-1 mr-2 text-sm"></i>
+                                            Limited cryptocurrency offerings
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fas fa-minus text-red-500 mt-1 mr-2 text-sm"></i>
+                                            No US clients accepted
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fas fa-minus text-red-500 mt-1 mr-2 text-sm"></i>
+                                            Inactivity fee after 12 months
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Trading Platforms -->
+                        <section class="mb-12">
+                            <h2 class="text-3xl font-bold mb-6">Trading Platforms</h2>
+                            <div class="space-y-6">
+                                <div class="bg-white rounded-lg shadow-lg p-6 border">
+                                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                                        <i class="fas fa-desktop text-blue-600 mr-2"></i>
+                                        MetaTrader 4 (MT4)
+                                    </h3>
+                                    <p class="text-blue-600 mb-4">
+                                        The world's most popular trading platform with advanced charting, 
+                                        automated trading capabilities, and extensive technical analysis tools.
+                                    </p>
+                                    <ul class="text-blue-600 space-y-1">
+                                        <li>• 30+ built-in technical indicators</li>
+                                        <li>• Expert Advisors (EAs) support</li>
+                                        <li>• One-click trading</li>
+                                        <li>• Mobile and web versions available</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-white rounded-lg shadow-lg p-6 border">
+                                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                                        <i class="fas fa-chart-line text-blue-600 mr-2"></i>
+                                        MetaTrader 5 (MT5)
+                                    </h3>
+                                    <p class="text-blue-600 mb-4">
+                                        Advanced multi-asset platform with enhanced features, 
+                                        more timeframes, and improved order management.
+                                    </p>
+                                    <ul class="text-blue-600 space-y-1">
+                                        <li>• 38 built-in technical indicators</li>
+                                        <li>• 21 timeframes</li>
+                                        <li>• Advanced order types</li>
+                                        <li>• Economic calendar integration</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-white rounded-lg shadow-lg p-6 border">
+                                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                                        <i class="fas fa-bolt text-blue-600 mr-2"></i>
+                                        cTrader
+                                    </h3>
+                                    <p class="text-blue-600 mb-4">
+                                        Professional ECN platform with advanced order types, 
+                                        level II pricing, and superior execution speeds.
+                                    </p>
+                                    <ul class="text-blue-600 space-y-1">
+                                        <li>• Level II market depth</li>
+                                        <li>• Advanced order types</li>
+                                        <li>• cBot automated trading</li>
+                                        <li>• Superior execution speeds</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Account Types -->
+                        <section class="mb-12">
+                            <h2 class="text-3xl font-bold mb-6">Account Types</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="bg-white rounded-lg shadow-lg p-6 border">
+                                    <h3 class="text-xl font-semibold mb-4 text-blue-800">Standard Account</h3>
+                                    <div class="space-y-3">
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Min Deposit:</span>
+                                            <span class="font-semibold">$100</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Spreads:</span>
+                                            <span class="font-semibold">From 1.0 pips</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Commission:</span>
+                                            <span class="font-semibold">None</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Platforms:</span>
+                                            <span class="font-semibold">MT4, MT5</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="bg-white rounded-lg shadow-lg p-6 border border-blue-500">
+                                    <div class="flex items-center justify-between mb-4">
+                                        <h3 class="text-xl font-semibold text-blue-800">Raw Account</h3>
+                                        <span class="bg-blue-500 text-white px-2 py-1 rounded text-sm">Popular</span>
+                                    </div>
+                                    <div class="space-y-3">
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Min Deposit:</span>
+                                            <span class="font-semibold">$100</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Spreads:</span>
+                                            <span class="font-semibold">From 0.0 pips</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Commission:</span>
+                                            <span class="font-semibold">$6/lot</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Platforms:</span>
+                                            <span class="font-semibold">MT4, MT5, cTrader</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Regulation -->
+                        <section class="mb-12">
+                            <h2 class="text-3xl font-bold mb-6">Regulation & Safety</h2>
+                            <div class="bg-green-50 rounded-lg p-6 border border-green-200">
+                                <div class="flex items-center mb-4">
+                                    <i class="fas fa-shield-alt text-green-600 text-2xl mr-3"></i>
+                                    <h3 class="text-xl font-semibold text-green-800">ASIC Regulated</h3>
+                                </div>
+                                <p class="text-green-700 mb-4">
+                                    FP Markets is regulated by the Australian Securities and Investments Commission (ASIC) 
+                                    under license number 286354. This provides strong investor protection and ensures 
+                                    compliance with strict financial standards.
+                                </p>
+                                <ul class="text-green-700 space-y-2">
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                        Client funds segregated in tier-1 banks
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                        Negative balance protection
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                        Professional indemnity insurance
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                        Regular ASIC compliance audits
+                                    </li>
+                                </ul>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- Sidebar -->
+                    <div class="lg:col-span-1">
+                        <!-- Quick Info Card -->
+                        <div class="bg-white rounded-lg shadow-lg p-6 mb-6 sticky top-6">
+                            <h3 class="text-xl font-semibold mb-4">Quick Info</h3>
+                            <div class="space-y-3 text-sm">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Founded:</span>
+                                    <span class="font-semibold">2009</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Headquarters:</span>
+                                    <span class="font-semibold">Sydney, Australia</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Regulation:</span>
+                                    <span class="font-semibold">ASIC</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Min Deposit:</span>
+                                    <span class="font-semibold">$100</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Max Leverage:</span>
+                                    <span class="font-semibold">1:500</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Platforms:</span>
+                                    <span class="font-semibold">MT4, MT5, cTrader</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Instruments:</span>
+                                    <span class="font-semibold">10,000+</span>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-6 pt-6 border-t">
+                                <a href="https://fpmarkets.com" target="_blank" rel="noopener noreferrer" 
+                                   class="block w-full bg-blue-600 text-white text-center py-3 rounded-lg hover:bg-blue-700 transition-colors font-semibold">
+                                    Visit FP Markets
+                                    <i class="fas fa-external-link-alt ml-2"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Rating Breakdown -->
+                        <div class="bg-white rounded-lg shadow-lg p-6">
+                            <h3 class="text-xl font-semibold mb-4">Rating Breakdown</h3>
+                            <div class="space-y-3">
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-sm text-gray-600">Regulation</span>
+                                        <span class="text-sm font-semibold">5.0</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-green-500 h-2 rounded-full" style="width: 100%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-sm text-gray-600">Trading Costs</span>
+                                        <span class="text-sm font-semibold">4.5</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-blue-500 h-2 rounded-full" style="width: 90%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-sm text-gray-600">Platforms</span>
+                                        <span class="text-sm font-semibold">4.5</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-blue-500 h-2 rounded-full" style="width: 90%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-sm text-gray-600">Customer Service</span>
+                                        <span class="text-sm font-semibold">4.0</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-yellow-500 h-2 rounded-full" style="width: 80%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-sm text-gray-600">Education</span>
+                                        <span class="text-sm font-semibold">4.0</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-yellow-500 h-2 rounded-full" style="width: 80%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-4 border-t">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-semibold">Overall Rating</span>
+                                    <div class="flex items-center">
+                                        <span class="text-2xl font-bold text-blue-600 mr-2">4.5</span>
+                                        <div class="text-yellow-400">★★★★★</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA Section -->
+            <div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
+                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <h2 class="text-3xl font-bold mb-4">Ready to Start Trading?</h2>
+                    <p class="text-xl mb-8 text-blue-100">
+                        Find the perfect broker for your trading style with our intelligent recommendation system
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <a href="/" class="bg-white text-blue-800 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors">
+                            Get Broker Recommendations
+                        </a>
+                        <a href="/compare" class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-800 transition-colors">
+                            Compare Brokers
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-gray-900 text-white py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                    <div>
+                        <div class="flex items-center space-x-2 mb-4">
+                            <i class="fas fa-chart-line text-blue-400 text-2xl"></i>
+                            <span class="text-xl font-bold">BrokerAnalysis</span>
+                        </div>
+                        <p class="text-gray-400">Find your perfect forex broker with our intelligent recommendation system.</p>
+                        <div class="mt-4">
+                            <p class="text-sm text-gray-400">30 N Gould St Ste R</p>
+                            <p class="text-sm text-gray-400">Sheridan, WY 82801, US</p>
+                            <p class="text-sm text-gray-400">Phone: (801)-893-2577</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold mb-4">Product</h3>
+                        <ul class="space-y-2 text-gray-400">
+                            <li><a href="/" class="hover:text-white transition-colors">Home</a></li>
+                            <li><a href="/reviews" class="hover:text-white transition-colors">Reviews</a></li>
+                            <li><a href="/compare" class="hover:text-white transition-colors">Compare</a></li>
+                            <li><a href="/simulator" class="hover:text-white transition-colors">Simulator</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold mb-4">Resources</h3>
+                        <ul class="space-y-2 text-gray-400">
+                            <li><a href="/about" class="hover:text-white transition-colors">About</a></li>
+                            <li><a href="#" class="hover:text-white transition-colors">Methodology</a></li>
+                            <li><a href="#" class="hover:text-white transition-colors">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold mb-4">Legal</h3>
+                        <ul class="space-y-2 text-gray-400">
+                            <li><a href="#" class="hover:text-white transition-colors">Privacy Policy</a></li>
+                            <li><a href="#" class="hover:text-white transition-colors">Terms of Service</a></li>
+                            <li><a href="#" class="hover:text-white transition-colors">Disclaimer</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                    <p>&copy; 2025 BrokerAnalysis. All rights reserved. EIN: 384298140</p>
+                </div>
+            </div>
+        </footer>
+
+        <script src="/static/navigation.js"></script>
+    </body>
+    </html>
+  `);
+});
+
+// FXTM Review Page
+app.get('/reviews/fxtm', (c) => {
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>FXTM Review 2025 - Detailed Analysis & Rating | BrokerAnalysis</title>
+        <meta name="description" content="Comprehensive FXTM review 2025. Analysis of spreads, regulation, platforms, and trading conditions. CySEC and FCA regulated with competitive spreads from 1.3 pips.">
+        <meta name="keywords" content="FXTM review, FXTM broker, CySEC regulated broker, FCA regulation, MetaTrader 4, MetaTrader 5, forex trading">
+        
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="article">
+        <meta property="og:title" content="FXTM Review 2025 - Detailed Analysis & Rating">
+        <meta property="og:description" content="Comprehensive FXTM review 2025. CySEC and FCA regulated broker with competitive spreads and multiple trading platforms.">
+        <meta property="og:image" content="https://brokeranalysis.com/static/images/fxtm-review-og.png">
+        <meta property="og:url" content="https://brokeranalysis.com/reviews/fxtm">
+        
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:title" content="FXTM Review 2025 - Detailed Analysis & Rating">
+        <meta property="twitter:description" content="Comprehensive FXTM review 2025. CySEC and FCA regulated broker with competitive spreads.">
+        <meta property="twitter:image" content="https://brokeranalysis.com/static/images/fxtm-review-og.png">
+        
+        <link rel="canonical" href="https://brokeranalysis.com/reviews/fxtm">
+        
+        <!-- Preconnect to external domains -->
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+        <link href="/static/styles.css" rel="stylesheet">
+        
+        <!-- Structured Data - Review -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "Review",
+          "itemReviewed": {
+            "@type": "FinancialProduct",
+            "name": "FXTM",
+            "description": "CySEC and FCA regulated forex and CFD broker",
+            "provider": {
+              "@type": "Organization",
+              "name": "ForexTime Limited",
+              "url": "https://fxtm.com"
+            }
+          },
+          "reviewRating": {
+            "@type": "Rating",
+            "ratingValue": "4.3",
+            "bestRating": "5",
+            "worstRating": "1"
+          },
+          "author": {
+            "@type": "Organization",
+            "name": "BrokerAnalysis",
+            "url": "https://brokeranalysis.com"
+          },
+          "datePublished": "2025-01-01",
+          "reviewBody": "FXTM is a well-regulated broker with CySEC and FCA licenses, offering competitive spreads from 1.3 pips, multiple trading platforms including MetaTrader 4 and 5. Strong regulation and comprehensive educational resources make it suitable for traders of all levels."
+        }
+        </script>
+        
+        <!-- Breadcrumb Structured Data -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://brokeranalysis.com"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Reviews",
+              "item": "https://brokeranalysis.com/reviews"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "FXTM Review",
+              "item": "https://brokeranalysis.com/reviews/fxtm"
+            }
+          ]
+        }
+        </script>
+    </head>
+    <body class="bg-blue-50 text-blue-900">
+        <a href="#main-content" class="sr-only focus:not-sr-only">Skip to main content</a>
+        
+        <!-- Navigation -->
+        <nav class="bg-white shadow-sm border-b">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-chart-line text-blue-600 text-2xl"></i>
+                        <a href="/" class="text-xl font-bold text-blue-900">BrokerAnalysis</a>
+                    </div>
+                    <div class="hidden md:flex items-center space-x-6">
+                        <a href="/" class="text-blue-800 hover:text-blue-600">Home</a>
+                        <a href="/reviews" class="text-blue-800 hover:text-blue-600">Reviews</a>
+                        <a href="/compare" class="text-blue-800 hover:text-blue-600">Compare</a>
+                        <a href="/simulator" class="text-blue-800 hover:text-blue-600">Simulator</a>
+                    </div>
+                    <div class="md:hidden">
+                        <button class="text-blue-800">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Breadcrumbs -->
+        <div class="bg-white border-b">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+                <nav class="flex" aria-label="Breadcrumb">
+                    <ol class="flex items-center space-x-2 text-sm">
+                        <li><a href="/" class="text-blue-600 hover:text-blue-800">Home</a></li>
+                        <li><i class="fas fa-chevron-right text-gray-400 mx-2"></i></li>
+                        <li><a href="/reviews" class="text-blue-600 hover:text-blue-800">Reviews</a></li>
+                        <li><i class="fas fa-chevron-right text-gray-400 mx-2"></i></li>
+                        <li class="text-gray-500">FXTM Review</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <main id="main-content">
+            <!-- Hero Section -->
+            <div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
+                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h1 class="text-4xl font-bold mb-4">FXTM Review 2025</h1>
+                            <p class="text-xl text-blue-100 mb-6">CySEC and FCA regulated broker with competitive spreads and award-winning platforms</p>
+                            <div class="flex items-center space-x-4">
+                                <div class="flex items-center">
+                                    <div class="text-yellow-400 text-xl mr-2">★★★★☆</div>
+                                    <span class="text-lg font-semibold">4.3/5.0</span>
+                                </div>
+                                <div class="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                                    CySEC & FCA Regulated
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hidden md:block">
+                            <img src="/static/logos/fxtm.png" alt="FXTM Logo" class="h-16 w-auto">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="bg-white py-8 border-b">
+                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-blue-600">1.3</div>
+                            <div class="text-sm text-gray-600">Min Spread (pips)</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-blue-600">$10</div>
+                            <div class="text-sm text-gray-600">Min Deposit</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-blue-600">1:1000</div>
+                            <div class="text-sm text-gray-600">Max Leverage</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-blue-600">2011</div>
+                            <div class="text-sm text-gray-600">Founded</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Main Review Content -->
+                    <div class="lg:col-span-2">
+                        <!-- Overview -->
+                        <section class="mb-12">
+                            <h2 class="text-3xl font-bold mb-6">FXTM Overview</h2>
+                            <p class="text-blue-600 mb-6 text-lg leading-relaxed">
+                                FXTM (ForexTime) is a well-established forex and CFD broker founded in 2011. 
+                                The company is regulated by multiple top-tier authorities including CySEC in Cyprus 
+                                and FCA in the United Kingdom, providing strong investor protection and regulatory oversight.
+                            </p>
+                            <p class="text-blue-600 mb-6 leading-relaxed">
+                                Known for its competitive spreads starting from 1.3 pips, comprehensive educational resources, 
+                                and award-winning trading platforms, FXTM serves traders across the globe with a focus on 
+                                transparency and client satisfaction. The broker offers multiple account types to accommodate 
+                                different trading styles and experience levels.
+                            </p>
+                        </section>
+
+                        <!-- Pros and Cons -->
+                        <section class="mb-12">
+                            <h2 class="text-3xl font-bold mb-6">Pros and Cons</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="bg-green-50 rounded-lg p-6">
+                                    <h3 class="text-xl font-semibold text-green-800 mb-4 flex items-center">
+                                        <i class="fas fa-check-circle mr-2"></i>
+                                        Pros
+                                    </h3>
+                                    <ul class="space-y-2 text-green-700">
+                                        <li class="flex items-start">
+                                            <i class="fas fa-plus text-green-500 mt-1 mr-2 text-sm"></i>
+                                            Multiple tier-1 regulations (CySEC, FCA)
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fas fa-plus text-green-500 mt-1 mr-2 text-sm"></i>
+                                            Competitive spreads from 1.3 pips
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fas fa-plus text-green-500 mt-1 mr-2 text-sm"></i>
+                                            Comprehensive educational resources
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fas fa-plus text-green-500 mt-1 mr-2 text-sm"></i>
+                                            Award-winning trading platforms
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fas fa-plus text-green-500 mt-1 mr-2 text-sm"></i>
+                                            Low minimum deposit ($10)
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fas fa-plus text-green-500 mt-1 mr-2 text-sm"></i>
+                                            Multiple account types available
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="bg-red-50 rounded-lg p-6">
+                                    <h3 class="text-xl font-semibold text-red-800 mb-4 flex items-center">
+                                        <i class="fas fa-times-circle mr-2"></i>
+                                        Cons
+                                    </h3>
+                                    <ul class="space-y-2 text-red-700">
+                                        <li class="flex items-start">
+                                            <i class="fas fa-minus text-red-500 mt-1 mr-2 text-sm"></i>
+                                            Higher spreads compared to ECN brokers
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fas fa-minus text-red-500 mt-1 mr-2 text-sm"></i>
+                                            Limited cryptocurrency offerings
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fas fa-minus text-red-500 mt-1 mr-2 text-sm"></i>
+                                            No US clients accepted
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="fas fa-minus text-red-500 mt-1 mr-2 text-sm"></i>
+                                            Swap fees can be high
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Trading Platforms -->
+                        <section class="mb-12">
+                            <h2 class="text-3xl font-bold mb-6">Trading Platforms</h2>
+                            <div class="space-y-6">
+                                <div class="bg-white rounded-lg shadow-lg p-6 border">
+                                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                                        <i class="fas fa-desktop text-blue-600 mr-2"></i>
+                                        MetaTrader 4 (MT4)
+                                    </h3>
+                                    <p class="text-blue-600 mb-4">
+                                        The industry-standard trading platform with advanced charting tools, 
+                                        automated trading capabilities, and extensive customization options.
+                                    </p>
+                                    <ul class="text-blue-600 space-y-1">
+                                        <li>• 30+ built-in technical indicators</li>
+                                        <li>• Expert Advisors (EAs) support</li>
+                                        <li>• One-click trading execution</li>
+                                        <li>• Mobile and web versions available</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-white rounded-lg shadow-lg p-6 border">
+                                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                                        <i class="fas fa-chart-line text-blue-600 mr-2"></i>
+                                        MetaTrader 5 (MT5)
+                                    </h3>
+                                    <p class="text-blue-600 mb-4">
+                                        Next-generation platform with enhanced features, more timeframes, 
+                                        and improved order management for multi-asset trading.
+                                    </p>
+                                    <ul class="text-blue-600 space-y-1">
+                                        <li>• 38 built-in technical indicators</li>
+                                        <li>• 21 timeframes for analysis</li>
+                                        <li>• Advanced order types</li>
+                                        <li>• Economic calendar integration</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-white rounded-lg shadow-lg p-6 border">
+                                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                                        <i class="fas fa-mobile-alt text-blue-600 mr-2"></i>
+                                        FXTM Trader App
+                                    </h3>
+                                    <p class="text-blue-600 mb-4">
+                                        Proprietary mobile trading app designed for on-the-go trading 
+                                        with intuitive interface and essential trading tools.
+                                    </p>
+                                    <ul class="text-blue-600 space-y-1">
+                                        <li>• User-friendly mobile interface</li>
+                                        <li>• Real-time market data</li>
+                                        <li>• Push notifications</li>
+                                        <li>• Account management features</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Account Types -->
+                        <section class="mb-12">
+                            <h2 class="text-3xl font-bold mb-6">Account Types</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="bg-white rounded-lg shadow-lg p-6 border">
+                                    <h3 class="text-xl font-semibold mb-4 text-blue-800">Standard Account</h3>
+                                    <div class="space-y-3">
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Min Deposit:</span>
+                                            <span class="font-semibold">$10</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Spreads:</span>
+                                            <span class="font-semibold">From 1.3 pips</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Commission:</span>
+                                            <span class="font-semibold">None</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Platforms:</span>
+                                            <span class="font-semibold">MT4, MT5</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="bg-white rounded-lg shadow-lg p-6 border border-blue-500">
+                                    <div class="flex items-center justify-between mb-4">
+                                        <h3 class="text-xl font-semibold text-blue-800">ECN Account</h3>
+                                        <span class="bg-blue-500 text-white px-2 py-1 rounded text-sm">Popular</span>
+                                    </div>
+                                    <div class="space-y-3">
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Min Deposit:</span>
+                                            <span class="font-semibold">$200</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Spreads:</span>
+                                            <span class="font-semibold">From 0.1 pips</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Commission:</span>
+                                            <span class="font-semibold">$5/lot</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Platforms:</span>
+                                            <span class="font-semibold">MT4, MT5</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Regulation -->
+                        <section class="mb-12">
+                            <h2 class="text-3xl font-bold mb-6">Regulation & Safety</h2>
+                            <div class="bg-green-50 rounded-lg p-6 border border-green-200">
+                                <div class="flex items-center mb-4">
+                                    <i class="fas fa-shield-alt text-green-600 text-2xl mr-3"></i>
+                                    <h3 class="text-xl font-semibold text-green-800">Multi-Tier Regulation</h3>
+                                </div>
+                                <p class="text-green-700 mb-4">
+                                    FXTM is regulated by multiple top-tier financial authorities including CySEC 
+                                    (Cyprus Securities and Exchange Commission) and FCA (Financial Conduct Authority) 
+                                    in the UK, ensuring the highest standards of client protection and regulatory compliance.
+                                </p>
+                                <ul class="text-green-700 space-y-2">
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                        Client funds segregated in tier-1 banks
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                        Investor compensation scheme coverage
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                        Negative balance protection
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                        Regular regulatory audits and compliance
+                                    </li>
+                                </ul>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- Sidebar -->
+                    <div class="lg:col-span-1">
+                        <!-- Quick Info Card -->
+                        <div class="bg-white rounded-lg shadow-lg p-6 mb-6 sticky top-6">
+                            <h3 class="text-xl font-semibold mb-4">Quick Info</h3>
+                            <div class="space-y-3 text-sm">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Founded:</span>
+                                    <span class="font-semibold">2011</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Headquarters:</span>
+                                    <span class="font-semibold">Limassol, Cyprus</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Regulation:</span>
+                                    <span class="font-semibold">CySEC, FCA</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Min Deposit:</span>
+                                    <span class="font-semibold">$10</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Max Leverage:</span>
+                                    <span class="font-semibold">1:1000</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Platforms:</span>
+                                    <span class="font-semibold">MT4, MT5, Mobile</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Instruments:</span>
+                                    <span class="font-semibold">250+</span>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-6 pt-6 border-t">
+                                <a href="https://fxtm.com" target="_blank" rel="noopener noreferrer" 
+                                   class="block w-full bg-blue-600 text-white text-center py-3 rounded-lg hover:bg-blue-700 transition-colors font-semibold">
+                                    Visit FXTM
+                                    <i class="fas fa-external-link-alt ml-2"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Rating Breakdown -->
+                        <div class="bg-white rounded-lg shadow-lg p-6">
+                            <h3 class="text-xl font-semibold mb-4">Rating Breakdown</h3>
+                            <div class="space-y-3">
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-sm text-gray-600">Regulation</span>
+                                        <span class="text-sm font-semibold">4.8</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-green-500 h-2 rounded-full" style="width: 96%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-sm text-gray-600">Trading Costs</span>
+                                        <span class="text-sm font-semibold">4.0</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-yellow-500 h-2 rounded-full" style="width: 80%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-sm text-gray-600">Platforms</span>
+                                        <span class="text-sm font-semibold">4.2</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-blue-500 h-2 rounded-full" style="width: 84%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-sm text-gray-600">Customer Service</span>
+                                        <span class="text-sm font-semibold">4.5</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-blue-500 h-2 rounded-full" style="width: 90%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-sm text-gray-600">Education</span>
+                                        <span class="text-sm font-semibold">4.7</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-green-500 h-2 rounded-full" style="width: 94%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-4 border-t">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-semibold">Overall Rating</span>
+                                    <div class="flex items-center">
+                                        <span class="text-2xl font-bold text-blue-600 mr-2">4.3</span>
+                                        <div class="text-yellow-400">★★★★☆</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA Section -->
+            <div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
+                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <h2 class="text-3xl font-bold mb-4">Ready to Start Trading?</h2>
+                    <p class="text-xl mb-8 text-blue-100">
+                        Find the perfect broker for your trading style with our intelligent recommendation system
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <a href="/" class="bg-white text-blue-800 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors">
+                            Get Broker Recommendations
+                        </a>
+                        <a href="/compare" class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-800 transition-colors">
+                            Compare Brokers
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-gray-900 text-white py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                    <div>
+                        <div class="flex items-center space-x-2 mb-4">
+                            <i class="fas fa-chart-line text-blue-400 text-2xl"></i>
+                            <span class="text-xl font-bold">BrokerAnalysis</span>
+                        </div>
+                        <p class="text-gray-400">Find your perfect forex broker with our intelligent recommendation system.</p>
+                        <div class="mt-4">
+                            <p class="text-sm text-gray-400">30 N Gould St Ste R</p>
+                            <p class="text-sm text-gray-400">Sheridan, WY 82801, US</p>
+                            <p class="text-sm text-gray-400">Phone: (801)-893-2577</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold mb-4">Product</h3>
+                        <ul class="space-y-2 text-gray-400">
+                            <li><a href="/" class="hover:text-white transition-colors">Home</a></li>
+                            <li><a href="/reviews" class="hover:text-white transition-colors">Reviews</a></li>
+                            <li><a href="/compare" class="hover:text-white transition-colors">Compare</a></li>
+                            <li><a href="/simulator" class="hover:text-white transition-colors">Simulator</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold mb-4">Resources</h3>
+                        <ul class="space-y-2 text-gray-400">
+                            <li><a href="/about" class="hover:text-white transition-colors">About</a></li>
+                            <li><a href="#" class="hover:text-white transition-colors">Methodology</a></li>
+                            <li><a href="#" class="hover:text-white transition-colors">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold mb-4">Legal</h3>
+                        <ul class="space-y-2 text-gray-400">
+                            <li><a href="#" class="hover:text-white transition-colors">Privacy Policy</a></li>
+                            <li><a href="#" class="hover:text-white transition-colors">Terms of Service</a></li>
+                            <li><a href="#" class="hover:text-white transition-colors">Disclaimer</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                    <p>&copy; 2025 BrokerAnalysis. All rights reserved. EIN: 384298140</p>
+                </div>
+            </div>
+        </footer>
+
+        <script src="/static/navigation.js"></script>
+    </body>
+    </html>
+  `);
+});
+
+// Blackbull Markets Review Page
+app.get('/reviews/blackbull-markets', (c) => {
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Blackbull Markets Review 2025 - Comprehensive Broker Analysis | Brokeranalysis</title>
+        <meta name="description" content="In-depth Blackbull Markets review 2025. Analyze trading platforms, spreads, regulation, and account types. Expert evaluation of this New Zealand forex broker.">
+        <meta name="keywords" content="Blackbull Markets review, forex broker, trading platforms, MT4, MT5, cTrader, New Zealand broker, FMA regulation">
+        
+        <!-- Open Graph -->
+        <meta property="og:title" content="Blackbull Markets Review 2025 - Expert Broker Analysis">
+        <meta property="og:description" content="Comprehensive review of Blackbull Markets. Discover trading costs, platforms, regulation, and account types in our detailed analysis.">
+        <meta property="og:type" content="article">
+        <meta property="og:url" content="https://brokeranalysis.com/reviews/blackbull-markets">
+        <meta property="og:image" content="https://brokeranalysis.com/images/blackbull-markets-review.jpg">
+        
+        <!-- Twitter Card -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="Blackbull Markets Review 2025 - Expert Analysis">
+        <meta name="twitter:description" content="Complete Blackbull Markets broker review covering platforms, costs, regulation, and trading conditions.">
+        <meta name="twitter:image" content="https://brokeranalysis.com/images/blackbull-markets-review.jpg">
+        
+        <link rel="canonical" href="https://brokeranalysis.com/reviews/blackbull-markets">
+        <link href="/static/styles.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+        
+        <!-- Structured Data -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Review",
+            "itemReviewed": {
+                "@type": "FinancialService",
+                "name": "Blackbull Markets",
+                "description": "New Zealand-based forex and CFD broker offering competitive spreads and multiple trading platforms",
+                "url": "https://blackbullmarkets.com",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "NZ",
+                    "addressLocality": "Auckland"
+                }
+            },
+            "reviewRating": {
+                "@type": "Rating",
+                "ratingValue": "4.3",
+                "bestRating": "5",
+                "worstRating": "1"
+            },
+            "author": {
+                "@type": "Organization",
+                "name": "Brokeranalysis",
+                "url": "https://brokeranalysis.com"
+            },
+            "datePublished": "2025-01-21",
+            "reviewBody": "Blackbull Markets is a New Zealand-based broker offering competitive trading conditions with tight spreads and fast execution. Regulated by FMA, it provides access to forex, indices, commodities, and cryptocurrencies through MT4, MT5, and cTrader platforms."
+        }
+        </script>
+        
+        <!-- Breadcrumb Structured Data -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://brokeranalysis.com"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Broker Reviews",
+                    "item": "https://brokeranalysis.com/reviews"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "Blackbull Markets Review",
+                    "item": "https://brokeranalysis.com/reviews/blackbull-markets"
+                }
+            ]
+        }
+        </script>
+    </head>
+    <body class="bg-gray-50">
+        <!-- Navigation -->
+        <nav class="bg-white shadow-sm border-b">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex items-center">
+                        <a href="/" class="text-2xl font-bold text-blue-600">Brokeranalysis</a>
+                    </div>
+                    <div class="hidden md:flex items-center space-x-8">
+                        <a href="/" class="text-gray-700 hover:text-blue-600">Home</a>
+                        <a href="/reviews" class="text-blue-600 font-medium">Reviews</a>
+                        <a href="/compare" class="text-gray-700 hover:text-blue-600">Compare</a>
+                        <a href="/education" class="text-gray-700 hover:text-blue-600">Education</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Breadcrumb -->
+        <div class="bg-gray-100 py-3">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <nav class="flex" aria-label="Breadcrumb">
+                    <ol class="flex items-center space-x-2">
+                        <li><a href="/" class="text-gray-500 hover:text-gray-700">Home</a></li>
+                        <li><i class="fas fa-chevron-right text-gray-400 text-sm"></i></li>
+                        <li><a href="/reviews" class="text-gray-500 hover:text-gray-700">Reviews</a></li>
+                        <li><i class="fas fa-chevron-right text-gray-400 text-sm"></i></li>
+                        <li class="text-gray-900 font-medium">Blackbull Markets</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Main Content -->
+                <div class="lg:col-span-2">
+                    <!-- Hero Section -->
+                    <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+                        <div class="flex items-center mb-4">
+                            <img src="https://via.placeholder.com/80x80?text=BB" alt="Blackbull Markets Logo" class="w-20 h-20 rounded-lg mr-4">
+                            <div>
+                                <h1 class="text-3xl font-bold text-gray-900">Blackbull Markets Review</h1>
+                                <p class="text-gray-600 mt-1">New Zealand-based forex and CFD broker</p>
+                                <div class="flex items-center mt-2">
+                                    <div class="flex text-yellow-400">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                    <span class="ml-2 text-gray-600">4.3/5 (Based on our analysis)</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Quick Stats -->
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+                            <div class="text-center p-3 bg-gray-50 rounded-lg">
+                                <div class="text-2xl font-bold text-blue-600">0.0 pips</div>
+                                <div class="text-sm text-gray-600">Min Spread</div>
+                            </div>
+                            <div class="text-center p-3 bg-gray-50 rounded-lg">
+                                <div class="text-2xl font-bold text-green-600">$200</div>
+                                <div class="text-sm text-gray-600">Min Deposit</div>
+                            </div>
+                            <div class="text-center p-3 bg-gray-50 rounded-lg">
+                                <div class="text-2xl font-bold text-purple-600">1:500</div>
+                                <div class="text-sm text-gray-600">Max Leverage</div>
+                            </div>
+                            <div class="text-center p-3 bg-gray-50 rounded-lg">
+                                <div class="text-2xl font-bold text-orange-600">2014</div>
+                                <div class="text-sm text-gray-600">Founded</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Overview -->
+                    <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-4">Overview</h2>
+                        <p class="text-gray-700 mb-4">
+                            Blackbull Markets is a New Zealand-based forex and CFD broker that has been serving traders since 2014. 
+                            Known for its competitive spreads and fast execution, the broker offers access to over 26,000 tradeable instruments 
+                            across forex, indices, commodities, and cryptocurrencies.
+                        </p>
+                        <p class="text-gray-700 mb-4">
+                            The broker is regulated by the Financial Markets Authority (FMA) of New Zealand and provides multiple trading 
+                            platforms including MetaTrader 4, MetaTrader 5, and cTrader. Blackbull Markets caters to both retail and 
+                            institutional clients with various account types and competitive trading conditions.
+                        </p>
+                        <p class="text-gray-700">
+                            With a focus on transparency and client satisfaction, Blackbull Markets offers negative balance protection, 
+                            segregated client funds, and 24/5 customer support to ensure a secure and reliable trading environment.
+                        </p>
+                    </div>
+
+                    <!-- Pros and Cons -->
+                    <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-6">Pros and Cons</h2>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h3 class="text-lg font-semibold text-green-600 mb-3 flex items-center">
+                                    <i class="fas fa-check-circle mr-2"></i>Pros
+                                </h3>
+                                <ul class="space-y-2">
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                        Competitive spreads from 0.0 pips
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                        Fast execution speeds
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                        Multiple trading platforms (MT4, MT5, cTrader)
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                        FMA regulation (New Zealand)
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                        Over 26,000 tradeable instruments
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                        Negative balance protection
+                                    </li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-red-600 mb-3 flex items-center">
+                                    <i class="fas fa-times-circle mr-2"></i>Cons
+                                </h3>
+                                <ul class="space-y-2">
+                                    <li class="flex items-start">
+                                        <i class="fas fa-times text-red-500 mt-1 mr-2"></i>
+                                        Limited educational resources
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-times text-red-500 mt-1 mr-2"></i>
+                                        No proprietary trading platform
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-times text-red-500 mt-1 mr-2"></i>
+                                        Higher minimum deposit for some accounts
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-times text-red-500 mt-1 mr-2"></i>
+                                        Limited research and analysis tools
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-times text-red-500 mt-1 mr-2"></i>
+                                        No social trading features
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Trading Platforms -->
+                    <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-6">Trading Platforms</h2>
+                        
+                        <div class="space-y-6">
+                            <div class="border rounded-lg p-4">
+                                <h3 class="text-xl font-semibold text-gray-900 mb-3">MetaTrader 4 (MT4)</h3>
+                                <p class="text-gray-700 mb-3">
+                                    The world's most popular trading platform, offering advanced charting tools, automated trading capabilities, 
+                                    and a wide range of technical indicators. Perfect for both beginners and experienced traders.
+                                </p>
+                                <ul class="text-sm text-gray-600 space-y-1">
+                                    <li>• Expert Advisors (EAs) support</li>
+                                    <li>• 30+ built-in technical indicators</li>
+                                    <li>• One-click trading</li>
+                                    <li>• Mobile and desktop versions</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="border rounded-lg p-4">
+                                <h3 class="text-xl font-semibold text-gray-900 mb-3">MetaTrader 5 (MT5)</h3>
+                                <p class="text-gray-700 mb-3">
+                                    The next-generation platform with enhanced features, more timeframes, and improved order management. 
+                                    Ideal for advanced traders and multi-asset trading.
+                                </p>
+                                <ul class="text-sm text-gray-600 space-y-1">
+                                    <li>• 21 timeframes vs 9 in MT4</li>
+                                    <li>• 38 built-in technical indicators</li>
+                                    <li>• Economic calendar integration</li>
+                                    <li>• Advanced order types</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="border rounded-lg p-4">
+                                <h3 class="text-xl font-semibold text-gray-900 mb-3">cTrader</h3>
+                                <p class="text-gray-700 mb-3">
+                                    A modern, intuitive platform designed for ECN trading with advanced charting capabilities and 
+                                    level II pricing. Offers superior execution and transparency.
+                                </p>
+                                <ul class="text-sm text-gray-600 space-y-1">
+                                    <li>• Level II pricing (market depth)</li>
+                                    <li>• Advanced charting with 70+ indicators</li>
+                                    <li>• cAlgo for algorithmic trading</li>
+                                    <li>• Copy trading functionality</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Account Types -->
+                    <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-6">Account Types</h2>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="border rounded-lg p-4">
+                                <h3 class="text-xl font-semibold text-blue-600 mb-3">Standard Account</h3>
+                                <ul class="space-y-2 text-gray-700">
+                                    <li><strong>Minimum Deposit:</strong> $200</li>
+                                    <li><strong>Spreads:</strong> From 1.0 pips</li>
+                                    <li><strong>Commission:</strong> No commission</li>
+                                    <li><strong>Leverage:</strong> Up to 1:500</li>
+                                    <li><strong>Platforms:</strong> MT4, MT5, cTrader</li>
+                                </ul>
+                                <p class="text-sm text-gray-600 mt-3">
+                                    Ideal for beginners and traders who prefer commission-free trading with competitive spreads.
+                                </p>
+                            </div>
+                            
+                            <div class="border rounded-lg p-4">
+                                <h3 class="text-xl font-semibold text-green-600 mb-3">Prime Account</h3>
+                                <ul class="space-y-2 text-gray-700">
+                                    <li><strong>Minimum Deposit:</strong> $2,000</li>
+                                    <li><strong>Spreads:</strong> From 0.0 pips</li>
+                                    <li><strong>Commission:</strong> $3 per lot</li>
+                                    <li><strong>Leverage:</strong> Up to 1:500</li>
+                                    <li><strong>Platforms:</strong> MT4, MT5, cTrader</li>
+                                </ul>
+                                <p class="text-sm text-gray-600 mt-3">
+                                    Perfect for active traders seeking the tightest spreads and willing to pay commission for better pricing.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Regulation and Safety -->
+                    <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-4">Regulation and Safety</h2>
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+                            <h3 class="text-lg font-semibold text-green-800 mb-2">FMA Regulated</h3>
+                            <p class="text-green-700">
+                                Blackbull Markets is regulated by the Financial Markets Authority (FMA) of New Zealand, 
+                                ensuring compliance with strict financial standards and client protection measures.
+                            </p>
+                        </div>
+                        
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <h4 class="font-semibold text-gray-900 mb-2">Client Fund Protection</h4>
+                                <ul class="text-sm text-gray-700 space-y-1">
+                                    <li>• Segregated client accounts</li>
+                                    <li>• Funds held in tier-1 banks</li>
+                                    <li>• Negative balance protection</li>
+                                </ul>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <h4 class="font-semibold text-gray-900 mb-2">Risk Management</h4>
+                                <ul class="text-sm text-gray-700 space-y-1">
+                                    <li>• Stop loss and take profit orders</li>
+                                    <li>• Margin call protection</li>
+                                    <li>• Real-time risk monitoring</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="lg:col-span-1">
+                    <!-- Quick Info -->
+                    <div class="bg-white rounded-lg shadow-sm p-6 mb-6 sticky top-4">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Info</h3>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Founded:</span>
+                                <span class="font-medium">2014</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Headquarters:</span>
+                                <span class="font-medium">Auckland, NZ</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Regulation:</span>
+                                <span class="font-medium">FMA (New Zealand)</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Min Deposit:</span>
+                                <span class="font-medium">$200</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Max Leverage:</span>
+                                <span class="font-medium">1:500</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Platforms:</span>
+                                <span class="font-medium">MT4, MT5, cTrader</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Instruments:</span>
+                                <span class="font-medium">26,000+</span>
+                            </div>
+                        </div>
+                        
+                        <a href="https://blackbullmarkets.com" target="_blank" rel="noopener noreferrer" 
+                           class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors mt-6 block text-center">
+                            Visit Blackbull Markets
+                        </a>
+                    </div>
+
+                    <!-- Rating Breakdown -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Rating Breakdown</h3>
+                        <div class="space-y-3">
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span>Regulation</span>
+                                    <span>4.5/5</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-green-500 h-2 rounded-full" style="width: 90%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span>Trading Costs</span>
+                                    <span>4.4/5</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-green-500 h-2 rounded-full" style="width: 88%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span>Platforms</span>
+                                    <span>4.2/5</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-blue-500 h-2 rounded-full" style="width: 84%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span>Customer Service</span>
+                                    <span>4.1/5</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-blue-500 h-2 rounded-full" style="width: 82%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span>Education</span>
+                                    <span>3.8/5</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-yellow-500 h-2 rounded-full" style="width: 76%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 pt-4 border-t">
+                            <div class="flex justify-between items-center">
+                                <span class="text-lg font-semibold">Overall Rating</span>
+                                <span class="text-2xl font-bold text-blue-600">4.3/5</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ready to Start Trading CTA -->
+            <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-8 text-center text-white mt-12">
+                <h2 class="text-3xl font-bold mb-4">Ready to Start Trading with Blackbull Markets?</h2>
+                <p class="text-xl mb-6 opacity-90">Join thousands of traders who trust Blackbull Markets for their trading needs</p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="https://blackbullmarkets.com" target="_blank" rel="noopener noreferrer" 
+                       class="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+                        Open Live Account
+                    </a>
+                    <a href="https://blackbullmarkets.com/demo" target="_blank" rel="noopener noreferrer" 
+                       class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors">
+                        Try Demo Account
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="bg-gray-900 text-white py-12 mt-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                    <div>
+                        <h3 class="text-xl font-bold mb-4">Brokeranalysis</h3>
+                        <p class="text-gray-400 text-sm">
+                            Your trusted source for broker reviews and trading insights. We help traders make informed decisions.
+                        </p>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold mb-4">Reviews</h4>
+                        <ul class="space-y-2 text-sm text-gray-400">
+                            <li><a href="/reviews/fp-markets" class="hover:text-white">FP Markets</a></li>
+                            <li><a href="/reviews/fxtm" class="hover:text-white">FXTM</a></li>
+                            <li><a href="/reviews/blackbull-markets" class="hover:text-white">Blackbull Markets</a></li>
+                            <li><a href="/reviews/eightcap" class="hover:text-white">Eightcap</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold mb-4">Tools</h4>
+                        <ul class="space-y-2 text-sm text-gray-400">
+                            <li><a href="/compare" class="hover:text-white">Broker Comparison</a></li>
+                            <li><a href="/calculator" class="hover:text-white">Trading Calculator</a></li>
+                            <li><a href="/education" class="hover:text-white">Education Center</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold mb-4">Contact</h4>
+                        <div class="text-sm text-gray-400 space-y-2">
+                            <p>30 N Gould St Ste R<br>Sheridan, WY 82801, US</p>
+                            <p>Phone: (801)-893-2577</p>
+                            <p>EIN: 384298140</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
+                    <p>&copy; 2025 Brokeranalysis. All rights reserved. Trading involves risk and may not be suitable for all investors.</p>
+                </div>
+            </div>
+        </footer>
+    </body>
+    </html>
+  `);
+});
+
+// Eightcap Review Page
+app.get('/reviews/eightcap', (c) => {
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Eightcap Review 2025: Comprehensive Broker Analysis | Brokeranalysis</title>
+        <meta name="description" content="In-depth Eightcap review covering trading platforms, fees, regulation, and account types. Expert analysis of this Australian forex and CFD broker for 2025.">
+        <meta name="keywords" content="Eightcap review, Eightcap broker, forex trading, CFD trading, MT4, MT5, TradingView, Australian broker, ASIC regulation">
+        <meta name="author" content="Brokeranalysis">
+        <meta name="robots" content="index, follow">
+        
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="article">
+        <meta property="og:url" content="https://brokeranalysis.com/reviews/eightcap">
+        <meta property="og:title" content="Eightcap Review 2025: Comprehensive Broker Analysis">
+        <meta property="og:description" content="Expert review of Eightcap - Australian forex and CFD broker. Analysis of trading platforms, fees, regulation, and account types.">
+        <meta property="og:image" content="https://brokeranalysis.com/images/eightcap-review-og.jpg">
+        <meta property="og:site_name" content="Brokeranalysis">
+        
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:url" content="https://brokeranalysis.com/reviews/eightcap">
+        <meta property="twitter:title" content="Eightcap Review 2025: Comprehensive Broker Analysis">
+        <meta property="twitter:description" content="Expert review of Eightcap - Australian forex and CFD broker. Analysis of trading platforms, fees, regulation, and account types.">
+        <meta property="twitter:image" content="https://brokeranalysis.com/images/eightcap-review-twitter.jpg">
+        
+        <!-- Canonical URL -->
+        <link rel="canonical" href="https://brokeranalysis.com/reviews/eightcap">
+        
+        <!-- Favicon -->
+        <link rel="icon" type="image/x-icon" href="/favicon.ico">
+        
+        <!-- Tailwind CSS -->
+        <link href="/static/styles.css" rel="stylesheet">
+        
+        <!-- Structured Data -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "Review",
+          "itemReviewed": {
+            "@type": "FinancialService",
+            "name": "Eightcap",
+            "description": "Australian forex and CFD broker offering MT4, MT5, and TradingView platforms",
+            "url": "https://eightcap.com",
+            "address": {
+              "@type": "PostalAddress",
+              "addressCountry": "AU",
+              "addressLocality": "Melbourne"
+            }
+          },
+          "author": {
+            "@type": "Organization",
+            "name": "Brokeranalysis",
+            "url": "https://brokeranalysis.com"
+          },
+          "reviewRating": {
+            "@type": "Rating",
+            "ratingValue": "8.2",
+            "bestRating": "10",
+            "worstRating": "1"
+          },
+          "datePublished": "2025-01-21",
+          "dateModified": "2025-01-21",
+          "reviewBody": "Eightcap is a well-regulated Australian broker offering competitive spreads, multiple trading platforms, and strong regulatory oversight from ASIC."
+        }
+        </script>
+        
+        <!-- Breadcrumb Structured Data -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://brokeranalysis.com"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Broker Reviews",
+              "item": "https://brokeranalysis.com/reviews"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "Eightcap Review",
+              "item": "https://brokeranalysis.com/reviews/eightcap"
+            }
+          ]
+        }
+        </script>
+    </head>
+    <body class="bg-gray-50 text-gray-900">
+        <!-- Navigation -->
+        <nav class="bg-white shadow-sm border-b">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex items-center">
+                        <a href="/" class="text-2xl font-bold text-blue-600">Brokeranalysis</a>
+                    </div>
+                    <div class="hidden md:flex items-center space-x-8">
+                        <a href="/" class="text-gray-600 hover:text-gray-900">Home</a>
+                        <a href="/reviews" class="text-gray-600 hover:text-gray-900">Reviews</a>
+                        <a href="/compare" class="text-gray-600 hover:text-gray-900">Compare</a>
+                        <a href="/education" class="text-gray-600 hover:text-gray-900">Education</a>
+                        <a href="/about" class="text-gray-600 hover:text-gray-900">About</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Breadcrumb -->
+        <div class="bg-gray-100 py-3">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <nav class="flex" aria-label="Breadcrumb">
+                    <ol class="flex items-center space-x-2">
+                        <li><a href="/" class="text-blue-600 hover:text-blue-800">Home</a></li>
+                        <li class="text-gray-500">/</li>
+                        <li><a href="/reviews" class="text-blue-600 hover:text-blue-800">Reviews</a></li>
+                        <li class="text-gray-500">/</li>
+                        <li class="text-gray-900">Eightcap Review</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Hero Section -->
+        <section class="bg-white py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h1 class="text-4xl font-bold text-gray-900 mb-4">Eightcap Review 2025</h1>
+                    <p class="text-xl text-gray-600 mb-8">Comprehensive analysis of the Australian forex and CFD broker</p>
+                    
+                    <!-- Quick Stats -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <div class="text-2xl font-bold text-blue-600">0.0 pips</div>
+                            <div class="text-sm text-gray-600">Min Spread</div>
+                        </div>
+                        <div class="bg-green-50 p-4 rounded-lg">
+                            <div class="text-2xl font-bold text-green-600">$100</div>
+                            <div class="text-sm text-gray-600">Min Deposit</div>
+                        </div>
+                        <div class="bg-purple-50 p-4 rounded-lg">
+                            <div class="text-2xl font-bold text-purple-600">1:500</div>
+                            <div class="text-sm text-gray-600">Max Leverage</div>
+                        </div>
+                        <div class="bg-orange-50 p-4 rounded-lg">
+                            <div class="text-2xl font-bold text-orange-600">2009</div>
+                            <div class="text-sm text-gray-600">Founded</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Content -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Main Content -->
+                <div class="lg:col-span-2">
+                    <!-- Overview -->
+                    <section class="bg-white rounded-lg shadow-sm p-8 mb-8">
+                        <h2 class="text-3xl font-bold mb-6">Eightcap Overview</h2>
+                        <p class="text-gray-700 mb-4">
+                            Eightcap is an Australian-based forex and CFD broker that has been serving traders since 2009. 
+                            Regulated by the Australian Securities and Investments Commission (ASIC), Eightcap offers 
+                            competitive trading conditions with tight spreads and fast execution across multiple platforms.
+                        </p>
+                        <p class="text-gray-700 mb-4">
+                            The broker provides access to over 800 trading instruments including forex, indices, 
+                            commodities, and cryptocurrencies. With offices in Melbourne and additional regulatory 
+                            coverage in other jurisdictions, Eightcap has established itself as a reliable choice 
+                            for both beginner and experienced traders.
+                        </p>
+                        <p class="text-gray-700">
+                            Eightcap's commitment to transparency, competitive pricing, and advanced trading technology 
+                            makes it a popular choice among Australian and international traders seeking a trustworthy 
+                            trading environment.
+                        </p>
+                    </section>
+
+                    <!-- Pros and Cons -->
+                    <section class="bg-white rounded-lg shadow-sm p-8 mb-8">
+                        <h2 class="text-3xl font-bold mb-6">Pros and Cons</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h3 class="text-xl font-semibold text-green-600 mb-4">Pros</h3>
+                                <ul class="space-y-2">
+                                    <li class="flex items-start">
+                                        <span class="text-green-500 mr-2">✓</span>
+                                        <span>ASIC regulated with strong oversight</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-500 mr-2">✓</span>
+                                        <span>Competitive spreads from 0.0 pips</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-500 mr-2">✓</span>
+                                        <span>Multiple trading platforms (MT4, MT5, TradingView)</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-500 mr-2">✓</span>
+                                        <span>Fast execution and reliable infrastructure</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-500 mr-2">✓</span>
+                                        <span>Comprehensive educational resources</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-500 mr-2">✓</span>
+                                        <span>24/5 customer support</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-red-600 mb-4">Cons</h3>
+                                <ul class="space-y-2">
+                                    <li class="flex items-start">
+                                        <span class="text-red-500 mr-2">✗</span>
+                                        <span>Limited regulatory coverage outside Australia</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-red-500 mr-2">✗</span>
+                                        <span>No proprietary trading platform</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-red-500 mr-2">✗</span>
+                                        <span>Commission charges on Raw account</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-red-500 mr-2">✗</span>
+                                        <span>Limited research and analysis tools</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Trading Platforms -->
+                    <section class="bg-white rounded-lg shadow-sm p-8 mb-8">
+                        <h2 class="text-3xl font-bold mb-6">Trading Platforms</h2>
+                        
+                        <div class="space-y-6">
+                            <div class="border-l-4 border-blue-500 pl-6">
+                                <h3 class="text-xl font-semibold mb-3">MetaTrader 4 (MT4)</h3>
+                                <p class="text-gray-700">
+                                    The world's most popular trading platform, offering advanced charting, 
+                                    automated trading capabilities, and a wide range of technical indicators. 
+                                    Perfect for forex and CFD trading with expert advisors support.
+                                </p>
+                            </div>
+                            
+                            <div class="border-l-4 border-green-500 pl-6">
+                                <h3 class="text-xl font-semibold mb-3">MetaTrader 5 (MT5)</h3>
+                                <p class="text-gray-700">
+                                    The next-generation platform with enhanced features including more timeframes, 
+                                    additional order types, and improved backtesting capabilities. Ideal for 
+                                    multi-asset trading and advanced market analysis.
+                                </p>
+                            </div>
+                            
+                            <div class="border-l-4 border-purple-500 pl-6">
+                                <h3 class="text-xl font-semibold mb-3">TradingView</h3>
+                                <p class="text-gray-700">
+                                    Web-based platform with professional charting tools, social trading features, 
+                                    and advanced technical analysis capabilities. Access to a vast library of 
+                                    indicators and trading ideas from the community.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Account Types -->
+                    <section class="bg-white rounded-lg shadow-sm p-8 mb-8">
+                        <h2 class="text-3xl font-bold mb-6">Account Types</h2>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="border rounded-lg p-6">
+                                <h3 class="text-xl font-semibold mb-4 text-blue-600">Standard Account</h3>
+                                <ul class="space-y-2 text-gray-700">
+                                    <li><strong>Min Deposit:</strong> $100</li>
+                                    <li><strong>Spreads:</strong> From 1.0 pips</li>
+                                    <li><strong>Commission:</strong> No commission</li>
+                                    <li><strong>Leverage:</strong> Up to 1:500</li>
+                                    <li><strong>Platforms:</strong> MT4, MT5, TradingView</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="border rounded-lg p-6">
+                                <h3 class="text-xl font-semibold mb-4 text-green-600">Raw Account</h3>
+                                <ul class="space-y-2 text-gray-700">
+                                    <li><strong>Min Deposit:</strong> $100</li>
+                                    <li><strong>Spreads:</strong> From 0.0 pips</li>
+                                    <li><strong>Commission:</strong> $3.50 per lot</li>
+                                    <li><strong>Leverage:</strong> Up to 1:500</li>
+                                    <li><strong>Platforms:</strong> MT4, MT5, TradingView</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Regulation and Safety -->
+                    <section class="bg-white rounded-lg shadow-sm p-8">
+                        <h2 class="text-3xl font-bold mb-6">Regulation and Safety</h2>
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <div class="bg-green-100 p-2 rounded-full mr-4">
+                                    <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-semibold">ASIC Regulation</h3>
+                                    <p class="text-gray-700">Regulated by the Australian Securities and Investments Commission (ASIC) under license number 391441.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="bg-blue-100 p-2 rounded-full mr-4">
+                                    <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-semibold">Client Fund Protection</h3>
+                                    <p class="text-gray-700">Client funds are segregated and held in tier-1 banks, providing additional security for trader deposits.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="lg:col-span-1">
+                    <!-- Quick Info -->
+                    <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+                        <h3 class="text-xl font-semibold mb-4">Quick Info</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Founded:</span>
+                                <span class="font-medium">2009</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Headquarters:</span>
+                                <span class="font-medium">Melbourne, Australia</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Regulation:</span>
+                                <span class="font-medium">ASIC</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Min Deposit:</span>
+                                <span class="font-medium">$100</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Max Leverage:</span>
+                                <span class="font-medium">1:500</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Platforms:</span>
+                                <span class="font-medium">MT4, MT5, TradingView</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Instruments:</span>
+                                <span class="font-medium">800+</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Visit Broker CTA -->
+                    <div class="bg-blue-600 text-white rounded-lg p-6 mb-6 text-center">
+                        <h3 class="text-xl font-semibold mb-2">Visit Eightcap</h3>
+                        <p class="mb-4">Start trading with competitive spreads and reliable execution</p>
+                        <a href="https://eightcap.com" target="_blank" rel="noopener noreferrer" 
+                           class="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+                            Open Account
+                        </a>
+                        <p class="text-xs mt-2 opacity-75">Risk warning: Trading involves risk</p>
+                    </div>
+
+                    <!-- Rating Breakdown -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h3 class="text-xl font-semibold mb-4">Rating Breakdown</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm text-gray-600">Regulation</span>
+                                    <span class="text-sm font-medium">9.0/10</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-green-500 h-2 rounded-full" style="width: 90%"></div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm text-gray-600">Trading Costs</span>
+                                    <span class="text-sm font-medium">8.5/10</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-green-500 h-2 rounded-full" style="width: 85%"></div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm text-gray-600">Platforms</span>
+                                    <span class="text-sm font-medium">8.0/10</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-blue-500 h-2 rounded-full" style="width: 80%"></div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm text-gray-600">Customer Service</span>
+                                    <span class="text-sm font-medium">7.8/10</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-blue-500 h-2 rounded-full" style="width: 78%"></div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm text-gray-600">Education</span>
+                                    <span class="text-sm font-medium">7.5/10</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-yellow-500 h-2 rounded-full" style="width: 75%"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="border-t pt-4 mt-4">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-lg font-semibold">Overall Rating</span>
+                                    <span class="text-2xl font-bold text-blue-600">8.2/10</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ready to Start Trading CTA -->
+        <section class="bg-blue-600 text-white py-16">
+            <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl font-bold mb-4">Ready to Start Trading with Eightcap?</h2>
+                <p class="text-xl mb-8">Join thousands of traders who trust Eightcap for their trading needs</p>
+                <a href="https://eightcap.com" target="_blank" rel="noopener noreferrer" 
+                   class="bg-white text-blue-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-colors">
+                    Open Your Account Today
+                </a>
+                <p class="text-sm mt-4 opacity-75">Risk warning: CFDs are complex instruments and come with a high risk of losing money rapidly due to leverage.</p>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-gray-900 text-white py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Brokeranalysis</h3>
+                        <p class="text-gray-400 mb-4">Your trusted source for broker reviews and trading insights.</p>
+                        <div class="text-sm text-gray-400">
+                            <p>30 N Gould St Ste R</p>
+                            <p>Sheridan, WY 82801, US</p>
+                            <p>EIN: 384298140</p>
+                            <p>Phone: (801)-893-2577</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold mb-4">Reviews</h4>
+                        <ul class="space-y-2 text-gray-400">
+                            <li><a href="/reviews/fp-markets" class="hover:text-white">FP Markets</a></li>
+                            <li><a href="/reviews/fxtm" class="hover:text-white">FXTM</a></li>
+                            <li><a href="/reviews/blackbull-markets" class="hover:text-white">Blackbull Markets</a></li>
+                            <li><a href="/reviews/eightcap" class="hover:text-white">Eightcap</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold mb-4">Resources</h4>
+                        <ul class="space-y-2 text-gray-400">
+                            <li><a href="/education" class="hover:text-white">Education</a></li>
+                            <li><a href="/compare" class="hover:text-white">Compare Brokers</a></li>
+                            <li><a href="/news" class="hover:text-white">Market News</a></li>
+                            <li><a href="/tools" class="hover:text-white">Trading Tools</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold mb-4">Company</h4>
+                        <ul class="space-y-2 text-gray-400">
+                            <li><a href="/about" class="hover:text-white">About Us</a></li>
+                            <li><a href="/contact" class="hover:text-white">Contact</a></li>
+                            <li><a href="/privacy" class="hover:text-white">Privacy Policy</a></li>
+                            <li><a href="/terms" class="hover:text-white">Terms of Service</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                    <p>&copy; 2025 Brokeranalysis. All rights reserved.</p>
+                    <p class="mt-2 text-sm">Risk Warning: Trading forex and CFDs involves significant risk and may not be suitable for all investors.</p>
+                </div>
+            </div>
+        </footer>
+        
+        <script src="/js/navigation.js"></script>
+    </body>
+    </html>
+  `);
+});
+
+// Octa Review Page
+app.get('/reviews/octa', (c) => {
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Octa Review 2025: Comprehensive Broker Analysis | Brokeranalysis</title>
+        <meta name="description" content="In-depth Octa review 2025. Analyze trading platforms, account types, regulation, fees, and safety. Expert evaluation of this global forex and CFD broker.">
+        <meta name="keywords" content="Octa review, Octa broker, forex trading, CFD trading, MetaTrader, cTrader, broker analysis, trading platforms">
+        <meta name="author" content="Brokeranalysis">
+        <meta name="robots" content="index, follow">
+        
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="article">
+        <meta property="og:url" content="https://brokeranalysis.com/reviews/octa">
+        <meta property="og:title" content="Octa Review 2025: Comprehensive Broker Analysis">
+        <meta property="og:description" content="Expert analysis of Octa broker. Compare trading platforms, fees, regulation, and safety features in our detailed review.">
+        <meta property="og:image" content="https://brokeranalysis.com/images/octa-review-social.jpg">
+        <meta property="og:site_name" content="Brokeranalysis">
+        
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:url" content="https://brokeranalysis.com/reviews/octa">
+        <meta property="twitter:title" content="Octa Review 2025: Comprehensive Broker Analysis">
+        <meta property="twitter:description" content="Expert analysis of Octa broker. Compare trading platforms, fees, regulation, and safety features.">
+        <meta property="twitter:image" content="https://brokeranalysis.com/images/octa-review-social.jpg">
+        
+        <!-- Canonical URL -->
+        <link rel="canonical" href="https://brokeranalysis.com/reviews/octa">
+        
+        <!-- Favicon -->
+        <link rel="icon" type="image/x-icon" href="/favicon.ico">
+        
+        <!-- Structured Data -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "Review",
+          "itemReviewed": {
+            "@type": "FinancialService",
+            "name": "Octa",
+            "description": "Global forex and CFD broker offering multiple trading platforms",
+            "url": "https://octa.com",
+            "sameAs": [
+              "https://www.linkedin.com/company/octa",
+              "https://twitter.com/octa_global"
+            ]
+          },
+          "reviewRating": {
+            "@type": "Rating",
+            "ratingValue": "4.2",
+            "bestRating": "5",
+            "worstRating": "1"
+          },
+          "author": {
+            "@type": "Organization",
+            "name": "Brokeranalysis",
+            "url": "https://brokeranalysis.com"
+          },
+          "publisher": {
+            "@type": "Organization",
+            "name": "Brokeranalysis",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://brokeranalysis.com/logo.png"
+            }
+          },
+          "datePublished": "2025-01-27",
+          "dateModified": "2025-01-27"
+        }
+        </script>
+        
+        <!-- Breadcrumb Structured Data -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://brokeranalysis.com"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Broker Reviews",
+              "item": "https://brokeranalysis.com/reviews"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "Octa Review",
+              "item": "https://brokeranalysis.com/reviews/octa"
+            }
+          ]
+        }
+        </script>
+        
+        <link href="/static/styles.css" rel="stylesheet">
+        <link rel="stylesheet" href="/src/styles.css">
+    </head>
+    <body class="bg-gray-50">
+        <!-- Navigation -->
+        <nav class="bg-white shadow-lg sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex items-center">
+                        <a href="/" class="flex-shrink-0 flex items-center">
+                            <span class="text-2xl font-bold text-blue-600">Brokeranalysis</span>
+                        </a>
+                    </div>
+                    <div class="hidden md:flex items-center space-x-8">
+                        <a href="/" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Home</a>
+                        <a href="/reviews" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Reviews</a>
+                        <a href="/compare" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Compare</a>
+                        <a href="/news" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">News</a>
+                        <a href="/tools" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Tools</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Breadcrumb -->
+        <div class="bg-gray-100 py-3">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <nav class="flex" aria-label="Breadcrumb">
+                    <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                        <li class="inline-flex items-center">
+                            <a href="/" class="text-gray-700 hover:text-blue-600 inline-flex items-center">
+                                Home
+                            </a>
+                        </li>
+                        <li>
+                            <div class="flex items-center">
+                                <span class="text-gray-400 mx-2">/</span>
+                                <a href="/reviews" class="text-gray-700 hover:text-blue-600">Reviews</a>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="flex items-center">
+                                <span class="text-gray-400 mx-2">/</span>
+                                <span class="text-gray-500">Octa Review</span>
+                            </div>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                <!-- Main Content -->
+                <div class="lg:col-span-3">
+                    <!-- Hero Section -->
+                    <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <img src="/images/brokers/octa-logo.png" alt="Octa Logo" class="w-16 h-16 mr-4">
+                                <div>
+                                    <h1 class="text-3xl font-bold text-gray-900">Octa Review 2025</h1>
+                                    <p class="text-gray-600">Global Forex & CFD Broker</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-3xl font-bold text-blue-600">4.2/5</div>
+                                <div class="text-sm text-gray-500">Overall Rating</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Quick Stats -->
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                            <div class="text-center p-4 bg-gray-50 rounded-lg">
+                                <div class="text-2xl font-bold text-blue-600">2013</div>
+                                <div class="text-sm text-gray-600">Founded</div>
+                            </div>
+                            <div class="text-center p-4 bg-gray-50 rounded-lg">
+                                <div class="text-2xl font-bold text-blue-600">1:1000</div>
+                                <div class="text-sm text-gray-600">Max Leverage</div>
+                            </div>
+                            <div class="text-center p-4 bg-gray-50 rounded-lg">
+                                <div class="text-2xl font-bold text-blue-600">0.0</div>
+                                <div class="text-sm text-gray-600">Min Spread</div>
+                            </div>
+                            <div class="text-center p-4 bg-gray-50 rounded-lg">
+                                <div class="text-2xl font-bold text-blue-600">$25</div>
+                                <div class="text-sm text-gray-600">Min Deposit</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-wrap gap-4">
+                            <a href="https://octa.com" target="_blank" rel="noopener" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                                Visit Octa
+                            </a>
+                            <a href="#comparison" class="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors">
+                                Compare Brokers
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Overview Section -->
+                    <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-6">Octa Overview</h2>
+                        <div class="prose max-w-none">
+                            <p class="text-gray-700 mb-4">
+                                Octa is a global forex and CFD broker established in 2013, offering trading services to clients worldwide. 
+                                The broker provides access to multiple trading platforms including MetaTrader 4, MetaTrader 5, and cTrader, 
+                                catering to both beginner and experienced traders.
+                            </p>
+                            <p class="text-gray-700 mb-4">
+                                With competitive spreads starting from 0.0 pips and leverage up to 1:1000, Octa aims to provide 
+                                flexible trading conditions. The broker offers a wide range of trading instruments including forex pairs, 
+                                commodities, indices, and cryptocurrencies.
+                            </p>
+                            <p class="text-gray-700">
+                                Octa focuses on providing educational resources and customer support to help traders improve their 
+                                trading skills and achieve their financial goals.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Pros and Cons -->
+                    <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-6">Pros and Cons</h2>
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div>
+                                <h3 class="text-lg font-semibold text-green-600 mb-4 flex items-center">
+                                    <span class="mr-2">✓</span> Pros
+                                </h3>
+                                <ul class="space-y-2">
+                                    <li class="flex items-start">
+                                        <span class="text-green-500 mr-2 mt-1">•</span>
+                                        <span class="text-gray-700">Multiple trading platforms (MT4, MT5, cTrader)</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-500 mr-2 mt-1">•</span>
+                                        <span class="text-gray-700">Competitive spreads from 0.0 pips</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-500 mr-2 mt-1">•</span>
+                                        <span class="text-gray-700">High leverage up to 1:1000</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-500 mr-2 mt-1">•</span>
+                                        <span class="text-gray-700">Low minimum deposit ($25)</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-500 mr-2 mt-1">•</span>
+                                        <span class="text-gray-700">Wide range of trading instruments</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-green-500 mr-2 mt-1">•</span>
+                                        <span class="text-gray-700">Educational resources and webinars</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-red-600 mb-4 flex items-center">
+                                    <span class="mr-2">✗</span> Cons
+                                </h3>
+                                <ul class="space-y-2">
+                                    <li class="flex items-start">
+                                        <span class="text-red-500 mr-2 mt-1">•</span>
+                                        <span class="text-gray-700">Limited regulatory oversight</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-red-500 mr-2 mt-1">•</span>
+                                        <span class="text-gray-700">No negative balance protection in some regions</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-red-500 mr-2 mt-1">•</span>
+                                        <span class="text-gray-700">Limited research and analysis tools</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-red-500 mr-2 mt-1">•</span>
+                                        <span class="text-gray-700">Customer support could be improved</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Trading Platforms -->
+                    <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-6">Trading Platforms</h2>
+                        <div class="grid md:grid-cols-3 gap-6">
+                            <div class="border rounded-lg p-6">
+                                <h3 class="text-xl font-semibold mb-4">MetaTrader 4</h3>
+                                <ul class="space-y-2 text-gray-700">
+                                    <li>• Advanced charting tools</li>
+                                    <li>• Expert Advisors (EAs)</li>
+                                    <li>• Custom indicators</li>
+                                    <li>• One-click trading</li>
+                                    <li>• Mobile trading apps</li>
+                                </ul>
+                            </div>
+                            <div class="border rounded-lg p-6">
+                                <h3 class="text-xl font-semibold mb-4">MetaTrader 5</h3>
+                                <ul class="space-y-2 text-gray-700">
+                                    <li>• Enhanced order management</li>
+                                    <li>• More timeframes</li>
+                                    <li>• Economic calendar</li>
+                                    <li>• Depth of market</li>
+                                    <li>• Advanced pending orders</li>
+                                </ul>
+                            </div>
+                            <div class="border rounded-lg p-6">
+                                <h3 class="text-xl font-semibold mb-4">cTrader</h3>
+                                <ul class="space-y-2 text-gray-700">
+                                    <li>• Level II pricing</li>
+                                    <li>• Advanced order types</li>
+                                    <li>• cBots (automated trading)</li>
+                                    <li>• Intuitive interface</li>
+                                    <li>• Fast execution</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Account Types -->
+                    <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-6">Account Types</h2>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="border rounded-lg p-6">
+                                <h3 class="text-xl font-semibold mb-4 text-blue-600">Standard Account</h3>
+                                <div class="space-y-3">
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Minimum Deposit:</span>
+                                        <span class="font-semibold">$25</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Spreads From:</span>
+                                        <span class="font-semibold">1.0 pips</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Commission:</span>
+                                        <span class="font-semibold">No</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Max Leverage:</span>
+                                        <span class="font-semibold">1:1000</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Platforms:</span>
+                                        <span class="font-semibold">MT4, MT5</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="border rounded-lg p-6">
+                                <h3 class="text-xl font-semibold mb-4 text-blue-600">ECN Account</h3>
+                                <div class="space-y-3">
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Minimum Deposit:</span>
+                                        <span class="font-semibold">$500</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Spreads From:</span>
+                                        <span class="font-semibold">0.0 pips</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Commission:</span>
+                                        <span class="font-semibold">$3.5/lot</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Max Leverage:</span>
+                                        <span class="font-semibold">1:500</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Platforms:</span>
+                                        <span class="font-semibold">MT4, MT5, cTrader</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Regulation and Safety -->
+                    <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-6">Regulation and Safety</h2>
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div>
+                                <h3 class="text-lg font-semibold mb-4">Regulatory Status</h3>
+                                <div class="space-y-3">
+                                    <div class="flex items-center">
+                                        <span class="w-3 h-3 bg-yellow-500 rounded-full mr-3"></span>
+                                        <span class="text-gray-700">Limited regulatory oversight</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="w-3 h-3 bg-green-500 rounded-full mr-3"></span>
+                                        <span class="text-gray-700">Operates under international standards</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold mb-4">Safety Features</h3>
+                                <div class="space-y-3">
+                                    <div class="flex items-center">
+                                        <span class="w-3 h-3 bg-green-500 rounded-full mr-3"></span>
+                                        <span class="text-gray-700">SSL encryption</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="w-3 h-3 bg-green-500 rounded-full mr-3"></span>
+                                        <span class="text-gray-700">Segregated client funds</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="w-3 h-3 bg-yellow-500 rounded-full mr-3"></span>
+                                        <span class="text-gray-700">Limited investor protection</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="lg:col-span-1">
+                    <!-- Quick Info -->
+                    <div class="bg-white rounded-lg shadow-lg p-6 mb-6 sticky top-24">
+                        <h3 class="text-lg font-semibold mb-4">Quick Info</h3>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Founded:</span>
+                                <span class="font-semibold">2013</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Headquarters:</span>
+                                <span class="font-semibold">Global</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Min Deposit:</span>
+                                <span class="font-semibold">$25</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Max Leverage:</span>
+                                <span class="font-semibold">1:1000</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Platforms:</span>
+                                <span class="font-semibold">MT4, MT5, cTrader</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Instruments:</span>
+                                <span class="font-semibold">100+</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6">
+                            <a href="https://octa.com" target="_blank" rel="noopener" class="w-full bg-blue-600 text-white text-center py-3 rounded-lg hover:bg-blue-700 transition-colors block">
+                                Visit Octa
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Rating Breakdown -->
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h3 class="text-lg font-semibold mb-4">Rating Breakdown</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm text-gray-600">Trading Platforms</span>
+                                    <span class="text-sm font-semibold">4.5/5</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-blue-600 h-2 rounded-full" style="width: 90%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm text-gray-600">Trading Costs</span>
+                                    <span class="text-sm font-semibold">4.3/5</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-blue-600 h-2 rounded-full" style="width: 86%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm text-gray-600">Regulation</span>
+                                    <span class="text-sm font-semibold">3.5/5</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-yellow-500 h-2 rounded-full" style="width: 70%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm text-gray-600">Customer Support</span>
+                                    <span class="text-sm font-semibold">4.0/5</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-blue-600 h-2 rounded-full" style="width: 80%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm text-gray-600">Education</span>
+                                    <span class="text-sm font-semibold">4.2/5</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-blue-600 h-2 rounded-full" style="width: 84%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 pt-4 border-t">
+                            <div class="flex justify-between items-center">
+                                <span class="text-lg font-semibold">Overall Rating</span>
+                                <span class="text-2xl font-bold text-blue-600">4.2/5</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="bg-blue-600 text-white py-16">
+            <div class="max-w-4xl mx-auto text-center px-4">
+                <h2 class="text-3xl font-bold mb-4">Ready to Start Trading with Octa?</h2>
+                <p class="text-xl mb-8">Join thousands of traders who trust Octa for their trading needs</p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="https://octa.com" target="_blank" rel="noopener" class="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+                        Open Account
+                    </a>
+                    <a href="/compare" class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors">
+                        Compare Brokers
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="bg-gray-900 text-white py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                    <div class="col-span-1 md:col-span-2">
+                        <h3 class="text-2xl font-bold mb-4">Brokeranalysis</h3>
+                        <p class="text-gray-300 mb-4">
+                            Your trusted source for comprehensive broker reviews and trading insights. 
+                            We help traders make informed decisions with unbiased analysis and expert recommendations.
+                        </p>
+                        <div class="text-sm text-gray-400">
+                            <p>30 N Gould St Ste R</p>
+                            <p>Sheridan, WY 82801, US</p>
+                            <p>EIN: 384298140</p>
+                            <p>Phone: (801)-893-2577</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                        <ul class="space-y-2">
+                            <li><a href="/" class="hover:text-white">Home</a></li>
+                            <li><a href="/reviews" class="hover:text-white">Broker Reviews</a></li>
+                            <li><a href="/compare" class="hover:text-white">Compare Brokers</a></li>
+                            <li><a href="/news" class="hover:text-white">Market News</a></li>
+                            <li><a href="/tools" class="hover:text-white">Trading Tools</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold mb-4">Company</h4>
+                        <ul class="space-y-2">
+                            <li><a href="/about" class="hover:text-white">About Us</a></li>
+                            <li><a href="/contact" class="hover:text-white">Contact</a></li>
+                            <li><a href="/privacy" class="hover:text-white">Privacy Policy</a></li>
+                            <li><a href="/terms" class="hover:text-white">Terms of Service</a></li>
+                            <li><a href="/disclaimer" class="hover:text-white">Disclaimer</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                    <p>&copy; 2025 Brokeranalysis. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+        
+        <script src="/js/navigation.js"></script>
+    </body>
+    </html>
+  `);
+});
+
+// Plus500 Review Page
+app.get('/reviews/plus500', (c) => {
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Plus500 Review 2025: CFD Trading Platform Analysis | Brokeranalysis</title>
+      <meta name="description" content="Comprehensive Plus500 review 2025. Analyze CFD trading platform, spreads, regulation, and user experience. Expert evaluation of Plus500's trading conditions.">
+      <meta name="keywords" content="Plus500 review, CFD trading, Plus500 platform, online trading, CFD broker, Plus500 analysis">
+      <meta name="author" content="Brokeranalysis">
+      <meta name="robots" content="index, follow">
+      
+      <!-- Open Graph / Facebook -->
+      <meta property="og:type" content="article">
+      <meta property="og:url" content="https://brokeranalysis.com/reviews/plus500">
+      <meta property="og:title" content="Plus500 Review 2025: CFD Trading Platform Analysis">
+      <meta property="og:description" content="Comprehensive Plus500 review 2025. Analyze CFD trading platform, spreads, regulation, and user experience.">
+      <meta property="og:image" content="https://brokeranalysis.com/images/plus500-review-og.jpg">
+      <meta property="og:site_name" content="Brokeranalysis">
+      
+      <!-- Twitter -->
+      <meta property="twitter:card" content="summary_large_image">
+      <meta property="twitter:url" content="https://brokeranalysis.com/reviews/plus500">
+      <meta property="twitter:title" content="Plus500 Review 2025: CFD Trading Platform Analysis">
+      <meta property="twitter:description" content="Comprehensive Plus500 review 2025. Analyze CFD trading platform, spreads, regulation, and user experience.">
+      <meta property="twitter:image" content="https://brokeranalysis.com/images/plus500-review-twitter.jpg">
+      
+      <!-- Canonical URL -->
+      <link rel="canonical" href="https://brokeranalysis.com/reviews/plus500">
+      
+      <!-- Structured Data -->
+      <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Review",
+        "itemReviewed": {
+          "@type": "FinancialService",
+          "name": "Plus500",
+          "description": "CFD Trading Platform",
+          "url": "https://www.plus500.com",
+          "sameAs": [
+            "https://www.linkedin.com/company/plus500",
+            "https://twitter.com/Plus500"
+          ]
+        },
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "7.8",
+          "bestRating": "10",
+          "worstRating": "1"
+        },
+        "author": {
+          "@type": "Organization",
+          "name": "Brokeranalysis",
+          "url": "https://brokeranalysis.com"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Brokeranalysis",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://brokeranalysis.com/logo.png"
+          }
+        },
+        "datePublished": "2025-01-27",
+        "dateModified": "2025-01-27"
+      }
+      </script>
+      
+      <!-- Breadcrumb Structured Data -->
+      <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://brokeranalysis.com"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Broker Reviews",
+            "item": "https://brokeranalysis.com/reviews"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Plus500 Review",
+            "item": "https://brokeranalysis.com/reviews/plus500"
+          }
+        ]
+      }
+      </script>
+      
+      <style>
+        ${`
+          * { margin: 0; padding: 0; box-sizing: border-box; }
+          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; }
+          .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+          .header { background: #1a365d; color: white; padding: 1rem 0; }
+          .nav { display: flex; justify-content: space-between; align-items: center; }
+          .logo { font-size: 1.5rem; font-weight: bold; }
+          .nav-links { display: flex; list-style: none; gap: 2rem; }
+          .nav-links a { color: white; text-decoration: none; }
+          .hero { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 4rem 0; }
+          .hero-content { display: grid; grid-template-columns: 2fr 1fr; gap: 3rem; align-items: center; }
+          .hero h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+          .hero p { font-size: 1.2rem; margin-bottom: 2rem; }
+          .rating-box { background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 10px; text-align: center; }
+          .rating-score { font-size: 3rem; font-weight: bold; margin-bottom: 0.5rem; }
+          .quick-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 2rem 0; }
+          .stat-card { background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 8px; text-align: center; }
+          .main-content { display: grid; grid-template-columns: 2fr 1fr; gap: 3rem; padding: 3rem 0; }
+          .content-section { margin-bottom: 3rem; }
+          .content-section h2 { color: #2d3748; margin-bottom: 1rem; font-size: 1.8rem; }
+          .content-section h3 { color: #4a5568; margin-bottom: 0.8rem; font-size: 1.3rem; }
+          .pros-cons { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0; }
+          .pros, .cons { padding: 1.5rem; border-radius: 8px; }
+          .pros { background: #f0fff4; border-left: 4px solid #38a169; }
+          .cons { background: #fff5f5; border-left: 4px solid #e53e3e; }
+          .pros h3 { color: #38a169; }
+          .cons h3 { color: #e53e3e; }
+          .sidebar { background: #f7fafc; padding: 2rem; border-radius: 10px; height: fit-content; }
+          .info-item { display: flex; justify-content: space-between; padding: 0.8rem 0; border-bottom: 1px solid #e2e8f0; }
+          .info-item:last-child { border-bottom: none; }
+          .cta-section { background: #2d3748; color: white; padding: 3rem 0; text-align: center; }
+          .cta-button { background: #4299e1; color: white; padding: 1rem 2rem; border: none; border-radius: 5px; font-size: 1.1rem; cursor: pointer; text-decoration: none; display: inline-block; }
+          .platform-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+          .platform-card { background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border: 1px solid #e9ecef; }
+          .account-types { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+          .account-card { background: #ffffff; padding: 2rem; border-radius: 10px; border: 1px solid #e2e8f0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+          .rating-breakdown { margin: 2rem 0; }
+          .rating-item { display: flex; justify-content: space-between; align-items: center; margin: 1rem 0; }
+          .rating-bar { background: #e2e8f0; height: 8px; border-radius: 4px; flex: 1; margin: 0 1rem; }
+          .rating-fill { background: #4299e1; height: 100%; border-radius: 4px; }
+          @media (max-width: 768px) {
+            .hero-content, .main-content, .pros-cons { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 2rem; }
+            .quick-stats { grid-template-columns: 1fr; }
+          }
+        `}
+      </style>
+    </head>
+    <body>
+      <!-- Header -->
+      <header class="header">
+        <nav class="nav container">
+          <div class="logo">Brokeranalysis</div>
+          <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/reviews">Reviews</a></li>
+            <li><a href="/compare">Compare</a></li>
+            <li><a href="/education">Education</a></li>
+          </ul>
+        </nav>
+      </header>
+
+      <!-- Hero Section -->
+      <section class="hero">
+        <div class="container">
+          <div class="hero-content">
+            <div>
+              <h1>Plus500 Review 2025</h1>
+              <p>Comprehensive analysis of Plus500's CFD trading platform, regulation, and trading conditions. Discover if Plus500 is the right broker for your trading needs.</p>
+              
+              <div class="quick-stats">
+                <div class="stat-card">
+                  <h3>Founded</h3>
+                  <p>2008</p>
+                </div>
+                <div class="stat-card">
+                  <h3>Headquarters</h3>
+                  <p>Israel</p>
+                </div>
+                <div class="stat-card">
+                  <h3>Regulation</h3>
+                  <p>FCA, CySEC, ASIC</p>
+                </div>
+                <div class="stat-card">
+                  <h3>Min Deposit</h3>
+                  <p>$100</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="rating-box">
+              <div class="rating-score">7.8</div>
+              <p>Overall Rating</p>
+              <p>Good CFD Platform</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Main Content -->
+      <main class="container main-content">
+        <div class="content">
+          <!-- Overview -->
+          <section class="content-section">
+            <h2>Plus500 Overview</h2>
+            <p>Plus500 is a well-established CFD broker founded in 2008, offering trading in over 2,800 financial instruments including forex, stocks, commodities, cryptocurrencies, and indices. The company is publicly traded on the London Stock Exchange and is regulated by multiple tier-1 authorities including the FCA, CySEC, and ASIC.</p>
+            
+            <p>Plus500's proprietary trading platform is known for its user-friendly interface and is available on web, desktop, and mobile devices. The broker focuses exclusively on CFD trading and does not offer traditional stock trading or other investment products.</p>
+          </section>
+
+          <!-- Pros and Cons -->
+          <section class="content-section">
+            <h2>Pros and Cons</h2>
+            <div class="pros-cons">
+              <div class="pros">
+                <h3>✅ Pros</h3>
+                <ul>
+                  <li>Strong regulatory oversight (FCA, CySEC, ASIC)</li>
+                  <li>User-friendly proprietary platform</li>
+                  <li>No commission trading</li>
+                  <li>Wide range of CFD instruments (2,800+)</li>
+                  <li>Competitive spreads</li>
+                  <li>Guaranteed stop losses available</li>
+                  <li>Mobile app with full functionality</li>
+                  <li>Demo account available</li>
+                </ul>
+              </div>
+              <div class="cons">
+                <h3>❌ Cons</h3>
+                <ul>
+                  <li>CFDs only - no traditional stock trading</li>
+                  <li>Limited educational resources</li>
+                  <li>No MetaTrader platform support</li>
+                  <li>Inactivity fees after 3 months</li>
+                  <li>Limited research and analysis tools</li>
+                  <li>No social trading features</li>
+                  <li>Weekend funding charges</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <!-- Trading Platform -->
+          <section class="content-section">
+            <h2>Trading Platform</h2>
+            <p>Plus500 offers its proprietary trading platform, which is available across multiple devices:</p>
+            
+            <div class="platform-grid">
+              <div class="platform-card">
+                <h3>WebTrader</h3>
+                <p>Browser-based platform with full trading functionality, real-time charts, and risk management tools.</p>
+                <ul>
+                  <li>No download required</li>
+                  <li>Advanced charting tools</li>
+                  <li>Real-time price alerts</li>
+                  <li>Risk management features</li>
+                </ul>
+              </div>
+              
+              <div class="platform-card">
+                <h3>Desktop Application</h3>
+                <p>Downloadable platform for Windows with enhanced performance and additional features.</p>
+                <ul>
+                  <li>Faster execution</li>
+                  <li>Enhanced charts</li>
+                  <li>Multiple watchlists</li>
+                  <li>Advanced order types</li>
+                </ul>
+              </div>
+              
+              <div class="platform-card">
+                <h3>Mobile Apps</h3>
+                <p>iOS and Android apps with full trading capabilities and push notifications.</p>
+                <ul>
+                  <li>Touch-optimized interface</li>
+                  <li>Push notifications</li>
+                  <li>Biometric login</li>
+                  <li>Full trading functionality</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <!-- Account Types -->
+          <section class="content-section">
+            <h2>Account Types</h2>
+            <div class="account-types">
+              <div class="account-card">
+                <h3>Standard Account</h3>
+                <div class="info-item">
+                  <span>Minimum Deposit:</span>
+                  <span>$100</span>
+                </div>
+                <div class="info-item">
+                  <span>Leverage:</span>
+                  <span>Up to 1:30 (EU) / 1:300 (Non-EU)</span>
+                </div>
+                <div class="info-item">
+                  <span>Spreads:</span>
+                  <span>From 0.6 pips</span>
+                </div>
+                <div class="info-item">
+                  <span>Commission:</span>
+                  <span>No commission</span>
+                </div>
+                <p>The standard account offers access to all Plus500 features with competitive spreads and no commission structure.</p>
+              </div>
+              
+              <div class="account-card">
+                <h3>Demo Account</h3>
+                <div class="info-item">
+                  <span>Virtual Funds:</span>
+                  <span>$40,000</span>
+                </div>
+                <div class="info-item">
+                  <span>Duration:</span>
+                  <span>Unlimited</span>
+                </div>
+                <div class="info-item">
+                  <span>Features:</span>
+                  <span>Full platform access</span>
+                </div>
+                <div class="info-item">
+                  <span>Real-time Data:</span>
+                  <span>Yes</span>
+                </div>
+                <p>Practice trading with virtual funds in real market conditions using the full Plus500 platform.</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Regulation and Safety -->
+          <section class="content-section">
+            <h2>Regulation and Safety</h2>
+            <p>Plus500 maintains strong regulatory compliance across multiple jurisdictions:</p>
+            
+            <div class="platform-grid">
+              <div class="platform-card">
+                <h3>FCA (UK)</h3>
+                <p>Plus500UK Ltd is authorized and regulated by the Financial Conduct Authority (FRN: 509909).</p>
+              </div>
+              
+              <div class="platform-card">
+                <h3>CySEC (Cyprus)</h3>
+                <p>Plus500CY Ltd is authorized and regulated by the Cyprus Securities and Exchange Commission (License No. 250/14).</p>
+              </div>
+              
+              <div class="platform-card">
+                <h3>ASIC (Australia)</h3>
+                <p>Plus500AU Pty Ltd is authorized and regulated by the Australian Securities and Investments Commission (AFSL #417727).</p>
+              </div>
+            </div>
+            
+            <h3>Client Fund Protection</h3>
+            <ul>
+              <li>Client funds segregated from company funds</li>
+              <li>Negative balance protection</li>
+              <li>Compensation schemes up to £85,000 (FSCS)</li>
+              <li>Regular audits by external firms</li>
+            </ul>
+          </section>
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+          <h3>Quick Info</h3>
+          <div class="info-item">
+            <span>Founded:</span>
+            <span>2008</span>
+          </div>
+          <div class="info-item">
+            <span>Headquarters:</span>
+            <span>Haifa, Israel</span>
+          </div>
+          <div class="info-item">
+            <span>Regulation:</span>
+            <span>FCA, CySEC, ASIC</span>
+          </div>
+          <div class="info-item">
+            <span>Min Deposit:</span>
+            <span>$100</span>
+          </div>
+          <div class="info-item">
+            <span>Max Leverage:</span>
+            <span>1:30 (EU) / 1:300</span>
+          </div>
+          <div class="info-item">
+            <span>Instruments:</span>
+            <span>2,800+ CFDs</span>
+          </div>
+          <div class="info-item">
+            <span>Platform:</span>
+            <span>Proprietary</span>
+          </div>
+          
+          <div class="rating-breakdown">
+            <h3>Rating Breakdown</h3>
+            <div class="rating-item">
+              <span>Platform</span>
+              <div class="rating-bar">
+                <div class="rating-fill" style="width: 85%"></div>
+              </div>
+              <span>8.5</span>
+            </div>
+            <div class="rating-item">
+              <span>Regulation</span>
+              <div class="rating-bar">
+                <div class="rating-fill" style="width: 90%"></div>
+              </div>
+              <span>9.0</span>
+            </div>
+            <div class="rating-item">
+              <span>Spreads</span>
+              <div class="rating-bar">
+                <div class="rating-fill" style="width: 75%"></div>
+              </div>
+              <span>7.5</span>
+            </div>
+            <div class="rating-item">
+              <span>Education</span>
+              <div class="rating-bar">
+                <div class="rating-fill" style="width: 60%"></div>
+              </div>
+              <span>6.0</span>
+            </div>
+            <div class="rating-item">
+              <span>Support</span>
+              <div class="rating-bar">
+                <div class="rating-fill" style="width: 80%"></div>
+              </div>
+              <span>8.0</span>
+            </div>
+          </div>
+          
+          <div style="margin-top: 2rem; text-align: center;">
+            <h4>Overall Rating</h4>
+            <div style="font-size: 2rem; color: #4299e1; font-weight: bold;">7.8/10</div>
+            <p style="color: #666; margin-top: 0.5rem;">Good CFD Platform</p>
+          </div>
+        </aside>
+      </main>
+
+      <!-- CTA Section -->
+      <section class="cta-section">
+        <div class="container">
+          <h2>Ready to Start Trading with Plus500?</h2>
+          <p>Join millions of traders worldwide and experience Plus500's user-friendly CFD trading platform.</p>
+          <a href="https://www.plus500.com" class="cta-button" target="_blank" rel="noopener noreferrer">Visit Plus500</a>
+          <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">CFDs are complex instruments and come with a high risk of losing money rapidly due to leverage.</p>
+        </div>
+      </section>
+
+      <script src="/js/navigation.js"></script>
+    </body>
+    </html>
+  `);
+});
+
+// AvaTrade Review Page
+app.get('/reviews/avatrade', (c) => {
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>AvaTrade Review 2024: Comprehensive Broker Analysis | Brokeranalysis</title>
+      <meta name="description" content="In-depth AvaTrade review 2024. Regulated by CBI, ASIC, FSA. MT4/MT5 platforms, 0.9 pip spreads, copy trading. Read our detailed analysis of fees, platforms, and safety.">
+      <meta name="keywords" content="AvaTrade review, AvaTrade broker, forex trading, CFD trading, MetaTrader, copy trading, regulated broker">
+      <link rel="canonical" href="https://brokeranalysis.com/reviews/avatrade">
+      
+      <!-- Open Graph -->
+      <meta property="og:title" content="AvaTrade Review 2024: Comprehensive Broker Analysis">
+      <meta property="og:description" content="Detailed AvaTrade review covering regulation, trading platforms, fees, and safety. Founded 2006, regulated by CBI, ASIC, FSA.">
+      <meta property="og:url" content="https://brokeranalysis.com/reviews/avatrade">
+      <meta property="og:type" content="article">
+      <meta property="og:image" content="https://brokeranalysis.com/images/avatrade-review-og.jpg">
+      <meta property="og:site_name" content="Brokeranalysis">
+      
+      <!-- Twitter Card -->
+      <meta name="twitter:card" content="summary_large_image">
+      <meta name="twitter:title" content="AvaTrade Review 2024: Comprehensive Analysis">
+      <meta name="twitter:description" content="Complete AvaTrade broker review. Regulation, platforms, fees, safety analysis.">
+      <meta name="twitter:image" content="https://brokeranalysis.com/images/avatrade-review-twitter.jpg">
+      
+      <!-- Structured Data -->
+      <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Review",
+        "itemReviewed": {
+          "@type": "FinancialProduct",
+          "name": "AvaTrade",
+          "description": "Online forex and CFD trading platform",
+          "provider": {
+            "@type": "Organization",
+            "name": "AvaTrade",
+            "url": "https://www.avatrade.com"
+          }
+        },
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "8.2",
+          "bestRating": "10",
+          "worstRating": "1"
+        },
+        "author": {
+          "@type": "Organization",
+          "name": "Brokeranalysis",
+          "url": "https://brokeranalysis.com"
+        },
+        "datePublished": "2024-01-15",
+        "dateModified": "2024-01-15"
+      }
+      </script>
+      
+      <!-- Breadcrumb Structured Data -->
+      <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://brokeranalysis.com"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Broker Reviews",
+            "item": "https://brokeranalysis.com/reviews"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "AvaTrade Review",
+            "item": "https://brokeranalysis.com/reviews/avatrade"
+          }
+        ]
+      }
+      </script>
+      
+      <link href="/static/styles.css" rel="stylesheet">
+    </head>
+    <body class="bg-gray-50">
+      <!-- Navigation -->
+      <nav class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex justify-between h-16">
+            <div class="flex items-center">
+              <a href="/" class="text-2xl font-bold text-blue-600">Brokeranalysis</a>
+            </div>
+            <div class="hidden md:flex items-center space-x-8">
+              <a href="/" class="text-gray-700 hover:text-blue-600">Home</a>
+              <a href="/reviews" class="text-gray-700 hover:text-blue-600">Reviews</a>
+              <a href="/compare" class="text-gray-700 hover:text-blue-600">Compare</a>
+              <a href="/education" class="text-gray-700 hover:text-blue-600">Education</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+      
+      <!-- Breadcrumb -->
+      <div class="bg-gray-100 py-3">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <nav class="flex" aria-label="Breadcrumb">
+            <ol class="flex items-center space-x-2">
+              <li><a href="/" class="text-gray-500 hover:text-blue-600">Home</a></li>
+              <li><span class="text-gray-400">/</span></li>
+              <li><a href="/reviews" class="text-gray-500 hover:text-blue-600">Reviews</a></li>
+              <li><span class="text-gray-400">/</span></li>
+              <li><span class="text-gray-900">AvaTrade</span></li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+      
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <!-- Main Content -->
+          <div class="lg:col-span-2">
+            <!-- Hero Section -->
+            <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+              <div class="flex items-center mb-4">
+                <img src="/images/avatrade-logo.png" alt="AvaTrade" class="w-16 h-16 mr-4">
+                <div>
+                  <h1 class="text-3xl font-bold text-gray-900">AvaTrade Review 2024</h1>
+                  <p class="text-gray-600">Established 2006 • Regulated by CBI, ASIC, FSA</p>
+                </div>
+              </div>
+              
+              <!-- Quick Stats -->
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+                <div class="text-center p-3 bg-gray-50 rounded">
+                  <div class="text-2xl font-bold text-blue-600">8.2</div>
+                  <div class="text-sm text-gray-600">Overall Rating</div>
+                </div>
+                <div class="text-center p-3 bg-gray-50 rounded">
+                  <div class="text-2xl font-bold text-green-600">0.9</div>
+                  <div class="text-sm text-gray-600">Min Spread (pips)</div>
+                </div>
+                <div class="text-center p-3 bg-gray-50 rounded">
+                  <div class="text-2xl font-bold text-purple-600">$100</div>
+                  <div class="text-sm text-gray-600">Min Deposit</div>
+                </div>
+                <div class="text-center p-3 bg-gray-50 rounded">
+                  <div class="text-2xl font-bold text-orange-600">1:400</div>
+                  <div class="text-sm text-gray-600">Max Leverage</div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Overview -->
+            <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+              <h2 class="text-2xl font-bold mb-4">AvaTrade Overview</h2>
+              <p class="text-gray-700 mb-4">
+                AvaTrade is a well-established online broker founded in 2006 in Dublin, Ireland. With over 18 years of experience in the financial markets, AvaTrade has built a solid reputation as a reliable and regulated broker serving traders worldwide.
+              </p>
+              <p class="text-gray-700 mb-4">
+                The broker offers a comprehensive range of trading instruments including forex, CFDs, stocks, commodities, cryptocurrencies, and bonds. AvaTrade is regulated by multiple top-tier authorities including the Central Bank of Ireland (CBI), ASIC Australia, and FSA Japan, ensuring client fund safety and regulatory compliance.
+              </p>
+              <p class="text-gray-700">
+                AvaTrade provides access to popular trading platforms like MetaTrader 4 and 5, along with their proprietary AvaTradeGO mobile app. The broker also offers copy trading services through DupliTrade and ZuluTrade integration.
+              </p>
+            </div>
+            
+            <!-- Pros and Cons -->
+            <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+              <h2 class="text-2xl font-bold mb-6">Pros and Cons</h2>
+              <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                  <h3 class="text-lg font-semibold text-green-600 mb-3">✓ Pros</h3>
+                  <ul class="space-y-2 text-gray-700">
+                    <li>• Multiple regulatory licenses (CBI, ASIC, FSA)</li>
+                    <li>• Competitive spreads from 0.9 pips</li>
+                    <li>• Comprehensive trading platforms (MT4, MT5)</li>
+                    <li>• Copy trading available</li>
+                    <li>• Extensive educational resources</li>
+                    <li>• Islamic accounts available</li>
+                    <li>• No commission on forex trades</li>
+                    <li>• 24/5 multilingual support</li>
+                  </ul>
+                </div>
+                <div>
+                  <h3 class="text-lg font-semibold text-red-600 mb-3">✗ Cons</h3>
+                  <ul class="space-y-2 text-gray-700">
+                    <li>• Limited research tools</li>
+                    <li>• Withdrawal fees on some methods</li>
+                    <li>• No US clients accepted</li>
+                    <li>• Inactivity fees after 3 months</li>
+                    <li>• Limited cryptocurrency selection</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Trading Platforms -->
+            <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+              <h2 class="text-2xl font-bold mb-6">Trading Platforms</h2>
+              
+              <div class="space-y-6">
+                <div class="border-l-4 border-blue-500 pl-4">
+                  <h3 class="text-xl font-semibold mb-2">MetaTrader 4 (MT4)</h3>
+                  <p class="text-gray-700 mb-2">The world's most popular trading platform with advanced charting, expert advisors, and automated trading capabilities.</p>
+                  <ul class="text-gray-600 text-sm space-y-1">
+                    <li>• 30+ technical indicators</li>
+                    <li>• Expert Advisors (EAs) support</li>
+                    <li>• One-click trading</li>
+                    <li>• Mobile and desktop versions</li>
+                  </ul>
+                </div>
+                
+                <div class="border-l-4 border-green-500 pl-4">
+                  <h3 class="text-xl font-semibold mb-2">MetaTrader 5 (MT5)</h3>
+                  <p class="text-gray-700 mb-2">Advanced platform with more timeframes, indicators, and improved order management system.</p>
+                  <ul class="text-gray-600 text-sm space-y-1">
+                    <li>• 21 timeframes vs 9 in MT4</li>
+                    <li>• 38 technical indicators</li>
+                    <li>• Economic calendar integration</li>
+                    <li>• Advanced order types</li>
+                  </ul>
+                </div>
+                
+                <div class="border-l-4 border-purple-500 pl-4">
+                  <h3 class="text-xl font-semibold mb-2">AvaTradeGO Mobile App</h3>
+                  <p class="text-gray-700 mb-2">Proprietary mobile trading app for iOS and Android with intuitive interface and full trading functionality.</p>
+                  <ul class="text-gray-600 text-sm space-y-1">
+                    <li>• User-friendly interface</li>
+                    <li>• Real-time quotes and charts</li>
+                    <li>• Push notifications</li>
+                    <li>• Touch ID/Face ID security</li>
+                  </ul>
+                </div>
+                
+                <div class="border-l-4 border-orange-500 pl-4">
+                  <h3 class="text-xl font-semibold mb-2">WebTrader</h3>
+                  <p class="text-gray-700 mb-2">Browser-based platform requiring no download, accessible from any device with internet connection.</p>
+                  <ul class="text-gray-600 text-sm space-y-1">
+                    <li>• No download required</li>
+                    <li>• Cross-platform compatibility</li>
+                    <li>• Real-time market data</li>
+                    <li>• Advanced charting tools</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Account Types -->
+            <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+              <h2 class="text-2xl font-bold mb-6">Account Types</h2>
+              
+              <div class="grid md:grid-cols-2 gap-6">
+                <div class="border rounded-lg p-4">
+                  <h3 class="text-xl font-semibold mb-3 text-blue-600">Retail Account</h3>
+                  <ul class="space-y-2 text-gray-700">
+                    <li><strong>Minimum Deposit:</strong> $100</li>
+                    <li><strong>Leverage:</strong> Up to 1:30 (EU) / 1:400 (Global)</li>
+                    <li><strong>Spreads:</strong> From 0.9 pips</li>
+                    <li><strong>Commission:</strong> No commission on forex</li>
+                    <li><strong>Features:</strong> Negative balance protection</li>
+                  </ul>
+                </div>
+                
+                <div class="border rounded-lg p-4">
+                  <h3 class="text-xl font-semibold mb-3 text-purple-600">Professional Account</h3>
+                  <ul class="space-y-2 text-gray-700">
+                    <li><strong>Minimum Deposit:</strong> $10,000</li>
+                    <li><strong>Leverage:</strong> Up to 1:400</li>
+                    <li><strong>Spreads:</strong> From 0.6 pips</li>
+                    <li><strong>Requirements:</strong> €500k portfolio or experience</li>
+                    <li><strong>Features:</strong> Higher leverage, lower spreads</li>
+                  </ul>
+                </div>
+                
+                <div class="border rounded-lg p-4">
+                  <h3 class="text-xl font-semibold mb-3 text-green-600">Demo Account</h3>
+                  <ul class="space-y-2 text-gray-700">
+                    <li><strong>Virtual Funds:</strong> $100,000</li>
+                    <li><strong>Duration:</strong> 21 days (renewable)</li>
+                    <li><strong>Features:</strong> Full platform access</li>
+                    <li><strong>Purpose:</strong> Practice and testing</li>
+                    <li><strong>Cost:</strong> Completely free</li>
+                  </ul>
+                </div>
+                
+                <div class="border rounded-lg p-4">
+                  <h3 class="text-xl font-semibold mb-3 text-orange-600">Islamic Account</h3>
+                  <ul class="space-y-2 text-gray-700">
+                    <li><strong>Type:</strong> Swap-free trading</li>
+                    <li><strong>Compliance:</strong> Sharia law compliant</li>
+                    <li><strong>Features:</strong> No overnight interest</li>
+                    <li><strong>Eligibility:</strong> Muslim traders</li>
+                    <li><strong>Verification:</strong> Religious documentation required</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Regulation and Safety -->
+            <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+              <h2 class="text-2xl font-bold mb-6">Regulation and Safety</h2>
+              
+              <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                  <h3 class="text-lg font-semibold mb-3">Regulatory Licenses</h3>
+                  <ul class="space-y-2 text-gray-700">
+                    <li>• <strong>Central Bank of Ireland (CBI)</strong> - Primary regulator</li>
+                    <li>• <strong>ASIC Australia</strong> - Australian operations</li>
+                    <li>• <strong>FSA Japan</strong> - Japanese market</li>
+                    <li>• <strong>FSCA South Africa</strong> - South African clients</li>
+                    <li>• <strong>BVI FSC</strong> - British Virgin Islands</li>
+                  </ul>
+                </div>
+                
+                <div>
+                  <h3 class="text-lg font-semibold mb-3">Safety Features</h3>
+                  <ul class="space-y-2 text-gray-700">
+                    <li>• Segregated client funds in tier-1 banks</li>
+                    <li>• Negative balance protection</li>
+                    <li>• Compensation scheme up to €20,000</li>
+                    <li>• Regular regulatory audits</li>
+                    <li>• MiFID II compliance</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div class="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                <h4 class="font-semibold text-green-800 mb-2">Trust Score: 8.2/10</h4>
+                <p class="text-green-700 text-sm">
+                  AvaTrade maintains a high trust score due to its multiple regulatory licenses, long operating history, and strong client fund protection measures.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Sidebar -->
+          <div class="lg:col-span-1">
+            <!-- Quick Info -->
+            <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+              <h3 class="text-lg font-semibold mb-4">Quick Info</h3>
+              <div class="space-y-3 text-sm">
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Founded:</span>
+                  <span class="font-medium">2006</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Headquarters:</span>
+                  <span class="font-medium">Dublin, Ireland</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Regulation:</span>
+                  <span class="font-medium">CBI, ASIC, FSA</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Min Deposit:</span>
+                  <span class="font-medium">$100</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Max Leverage:</span>
+                  <span class="font-medium">1:400</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Platforms:</span>
+                  <span class="font-medium">MT4, MT5, Mobile</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Support:</span>
+                  <span class="font-medium">24/5</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Rating Breakdown -->
+            <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+              <h3 class="text-lg font-semibold mb-4">Rating Breakdown</h3>
+              <div class="space-y-3">
+                <div>
+                  <div class="flex justify-between text-sm mb-1">
+                    <span>Regulation & Safety</span>
+                    <span class="font-medium">9.0/10</span>
+                  </div>
+                  <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div class="bg-green-500 h-2 rounded-full" style="width: 90%"></div>
+                  </div>
+                </div>
+                
+                <div>
+                  <div class="flex justify-between text-sm mb-1">
+                    <span>Trading Platforms</span>
+                    <span class="font-medium">8.5/10</span>
+                  </div>
+                  <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div class="bg-blue-500 h-2 rounded-full" style="width: 85%"></div>
+                  </div>
+                </div>
+                
+                <div>
+                  <div class="flex justify-between text-sm mb-1">
+                    <span>Fees & Spreads</span>
+                    <span class="font-medium">7.8/10</span>
+                  </div>
+                  <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div class="bg-yellow-500 h-2 rounded-full" style="width: 78%"></div>
+                  </div>
+                </div>
+                
+                <div>
+                  <div class="flex justify-between text-sm mb-1">
+                    <span>Customer Support</span>
+                    <span class="font-medium">8.0/10</span>
+                  </div>
+                  <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div class="bg-purple-500 h-2 rounded-full" style="width: 80%"></div>
+                  </div>
+                </div>
+                
+                <div>
+                  <div class="flex justify-between text-sm mb-1">
+                    <span>Education & Research</span>
+                    <span class="font-medium">7.5/10</span>
+                  </div>
+                  <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div class="bg-orange-500 h-2 rounded-full" style="width: 75%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Overall Rating -->
+            <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg shadow-sm p-6 text-white mb-6">
+              <div class="text-center">
+                <div class="text-4xl font-bold mb-2">8.2</div>
+                <div class="text-lg mb-2">Overall Rating</div>
+                <div class="text-sm opacity-90">Very Good Broker</div>
+                <div class="flex justify-center mt-3">
+                  <div class="flex space-x-1">
+                    <span class="text-yellow-300">★★★★</span>
+                    <span class="text-gray-300">★</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- CTA -->
+            <div class="bg-white rounded-lg shadow-sm p-6">
+              <h3 class="text-lg font-semibold mb-4">Start Trading with AvaTrade</h3>
+              <p class="text-gray-600 text-sm mb-4">
+                Ready to start trading with a regulated and trusted broker? Open your AvaTrade account today.
+              </p>
+              <a href="#" class="block w-full bg-blue-600 text-white text-center py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors mb-3">
+                Open Live Account
+              </a>
+              <a href="#" class="block w-full border border-gray-300 text-gray-700 text-center py-3 rounded-lg font-medium hover:bg-gray-50 transition-colors">
+                Try Demo Account
+              </a>
+              <p class="text-xs text-gray-500 mt-3 text-center">
+                Risk Warning: Trading involves substantial risk of loss
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Footer -->
+      <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+              <h3 class="text-lg font-semibold mb-4">Brokeranalysis</h3>
+              <p class="text-gray-400 text-sm">
+                Your trusted source for broker reviews and trading insights.
+              </p>
+            </div>
+            <div>
+              <h4 class="font-semibold mb-3">Reviews</h4>
+              <ul class="space-y-2 text-sm text-gray-400">
+                <li><a href="/reviews/fp-markets" class="hover:text-white">FP Markets</a></li>
+                <li><a href="/reviews/fxtm" class="hover:text-white">FXTM</a></li>
+                <li><a href="/reviews/blackbull-markets" class="hover:text-white">Blackbull Markets</a></li>
+                <li><a href="/reviews/eightcap" class="hover:text-white">Eightcap</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="font-semibold mb-3">Tools</h4>
+              <ul class="space-y-2 text-sm text-gray-400">
+                <li><a href="/compare" class="hover:text-white">Broker Comparison</a></li>
+                <li><a href="/calculator" class="hover:text-white">Trading Calculator</a></li>
+                <li><a href="/education" class="hover:text-white">Education</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="font-semibold mb-3">Contact</h4>
+              <div class="text-sm text-gray-400 space-y-1">
+                <p>30 N Gould St Ste R</p>
+                <p>Sheridan, WY 82801, US</p>
+                <p>Phone: (801)-893-2577</p>
+                <p>EIN: 384298140</p>
+              </div>
+            </div>
+          </div>
+          <div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
+            <p>&copy; 2024 Brokeranalysis. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
+      
+      <script src="/js/navigation.js"></script>
+    </body>
+    </html>
+  `);
+});
+
+// CFI Review Page
+app.get('/reviews/cfi', (c) => {
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>CFI Review 2024: Comprehensive Broker Analysis | Brokeranalysis</title>
+      <meta name="description" content="In-depth CFI review 2024. CySEC regulated broker since 2007. MT4/MT5 platforms, 1.2 pip spreads, copy trading. Read our detailed analysis of fees, platforms, and safety.">
+      <meta name="keywords" content="CFI review, CFI broker, forex trading, CFD trading, MetaTrader, CySEC regulated, Cyprus broker">
+      <link rel="canonical" href="https://brokeranalysis.com/reviews/cfi">
+      
+      <!-- Open Graph -->
+      <meta property="og:title" content="CFI Review 2024: Comprehensive Broker Analysis">
+      <meta property="og:description" content="Detailed CFI review covering CySEC regulation, trading platforms, fees, and safety. Founded 2007, based in Cyprus.">
+      <meta property="og:url" content="https://brokeranalysis.com/reviews/cfi">
+      <meta property="og:type" content="article">
+      <meta property="og:image" content="https://brokeranalysis.com/images/cfi-review-og.jpg">
+      <meta property="og:site_name" content="Brokeranalysis">
+      
+      <!-- Twitter Card -->
+      <meta name="twitter:card" content="summary_large_image">
+      <meta name="twitter:title" content="CFI Review 2024: Comprehensive Analysis">
+      <meta name="twitter:description" content="Complete CFI broker review. CySEC regulation, platforms, fees, safety analysis.">
+      <meta name="twitter:image" content="https://brokeranalysis.com/images/cfi-review-twitter.jpg">
+      
+      <!-- Structured Data -->
+      <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Review",
+        "itemReviewed": {
+          "@type": "FinancialProduct",
+          "name": "CFI",
+          "description": "Online forex and CFD trading platform",
+          "provider": {
+            "@type": "Organization",
+            "name": "CFI",
+            "url": "https://www.cfifinancial.com"
+          }
+        },
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "7.8",
+          "bestRating": "10",
+          "worstRating": "1"
+        },
+        "author": {
+          "@type": "Organization",
+          "name": "Brokeranalysis",
+          "url": "https://brokeranalysis.com"
+        },
+        "datePublished": "2024-01-15",
+        "dateModified": "2024-01-15"
+      }
+      </script>
+      
+      <!-- Breadcrumb Structured Data -->
+      <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://brokeranalysis.com"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Broker Reviews",
+            "item": "https://brokeranalysis.com/reviews"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "CFI Review",
+            "item": "https://brokeranalysis.com/reviews/cfi"
+          }
+        ]
+      }
+      </script>
+      
+      <link href="/static/styles.css" rel="stylesheet">
+    </head>
+    <body class="bg-gray-50">
+      <!-- Navigation -->
+      <nav class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex justify-between h-16">
+            <div class="flex items-center">
+              <a href="/" class="text-2xl font-bold text-blue-600">Brokeranalysis</a>
+            </div>
+            <div class="hidden md:flex items-center space-x-8">
+              <a href="/" class="text-gray-700 hover:text-blue-600">Home</a>
+              <a href="/reviews" class="text-gray-700 hover:text-blue-600">Reviews</a>
+              <a href="/compare" class="text-gray-700 hover:text-blue-600">Compare</a>
+              <a href="/education" class="text-gray-700 hover:text-blue-600">Education</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+      
+      <!-- Breadcrumb -->
+      <div class="bg-gray-100 py-3">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <nav class="flex" aria-label="Breadcrumb">
+            <ol class="flex items-center space-x-2">
+              <li><a href="/" class="text-gray-500 hover:text-blue-600">Home</a></li>
+              <li><span class="text-gray-400">/</span></li>
+              <li><a href="/reviews" class="text-gray-500 hover:text-blue-600">Reviews</a></li>
+              <li><span class="text-gray-400">/</span></li>
+              <li><span class="text-gray-900">CFI</span></li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+      
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <!-- Main Content -->
+          <div class="lg:col-span-2">
+            <!-- Hero Section -->
+            <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+              <div class="flex items-center mb-4">
+                <img src="/images/cfi-logo.png" alt="CFI" class="w-16 h-16 mr-4">
+                <div>
+                  <h1 class="text-3xl font-bold text-gray-900">CFI Review 2024</h1>
+                  <p class="text-gray-600">Established 2007 • Regulated by CySEC</p>
+                </div>
+              </div>
+              
+              <!-- Quick Stats -->
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+                <div class="text-center p-3 bg-gray-50 rounded">
+                  <div class="text-2xl font-bold text-blue-600">7.8</div>
+                  <div class="text-sm text-gray-600">Overall Rating</div>
+                </div>
+                <div class="text-center p-3 bg-gray-50 rounded">
+                  <div class="text-2xl font-bold text-green-600">1.2</div>
+                  <div class="text-sm text-gray-600">Min Spread (pips)</div>
+                </div>
+                <div class="text-center p-3 bg-gray-50 rounded">
+                  <div class="text-2xl font-bold text-purple-600">$250</div>
+                  <div class="text-sm text-gray-600">Min Deposit</div>
+                </div>
+                <div class="text-center p-3 bg-gray-50 rounded">
+                  <div class="text-2xl font-bold text-orange-600">1:400</div>
+                  <div class="text-sm text-gray-600">Max Leverage</div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Overview -->
+            <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+              <h2 class="text-2xl font-bold mb-4">CFI Overview</h2>
+              <p class="text-gray-700 mb-4">
+                CFI is a Cyprus-based online broker founded in 2007, offering forex and CFD trading services to clients worldwide. Regulated by the Cyprus Securities and Exchange Commission (CySEC), CFI provides access to a wide range of financial instruments including forex, stocks, commodities, and cryptocurrencies.
+              </p>
+              <p class="text-gray-700 mb-4">
+                The broker operates from its headquarters in Limassol, Cyprus, and serves traders globally with the exception of certain restricted jurisdictions. CFI offers competitive trading conditions with spreads starting from 1.2 pips on major currency pairs and leverage up to 1:400 for international clients.
+              </p>
+              <p class="text-gray-700">
+                CFI provides access to the popular MetaTrader 4 and MetaTrader 5 platforms, along with a web-based trading platform and mobile applications for iOS and Android devices. The broker also offers copy trading services and comprehensive educational resources.
+              </p>
+            </div>
+            
+            <!-- Pros and Cons -->
+            <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+              <h2 class="text-2xl font-bold mb-6">Pros and Cons</h2>
+              <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                  <h3 class="text-lg font-semibold text-green-600 mb-3">✓ Pros</h3>
+                  <ul class="space-y-2 text-gray-700">
+                    <li>• CySEC regulated and licensed</li>
+                    <li>• MetaTrader 4 and 5 platforms</li>
+                    <li>• No commission on forex trades</li>
+                    <li>• Copy trading services available</li>
+                    <li>• Islamic accounts offered</li>
+                    <li>• 24/5 multilingual support</li>
+                    <li>• Negative balance protection</li>
+                    <li>• Educational resources and webinars</li>
+                  </ul>
+                </div>
+                <div>
+                  <h3 class="text-lg font-semibold text-red-600 mb-3">✗ Cons</h3>
+                  <ul class="space-y-2 text-gray-700">
+                    <li>• Higher minimum deposit ($250)</li>
+                    <li>• Limited research tools</li>
+                    <li>• Inactivity fees after 90 days</li>
+                    <li>• Spreads could be more competitive</li>
+                    <li>• Limited cryptocurrency selection</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Trading Platforms -->
+            <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+              <h2 class="text-2xl font-bold mb-6">Trading Platforms</h2>
+              
+              <div class="space-y-6">
+                <div class="border-l-4 border-blue-500 pl-4">
+                  <h3 class="text-xl font-semibold mb-2">MetaTrader 4 (MT4)</h3>
+                  <p class="text-gray-700 mb-2">The industry-standard platform with comprehensive charting tools, expert advisors, and automated trading capabilities.</p>
+                  <ul class="text-gray-600 text-sm space-y-1">
+                    <li>• 30+ technical indicators</li>
+                    <li>• Expert Advisors (EAs) support</li>
+                    <li>• One-click trading execution</li>
+                    <li>• Advanced charting package</li>
+                  </ul>
+                </div>
+                
+                <div class="border-l-4 border-green-500 pl-4">
+                  <h3 class="text-xl font-semibold mb-2">MetaTrader 5 (MT5)</h3>
+                  <p class="text-gray-700 mb-2">Next-generation platform with enhanced features, more timeframes, and improved order management.</p>
+                  <ul class="text-gray-600 text-sm space-y-1">
+                    <li>• 21 timeframes available</li>
+                    <li>• 38 built-in technical indicators</li>
+                    <li>• Economic calendar integration</li>
+                    <li>• Advanced order types</li>
+                  </ul>
+                </div>
+                
+                <div class="border-l-4 border-purple-500 pl-4">
+                  <h3 class="text-xl font-semibold mb-2">WebTrader</h3>
+                  <p class="text-gray-700 mb-2">Browser-based trading platform accessible from any device without software installation.</p>
+                  <ul class="text-gray-600 text-sm space-y-1">
+                    <li>• No download required</li>
+                    <li>• Cross-platform compatibility</li>
+                    <li>• Real-time market data</li>
+                    <li>• Advanced charting tools</li>
+                  </ul>
+                </div>
+                
+                <div class="border-l-4 border-orange-500 pl-4">
+                  <h3 class="text-xl font-semibold mb-2">Mobile Apps</h3>
+                  <p class="text-gray-700 mb-2">Native mobile applications for iOS and Android with full trading functionality on the go.</p>
+                  <ul class="text-gray-600 text-sm space-y-1">
+                    <li>• iOS and Android apps</li>
+                    <li>• Real-time quotes and charts</li>
+                    <li>• Push notifications</li>
+                    <li>• Secure biometric login</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Account Types -->
+            <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+              <h2 class="text-2xl font-bold mb-6">Account Types</h2>
+              
+              <div class="grid md:grid-cols-2 gap-6">
+                <div class="border rounded-lg p-4">
+                  <h3 class="text-xl font-semibold mb-3 text-blue-600">Standard Account</h3>
+                  <ul class="space-y-2 text-gray-700">
+                    <li><strong>Minimum Deposit:</strong> $250</li>
+                    <li><strong>Leverage:</strong> Up to 1:30 (EU) / 1:400 (Global)</li>
+                    <li><strong>Spreads:</strong> From 1.2 pips</li>
+                    <li><strong>Commission:</strong> No commission on forex</li>
+                    <li><strong>Features:</strong> Negative balance protection</li>
+                  </ul>
+                </div>
+                
+                <div class="border rounded-lg p-4">
+                  <h3 class="text-xl font-semibold mb-3 text-purple-600">Professional Account</h3>
+                  <ul class="space-y-2 text-gray-700">
+                    <li><strong>Eligibility:</strong> Qualified professional traders</li>
+                    <li><strong>Leverage:</strong> Up to 1:400</li>
+                    <li><strong>Spreads:</strong> Tighter spreads available</li>
+                    <li><strong>Requirements:</strong> €500k portfolio or experience</li>
+                    <li><strong>Features:</strong> Enhanced trading conditions</li>
+                  </ul>
+                </div>
+                
+                <div class="border rounded-lg p-4">
+                  <h3 class="text-xl font-semibold mb-3 text-green-600">Demo Account</h3>
+                  <ul class="space-y-2 text-gray-700">
+                    <li><strong>Virtual Funds:</strong> $50,000</li>
+                    <li><strong>Duration:</strong> Unlimited</li>
+                    <li><strong>Features:</strong> Full platform access</li>
+                    <li><strong>Purpose:</strong> Practice and strategy testing</li>
+                    <li><strong>Cost:</strong> Completely free</li>
+                  </ul>
+                </div>
+                
+                <div class="border rounded-lg p-4">
+                  <h3 class="text-xl font-semibold mb-3 text-orange-600">Islamic Account</h3>
+                  <ul class="space-y-2 text-gray-700">
+                    <li><strong>Type:</strong> Swap-free trading</li>
+                    <li><strong>Compliance:</strong> Sharia law compliant</li>
+                    <li><strong>Features:</strong> No overnight interest charges</li>
+                    <li><strong>Eligibility:</strong> Muslim traders</li>
+                    <li><strong>Verification:</strong> Religious documentation required</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Regulation and Safety -->
+            <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+              <h2 class="text-2xl font-bold mb-6">Regulation and Safety</h2>
+              
+              <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                  <h3 class="text-lg font-semibold mb-3">Regulatory License</h3>
+                  <ul class="space-y-2 text-gray-700">
+                    <li>• <strong>CySEC (Cyprus)</strong> - License No. 164/12</li>
+                    <li>• <strong>MiFID II Compliance</strong> - EU regulations</li>
+                    <li>• <strong>Operational since 2007</strong> - 17+ years experience</li>
+                    <li>• <strong>Headquartered in Limassol</strong> - Cyprus</li>
+                  </ul>
+                </div>
+                
+                <div>
+                  <h3 class="text-lg font-semibold mb-3">Safety Features</h3>
+                  <ul class="space-y-2 text-gray-700">
+                    <li>• Segregated client funds in tier-1 banks</li>
+                    <li>• Negative balance protection</li>
+                    <li>• Investor compensation fund up to €20,000</li>
+                    <li>• Regular regulatory audits and compliance</li>
+                    <li>• SSL encryption for data security</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div class="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <h4 class="font-semibold text-blue-800 mb-2">Trust Score: 7.8/10</h4>
+                <p class="text-blue-700 text-sm">
+                  CFI maintains a good trust score with CySEC regulation, segregated client funds, and investor protection measures, though it's a smaller broker compared to industry leaders.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Sidebar -->
+          <div class="lg:col-span-1">
+            <!-- Quick Info -->
+            <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+              <h3 class="text-lg font-semibold mb-4">Quick Info</h3>
+              <div class="space-y-3 text-sm">
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Founded:</span>
+                  <span class="font-medium">2007</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Headquarters:</span>
+                  <span class="font-medium">Limassol, Cyprus</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Regulation:</span>
+                  <span class="font-medium">CySEC</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Min Deposit:</span>
+                  <span class="font-medium">$250</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Max Leverage:</span>
+                  <span class="font-medium">1:400</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Platforms:</span>
+                  <span class="font-medium">MT4, MT5, Web</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Support:</span>
+                  <span class="font-medium">24/5</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Rating Breakdown -->
+            <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+              <h3 class="text-lg font-semibold mb-4">Rating Breakdown</h3>
+              <div class="space-y-3">
+                <div>
+                  <div class="flex justify-between text-sm mb-1">
+                    <span>Regulation & Safety</span>
+                    <span class="font-medium">8.0/10</span>
+                  </div>
+                  <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div class="bg-green-500 h-2 rounded-full" style="width: 80%"></div>
+                  </div>
+                </div>
+                
+                <div>
+                  <div class="flex justify-between text-sm mb-1">
+                    <span>Trading Platforms</span>
+                    <span class="font-medium">8.2/10</span>
+                  </div>
+                  <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div class="bg-blue-500 h-2 rounded-full" style="width: 82%"></div>
+                  </div>
+                </div>
+                
+                <div>
+                  <div class="flex justify-between text-sm mb-1">
+                    <span>Fees & Spreads</span>
+                    <span class="font-medium">7.2/10</span>
+                  </div>
+                  <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div class="bg-yellow-500 h-2 rounded-full" style="width: 72%"></div>
+                  </div>
+                </div>
+                
+                <div>
+                  <div class="flex justify-between text-sm mb-1">
+                    <span>Customer Support</span>
+                    <span class="font-medium">7.5/10</span>
+                  </div>
+                  <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div class="bg-purple-500 h-2 rounded-full" style="width: 75%"></div>
+                  </div>
+                </div>
+                
+                <div>
+                  <div class="flex justify-between text-sm mb-1">
+                    <span>Education & Research</span>
+                    <span class="font-medium">7.8/10</span>
+                  </div>
+                  <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div class="bg-orange-500 h-2 rounded-full" style="width: 78%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Overall Rating -->
+            <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg shadow-sm p-6 text-white mb-6">
+              <div class="text-center">
+                <div class="text-4xl font-bold mb-2">7.8</div>
+                <div class="text-lg mb-2">Overall Rating</div>
+                <div class="text-sm opacity-90">Good Broker</div>
+                <div class="flex justify-center mt-3">
+                  <div class="flex space-x-1">
+                    <span class="text-yellow-300">★★★★</span>
+                    <span class="text-gray-300">★</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- CTA -->
+            <div class="bg-white rounded-lg shadow-sm p-6">
+              <h3 class="text-lg font-semibold mb-4">Start Trading with CFI</h3>
+              <p class="text-gray-600 text-sm mb-4">
+                Ready to start trading with a CySEC regulated broker? Open your CFI account today.
+              </p>
+              <a href="#" class="block w-full bg-blue-600 text-white text-center py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors mb-3">
+                Open Live Account
+              </a>
+              <a href="#" class="block w-full border border-gray-300 text-gray-700 text-center py-3 rounded-lg font-medium hover:bg-gray-50 transition-colors">
+                Try Demo Account
+              </a>
+              <p class="text-xs text-gray-500 mt-3 text-center">
+                Risk Warning: Trading involves substantial risk of loss
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Footer -->
+      <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+              <h3 class="text-lg font-semibold mb-4">Brokeranalysis</h3>
+              <p class="text-gray-400 text-sm">
+                Your trusted source for broker reviews and trading insights.
+              </p>
+            </div>
+            <div>
+              <h4 class="font-semibold mb-3">Reviews</h4>
+              <ul class="space-y-2 text-sm text-gray-400">
+                <li><a href="/reviews/fp-markets" class="hover:text-white">FP Markets</a></li>
+                <li><a href="/reviews/fxtm" class="hover:text-white">FXTM</a></li>
+                <li><a href="/reviews/avatrade" class="hover:text-white">AvaTrade</a></li>
+                <li><a href="/reviews/plus500" class="hover:text-white">Plus500</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="font-semibold mb-3">Tools</h4>
+              <ul class="space-y-2 text-sm text-gray-400">
+                <li><a href="/compare" class="hover:text-white">Broker Comparison</a></li>
+                <li><a href="/calculator" class="hover:text-white">Trading Calculator</a></li>
+                <li><a href="/education" class="hover:text-white">Education</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="font-semibold mb-3">Contact</h4>
+              <div class="text-sm text-gray-400 space-y-1">
+                <p>30 N Gould St Ste R</p>
+                <p>Sheridan, WY 82801, US</p>
+                <p>Phone: (801)-893-2577</p>
+                <p>EIN: 384298140</p>
+              </div>
+            </div>
+          </div>
+          <div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
+            <p>&copy; 2024 Brokeranalysis. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
+      
+      <script src="/js/navigation.js"></script>
     </body>
     </html>
   `);
