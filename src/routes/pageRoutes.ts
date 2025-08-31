@@ -11,6 +11,11 @@ import { renderBrokersDirectoryPage } from '../components/BrokersDirectoryPage.j
 import { renderCountriesDirectoryPage } from '../components/CountriesDirectoryPage.js';
 import { renderRegulatorPage } from '../components/RegulatorPage.js';
 import { renderUSACountryPage } from '../components/USACountryPage.js';
+import { renderSingaporeCountryPage } from '../components/SingaporeCountryPage.js';
+import { renderDubaiCountryPage } from '../components/DubaiCountryPage.js';
+import { renderSouthAfricaCountryPage } from '../components/SouthAfricaCountryPage.js';
+import { renderPhilippinesCountryPage } from '../components/PhilippinesCountryPage.js';
+import { renderPakistanCountryPage } from '../components/PakistanCountryPage.js';
 
 const pageRoutes = new Hono<{ Bindings: Bindings }>();
 
@@ -278,6 +283,76 @@ pageRoutes.get('/countries/usa', (c) => {
       <meta property="article:publisher" content="https://www.facebook.com/brokeranalysis" />
       <link rel="alternate" hreflang="en" href="${getCurrentDomain(c.req.raw)}/countries/usa" />
     `
+  }));
+});
+
+// Individual Country Pages - Singapore
+pageRoutes.get('/countries/singapore', (c) => {
+  return c.html(renderLayout(renderSingaporeCountryPage({
+    canonicalUrl: '/countries/singapore',
+    request: c.req.raw
+  }), {
+    title: 'Best Forex Brokers in Singapore 2025 - MAS Regulated | BrokerAnalysis',
+    description: 'Compare top Singapore forex brokers with MAS regulation. Find the best spreads, platforms, and trading conditions for Singaporean forex traders.',
+    keywords: 'Singapore forex brokers, MAS regulated brokers, Singapore forex trading, IC Markets, Pepperstone, Vantage FX, IG Markets, CMC Markets, Saxo Bank',
+    canonicalUrl: '/countries/singapore',
+    request: c.req.raw
+  }));
+});
+
+// Individual Country Pages - Dubai/UAE
+pageRoutes.get('/countries/dubai', (c) => {
+  return c.html(renderLayout(renderDubaiCountryPage({
+    canonicalUrl: '/countries/dubai',
+    request: c.req.raw
+  }), {
+    title: 'Best Forex Brokers in Dubai 2025 - DFSA Regulated | BrokerAnalysis',
+    description: 'Compare top Dubai forex brokers with DFSA regulation. Find the best spreads, platforms, and trading conditions for UAE forex traders.',
+    keywords: 'Dubai forex brokers, UAE forex trading, DFSA regulated brokers, IG Markets, Swissquote, Saxo Bank, ADSS, ThinkMarkets, XTB',
+    canonicalUrl: '/countries/dubai',
+    request: c.req.raw
+  }));
+});
+
+// Individual Country Pages - South Africa
+pageRoutes.get('/countries/south-africa', (c) => {
+  return c.html(renderLayout(renderSouthAfricaCountryPage({
+    canonicalUrl: '/countries/south-africa',
+    request: c.req.raw
+  }), {
+    title: 'Best Forex Brokers in South Africa 2025 - FSCA Regulated | BrokerAnalysis',
+    description: 'Compare top South African forex brokers with FSCA regulation. Find the best spreads, platforms, and trading conditions for South African traders.',
+    keywords: 'South Africa forex brokers, FSCA regulated brokers, AvaTrade, FXCM, IG Markets, Pepperstone, XM Group, Exness',
+    canonicalUrl: '/countries/south-africa',
+    request: c.req.raw
+  }));
+});
+
+// Individual Country Pages - Philippines
+pageRoutes.get('/countries/philippines', (c) => {
+  return c.html(renderLayout(renderPhilippinesCountryPage({
+    canonicalUrl: '/countries/philippines',
+    request: c.req.raw
+  }), {
+    title: 'Best Forex Brokers in Philippines 2025 - BSP Regulated | BrokerAnalysis',
+    description: 'Compare top Philippines forex brokers with BSP oversight. Find the best spreads, platforms, and trading conditions for Filipino traders.',
+    keywords: 'Philippines forex brokers, BSP regulated brokers, Filipino forex trading, XM Group, FXCM, RoboForex, Exness, Pepperstone',
+    canonicalUrl: '/countries/philippines',
+    request: c.req.raw
+  }));
+});
+
+// Individual Country Pages - Pakistan
+pageRoutes.get('/countries/pakistan', (c) => {
+  return c.html(renderLayout(renderPakistanCountryPage({
+    canonicalUrl: '/countries/pakistan',
+    request: c.req.raw
+  }), {
+    title: 'Best Forex Brokers in Pakistan 2025 - SECP Regulated | BrokerAnalysis',
+    description: 'Compare top Pakistan forex brokers with SECP oversight. Find Islamic accounts, competitive spreads, and trading platforms for Pakistani traders.',
+    keywords: 'Pakistan forex brokers, SECP regulated brokers, Islamic forex accounts, OctaFX, Exness, FBS, XM Group, InstaForex',
+    canonicalUrl: '/countries/pakistan',
+    request: c.req.raw
   }));
 });
 
