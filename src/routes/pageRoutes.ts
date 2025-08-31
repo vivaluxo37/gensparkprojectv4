@@ -19,6 +19,7 @@ import { renderPakistanCountryPage } from '../components/PakistanCountryPage.js'
 import { renderIndiaCountryPage } from '../components/IndiaCountryPage.js';
 import { renderCanadaCountryPage } from '../components/CanadaCountryPage.js';
 import { renderAustraliaCountryPage } from '../components/AustraliaCountryPage.js';
+import { renderBelgiumCountryPage } from '../components/BelgiumCountryPage.js';
 
 const pageRoutes = new Hono<{ Bindings: Bindings }>();
 
@@ -359,6 +360,33 @@ pageRoutes.get('/countries/australia', (c) => {
       <meta property="og:locale" content="en_AU" />
       <meta property="og:type" content="website" />
       <link rel="alternate" hreflang="en" href="${getCurrentDomain(c.req.raw)}/countries/australia" />
+    `
+  }));
+});
+
+// Individual Country Pages - Belgium
+pageRoutes.get('/countries/belgium', (c) => {
+  return c.html(renderLayout(renderBelgiumCountryPage({
+    canonicalUrl: '/countries/belgium',
+    request: c.req.raw
+  }), {
+    title: 'Best Forex Brokers in Belgium 2025 - FSMA Regulated | BrokerAnalysis',
+    description: 'Compare the best forex brokers for Belgian traders in 2025. Find top-rated FSMA regulated brokers with competitive spreads, EUR support, and MiFID II compliance.',
+    keywords: 'forex brokers Belgium, FSMA regulated, Belgian traders, MetaTrader, forex trading Belgium, EUR trading, XTB, IG Markets, Saxo Bank, Plus500, Pepperstone',
+    canonicalUrl: '/countries/belgium',
+    request: c.req.raw,
+    additionalHead: `
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+      <meta name="geo.region" content="BE" />
+      <meta name="geo.placename" content="Belgium" />
+      <meta name="robots" content="index, follow, max-image-preview:large" />
+      <meta property="og:locale" content="en_BE" />
+      <meta property="og:type" content="website" />
+      <link rel="alternate" hreflang="en" href="${getCurrentDomain(c.req.raw)}/countries/belgium" />
+      <link rel="alternate" hreflang="nl" href="${getCurrentDomain(c.req.raw)}/countries/belgium" />
+      <link rel="alternate" hreflang="fr" href="${getCurrentDomain(c.req.raw)}/countries/belgium" />
+      <link rel="alternate" hreflang="de" href="${getCurrentDomain(c.req.raw)}/countries/belgium" />
     `
   }));
 });
