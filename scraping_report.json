@@ -1,0 +1,22 @@
+{
+  "timestamp": "2025-08-31T16:21:10.183Z",
+  "total_brokers_scraped": 53,
+  "sources_completed": 5,
+  "total_sources": 17,
+  "completion_percentage": "29.4",
+  "brokers_by_source": {
+    "www.forexbrokers.com": 13,
+    "www.forexpeacearmy.com": 12,
+    "www.investopedia.com": 7,
+    "www.dailyforex.com": 14,
+    "brokerchooser.com": 7
+  },
+  "average_rating": "4.0",
+  "regulation_distribution": {
+    "Australian Securities and Investments Commission": 22,
+    "Commodity Futures Trading Commission": 20,
+    "Financial Conduct Authority": 28,
+    "National Futures Association": 15,
+    "Cyprus Securities and Exchange Commission": 19
+  }
+}
