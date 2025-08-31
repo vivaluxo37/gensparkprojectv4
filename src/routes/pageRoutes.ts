@@ -16,6 +16,7 @@ import { renderDubaiCountryPage } from '../components/DubaiCountryPage.js';
 import { renderSouthAfricaCountryPage } from '../components/SouthAfricaCountryPage.js';
 import { renderPhilippinesCountryPage } from '../components/PhilippinesCountryPage.js';
 import { renderPakistanCountryPage } from '../components/PakistanCountryPage.js';
+import { renderIndiaCountryPage } from '../components/IndiaCountryPage.js';
 
 const pageRoutes = new Hono<{ Bindings: Bindings }>();
 
@@ -282,6 +283,31 @@ pageRoutes.get('/countries/usa', (c) => {
       <meta property="og:type" content="website" />
       <meta property="article:publisher" content="https://www.facebook.com/brokeranalysis" />
       <link rel="alternate" hreflang="en" href="${getCurrentDomain(c.req.raw)}/countries/usa" />
+    `
+  }));
+});
+
+// Individual Country Pages - India
+pageRoutes.get('/countries/india', (c) => {
+  return c.html(renderLayout(renderIndiaCountryPage({
+    canonicalUrl: '/countries/india',
+    request: c.req.raw
+  }), {
+    title: 'Best Forex Brokers in India 2025 - SEBI Regulated | BrokerAnalysis',
+    description: 'Compare the best forex brokers for Indian traders in 2025. Find top-rated brokers with SEBI oversight, competitive spreads, UPI payments, and advanced platforms.',
+    keywords: 'forex brokers India, SEBI regulated, Indian traders, MetaTrader, forex trading India, UPI payments, XM Group, Exness, OctaFX, FXCM, AvaTrade, Pepperstone, IC Markets',
+    canonicalUrl: '/countries/india',
+    request: c.req.raw,
+    additionalHead: `
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+      <meta name="geo.region" content="IN" />
+      <meta name="geo.placename" content="India" />
+      <meta name="robots" content="index, follow, max-image-preview:large" />
+      <meta property="og:locale" content="en_IN" />
+      <meta property="og:type" content="website" />
+      <link rel="alternate" hreflang="en" href="${getCurrentDomain(c.req.raw)}/countries/india" />
+      <link rel="alternate" hreflang="hi" href="${getCurrentDomain(c.req.raw)}/countries/india" />
     `
   }));
 });
