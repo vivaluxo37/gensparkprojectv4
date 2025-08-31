@@ -12,6 +12,82 @@ type Bindings = {
 
 const app = new Hono<{ Bindings: Bindings }>()
 
+// DEBUG: Simple test to see if route parameters work at all
+app.get('/simple-test/:param', (c) => {
+  const param = c.req.param('param');
+  return c.text(`Route parameter test successful! Parameter: ${param}`);
+});
+
+// TEST: Put dynamic routes FIRST to ensure they register
+app.get('/reviews/:brokerSlug', async (c) => {
+  const brokerSlug = c.req.param('brokerSlug');
+  
+  // Skip if it matches known static routes to avoid conflicts
+  const staticRoutes = ['fp-markets', 'fxtm', 'blackbull-markets', 'eightcap', 'octa', 'plus500', 'avatrade', 'cfi'];
+  if (staticRoutes.includes(brokerSlug)) {
+    return c.notFound(); // Let static routes handle these
+  }
+  
+  // Simple test without database first
+  if (brokerSlug === 'test') {
+    return c.html(`
+      <html>
+      <body>
+        <h1>Dynamic route test successful!</h1>
+        <p>Requested slug: ${brokerSlug}</p>
+      </body>
+      </html>
+    `);
+  }
+  
+  const { DB } = c.env;
+  
+  try {
+    const broker = await DB.prepare('SELECT * FROM brokers WHERE slug = ?').bind(brokerSlug).first();
+    
+    if (!broker) {
+      return c.html(`<h1>Broker "${brokerSlug}" not found</h1><p>Available brokers: ic-markets, pepperstone, interactive-brokers, oanda, xm-group</p>`);
+    }
+    
+    return c.html(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>${broker.name} Review - BrokerAnalysis</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="/static/styles.css" rel="stylesheet">
+      </head>
+      <body class="bg-blue-50">
+        <div class="max-w-4xl mx-auto p-8">
+          <h1 class="text-4xl font-bold mb-4">${broker.name} Review</h1>
+          <div class="bg-white rounded-lg p-6 shadow-sm mb-6">
+            <div class="grid grid-cols-2 gap-4">
+              <div><strong>Rating:</strong> ${broker.rating}/5.0</div>
+              <div><strong>Founded:</strong> ${broker.established}</div>
+              <div><strong>Min Deposit:</strong> $${broker.min_deposit_usd}</div>
+              <div><strong>Max Leverage:</strong> ${broker.max_leverage}</div>
+              <div><strong>Regulated:</strong> ${broker.is_regulated ? 'Yes' : 'No'}</div>
+              <div><strong>Headquarters:</strong> ${broker.headquarters || 'N/A'}</div>
+            </div>
+          </div>
+          <div class="bg-white rounded-lg p-6 shadow-sm">
+            <p>This is a test version of the ${broker.name} review page.</p>
+            <p>Slug requested: ${brokerSlug}</p>
+            <p>Broker ID: ${broker.id}</p>
+            <a href="${broker.website_url}" target="_blank" class="bg-blue-600 text-white px-4 py-2 rounded inline-block mt-4">Visit ${broker.name}</a>
+          </div>
+          <div class="mt-6">
+            <a href="/reviews" class="text-blue-600 hover:underline">← Back to Reviews</a>
+          </div>
+        </div>
+      </body>
+      </html>
+    `);
+  } catch (error) {
+    return c.html(`<h1>Error</h1><p>Database error: ${error.message}</p>`);
+  }
+});
+
 // Enable CORS for all API routes
 app.use('/api/*', cors({
   origin: '*',
@@ -1595,8 +1671,97 @@ app.get('/reviews', (c) => {
   `);
 });
 
+// Route moved to beginning of file to ensure proper registration
+
+// Enhanced Compare API endpoint
+app.get('/api/compare', async (c) => {
+  const { DB } = c.env;
+  const url = new URL(c.req.url);
+  const brokerIds = url.searchParams.get('brokers')?.split(',').filter(id => id) || [];
+  
+  if (brokerIds.length === 0) {
+    return c.json({ error: 'No brokers specified' }, 400);
+  }
+  
+  if (brokerIds.length > 4) {
+    return c.json({ error: 'Maximum 4 brokers can be compared' }, 400);
+  }
+  
+  try {
+    const placeholders = brokerIds.map(() => '?').join(',');
+    
+    // Get comprehensive broker data for comparison
+    const brokers = await DB.prepare(`
+      SELECT b.*, bd.*, bs.*
+      FROM brokers b
+      LEFT JOIN broker_details bd ON b.id = bd.broker_id
+      LEFT JOIN broker_scores bs ON b.id = bs.broker_id
+      WHERE b.id IN (${placeholders})
+      ORDER BY b.rating DESC
+    `).bind(...brokerIds).all();
+    
+    // Get spreads for each broker
+    const spreadsPromises = brokerIds.map(id => 
+      DB.prepare(`
+        SELECT * FROM spreads_enhanced 
+        WHERE broker_id = ? AND currency_pair IN ('EURUSD', 'GBPUSD', 'USDJPY', 'AUDUSD')
+        ORDER BY currency_pair
+      `).bind(id).all()
+    );
+    
+    // Get regulations for each broker
+    const regulationsPromises = brokerIds.map(id =>
+      DB.prepare('SELECT * FROM regulations WHERE broker_id = ?').bind(id).all()
+    );
+    
+    // Get platforms for each broker
+    const platformsPromises = brokerIds.map(id =>
+      DB.prepare(`
+        SELECT tp.name, tp.platform_type, bp.primary_platform
+        FROM trading_platforms tp
+        JOIN broker_platforms bp ON tp.id = bp.platform_id
+        WHERE bp.broker_id = ? AND bp.available = 1
+      `).bind(id).all()
+    );
+    
+    const [spreadsResults, regulationsResults, platformsResults] = await Promise.all([
+      Promise.all(spreadsPromises),
+      Promise.all(regulationsPromises),
+      Promise.all(platformsPromises)
+    ]);
+    
+    // Combine data
+    const comparison = brokers.results.map((broker, index) => ({
+      ...broker,
+      spreads: spreadsResults[index].results || [],
+      regulations: regulationsResults[index].results || [],
+      platforms: platformsResults[index].results || []
+    }));
+    
+    return c.json({
+      brokers: comparison,
+      comparison_date: new Date().toISOString(),
+      criteria_count: 12
+    });
+    
+  } catch (error) {
+    return c.json({ error: 'Database error: ' + error.message }, 500);
+  }
+});
+
 // Compare page route
-app.get('/compare', (c) => {
+app.get('/compare', async (c) => {
+  const { DB } = c.env;
+  
+  // Get top brokers for default comparison
+  const topBrokers = await DB.prepare(`
+    SELECT id, name, slug, rating, logo_url, min_deposit_usd, max_leverage, spread_type
+    FROM brokers 
+    ORDER BY rating DESC 
+    LIMIT 8
+  `).all();
+
+  const brokersData = topBrokers.results || [];
   return c.html(`
     <!DOCTYPE html>
     <html lang="en">
@@ -6376,8 +6541,257 @@ app.get('/brokers/automated-trading', (c) => {
   `);
 });
 
-// FP Markets Review Page
+// TEMPORARY: Test dynamic route by replacing static route
 app.get('/reviews/fp-markets', (c) => {
+  const slug = 'fp-markets'; // Hard-coded for this test
+  return c.html(`
+    <html>
+    <head>
+      <title>Dynamic Route Test - ${slug}</title>
+    </head>
+    <body>
+      <h1>Dynamic Route Test Works!</h1>
+      <p>This route was dynamically matched for: ${slug}</p>
+    </body>
+    </html>
+  `);
+});
+
+// IC Markets Review Page - Static Route
+app.get('/reviews/ic-markets', async (c) => {
+  const { DB } = c.env;
+  
+  try {
+    // Get comprehensive broker data
+    const broker = await DB.prepare(`
+      SELECT b.*, bd.*, bs.*
+      FROM brokers b
+      LEFT JOIN broker_details bd ON b.id = bd.broker_id
+      LEFT JOIN broker_scores bs ON b.id = bs.broker_id
+      WHERE b.slug = 'ic-markets'
+    `).bind().first();
+    
+    if (!broker) {
+      return c.html('<h1>IC Markets data not found</h1><p>Please check database configuration.</p>');
+    }
+    
+    // Get additional data
+    const [spreads, platforms, regulations] = await Promise.all([
+      DB.prepare('SELECT * FROM spreads_enhanced WHERE broker_id = ? AND currency_pair IN ("EURUSD", "GBPUSD", "USDJPY") ORDER BY currency_pair').bind(broker.id).all(),
+      DB.prepare(`
+        SELECT tp.*, bp.primary_platform 
+        FROM trading_platforms tp 
+        JOIN broker_platforms bp ON tp.id = bp.platform_id 
+        WHERE bp.broker_id = ? AND bp.available = 1
+      `).bind(broker.id).all(),
+      DB.prepare('SELECT * FROM regulations WHERE broker_id = ?').bind(broker.id).all()
+    ]);
+
+    return c.html(`
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>${broker.name} Review 2025 - Detailed Analysis & Rating | BrokerAnalysis</title>
+          <meta name="description" content="Comprehensive ${broker.name} review covering spreads, regulation, platforms, and trading conditions. Expert analysis with pros, cons, and detailed ratings.">
+          <meta name="keywords" content="${broker.name} review, ${broker.name} spreads, ${broker.name} regulation, forex broker review, ${broker.slug}">
+          
+          <link rel="canonical" href="https://brokeranalysis.com/reviews/${broker.slug}">
+          <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+          <link href="/static/styles.css" rel="stylesheet">
+      </head>
+      <body class="bg-blue-50 text-blue-900">
+          <!-- Navigation -->
+          <nav class="bg-white shadow-sm border-b sticky top-0 z-50">
+              <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                  <div class="flex justify-between items-center h-16">
+                      <div class="flex items-center space-x-2">
+                          <i class="fas fa-chart-line text-primary text-2xl"></i>
+                          <a href="/" class="text-xl font-bold text-blue-900">BrokerAnalysis</a>
+                      </div>
+                      <div class="hidden md:flex items-center space-x-6">
+                          <a href="/reviews" class="text-blue-800 hover:text-primary transition-colors">Reviews</a>
+                          <a href="/compare" class="text-blue-800 hover:text-primary transition-colors">Compare</a>
+                          <a href="/simulator" class="text-blue-800 hover:text-primary transition-colors">Simulator</a>
+                          <a href="/about" class="text-blue-800 hover:text-primary transition-colors">About</a>
+                      </div>
+                  </div>
+              </div>
+          </nav>
+
+          <!-- Hero Section -->
+          <div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-8">
+              <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                  <div class="flex flex-col md:flex-row items-center gap-6">
+                      <div class="bg-white rounded-lg p-4 flex-shrink-0">
+                          <img src="${broker.logo_url}" alt="${broker.name} logo" class="h-16 w-auto">
+                      </div>
+                      <div class="flex-1 text-center md:text-left">
+                          <h1 class="text-4xl font-bold mb-2">${broker.name} Review 2025</h1>
+                          <p class="text-xl text-blue-100 mb-4">${broker.description_short || 'Professional forex and CFD broker review'}</p>
+                          <div class="flex flex-col sm:flex-row gap-4 items-center justify-center md:justify-start">
+                              <div class="flex items-center gap-2">
+                                  <div class="flex text-yellow-400">
+                                      ${Array(Math.floor(broker.rating)).fill().map(() => '<i class="fas fa-star"></i>').join('')}
+                                      ${broker.rating % 1 !== 0 ? '<i class="fas fa-star-half-alt"></i>' : ''}
+                                      ${Array(5 - Math.ceil(broker.rating)).fill().map(() => '<i class="far fa-star"></i>').join('')}
+                                  </div>
+                                  <span class="text-xl font-semibold">${broker.rating}/5.0</span>
+                              </div>
+                              <div class="text-blue-100">
+                                  <i class="fas fa-shield-alt mr-2"></i>
+                                  ${broker.is_regulated ? 'Regulated Broker' : 'Unregulated'}
+                              </div>
+                          </div>
+                      </div>
+                      <div class="flex-shrink-0">
+                          <a href="${broker.website_url}" target="_blank" rel="noopener" class="bg-yellow-400 text-blue-900 px-6 py-3 rounded-lg font-semibold hover:bg-yellow-300 transition-colors">
+                              Visit ${broker.name}
+                          </a>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <!-- Quick Facts -->
+          <div class="bg-white py-6 border-b">
+              <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                  <div class="grid grid-cols-2 md:grid-cols-6 gap-4">
+                      <div class="text-center">
+                          <div class="text-2xl font-bold text-blue-600">${broker.min_deposit_usd === 0 ? 'No Min' : '$' + broker.min_deposit_usd}</div>
+                          <div class="text-sm text-gray-600">Min Deposit</div>
+                      </div>
+                      <div class="text-center">
+                          <div class="text-2xl font-bold text-blue-600">${broker.max_leverage}</div>
+                          <div class="text-sm text-gray-600">Max Leverage</div>
+                      </div>
+                      <div class="text-center">
+                          <div class="text-2xl font-bold text-blue-600">${broker.spread_type}</div>
+                          <div class="text-sm text-gray-600">Spread Type</div>
+                      </div>
+                      <div class="text-center">
+                          <div class="text-2xl font-bold text-blue-600">${broker.established}</div>
+                          <div class="text-sm text-gray-600">Founded</div>
+                      </div>
+                      <div class="text-center">
+                          <div class="text-2xl font-bold text-blue-600">${broker.headquarters?.split(',')[0] || 'N/A'}</div>
+                          <div class="text-sm text-gray-600">Headquarters</div>
+                      </div>
+                      <div class="text-center">
+                          <div class="text-2xl font-bold text-blue-600">${broker.demo_account ? 'Yes' : 'No'}</div>
+                          <div class="text-sm text-gray-600">Demo Account</div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <!-- Main Content -->
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+              <div class="grid lg:grid-cols-3 gap-8">
+                  <!-- Review Content -->
+                  <div class="lg:col-span-2">
+                      <section class="bg-white rounded-lg shadow-sm p-6 mb-8">
+                          <h2 class="text-2xl font-bold mb-4">Executive Summary</h2>
+                          <div class="prose max-w-none">
+                              <p class="text-lg leading-relaxed mb-4">
+                                  ${broker.description_long || 'Comprehensive review content will be displayed here based on our detailed analysis of this broker.'}
+                              </p>
+                          </div>
+                      </section>
+
+                      <!-- Pros and Cons -->
+                      ${broker.pros_text && broker.cons_text ? `
+                      <section class="bg-white rounded-lg shadow-sm p-6 mb-8">
+                          <h2 class="text-2xl font-bold mb-6">Pros and Cons</h2>
+                          <div class="grid md:grid-cols-2 gap-6">
+                              <div>
+                                  <h3 class="text-lg font-semibold text-green-700 mb-3 flex items-center">
+                                      <i class="fas fa-check-circle mr-2"></i>Pros
+                                  </h3>
+                                  <ul class="space-y-2">
+                                      ${broker.pros_text.split('|').map(pro => `<li class="flex items-start"><i class="fas fa-plus text-green-500 mt-1 mr-2 text-sm"></i><span class="text-gray-700">${pro}</span></li>`).join('')}
+                                  </ul>
+                              </div>
+                              <div>
+                                  <h3 class="text-lg font-semibold text-red-700 mb-3 flex items-center">
+                                      <i class="fas fa-times-circle mr-2"></i>Cons
+                                  </h3>
+                                  <ul class="space-y-2">
+                                      ${broker.cons_text.split('|').map(con => `<li class="flex items-start"><i class="fas fa-minus text-red-500 mt-1 mr-2 text-sm"></i><span class="text-gray-700">${con}</span></li>`).join('')}
+                                  </ul>
+                              </div>
+                          </div>
+                      </section>
+                      ` : ''}
+
+                      <!-- Spreads -->
+                      ${spreads.results && spreads.results.length > 0 ? `
+                      <section class="bg-white rounded-lg shadow-sm p-6 mb-8">
+                          <h2 class="text-2xl font-bold mb-6">Spreads & Trading Costs</h2>
+                          <div class="overflow-x-auto">
+                              <table class="w-full">
+                                  <thead>
+                                      <tr class="border-b">
+                                          <th class="text-left py-2">Currency Pair</th>
+                                          <th class="text-left py-2">Typical Spread</th>
+                                          <th class="text-left py-2">Commission</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                      ${spreads.results.map(spread => `
+                                      <tr class="border-b">
+                                          <td class="py-2 font-semibold">${spread.currency_pair}</td>
+                                          <td class="py-2">${spread.spread_avg} pips</td>
+                                          <td class="py-2">$${spread.commission_per_lot}/lot</td>
+                                      </tr>
+                                      `).join('')}
+                                  </tbody>
+                              </table>
+                          </div>
+                      </section>
+                      ` : ''}
+                  </div>
+
+                  <!-- Sidebar -->
+                  <div class="lg:col-span-1">
+                      <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+                          <h3 class="text-lg font-semibold mb-4">Broker Details</h3>
+                          <dl class="space-y-3">
+                              <div>
+                                  <dt class="text-sm font-medium text-gray-500">Website</dt>
+                                  <dd class="text-sm"><a href="${broker.website_url}" target="_blank" rel="noopener" class="text-blue-600 hover:underline">${broker.website_url}</a></dd>
+                              </div>
+                              <div>
+                                  <dt class="text-sm font-medium text-gray-500">Founded</dt>
+                                  <dd class="text-sm">${broker.established}</dd>
+                              </div>
+                              <div>
+                                  <dt class="text-sm font-medium text-gray-500">Headquarters</dt>
+                                  <dd class="text-sm">${broker.headquarters}</dd>
+                              </div>
+                              <div>
+                                  <dt class="text-sm font-medium text-gray-500">Clients</dt>
+                                  <dd class="text-sm">${broker.client_count ? broker.client_count.toLocaleString() + '+' : 'N/A'}</dd>
+                              </div>
+                          </dl>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+      </body>
+      </html>
+    `);
+  } catch (error) {
+    return c.html(`<h1>Error</h1><p>Database error: ${error.message}</p>`);
+  }
+});
+
+// Original FP Markets Review Page (commented out for test)
+/*
+app.get('/reviews/fp-markets-old', (c) => {
   return c.html(`
     <!DOCTYPE html>
     <html lang="en">
@@ -10678,6 +11092,373 @@ app.get('/reviews/cfi', (c) => {
       </footer>
       
       <script src="/js/navigation.js"></script>
+    </body>
+    </html>
+  `);
+});
+
+// Individual Broker Review Pages (Industry-Standard Implementation)
+// NOTE: Simple route moved to earlier position to avoid conflicts
+
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>${broker.name} Review 2025 - Detailed Analysis & Rating | BrokerAnalysis</title>
+        <meta name="description" content="Comprehensive ${broker.name} review covering spreads, regulation, platforms, and trading conditions. Expert analysis with pros, cons, and detailed ratings.">
+        <meta name="keywords" content="${broker.name} review, ${broker.name} spreads, ${broker.name} regulation, forex broker review, ${broker.slug}">
+        
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="article">
+        <meta property="og:title" content="${broker.name} Review 2025 - Detailed Analysis & Rating">
+        <meta property="og:description" content="Comprehensive ${broker.name} review covering spreads, regulation, platforms, and trading conditions. Expert analysis with pros, cons, and detailed ratings.">
+        <meta property="og:image" content="https://brokeranalysis.com/static/images/brokers/${broker.slug}-og.png">
+        <meta property="og:url" content="https://brokeranalysis.com/reviews/${broker.slug}">
+        
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:title" content="${broker.name} Review 2025 - Detailed Analysis & Rating">
+        <meta property="twitter:description" content="Comprehensive ${broker.name} review covering spreads, regulation, platforms, and trading conditions.">
+        <meta property="twitter:image" content="https://brokeranalysis.com/static/images/brokers/${broker.slug}-og.png">
+        
+        <link rel="canonical" href="https://brokeranalysis.com/reviews/${broker.slug}">
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+        <link href="/static/styles.css" rel="stylesheet">
+        
+        <!-- Structured Data - Review Schema -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "Review",
+          "itemReviewed": {
+            "@type": "FinancialService",
+            "name": "${broker.name}",
+            "description": "${broker.description_short || broker.description || 'Forex and CFD broker'}",
+            "url": "${broker.website_url}",
+            "logo": "${broker.logo_url}"
+          },
+          "author": {
+            "@type": "Organization",
+            "name": "BrokerAnalysis"
+          },
+          "reviewRating": {
+            "@type": "Rating",
+            "ratingValue": "${broker.rating}",
+            "bestRating": "5",
+            "worstRating": "1"
+          },
+          "publisher": {
+            "@type": "Organization",
+            "name": "BrokerAnalysis"
+          },
+          "datePublished": "${new Date().toISOString()}"
+        }
+        </script>
+    </head>
+    <body class="bg-blue-50 text-blue-900">
+        <!-- Navigation -->
+        <nav class="bg-white shadow-sm border-b sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-chart-line text-primary text-2xl"></i>
+                        <a href="/" class="text-xl font-bold text-blue-900">BrokerAnalysis</a>
+                    </div>
+                    <div class="hidden md:flex items-center space-x-6">
+                        <a href="/reviews" class="text-blue-800 hover:text-primary transition-colors">Reviews</a>
+                        <a href="/compare" class="text-blue-800 hover:text-primary transition-colors">Compare</a>
+                        <a href="/simulator" class="text-blue-800 hover:text-primary transition-colors">Simulator</a>
+                        <a href="/about" class="text-blue-800 hover:text-primary transition-colors">About</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Breadcrumb -->
+        <div class="bg-white border-b">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+                <nav class="flex" aria-label="Breadcrumb">
+                    <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                        <li><a href="/" class="text-blue-600 hover:text-primary">Home</a></li>
+                        <li class="flex items-center">
+                            <i class="fas fa-chevron-right text-gray-400 mx-2 text-sm"></i>
+                            <a href="/reviews" class="text-blue-600 hover:text-primary">Reviews</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-chevron-right text-gray-400 mx-2 text-sm"></i>
+                            <span class="text-gray-500">${broker.name}</span>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Hero Section -->
+        <div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-8">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row items-center gap-6">
+                    <div class="bg-white rounded-lg p-4 flex-shrink-0">
+                        <img src="${broker.logo_url}" alt="${broker.name} logo" class="h-16 w-auto">
+                    </div>
+                    <div class="flex-1 text-center md:text-left">
+                        <h1 class="text-4xl font-bold mb-2">${broker.name} Review 2025</h1>
+                        <p class="text-xl text-blue-100 mb-4">${broker.description_short || broker.description || 'Professional forex and CFD broker review'}</p>
+                        <div class="flex flex-col sm:flex-row gap-4 items-center justify-center md:justify-start">
+                            <div class="flex items-center gap-2">
+                                <div class="flex text-yellow-400">
+                                    ${Array(Math.floor(broker.rating)).fill().map(() => '<i class="fas fa-star"></i>').join('')}
+                                    ${broker.rating % 1 !== 0 ? '<i class="fas fa-star-half-alt"></i>' : ''}
+                                    ${Array(5 - Math.ceil(broker.rating)).fill().map(() => '<i class="far fa-star"></i>').join('')}
+                                </div>
+                                <span class="text-xl font-semibold">${broker.rating}/5.0</span>
+                            </div>
+                            <div class="text-blue-100">
+                                <i class="fas fa-shield-alt mr-2"></i>
+                                ${broker.is_regulated ? 'Regulated Broker' : 'Unregulated'}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <a href="${broker.website_url}" target="_blank" rel="noopener" class="bg-yellow-400 text-blue-900 px-6 py-3 rounded-lg font-semibold hover:bg-yellow-300 transition-colors">
+                            Visit ${broker.name}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Facts -->
+        <div class="bg-white py-6 border-b">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-2 md:grid-cols-6 gap-4">
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-blue-600">${broker.min_deposit_usd === 0 ? 'No Min' : '$' + broker.min_deposit_usd}</div>
+                        <div class="text-sm text-gray-600">Min Deposit</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-blue-600">${broker.max_leverage}</div>
+                        <div class="text-sm text-gray-600">Max Leverage</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-blue-600">${broker.spread_type}</div>
+                        <div class="text-sm text-gray-600">Spread Type</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-blue-600">${broker.established}</div>
+                        <div class="text-sm text-gray-600">Founded</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-blue-600">${broker.headquarters?.split(',')[0] || 'N/A'}</div>
+                        <div class="text-sm text-gray-600">Headquarters</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-blue-600">${broker.demo_account ? 'Yes' : 'No'}</div>
+                        <div class="text-sm text-gray-600">Demo Account</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Main Review Content -->
+                <div class="lg:col-span-2">
+                    <!-- Executive Summary -->
+                    <section class="bg-white rounded-lg shadow-sm p-6 mb-8">
+                        <h2 class="text-2xl font-bold mb-4">Executive Summary</h2>
+                        <div class="prose max-w-none">
+                            <p class="text-lg leading-relaxed mb-4">
+                                ${broker.description_long || broker.description || 'Comprehensive review content will be displayed here based on our detailed analysis of this broker.'}
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- Pros and Cons -->
+                    <section class="bg-white rounded-lg shadow-sm p-6 mb-8">
+                        <h2 class="text-2xl font-bold mb-6">Pros and Cons</h2>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h3 class="text-lg font-semibold text-green-700 mb-3 flex items-center">
+                                    <i class="fas fa-check-circle mr-2"></i>Pros
+                                </h3>
+                                <ul class="space-y-2">
+                                    ${broker.pros_text ? broker.pros_text.split('|').map(pro => `<li class="flex items-start"><i class="fas fa-plus text-green-500 mr-2 mt-1 text-sm"></i><span>${pro.trim()}</span></li>`).join('') : '<li class="text-gray-500">Pros information not available</li>'}
+                                </ul>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-red-700 mb-3 flex items-center">
+                                    <i class="fas fa-times-circle mr-2"></i>Cons
+                                </h3>
+                                <ul class="space-y-2">
+                                    ${broker.cons_text ? broker.cons_text.split('|').map(con => `<li class="flex items-start"><i class="fas fa-minus text-red-500 mr-2 mt-1 text-sm"></i><span>${con.trim()}</span></li>`).join('') : '<li class="text-gray-500">Cons information not available</li>'}
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Detailed Scoring -->
+                    <section class="bg-white rounded-lg shadow-sm p-6 mb-8">
+                        <h2 class="text-2xl font-bold mb-6">Detailed Ratings</h2>
+                        <div class="space-y-4">
+                            ${broker.regulation_score ? `
+                            <div class="flex items-center justify-between">
+                                <span class="font-medium">Regulation & Safety</span>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-32 bg-gray-200 rounded-full h-2">
+                                        <div class="bg-blue-500 h-2 rounded-full" style="width: ${broker.regulation_score}%"></div>
+                                    </div>
+                                    <span class="text-sm font-semibold">${Math.round(broker.regulation_score)}/100</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="font-medium">Spreads & Costs</span>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-32 bg-gray-200 rounded-full h-2">
+                                        <div class="bg-green-500 h-2 rounded-full" style="width: ${broker.spreads_score}%"></div>
+                                    </div>
+                                    <span class="text-sm font-semibold">${Math.round(broker.spreads_score)}/100</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="font-medium">Trading Platforms</span>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-32 bg-gray-200 rounded-full h-2">
+                                        <div class="bg-purple-500 h-2 rounded-full" style="width: ${broker.platforms_score}%"></div>
+                                    </div>
+                                    <span class="text-sm font-semibold">${Math.round(broker.platforms_score)}/100</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="font-medium">Customer Support</span>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-32 bg-gray-200 rounded-full h-2">
+                                        <div class="bg-yellow-500 h-2 rounded-full" style="width: ${broker.support_score}%"></div>
+                                    </div>
+                                    <span class="text-sm font-semibold">${Math.round(broker.support_score)}/100</span>
+                                </div>
+                            </div>
+                            ` : '<p class="text-gray-500">Detailed scoring not available</p>'}
+                        </div>
+                    </section>
+
+                    <!-- Spreads & Fees -->
+                    <section class="bg-white rounded-lg shadow-sm p-6 mb-8">
+                        <h2 class="text-2xl font-bold mb-6">Spreads & Trading Costs</h2>
+                        ${spreads.results && spreads.results.length > 0 ? `
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Currency Pair</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Spread From</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Avg Spread</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Commission</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    ${spreads.results.map(spread => `
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap font-medium">${spread.currency_pair}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">${spread.spread_from} pips</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">${spread.spread_avg} pips</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">$${spread.commission_per_lot || '0'}/lot</td>
+                                    </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                        ` : '<p class="text-gray-500">Detailed spread information not available</p>'}
+                    </section>
+
+                    <!-- Trading Platforms -->
+                    <section class="bg-white rounded-lg shadow-sm p-6 mb-8">
+                        <h2 class="text-2xl font-bold mb-6">Trading Platforms</h2>
+                        ${platforms.results && platforms.results.length > 0 ? `
+                        <div class="grid md:grid-cols-2 gap-4">
+                            ${platforms.results.map(platform => `
+                            <div class="border rounded-lg p-4 ${platform.primary_platform ? 'border-blue-500 bg-blue-50' : 'border-gray-200'}">
+                                <h3 class="font-semibold text-lg mb-2">${platform.name}</h3>
+                                <p class="text-gray-600 text-sm mb-3">${platform.description || 'Professional trading platform'}</p>
+                                <div class="flex flex-wrap gap-2">
+                                    ${platform.mobile_available ? '<span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">Mobile</span>' : ''}
+                                    ${platform.api_available ? '<span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">API</span>' : ''}
+                                    ${platform.algo_trading ? '<span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">Algo Trading</span>' : ''}
+                                </div>
+                            </div>
+                            `).join('')}
+                        </div>
+                        ` : '<p class="text-gray-500">Platform information not available</p>'}
+                    </section>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="lg:col-span-1">
+                    <!-- Quick Actions -->
+                    <div class="bg-white rounded-lg shadow-sm p-6 mb-6 sticky top-24">
+                        <h3 class="text-lg font-semibold mb-4">Quick Actions</h3>
+                        <div class="space-y-3">
+                            <a href="${broker.website_url}" target="_blank" rel="noopener" class="block w-full bg-blue-600 text-white text-center py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                                Visit ${broker.name}
+                            </a>
+                            <a href="/compare?brokers=${broker.slug}" class="block w-full bg-gray-100 text-blue-900 text-center py-3 rounded-lg hover:bg-gray-200 transition-colors">
+                                Compare with Others
+                            </a>
+                            <a href="/simulator?broker=${broker.slug}" class="block w-full bg-yellow-100 text-blue-900 text-center py-3 rounded-lg hover:bg-yellow-200 transition-colors">
+                                Cost Calculator
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Key Information -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h3 class="text-lg font-semibold mb-4">Key Information</h3>
+                        <dl class="space-y-3">
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500">Website</dt>
+                                <dd class="text-sm"><a href="${broker.website_url}" target="_blank" rel="noopener" class="text-blue-600 hover:underline">${broker.website_url}</a></dd>
+                            </div>
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500">Founded</dt>
+                                <dd class="text-sm">${broker.established}</dd>
+                            </div>
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500">Headquarters</dt>
+                                <dd class="text-sm">${broker.headquarters}</dd>
+                            </div>
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500">Clients</dt>
+                                <dd class="text-sm">${broker.client_count ? broker.client_count.toLocaleString() + '+' : 'N/A'}</dd>
+                            </div>
+                            <div>
+                                <dt class="text-sm font-medium text-gray-500">Company Type</dt>
+                                <dd class="text-sm">${broker.company_type || 'N/A'}</dd>
+                            </div>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Call to Action -->
+        <div class="bg-gradient-to-r from-blue-600 to-blue-800 py-12">
+            <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl font-bold text-white mb-4">Ready to Start Trading with ${broker.name}?</h2>
+                <p class="text-xl text-blue-100 mb-8">Join thousands of traders who have chosen ${broker.name} for their forex trading needs.</p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="${broker.website_url}" target="_blank" rel="noopener" class="bg-yellow-400 text-blue-900 px-8 py-4 rounded-lg font-semibold hover:bg-yellow-300 transition-colors">
+                        Open Account with ${broker.name}
+                    </a>
+                    <a href="/reviews" class="border border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-blue-900 transition-colors">
+                        Compare More Brokers
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
     </body>
     </html>
   `);
