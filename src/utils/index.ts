@@ -34,31 +34,47 @@ export function truncateText(text: string, maxLength: number): string {
   return text.slice(0, maxLength - 3) + '...';
 }
 
+export function getCurrentDomain(request?: Request): string {
+  // If we have a request object, extract the domain from it
+  if (request) {
+    const url = new URL(request.url);
+    return `${url.protocol}//${url.host}`;
+  }
+  
+  // Fallback to production domain for static generation
+  return 'https://brokeranalysis.com';
+}
+
 export function generateMetaTags(
   title: string,
   description: string,
   keywords?: string,
   canonical?: string,
-  ogImage?: string
+  ogImage?: string,
+  request?: Request
 ): string {
+  const domain = getCurrentDomain(request);
+  const fullCanonical = canonical?.startsWith('http') ? canonical : `${domain}${canonical || ''}`;
+  const fullOgImage = ogImage?.startsWith('http') ? ogImage : `${domain}${ogImage || '/static/images/brokeranalysis-og-image.png'}`;
+  
   return `
     <title>${title}</title>
     <meta name="description" content="${description}">
     ${keywords ? `<meta name="keywords" content="${keywords}">` : ''}
-    ${canonical ? `<link rel="canonical" href="${canonical}">` : ''}
+    ${canonical ? `<link rel="canonical" href="${fullCanonical}">` : ''}
     
     <!-- Open Graph -->
     <meta property="og:title" content="${title}">
     <meta property="og:description" content="${description}">
     <meta property="og:type" content="website">
-    ${canonical ? `<meta property="og:url" content="${canonical}">` : ''}
-    ${ogImage ? `<meta property="og:image" content="${ogImage}">` : ''}
+    ${canonical ? `<meta property="og:url" content="${fullCanonical}">` : ''}
+    <meta property="og:image" content="${fullOgImage}">
     
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="${title}">
     <meta name="twitter:description" content="${description}">
-    ${ogImage ? `<meta name="twitter:image" content="${ogImage}">` : ''}
+    <meta name="twitter:image" content="${fullOgImage}">
   `;
 }
 

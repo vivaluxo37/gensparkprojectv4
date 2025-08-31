@@ -936,6 +936,212 @@ window.sendQuickMessage = function(message) {
     window.app.sendChatMessage(message);
 };
 
+// Country brokers loading function
+window.loadCountryBrokers = async function(countrySlug, regulatorName) {
+    const gridElement = document.getElementById('country-brokers-grid');
+    const regulationInfo = document.getElementById('regulation-info');
+    
+    if (!gridElement) return;
+    
+    try {
+        gridElement.innerHTML = '<div class="col-span-full flex justify-center py-8"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div></div>';
+        
+        // Load brokers for this country
+        const response = await fetch(`/api/brokers?limit=50`);
+        const data = await response.json();
+        
+        if (!data.brokers || data.brokers.length === 0) {
+            gridElement.innerHTML = '<div class="col-span-full text-center py-8 text-gray-500">No brokers found for this region.</div>';
+            return;
+        }
+        
+        // Filter brokers by regulatory relevance (this is a simplified filter - you may want to enhance this)
+        const relevantBrokers = data.brokers.filter(broker => 
+            broker.is_regulated || broker.headquarters?.toLowerCase().includes(countrySlug) ||
+            broker.regulators?.toLowerCase().includes(regulatorName?.toLowerCase())
+        );
+        
+        // Update regulation information
+        if (regulationInfo) {
+            regulationInfo.innerHTML = getRegulationInfo(regulatorName, countrySlug);
+        }
+        
+        // Render broker cards
+        gridElement.innerHTML = relevantBrokers.slice(0, 12).map(broker => `
+            <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-200 border border-gray-200">
+                <div class="p-6">
+                    <!-- Broker Header -->
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-center space-x-3">
+                            <img src="${broker.logo_url || '/static/images/broker-placeholder.png'}" 
+                                 alt="${broker.name} logo" 
+                                 class="w-12 h-12 rounded-lg object-contain bg-gray-50 p-1"
+                                 onerror="this.src='/static/images/broker-placeholder.png'">
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-900">${broker.name}</h3>
+                                <div class="flex items-center space-x-1">
+                                    ${generateStarRating(broker.rating)}
+                                    <span class="text-sm text-gray-600 ml-2">${broker.rating}/5</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Key Features -->
+                    <div class="grid grid-cols-2 gap-3 mb-4 text-sm">
+                        <div>
+                            <span class="text-gray-500">Min Deposit:</span>
+                            <div class="font-medium">${formatCurrency(broker.min_deposit_usd)}</div>
+                        </div>
+                        <div>
+                            <span class="text-gray-500">Max Leverage:</span>
+                            <div class="font-medium">1:${broker.max_leverage}</div>
+                        </div>
+                        <div>
+                            <span class="text-gray-500">Spread Type:</span>
+                            <div class="font-medium capitalize">${broker.spread_type || 'Variable'}</div>
+                        </div>
+                        <div>
+                            <span class="text-gray-500">Regulation:</span>
+                            <div class="font-medium">${broker.is_regulated ? 'Yes' : 'No'}</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Features -->
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        ${broker.demo_account ? '<span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full">Demo Account</span>' : ''}
+                        ${broker.mobile_app ? '<span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-full">Mobile App</span>' : ''}
+                        ${broker.copy_trading ? '<span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded-full">Copy Trading</span>' : ''}
+                        ${broker.social_trading ? '<span class="px-2 py-1 bg-pink-100 text-pink-700 text-xs rounded-full">Social Trading</span>' : ''}
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="flex space-x-2">
+                        <a href="/reviews/${broker.slug}" 
+                           class="flex-1 bg-blue-600 text-white text-center py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium">
+                            Read Review
+                        </a>
+                        <a href="${broker.website_url}" 
+                           target="_blank" 
+                           rel="noopener noreferrer"
+                           class="flex-1 bg-gray-100 text-gray-700 text-center py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium">
+                            Visit Broker
+                        </a>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+        
+    } catch (error) {
+        console.error('Error loading country brokers:', error);
+        gridElement.innerHTML = '<div class="col-span-full text-center py-8 text-red-500">Failed to load brokers. Please try again.</div>';
+    }
+};
+
+// Helper function to generate star rating
+function generateStarRating(rating) {
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 !== 0;
+    const emptyStars = 5 - Math.ceil(rating);
+    
+    return '★'.repeat(fullStars) + 
+           (hasHalfStar ? '☆' : '') + 
+           '☆'.repeat(emptyStars);
+}
+
+// Helper function to format currency
+function formatCurrency(amount) {
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0
+    }).format(amount);
+}
+
+// Setup filters for reviews page
+window.setupFilters = function() {
+    const searchInput = document.getElementById('broker-search');
+    const regulationFilter = document.getElementById('filter-regulation');
+    const depositFilter = document.getElementById('filter-min-deposit');
+    
+    if (searchInput) {
+        searchInput.addEventListener('input', debounce(filterBrokers, 300));
+    }
+    
+    if (regulationFilter) {
+        regulationFilter.addEventListener('change', filterBrokers);
+    }
+    
+    if (depositFilter) {
+        depositFilter.addEventListener('change', filterBrokers);
+    }
+};
+
+// Filter brokers based on search and filters
+function filterBrokers() {
+    if (typeof Reviews !== 'undefined' && window.reviewsInstance) {
+        window.reviewsInstance.applyFilters();
+    }
+}
+
+// Debounce helper function
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// Helper function to get regulation information
+function getRegulationInfo(regulatorName, countrySlug) {
+    const regulationData = {
+        'ASIC': {
+            fullName: 'Australian Securities and Investments Commission',
+            description: 'ASIC is Australia\'s corporate, markets, financial services and consumer credit regulator. ASIC-regulated brokers must comply with strict capital adequacy requirements, client money segregation rules, and provide negative balance protection.',
+            benefits: ['Client money segregation', 'Negative balance protection', 'Dispute resolution scheme', 'Strict capital requirements']
+        },
+        'FCA': {
+            fullName: 'Financial Conduct Authority',
+            description: 'The FCA regulates the conduct of financial services firms in the UK. FCA-regulated brokers must adhere to stringent operational requirements and provide robust client protections.',
+            benefits: ['£85,000 FSCS protection', 'Strict conduct rules', 'Client money protection', 'Regular supervision']
+        },
+        'IIROC': {
+            fullName: 'Investment Industry Regulatory Organization of Canada',
+            description: 'IIROC is a self-regulatory organization that oversees investment dealers and trading activity in Canada\'s debt and equity markets.',
+            benefits: ['CIPF protection', 'Strict compliance standards', 'Market surveillance', 'Professional standards']
+        },
+        'CFTC/NFA': {
+            fullName: 'Commodity Futures Trading Commission / National Futures Association',
+            description: 'The CFTC and NFA jointly regulate forex trading in the United States, providing comprehensive oversight and client protections.',
+            benefits: ['Segregated customer funds', 'First-in-first-out rules', 'Limited leverage (50:1)', 'Strict regulatory oversight']
+        }
+    };
+    
+    const info = regulationData[regulatorName] || {
+        fullName: regulatorName,
+        description: `${regulatorName} provides regulatory oversight for financial services in the region.`,
+        benefits: ['Regulatory oversight', 'Client protections', 'Market supervision']
+    };
+    
+    return `
+        <h4 class="font-semibold text-lg mb-2">${info.fullName} (${regulatorName})</h4>
+        <p class="text-gray-700 mb-4">${info.description}</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            ${info.benefits.map(benefit => `
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-check-circle text-green-600"></i>
+                    <span class="text-sm">${benefit}</span>
+                </div>
+            `).join('')}
+        </div>
+    `;
+}
+
 // Initialize the application
 document.addEventListener('DOMContentLoaded', () => {
     window.app = new BrokerAnalysis();

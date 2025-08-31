@@ -2,7 +2,7 @@
 import { Hono } from 'hono';
 import type { Bindings } from '../types';
 import { BrokerService } from '../services/brokerService';
-import { generateBrokerReviewHTML } from '../components/BrokerReview';
+import { generateComprehensiveBrokerReviewHTML } from '../components/EnhancedBrokerReview';
 
 const brokerRoutes = new Hono<{ Bindings: Bindings }>();
 
@@ -92,7 +92,7 @@ brokerRoutes.get('/reviews/ic-markets', async (c) => {
       return c.html('<h1>IC Markets not found</h1><p>Broker data not available in database.</p>', 404);
     }
     
-    return c.html(generateBrokerReviewHTML(broker));
+    return c.html(generateComprehensiveBrokerReviewHTML(broker, c.req.raw));
   } catch (error) {
     return c.html(`<h1>Error</h1><p>Database error: ${error.message}</p>`, 500);
   }
@@ -107,7 +107,7 @@ brokerRoutes.get('/reviews/pepperstone', async (c) => {
       return c.html('<h1>Pepperstone not found</h1><p>Broker data not available in database.</p>', 404);
     }
     
-    return c.html(generateBrokerReviewHTML(broker));
+    return c.html(generateComprehensiveBrokerReviewHTML(broker, c.req.raw));
   } catch (error) {
     return c.html(`<h1>Error</h1><p>Database error: ${error.message}</p>`, 500);
   }
@@ -122,7 +122,7 @@ brokerRoutes.get('/reviews/interactive-brokers', async (c) => {
       return c.html('<h1>Interactive Brokers not found</h1><p>Broker data not available in database.</p>', 404);
     }
     
-    return c.html(generateBrokerReviewHTML(broker));
+    return c.html(generateComprehensiveBrokerReviewHTML(broker, c.req.raw));
   } catch (error) {
     return c.html(`<h1>Error</h1><p>Database error: ${error.message}</p>`, 500);
   }
@@ -137,7 +137,7 @@ brokerRoutes.get('/reviews/oanda', async (c) => {
       return c.html('<h1>OANDA not found</h1><p>Broker data not available in database.</p>', 404);
     }
     
-    return c.html(generateBrokerReviewHTML(broker));
+    return c.html(generateComprehensiveBrokerReviewHTML(broker, c.req.raw));
   } catch (error) {
     return c.html(`<h1>Error</h1><p>Database error: ${error.message}</p>`, 500);
   }
@@ -152,10 +152,41 @@ brokerRoutes.get('/reviews/xm-group', async (c) => {
       return c.html('<h1>XM Group not found</h1><p>Broker data not available in database.</p>', 404);
     }
     
-    return c.html(generateBrokerReviewHTML(broker));
+    return c.html(generateComprehensiveBrokerReviewHTML(broker, c.req.raw));
   } catch (error) {
     return c.html(`<h1>Error</h1><p>Database error: ${error.message}</p>`, 500);
   }
+});
+
+// Programmatic SEO routes for broker categories
+brokerRoutes.get('/brokers/regulation/:regulator', async (c) => {
+  const regulator = c.req.param('regulator').toUpperCase();
+  const brokerService = new BrokerService(c.env.DB);
+  
+  try {
+    // This would need to be implemented in the broker service
+    // For now, redirect to main reviews page
+    return c.redirect('/reviews');
+  } catch (error) {
+    return c.html(`<h1>Error</h1><p>Database error: ${error.message}</p>`, 500);
+  }
+});
+
+brokerRoutes.get('/brokers/spread-type/:spreadType', async (c) => {
+  const spreadType = c.req.param('spreadType');
+  return c.redirect('/reviews'); // Placeholder
+});
+
+brokerRoutes.get('/brokers/platform/:platform', async (c) => {
+  const platform = c.req.param('platform');
+  return c.redirect('/reviews'); // Placeholder
+});
+
+// Compare specific brokers (SEO-friendly URLs)
+brokerRoutes.get('/compare/:broker1-vs-:broker2', async (c) => {
+  const broker1 = c.req.param('broker1');
+  const broker2 = c.req.param('broker2');
+  return c.redirect(`/compare?brokers=${broker1},${broker2}`);
 });
 
 // Generic dynamic route (LAST - least specific)
@@ -183,7 +214,7 @@ brokerRoutes.get('/reviews/:brokerSlug', async (c) => {
       `, 404);
     }
     
-    return c.html(generateBrokerReviewHTML(broker));
+    return c.html(generateComprehensiveBrokerReviewHTML(broker, c.req.raw));
   } catch (error) {
     return c.html(`<h1>Error</h1><p>Database error: ${error.message}</p>`, 500);
   }

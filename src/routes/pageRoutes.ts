@@ -3,7 +3,7 @@ import { Hono } from 'hono';
 import { getCookie } from 'hono/cookie';
 import type { Bindings } from '../types';
 import { BrokerService } from '../services/brokerService';
-import { generateMetaTags, generateStructuredData } from '../utils';
+import { generateMetaTags, generateStructuredData, getCurrentDomain } from '../utils';
 import { renderLayout } from '../components/Layout.js';
 import { renderHomePage } from '../components/HomePage.js';
 import { renderFAQ } from '../components/FAQ.js';
@@ -21,7 +21,8 @@ pageRoutes.get('/', (c) => {
     title: 'Best Forex Brokers 2025 - Compare 67+ Regulated Brokers | BrokerAnalysis',
     description: 'Find the perfect forex broker with our intelligent matching system. Compare spreads, regulation, and features of 67+ top-rated brokers. Get personalized recommendations now.',
     keywords: 'forex brokers, best forex brokers 2025, regulated forex brokers, forex broker comparison, forex trading, broker reviews, forex spreads, trading platforms',
-    canonicalUrl: 'https://brokeranalysis.com/',
+    canonicalUrl: '/',
+    request: c.req.raw,
     additionalHead: `
       <!-- Static CSS preload disabled for development -->
       <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -54,7 +55,9 @@ pageRoutes.get('/reviews', (c) => {
           'Forex Broker Reviews 2025 - In-Depth Analysis & Ratings | BrokerAnalysis',
           'Comprehensive reviews of 12+ top forex brokers. Read detailed analysis of spreads, regulation, platforms, and features. Updated for 2025.',
           'forex broker reviews, IC Markets review, Pepperstone review, broker ratings, forex broker comparison',
-          'https://brokeranalysis.com/reviews'
+          '/reviews',
+          undefined,
+          c.req.raw
         )}
         
         <link rel="stylesheet" href="/static/styles.css">
@@ -131,7 +134,9 @@ pageRoutes.get('/about', (c) => {
           'About BrokerAnalysis - Our Methodology & Team | Forex Broker Reviews',
           'Learn about our rigorous broker review methodology, rating system, and commitment to helping traders find the best forex brokers.',
           'about broker analysis, forex broker methodology, rating system, broker reviews',
-          'https://brokeranalysis.com/about'
+          '/about',
+          undefined,
+          c.req.raw
         )}
         
         <link rel="stylesheet" href="/static/styles.css">
@@ -298,7 +303,9 @@ pageRoutes.get('/simulator', (c) => {
           'Trading Cost Calculator - Compare Forex Broker Fees & Spreads | BrokerAnalysis',
           'Calculate real trading costs across multiple brokers. Compare spreads, commissions, and total costs based on your trading strategy and volume.',
           'trading cost calculator, forex fees calculator, spread comparison, broker costs, trading simulator',
-          'https://brokeranalysis.com/simulator'
+          '/simulator',
+          undefined,
+          c.req.raw
         )}
         
         <link rel="stylesheet" href="/static/styles.css">
@@ -449,7 +456,9 @@ countryPages.forEach(country => {
             `Best Forex Brokers in ${country.name} 2025 - ${country.regulator} Regulated | BrokerAnalysis`,
             `Find the best ${country.regulator}-regulated forex brokers for traders in ${country.name}. Compare spreads, features, and regulations from top-rated brokers.`,
             `forex brokers ${country.name}, ${country.regulator} regulated brokers, best forex broker ${country.name}`,
-            `https://brokeranalysis.com/brokers/${country.slug}`
+            `/brokers/${country.slug}`,
+            undefined,
+            c.req.raw
           )}
           
           <link rel="stylesheet" href="/static/styles.css">
@@ -580,11 +589,12 @@ pageRoutes.get('/dashboard', async (c) => {
 
 // SEO pages (robots.txt, sitemap.xml)
 pageRoutes.get('/robots.txt', (c) => {
+  const domain = getCurrentDomain(c.req.raw);
   return c.text(`User-agent: *
 Allow: /
 
 # Sitemaps
-Sitemap: https://brokeranalysis.com/sitemap.xml
+Sitemap: ${domain}/sitemap.xml
 
 # Crawl-delay for respectful crawling
 Crawl-delay: 1
@@ -615,7 +625,7 @@ pageRoutes.get('/sitemap.xml', async (c) => {
     const brokersResult = await brokerService.getAllBrokers(1, 100);
     const brokers = brokersResult.brokers;
     
-    const baseUrl = 'https://brokeranalysis.com';
+    const baseUrl = getCurrentDomain(c.req.raw);
     const currentDate = new Date().toISOString().split('T')[0];
     
     let sitemap = `<?xml version="1.0" encoding="UTF-8"?>
