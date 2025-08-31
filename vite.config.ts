@@ -5,10 +5,12 @@ import { defineConfig } from 'vite'
 
 export default defineConfig({
   plugins: [
-    build(),
+    build({
+      entry: 'src/app.tsx'
+    }),
     devServer({
       adapter,
-      entry: 'src/index.tsx'
+      entry: 'src/app.tsx'
     })
   ],
   css: {
@@ -16,6 +18,9 @@ export default defineConfig({
   },
   build: {
     cssCodeSplit: true,
+    // Enable tree shaking and optimization
+    minify: 'esbuild',
+    target: 'esnext',
     rollupOptions: {
       output: {
         assetFileNames: (assetInfo) => {
@@ -24,6 +29,14 @@ export default defineConfig({
           }
           return 'static/[name]-[hash][extname]'
         }
+      },
+      // Optimize external dependencies
+      external: [],
+      // Tree shaking configuration
+      treeshake: {
+        moduleSideEffects: false,
+        propertyReadSideEffects: false,
+        unknownGlobalSideEffects: false
       }
     }
   }
