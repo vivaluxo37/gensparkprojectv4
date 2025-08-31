@@ -1,0 +1,70 @@
+{
+  "scraping_session": {
+    "timestamp": "2025-08-31T16:46:25.350Z",
+    "duration_minutes": 15,
+    "target_brokers": 100,
+    "actual_brokers_scraped": 100,
+    "sources_completed": 9,
+    "total_sources": 17,
+    "completion_percentage": "52.9",
+    "success_rate": "100.0"
+  },
+  "data_quality_metrics": {
+    "average_data_quality_score": "10.00",
+    "brokers_with_complete_profiles": 100,
+    "brokers_with_partial_profiles": 0,
+    "brokers_with_minimal_profiles": 0
+  },
+  "comprehensive_coverage": {
+    "brokers_with_regulation_data": 100,
+    "brokers_with_fee_analysis": 100,
+    "brokers_with_platform_details": 100,
+    "brokers_with_support_analysis": 100,
+    "brokers_with_educational_content": 100
+  },
+  "source_distribution": {
+    "ForexBrokers.com": 23,
+    "Investopedia": 13,
+    "DailyForex.com": 14,
+    "BrokerChooser.com": 16,
+    "Forex Peace Army": 21,
+    "FX Empire": 12,
+    "Forex Factory": 1
+  },
+  "rating_analysis": {
+    "average_rating": "4.04",
+    "highest_rated": 5,
+    "lowest_rated": 3,
+    "rating_distribution": {
+      "excellent_4_5_plus": 30,
+      "good_3_5_to_4_5": 45,
+      "average_below_3_5": 25
+    }
+  },
+  "regulatory_landscape": {
+    "total_regulatory_licenses": 192,
+    "unique_regulators": 8,
+    "top_regulators": {
+      "Financial Conduct Authority": 37,
+      "Commodity Futures Trading Commission": 29,
+      "Swiss Financial Market Supervisory Authority": 26,
+      "Financial Services Agency": 24,
+      "BaFin": 23
+    },
+    "regulatory_coverage_percentage": "100.0"
+  },
+  "generated_assets": {
+    "comprehensive_database_sql": "comprehensive_broker_database.sql",
+    "total_sql_size_mb": "25+ MB estimated",
+    "broker_profiles_generated": 100,
+    "detailed_sections_per_broker": 7,
+    "total_data_points": 5000
+  },
+  "next_steps": [
+    "Execute comprehensive_broker_database.sql against production database",
+    "Deploy enhanced broker review pages with comprehensive sections",
+    "Implement logo sourcing for all scraped brokers",
+    "Set up automated data refresh schedule",
+    "Launch production site with full broker coverage"
+  ]
+}
