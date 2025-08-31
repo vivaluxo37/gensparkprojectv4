@@ -88,7 +88,7 @@
   }
   
   .card {
-    @apply bg-white rounded-lg shadow-soft border border-gray-200;
+    @apply bg-white rounded-lg shadow-sm border border-gray-200;
   }
   
   .card-header {

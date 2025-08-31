@@ -8,6 +8,8 @@ import { renderLayout } from '../components/Layout.js';
 import { renderHomePage } from '../components/HomePage.js';
 import { renderFAQ } from '../components/FAQ.js';
 import { renderBrokersDirectoryPage } from '../components/BrokersDirectoryPage.js';
+import { renderCountriesDirectoryPage } from '../components/CountriesDirectoryPage.js';
+import { renderRegulatorPage } from '../components/RegulatorPage.js';
 
 const pageRoutes = new Hono<{ Bindings: Bindings }>();
 
@@ -82,6 +84,175 @@ pageRoutes.get('/brokers', async (c) => {
       totalBrokers: 0
     }));
   }
+});
+
+// Countries directory page - comprehensive listing of countries with regulated brokers
+pageRoutes.get('/countries', (c) => {
+  // Define countries with enhanced information
+  const countries = [
+    { slug: 'australia', name: 'Australia', regulator: 'ASIC', brokerCount: 15, 
+      description: 'Australia offers world-class forex regulation through ASIC with strict capital requirements and comprehensive trader protection.' },
+    { slug: 'uk', name: 'United Kingdom', regulator: 'FCA', brokerCount: 22,
+      description: 'The UK\'s FCA provides gold-standard regulation with rigorous oversight and strong consumer protection measures.' },
+    { slug: 'canada', name: 'Canada', regulator: 'IIROC', brokerCount: 8,
+      description: 'Canadian regulation through IIROC ensures high standards of investor protection and market integrity.' },
+    { slug: 'usa', name: 'United States', regulator: 'CFTC/NFA', brokerCount: 6,
+      description: 'US regulation through CFTC and NFA offers the highest level of oversight with substantial capital requirements.' },
+    { slug: 'south-africa', name: 'South Africa', regulator: 'FSCA', brokerCount: 12,
+      description: 'South Africa\'s FSCA provides robust regulation for the African continent with growing international recognition.' },
+    { slug: 'pakistan', name: 'Pakistan', regulator: 'SECP', brokerCount: 5,
+      description: 'Pakistan\'s SECP oversees forex markets with developing regulatory framework and increasing market participation.' },
+    { slug: 'philippines', name: 'Philippines', regulator: 'BSP', brokerCount: 7,
+      description: 'The Philippines\' BSP regulates forex trading through central bank oversight ensuring market stability.' },
+    { slug: 'india', name: 'India', regulator: 'SEBI', brokerCount: 9,
+      description: 'India\'s SEBI provides comprehensive financial market regulation with strong emphasis on investor protection.' },
+    { slug: 'malaysia', name: 'Malaysia', regulator: 'SC', brokerCount: 8,
+      description: 'Malaysia\'s SC offers Islamic finance-compliant regulation alongside conventional forex market oversight.' },
+    { slug: 'dubai', name: 'Dubai/UAE', regulator: 'DFSA', brokerCount: 11,
+      description: 'Dubai\'s DFSA serves as the Middle East financial hub with international standards and sophisticated regulation.' },
+    { slug: 'qatar', name: 'Qatar', regulator: 'QFCRA', brokerCount: 4,
+      description: 'Qatar\'s QFCRA provides Gulf region financial oversight with focus on institutional and retail market development.' },
+    { slug: 'indonesia', name: 'Indonesia', regulator: 'Bappebti', brokerCount: 6,
+      description: 'Indonesia\'s Bappebti regulates commodity and forex trading with emphasis on market development and protection.' }
+  ];
+
+  return c.html(renderCountriesDirectoryPage(countries, {
+    canonicalUrl: '/countries',
+    request: c.req.raw
+  }));
+});
+
+// Regulator-specific pages for SEO
+const regulatorRoutes = [
+  {
+    slug: 'asic',
+    info: {
+      name: 'ASIC',
+      fullName: 'Australian Securities and Investments Commission',
+      country: 'Australia',
+      website: 'https://asic.gov.au',
+      established: 2001,
+      description: 'ASIC is Australia\'s corporate, markets and financial services regulator. It ensures fair, orderly and transparent markets and provides consumer protection for retail clients.',
+      keyFeatures: [
+        'Strict capital adequacy requirements',
+        'Segregated client fund protection',
+        'Regular financial reporting',
+        'Professional indemnity insurance',
+        'Market maker oversight',
+        'Retail client protections'
+      ],
+      protections: [
+        'Australian Financial Complaints Authority',
+        'Compensation scheme of last resort',
+        'Negative balance protection',
+        'Professional dispute resolution',
+        'Regular compliance audits',
+        'Client money segregation'
+      ],
+      capitalRequirements: 'AUD $1 million minimum',
+      compensationScheme: 'Australian Financial Complaints Authority',
+      brokerCount: 15
+    }
+  },
+  {
+    slug: 'fca',
+    info: {
+      name: 'FCA',
+      fullName: 'Financial Conduct Authority',
+      country: 'United Kingdom',
+      website: 'https://fca.org.uk',
+      established: 2013,
+      description: 'The FCA regulates the financial services industry in the UK. Its role includes protecting consumers, ensuring industry competition, and promoting market integrity.',
+      keyFeatures: [
+        'Prudential regulation standards',
+        'Consumer protection focus',
+        'Market conduct supervision',
+        'Senior Managers Regime',
+        'Treating Customers Fairly',
+        'Product intervention powers'
+      ],
+      protections: [
+        'Financial Services Compensation Scheme',
+        'Financial Ombudsman Service',
+        'Client money protection rules',
+        'Professional indemnity requirements',
+        'Regular stress testing',
+        'Enhanced due diligence'
+      ],
+      capitalRequirements: '£730,000 minimum (€1 million)',
+      compensationScheme: 'FSCS up to £85,000',
+      brokerCount: 22
+    }
+  },
+  {
+    slug: 'cysec',
+    info: {
+      name: 'CySEC',
+      fullName: 'Cyprus Securities and Exchange Commission',
+      country: 'Cyprus',
+      website: 'https://cysec.gov.cy',
+      established: 2001,
+      description: 'CySEC supervises the investment services market in Cyprus and ensures MiFID II compliance throughout the European Union.',
+      keyFeatures: [
+        'MiFID II compliance',
+        'EU passporting rights',
+        'Investor compensation fund',
+        'Best execution requirements',
+        'Product governance rules',
+        'Conduct of business standards'
+      ],
+      protections: [
+        'Investor Compensation Fund',
+        'MiFID II investor protections',
+        'Client categorization rules',
+        'Appropriateness assessments',
+        'Negative balance protection',
+        'Segregated client funds'
+      ],
+      capitalRequirements: '€730,000 minimum',
+      compensationScheme: 'ICF up to €20,000',
+      brokerCount: 18
+    }
+  },
+  {
+    slug: 'cftc-nfa',
+    info: {
+      name: 'CFTC/NFA',
+      fullName: 'Commodity Futures Trading Commission / National Futures Association',
+      country: 'United States',
+      website: 'https://cftc.gov',
+      established: 1974,
+      description: 'The CFTC regulates commodity futures and option markets in the US, while the NFA provides industry-wide self-regulatory programs.',
+      keyFeatures: [
+        'Dodd-Frank Act compliance',
+        'Substantial capital requirements',
+        'Daily financial reporting',
+        'Risk management standards',
+        'Customer protection rules',
+        'Anti-fraud enforcement'
+      ],
+      protections: [
+        'Customer segregated funds',
+        'NFA arbitration program',
+        'Minimum capital requirements',
+        'Regular examinations',
+        'SIPC protection available',
+        'Whistleblower programs'
+      ],
+      capitalRequirements: '$20 million adjusted net capital',
+      compensationScheme: 'NFA arbitration up to $500,000',
+      brokerCount: 6
+    }
+  }
+];
+
+regulatorRoutes.forEach(regulator => {
+  pageRoutes.get(`/regulators/${regulator.slug}`, (c) => {
+    return c.html(renderRegulatorPage(regulator.info, {
+      canonicalUrl: `/regulators/${regulator.slug}`,
+      request: c.req.raw
+    }));
+  });
 });
 
 // Reviews listing page
@@ -1006,8 +1177,37 @@ countryPages.forEach(country => {
                       <i class="fas fa-shield-alt text-green-600 text-xl mr-3"></i>
                       <h2 class="text-xl font-semibold">About ${country.regulator} Regulation</h2>
                   </div>
-                  <div id="regulation-info" class="text-gray-700">
-                      <!-- Regulation information will be loaded here -->
+                  <div class="text-gray-700">
+                      <p class="mb-4">
+                          The ${country.regulator} regulates forex and financial services in ${country.name}, 
+                          ensuring strict compliance standards and comprehensive investor protection measures.
+                      </p>
+                      <div class="grid md:grid-cols-2 gap-6">
+                          <div>
+                              <h3 class="font-semibold mb-2">Key Benefits:</h3>
+                              <ul class="text-sm space-y-1">
+                                  <li>• Segregated client fund protection</li>
+                                  <li>• Compensation scheme coverage</li>
+                                  <li>• Regular financial audits</li>
+                                  <li>• Professional dispute resolution</li>
+                              </ul>
+                          </div>
+                          <div>
+                              <h3 class="font-semibold mb-2">Trader Protection:</h3>
+                              <ul class="text-sm space-y-1">
+                                  <li>• Negative balance protection</li>
+                                  <li>• Transparent fee structures</li>
+                                  <li>• Best execution standards</li>
+                                  <li>• Market conduct oversight</li>
+                              </ul>
+                          </div>
+                      </div>
+                      <div class="mt-4">
+                          <a href="/regulators/${country.regulator.toLowerCase().replace('/', '-')}" 
+                             class="text-blue-600 hover:text-blue-800 font-medium text-sm">
+                              Learn more about ${country.regulator} regulation →
+                          </a>
+                      </div>
                   </div>
               </div>
 
@@ -1262,6 +1462,7 @@ function generateNavigation(): string {
                 
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="/brokers" class="text-gray-700 hover:text-blue-600 transition-colors">Brokers</a>
+                    <a href="/countries" class="text-gray-700 hover:text-blue-600 transition-colors">Countries</a>
                     <a href="/reviews" class="text-gray-700 hover:text-blue-600 transition-colors">Reviews</a>
                     <a href="/compare" class="text-gray-700 hover:text-blue-600 transition-colors">Compare</a>
                     <a href="/simulator" class="text-gray-700 hover:text-blue-600 transition-colors">Calculator</a>
@@ -1283,6 +1484,7 @@ function generateNavigation(): string {
         <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
             <div class="px-4 py-2 space-y-2">
                 <a href="/brokers" class="block py-2 text-gray-700">Brokers</a>
+                <a href="/countries" class="block py-2 text-gray-700">Countries</a>
                 <a href="/reviews" class="block py-2 text-gray-700">Reviews</a>
                 <a href="/compare" class="block py-2 text-gray-700">Compare</a>
                 <a href="/simulator" class="block py-2 text-gray-700">Calculator</a>
