@@ -55,19 +55,17 @@ export function renderLayout(content: string, options: LayoutOptions = {}): stri
         <meta property="twitter:image" content="${ogImage}">
         
         <!-- Favicon and App Icons -->
-        <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
-        <link rel="icon" type="image/png" sizes="32x32" href="/static/images/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/static/images/favicon-16x16.png">
-        <link rel="apple-touch-icon" sizes="180x180" href="/static/images/apple-touch-icon.png">
+        <!-- <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico"> -->
+        <!-- Favicon icons temporarily disabled for development -->
         
         <!-- Preconnect to external domains -->
-        <link href="/static/styles.css" rel="stylesheet">
         <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
         <link rel="dns-prefetch" href="https://fonts.googleapis.com">
         
         <!-- CSS -->
         <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
-        <link href="/static/styles.css" rel="stylesheet">
+        <!-- Tailwind CSS CDN for development -->
+        <script src="https://cdn.tailwindcss.com"></script>
         
         <!-- Structured Data - Organization -->
         <script type="application/ld+json">

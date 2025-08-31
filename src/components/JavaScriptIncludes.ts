@@ -3,14 +3,7 @@ export function renderJavaScriptIncludes(): string {
     <!-- External JavaScript Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
     
-    <!-- Custom JavaScript Files -->
-    <script src="/static/enhanced-broker-database.js"></script>
-    <script src="/static/auth.js"></script>
-    <script src="/static/navigation.js"></script>
-    <script src="/static/broker-matches.js"></script>
-    <script src="/static/chatbot.js"></script>
-    <script src="/static/faq.js"></script>
-    <script src="/static/featured-brokers.js"></script>
+    <!-- Note: Static JS files temporarily disabled for development - functionality is embedded inline below -->
     
     <!-- Inline JavaScript for immediate functionality -->
     <script>

@@ -23,7 +23,7 @@ pageRoutes.get('/', (c) => {
     keywords: 'forex brokers, best forex brokers 2025, regulated forex brokers, forex broker comparison, forex trading, broker reviews, forex spreads, trading platforms',
     canonicalUrl: 'https://brokeranalysis.com/',
     additionalHead: `
-      <link rel="preload" href="/static/styles.css" as="style">
+      <!-- Static CSS preload disabled for development -->
       <link rel="preconnect" href="https://fonts.googleapis.com">
       <link rel="preconnect" href="https://cdnjs.cloudflare.com">
       ${generateStructuredData({
