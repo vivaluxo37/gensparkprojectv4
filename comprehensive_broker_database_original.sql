@@ -30,8 +30,8 @@ INSERT INTO brokers (
   regulation_trust_score, fees_score, platform_tools_score, deposit_withdrawal_score,
   customer_support_score, research_education_score, user_reviews_count
 ) VALUES (
-  'MetaTrader 4',
-  'metatrader-4', 
+  'MetaTrader',
+  'metatrader', 
   'https://example-metatrader.com',
   '/static/images/brokers/metatrader-logo.svg',
   3.4,
@@ -100,8 +100,8 @@ INSERT INTO brokers (
   regulation_trust_score, fees_score, platform_tools_score, deposit_withdrawal_score,
   customer_support_score, research_education_score, user_reviews_count
 ) VALUES (
-  'Blueberry Markets',
-  'blueberry-markets', 
+  'Blueberry Markets ForexBrokers',
+  'blueberry-markets-forexbrokers', 
   'https://example-blueberry-markets-forexbrokers.com',
   '/static/images/brokers/blueberry-markets-forexbrokers-logo.svg',
   3.1,
@@ -594,8 +594,8 @@ INSERT INTO brokers (
   regulation_trust_score, fees_score, platform_tools_score, deposit_withdrawal_score,
   customer_support_score, research_education_score, user_reviews_count
 ) VALUES (
-  'XTB',
-  'xtb', 
+  'XTB ForexBrokers',
+  'xtb-forexbrokers', 
   'https://example-xtb-forexbrokers.com',
   '/static/images/brokers/xtb-forexbrokers-logo.svg',
   4.4,
@@ -664,8 +664,8 @@ INSERT INTO brokers (
   regulation_trust_score, fees_score, platform_tools_score, deposit_withdrawal_score,
   customer_support_score, research_education_score, user_reviews_count
 ) VALUES (
-  'Zipline',
-  'zipline', 
+  'Zipline ForexBrokers',
+  'zipline-forexbrokers', 
   'https://example-zipline-forexbrokers.com',
   '/static/images/brokers/zipline-forexbrokers-logo.svg',
   3.3,
@@ -1018,8 +1018,8 @@ INSERT INTO brokers (
   regulation_trust_score, fees_score, platform_tools_score, deposit_withdrawal_score,
   customer_support_score, research_education_score, user_reviews_count
 ) VALUES (
-  'TradeStation',
-  'tradestation', 
+  'TradingStation',
+  'tradingstation', 
   'https://example-tradingstation.com',
   '/static/images/brokers/tradingstation-logo.svg',
   4.5,
@@ -1084,8 +1084,8 @@ INSERT INTO brokers (
   regulation_trust_score, fees_score, platform_tools_score, deposit_withdrawal_score,
   customer_support_score, research_education_score, user_reviews_count
 ) VALUES (
-  'Spread Co',
-  'spread-co', 
+  'Spread Co ForexBrokers',
+  'spread-co-forexbrokers', 
   'https://example-spread-co-forexbrokers.com',
   '/static/images/brokers/spread-co-forexbrokers-logo.svg',
   4.7,
@@ -1356,8 +1356,8 @@ INSERT INTO brokers (
   regulation_trust_score, fees_score, platform_tools_score, deposit_withdrawal_score,
   customer_support_score, research_education_score, user_reviews_count
 ) VALUES (
-  'easyMarkets',
-  'easymarkets', 
+  'easyMarkets ForexBrokers',
+  'easymarkets-forexbrokers', 
   'https://example-easymarkets-forexbrokers.com',
   '/static/images/brokers/easymarkets-forexbrokers-logo.svg',
   4.2,
@@ -1566,8 +1566,8 @@ INSERT INTO brokers (
   regulation_trust_score, fees_score, platform_tools_score, deposit_withdrawal_score,
   customer_support_score, research_education_score, user_reviews_count
 ) VALUES (
-  'TradeStation',
-  'tradestation', 
+  'TradingStation ForexBrokers',
+  'tradingstation-forexbrokers', 
   'https://example-tradingstation-forexbrokers.com',
   '/static/images/brokers/tradingstation-forexbrokers-logo.svg',
   3.4,
@@ -1640,8 +1640,8 @@ INSERT INTO brokers (
   regulation_trust_score, fees_score, platform_tools_score, deposit_withdrawal_score,
   customer_support_score, research_education_score, user_reviews_count
 ) VALUES (
-  'Ally Invest',
-  'ally-invest', 
+  'Ally Invest Investopedia',
+  'ally-invest-investopedia', 
   'https://example-ally-invest-investopedia.com',
   '/static/images/brokers/ally-invest-investopedia-logo.svg',
   3.9,
@@ -2006,8 +2006,8 @@ INSERT INTO brokers (
   regulation_trust_score, fees_score, platform_tools_score, deposit_withdrawal_score,
   customer_support_score, research_education_score, user_reviews_count
 ) VALUES (
-  'E*TRADE',
-  'etrade', 
+  'E*TRADE Investopedia',
+  'e-trade-investopedia', 
   'https://example-e-trade-investopedia.com',
   '/static/images/brokers/e-trade-investopedia-logo.svg',
   4.3,
@@ -2076,8 +2076,8 @@ INSERT INTO brokers (
   regulation_trust_score, fees_score, platform_tools_score, deposit_withdrawal_score,
   customer_support_score, research_education_score, user_reviews_count
 ) VALUES (
-  'MetaTrader 4',
-  'metatrader-4', 
+  'MetaTrader Investopedia',
+  'metatrader-investopedia', 
   'https://example-metatrader-investopedia.com',
   '/static/images/brokers/metatrader-investopedia-logo.svg',
   4.6,
@@ -2274,8 +2274,8 @@ INSERT INTO brokers (
   regulation_trust_score, fees_score, platform_tools_score, deposit_withdrawal_score,
   customer_support_score, research_education_score, user_reviews_count
 ) VALUES (
-  'KuCoin',
-  'kucoin', 
+  'KuCoin Investopedia',
+  'kucoin-investopedia', 
   'https://example-kucoin-investopedia.com',
   '/static/images/brokers/kucoin-investopedia-logo.svg',
   3.1,
@@ -2476,8 +2476,8 @@ INSERT INTO brokers (
   regulation_trust_score, fees_score, platform_tools_score, deposit_withdrawal_score,
   customer_support_score, research_education_score, user_reviews_count
 ) VALUES (
-  'OANDA',
-  'oanda', 
+  'OANDA Investopedia',
+  'oanda-investopedia', 
   'https://example-oanda-investopedia.com',
   '/static/images/brokers/oanda-investopedia-logo.svg',
   3.9,
@@ -2550,8 +2550,8 @@ INSERT INTO brokers (
   regulation_trust_score, fees_score, platform_tools_score, deposit_withdrawal_score,
   customer_support_score, research_education_score, user_reviews_count
 ) VALUES (
-  'London Capital Group',
-  'london-capital-group', 
+  'London Capital Group DailyForex',
+  'london-capital-group-dailyforex', 
   'https://example-london-capital-group-dailyforex.com',
   '/static/images/brokers/london-capital-group-dailyforex-logo.svg',
   3.6,
@@ -2900,8 +2900,8 @@ INSERT INTO brokers (
   regulation_trust_score, fees_score, platform_tools_score, deposit_withdrawal_score,
   customer_support_score, research_education_score, user_reviews_count
 ) VALUES (
-  'MetaTrader 4',
-  'metatrader-4', 
+  'MetaTrader',
+  'metatrader', 
   'https://example-metatrader.com',
   '/static/images/brokers/metatrader-logo.svg',
   4.3,
@@ -3044,8 +3044,8 @@ INSERT INTO brokers (
   regulation_trust_score, fees_score, platform_tools_score, deposit_withdrawal_score,
   customer_support_score, research_education_score, user_reviews_count
 ) VALUES (
-  'Quadency',
-  'quadency', 
+  'Quadency DailyForex',
+  'quadency-dailyforex', 
   'https://example-quadency-dailyforex.com',
   '/static/images/brokers/quadency-dailyforex-logo.svg',
   4.8,
@@ -3254,8 +3254,8 @@ INSERT INTO brokers (
   regulation_trust_score, fees_score, platform_tools_score, deposit_withdrawal_score,
   customer_support_score, research_education_score, user_reviews_count
 ) VALUES (
-  'OKEx',
-  'okex', 
+  'OKEx DailyForex',
+  'okex-dailyforex', 
   'https://example-okex-dailyforex.com',
   '/static/images/brokers/okex-dailyforex-logo.svg',
   4,
@@ -3538,8 +3538,8 @@ INSERT INTO brokers (
   regulation_trust_score, fees_score, platform_tools_score, deposit_withdrawal_score,
   customer_support_score, research_education_score, user_reviews_count
 ) VALUES (
-  'easyMarkets',
-  'easymarkets', 
+  'easyMarkets BrokerChooser',
+  'easymarkets-brokerchooser', 
   'https://example-easymarkets-brokerchooser.com',
   '/static/images/brokers/easymarkets-brokerchooser-logo.svg',
   4.7,
@@ -3674,8 +3674,8 @@ INSERT INTO brokers (
   regulation_trust_score, fees_score, platform_tools_score, deposit_withdrawal_score,
   customer_support_score, research_education_score, user_reviews_count
 ) VALUES (
-  'ZuluTrade',
-  'zulutrade', 
+  'ZuluTrade BrokerChooser',
+  'zulutrade-brokerchooser', 
   'https://example-zulutrade-brokerchooser.com',
   '/static/images/brokers/zulutrade-brokerchooser-logo.svg',
   4.6,
@@ -3810,8 +3810,8 @@ INSERT INTO brokers (
   regulation_trust_score, fees_score, platform_tools_score, deposit_withdrawal_score,
   customer_support_score, research_education_score, user_reviews_count
 ) VALUES (
-  'TradeStation',
-  'tradestation', 
+  'TradingStation',
+  'tradingstation', 
   'https://example-tradingstation.com',
   '/static/images/brokers/tradingstation-logo.svg',
   4.8,
@@ -4514,8 +4514,8 @@ INSERT INTO brokers (
   regulation_trust_score, fees_score, platform_tools_score, deposit_withdrawal_score,
   customer_support_score, research_education_score, user_reviews_count
 ) VALUES (
-  'Olymp Trade',
-  'olymp-trade', 
+  'Olymp Trade BrokerChooser',
+  'olymp-trade-brokerchooser', 
   'https://example-olymp-trade-brokerchooser.com',
   '/static/images/brokers/olymp-trade-brokerchooser-logo.svg',
   4,
@@ -4724,8 +4724,8 @@ INSERT INTO brokers (
   regulation_trust_score, fees_score, platform_tools_score, deposit_withdrawal_score,
   customer_support_score, research_education_score, user_reviews_count
 ) VALUES (
-  'Gunbot',
-  'gunbot', 
+  'Gunbot Forex Peace Army',
+  'gunbot-forex-peace-army', 
   'https://example-gunbot-forex-peace-army.com',
   '/static/images/brokers/gunbot-forex-peace-army-logo.svg',
   4.4,
@@ -4992,8 +4992,8 @@ INSERT INTO brokers (
   regulation_trust_score, fees_score, platform_tools_score, deposit_withdrawal_score,
   customer_support_score, research_education_score, user_reviews_count
 ) VALUES (
-  'Backtrader',
-  'backtrader', 
+  'Backtrader Forex Peace Army',
+  'backtrader-forex-peace-army', 
   'https://example-backtrader-forex-peace-army.com',
   '/static/images/brokers/backtrader-forex-peace-army-logo.svg',
   3.2,
@@ -5350,8 +5350,8 @@ INSERT INTO brokers (
   regulation_trust_score, fees_score, platform_tools_score, deposit_withdrawal_score,
   customer_support_score, research_education_score, user_reviews_count
 ) VALUES (
-  'Darwinex',
-  'darwinex', 
+  'Darwinex Forex Peace Army',
+  'darwinex-forex-peace-army', 
   'https://example-darwinex-forex-peace-army.com',
   '/static/images/brokers/darwinex-forex-peace-army-logo.svg',
   4.9,
@@ -5626,8 +5626,8 @@ INSERT INTO brokers (
   regulation_trust_score, fees_score, platform_tools_score, deposit_withdrawal_score,
   customer_support_score, research_education_score, user_reviews_count
 ) VALUES (
-  'NordFX',
-  'nordfx', 
+  'NordFX Forex Peace Army',
+  'nordfx-forex-peace-army', 
   'https://example-nordfx-forex-peace-army.com',
   '/static/images/brokers/nordfx-forex-peace-army-logo.svg',
   4.5,
@@ -5692,8 +5692,8 @@ INSERT INTO brokers (
   regulation_trust_score, fees_score, platform_tools_score, deposit_withdrawal_score,
   customer_support_score, research_education_score, user_reviews_count
 ) VALUES (
-  'IQ Option',
-  'iq-option', 
+  'IQ Option Forex Peace Army',
+  'iq-option-forex-peace-army', 
   'https://example-iq-option-forex-peace-army.com',
   '/static/images/brokers/iq-option-forex-peace-army-logo.svg',
   3.8,
@@ -5824,8 +5824,8 @@ INSERT INTO brokers (
   regulation_trust_score, fees_score, platform_tools_score, deposit_withdrawal_score,
   customer_support_score, research_education_score, user_reviews_count
 ) VALUES (
-  'eToro',
-  'etoro', 
+  'eToro Forex Peace Army',
+  'etoro-forex-peace-army', 
   'https://example-etoro-forex-peace-army.com',
   '/static/images/brokers/etoro-forex-peace-army-logo.svg',
   4.7,
@@ -5964,8 +5964,8 @@ INSERT INTO brokers (
   regulation_trust_score, fees_score, platform_tools_score, deposit_withdrawal_score,
   customer_support_score, research_education_score, user_reviews_count
 ) VALUES (
-  'Vantage FX',
-  'vantage-fx', 
+  'Vantage FX Forex Peace Army',
+  'vantage-fx-forex-peace-army', 
   'https://example-vantage-fx-forex-peace-army.com',
   '/static/images/brokers/vantage-fx-forex-peace-army-logo.svg',
   3.2,
@@ -6100,8 +6100,8 @@ INSERT INTO brokers (
   regulation_trust_score, fees_score, platform_tools_score, deposit_withdrawal_score,
   customer_support_score, research_education_score, user_reviews_count
 ) VALUES (
-  'ByBit',
-  'bybit', 
+  'ByBit FX Empire',
+  'bybit-fx-empire', 
   'https://example-bybit-fx-empire.com',
   '/static/images/brokers/bybit-fx-empire-logo.svg',
   3,
@@ -6384,8 +6384,8 @@ INSERT INTO brokers (
   regulation_trust_score, fees_score, platform_tools_score, deposit_withdrawal_score,
   customer_support_score, research_education_score, user_reviews_count
 ) VALUES (
-  'FXDD',
-  'fxdd', 
+  'FXDD FX Empire',
+  'fxdd-fx-empire', 
   'https://example-fxdd-fx-empire.com',
   '/static/images/brokers/fxdd-fx-empire-logo.svg',
   3.9,
@@ -6458,8 +6458,8 @@ INSERT INTO brokers (
   regulation_trust_score, fees_score, platform_tools_score, deposit_withdrawal_score,
   customer_support_score, research_education_score, user_reviews_count
 ) VALUES (
-  'Libertex',
-  'libertex', 
+  'Libertex FX Empire',
+  'libertex-fx-empire', 
   'https://example-libertex-fx-empire.com',
   '/static/images/brokers/libertex-fx-empire-logo.svg',
   3.3,
@@ -6594,8 +6594,8 @@ INSERT INTO brokers (
   regulation_trust_score, fees_score, platform_tools_score, deposit_withdrawal_score,
   customer_support_score, research_education_score, user_reviews_count
 ) VALUES (
-  'Forex.com',
-  'forexcom', 
+  'Forex.com FX Empire',
+  'forex-com-fx-empire', 
   'https://example-forex-com-fx-empire.com',
   '/static/images/brokers/forex-com-fx-empire-logo.svg',
   4.9,
@@ -6668,8 +6668,8 @@ INSERT INTO brokers (
   regulation_trust_score, fees_score, platform_tools_score, deposit_withdrawal_score,
   customer_support_score, research_education_score, user_reviews_count
 ) VALUES (
-  'LiteForex',
-  'liteforex', 
+  'LiteForex FX Empire',
+  'liteforex-fx-empire', 
   'https://example-liteforex-fx-empire.com',
   '/static/images/brokers/liteforex-fx-empire-logo.svg',
   3.1,
