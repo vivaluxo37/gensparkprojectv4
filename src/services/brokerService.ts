@@ -8,12 +8,29 @@ export class BrokerService {
     this.db = db;
   }
 
-  async getAllBrokers(page = 1, limit = 12): Promise<BrokerListResponse> {
+  async getAllBrokers(page = 1, limit = 12, sortBy = 'rating'): Promise<{ brokers: Broker[], total: number, totalPages: number, currentPage: number }> {
     const offset = (page - 1) * limit;
     
     // Get total count
     const countResult = await this.db.prepare('SELECT COUNT(*) as total FROM brokers').first() as { total: number };
     const total = countResult?.total || 0;
+    const totalPages = Math.ceil(total / limit);
+    
+    // Determine sort order
+    let orderClause = 'ORDER BY b.rating DESC, b.name ASC';
+    switch (sortBy) {
+      case 'name':
+        orderClause = 'ORDER BY b.name ASC';
+        break;
+      case 'deposit':
+        orderClause = 'ORDER BY b.min_deposit_usd ASC';
+        break;
+      case 'established':
+        orderClause = 'ORDER BY b.established DESC';
+        break;
+      default:
+        orderClause = 'ORDER BY b.rating DESC, b.name ASC';
+    }
     
     // Get brokers with pagination
     const brokers = await this.db.prepare(`
@@ -23,18 +40,15 @@ export class BrokerService {
       FROM brokers b
       LEFT JOIN regulations r ON b.id = r.broker_id
       GROUP BY b.id
-      ORDER BY b.rating DESC, b.name ASC
+      ${orderClause}
       LIMIT ? OFFSET ?
     `).bind(limit, offset).all();
 
     return {
       brokers: brokers.results as Broker[],
-      pagination: {
-        page,
-        limit,
-        total,
-        pages: Math.ceil(total / limit)
-      }
+      total,
+      totalPages,
+      currentPage: page
     };
   }
 

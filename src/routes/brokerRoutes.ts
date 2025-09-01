@@ -36,6 +36,25 @@ brokerRoutes.get('/api/brokers/:id', async (c) => {
   }
 });
 
+// Individual Broker Review Pages - CRITICAL SEO IMPLEMENTATION
+brokerRoutes.get('/review/:slug', async (c) => {
+  const slug = c.req.param('slug');
+  const brokerService = new BrokerService(c.env.DB);
+  
+  try {
+    const broker = await brokerService.getBrokerBySlug(slug);
+    if (!broker) {
+      return c.notFound();
+    }
+    
+    // Generate comprehensive broker review page
+    return c.html(generateComprehensiveBrokerReviewHTML(broker, c.req.raw));
+  } catch (error) {
+    console.error('Error loading broker review:', error);
+    return c.html('Error loading broker review', 500);
+  }
+});
+
 brokerRoutes.get('/api/compare', async (c) => {
   const brokerService = new BrokerService(c.env.DB);
   const url = new URL(c.req.url);

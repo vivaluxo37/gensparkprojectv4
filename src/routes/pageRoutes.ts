@@ -7,6 +7,23 @@ import { generateMetaTags, generateStructuredData, getCurrentDomain } from '../u
 import { renderLayout } from '../components/Layout.js';
 import { renderHomePage } from '../components/HomePage.js';
 import { renderFAQ } from '../components/FAQ.js';
+import { renderBrokersDirectoryPage } from '../components/BrokersDirectoryPage.js';
+import { renderCountriesDirectoryPage } from '../components/CountriesDirectoryPage.js';
+import { renderRegulatorPage } from '../components/RegulatorPage.js';
+import { renderUSACountryPage } from '../components/USACountryPage.js';
+import { renderSingaporeCountryPage } from '../components/SingaporeCountryPage.js';
+import { renderDubaiCountryPage } from '../components/DubaiCountryPage.js';
+import { renderSouthAfricaCountryPage } from '../components/SouthAfricaCountryPage.js';
+import { renderPhilippinesCountryPage } from '../components/PhilippinesCountryPage.js';
+import { renderPakistanCountryPage } from '../components/PakistanCountryPage.js';
+import { renderIndiaCountryPage } from '../components/IndiaCountryPage.js';
+import { renderCanadaCountryPage } from '../components/CanadaCountryPage.js';
+import { renderAustraliaCountryPage } from '../components/AustraliaCountryPage.js';
+import { renderBelgiumCountryPage } from '../components/BelgiumCountryPage.js';
+import { renderNepalCountryPage } from '../components/NepalCountryPage.js';
+import { renderMalaysiaCountryPage } from '../components/MalaysiaCountryPage.js';
+import { renderEthiopiaCountryPage } from '../components/EthiopiaCountryPage.js';
+import { renderBangladeshCountryPage } from '../components/BangladeshCountryPage.js';
 
 const pageRoutes = new Hono<{ Bindings: Bindings }>();
 
@@ -39,6 +56,517 @@ pageRoutes.get('/', (c) => {
           "query-input": "required name=search_term_string"
         }
       })}
+    `
+  }));
+});
+
+// Main brokers directory page - comprehensive listing with SEO optimization
+pageRoutes.get('/brokers', async (c) => {
+  try {
+    const { DB } = c.env;
+    const brokerService = new BrokerService(DB);
+    
+    // Get pagination parameters
+    const page = parseInt(c.req.query('page') || '1');
+    const limit = 12; // 12 brokers per page
+    const sort = c.req.query('sort') || 'rating';
+    
+    // Get brokers with pagination
+    const result = await brokerService.getAllBrokers(page, limit, sort);
+    
+    if (!result || !result.brokers) {
+      throw new Error('Failed to fetch brokers');
+    }
+    
+    return c.html(renderBrokersDirectoryPage(result.brokers, {
+      canonicalUrl: '/brokers',
+      request: c.req.raw,
+      currentPage: page,
+      totalPages: result.totalPages || 1,
+      totalBrokers: result.total || result.brokers.length
+    }));
+    
+  } catch (error) {
+    console.error('Error loading brokers directory:', error);
+    
+    // Fallback with empty state
+    return c.html(renderBrokersDirectoryPage([], {
+      canonicalUrl: '/brokers',
+      request: c.req.raw,
+      currentPage: 1,
+      totalPages: 1,
+      totalBrokers: 0
+    }));
+  }
+});
+
+// Countries directory page - comprehensive listing of countries with regulated brokers
+pageRoutes.get('/countries', (c) => {
+  // Define countries with enhanced information
+  const countries = [
+    { slug: 'australia', name: 'Australia', regulator: 'ASIC', brokerCount: 15, 
+      description: 'Australia offers world-class forex regulation through ASIC with strict capital requirements and comprehensive trader protection.' },
+    { slug: 'uk', name: 'United Kingdom', regulator: 'FCA', brokerCount: 22,
+      description: 'The UK\'s FCA provides gold-standard regulation with rigorous oversight and strong consumer protection measures.' },
+    { slug: 'canada', name: 'Canada', regulator: 'IIROC', brokerCount: 8,
+      description: 'Canadian regulation through IIROC ensures high standards of investor protection and market integrity.' },
+    { slug: 'usa', name: 'United States', regulator: 'CFTC/NFA', brokerCount: 6,
+      description: 'US regulation through CFTC and NFA offers the highest level of oversight with substantial capital requirements.' },
+    { slug: 'south-africa', name: 'South Africa', regulator: 'FSCA', brokerCount: 12,
+      description: 'South Africa\'s FSCA provides robust regulation for the African continent with growing international recognition.' },
+    { slug: 'pakistan', name: 'Pakistan', regulator: 'SECP', brokerCount: 5,
+      description: 'Pakistan\'s SECP oversees forex markets with developing regulatory framework and increasing market participation.' },
+    { slug: 'philippines', name: 'Philippines', regulator: 'BSP', brokerCount: 7,
+      description: 'The Philippines\' BSP regulates forex trading through central bank oversight ensuring market stability.' },
+    { slug: 'india', name: 'India', regulator: 'SEBI', brokerCount: 9,
+      description: 'India\'s SEBI provides comprehensive financial market regulation with strong emphasis on investor protection.' },
+    { slug: 'malaysia', name: 'Malaysia', regulator: 'SC', brokerCount: 8,
+      description: 'Malaysia\'s SC offers Islamic finance-compliant regulation alongside conventional forex market oversight.' },
+    { slug: 'dubai', name: 'Dubai/UAE', regulator: 'DFSA', brokerCount: 11,
+      description: 'Dubai\'s DFSA serves as the Middle East financial hub with international standards and sophisticated regulation.' },
+    { slug: 'qatar', name: 'Qatar', regulator: 'QFCRA', brokerCount: 4,
+      description: 'Qatar\'s QFCRA provides Gulf region financial oversight with focus on institutional and retail market development.' },
+    { slug: 'indonesia', name: 'Indonesia', regulator: 'Bappebti', brokerCount: 6,
+      description: 'Indonesia\'s Bappebti regulates commodity and forex trading with emphasis on market development and protection.' },
+    { slug: 'nepal', name: 'Nepal', regulator: 'NRB', brokerCount: 6,
+      description: 'Nepal\'s forex market operates with Nepal Rastra Bank oversight. International brokers serve Nepali traders with ultra-low deposits and high leverage access.' },
+    { slug: 'ethiopia', name: 'Ethiopia', regulator: 'NBE', brokerCount: 6,
+      description: 'Ethiopia\'s growing economy offers forex trading opportunities through international brokers with NBE awareness and ETB currency support for African traders.' },
+    { slug: 'bangladesh', name: 'Bangladesh', regulator: 'BB', brokerCount: 6,
+      description: 'Bangladesh\'s advanced digital payment ecosystem supports forex trading through international brokers with BDT support and mobile banking integration.' }
+  ];
+
+  return c.html(renderCountriesDirectoryPage(countries, {
+    canonicalUrl: '/countries',
+    request: c.req.raw
+  }));
+});
+
+// Regulator-specific pages for SEO
+const regulatorRoutes = [
+  {
+    slug: 'asic',
+    info: {
+      name: 'ASIC',
+      fullName: 'Australian Securities and Investments Commission',
+      country: 'Australia',
+      website: 'https://asic.gov.au',
+      established: 2001,
+      description: 'ASIC is Australia\'s corporate, markets and financial services regulator. It ensures fair, orderly and transparent markets and provides consumer protection for retail clients.',
+      keyFeatures: [
+        'Strict capital adequacy requirements',
+        'Segregated client fund protection',
+        'Regular financial reporting',
+        'Professional indemnity insurance',
+        'Market maker oversight',
+        'Retail client protections'
+      ],
+      protections: [
+        'Australian Financial Complaints Authority',
+        'Compensation scheme of last resort',
+        'Negative balance protection',
+        'Professional dispute resolution',
+        'Regular compliance audits',
+        'Client money segregation'
+      ],
+      capitalRequirements: 'AUD $1 million minimum',
+      compensationScheme: 'Australian Financial Complaints Authority',
+      brokerCount: 15
+    }
+  },
+  {
+    slug: 'fca',
+    info: {
+      name: 'FCA',
+      fullName: 'Financial Conduct Authority',
+      country: 'United Kingdom',
+      website: 'https://fca.org.uk',
+      established: 2013,
+      description: 'The FCA regulates the financial services industry in the UK. Its role includes protecting consumers, ensuring industry competition, and promoting market integrity.',
+      keyFeatures: [
+        'Prudential regulation standards',
+        'Consumer protection focus',
+        'Market conduct supervision',
+        'Senior Managers Regime',
+        'Treating Customers Fairly',
+        'Product intervention powers'
+      ],
+      protections: [
+        'Financial Services Compensation Scheme',
+        'Financial Ombudsman Service',
+        'Client money protection rules',
+        'Professional indemnity requirements',
+        'Regular stress testing',
+        'Enhanced due diligence'
+      ],
+      capitalRequirements: '£730,000 minimum (€1 million)',
+      compensationScheme: 'FSCS up to £85,000',
+      brokerCount: 22
+    }
+  },
+  {
+    slug: 'cysec',
+    info: {
+      name: 'CySEC',
+      fullName: 'Cyprus Securities and Exchange Commission',
+      country: 'Cyprus',
+      website: 'https://cysec.gov.cy',
+      established: 2001,
+      description: 'CySEC supervises the investment services market in Cyprus and ensures MiFID II compliance throughout the European Union.',
+      keyFeatures: [
+        'MiFID II compliance',
+        'EU passporting rights',
+        'Investor compensation fund',
+        'Best execution requirements',
+        'Product governance rules',
+        'Conduct of business standards'
+      ],
+      protections: [
+        'Investor Compensation Fund',
+        'MiFID II investor protections',
+        'Client categorization rules',
+        'Appropriateness assessments',
+        'Negative balance protection',
+        'Segregated client funds'
+      ],
+      capitalRequirements: '€730,000 minimum',
+      compensationScheme: 'ICF up to €20,000',
+      brokerCount: 18
+    }
+  },
+  {
+    slug: 'cftc-nfa',
+    info: {
+      name: 'CFTC/NFA',
+      fullName: 'Commodity Futures Trading Commission / National Futures Association',
+      country: 'United States',
+      website: 'https://cftc.gov',
+      established: 1974,
+      description: 'The CFTC regulates commodity futures and option markets in the US, while the NFA provides industry-wide self-regulatory programs.',
+      keyFeatures: [
+        'Dodd-Frank Act compliance',
+        'Substantial capital requirements',
+        'Daily financial reporting',
+        'Risk management standards',
+        'Customer protection rules',
+        'Anti-fraud enforcement'
+      ],
+      protections: [
+        'Customer segregated funds',
+        'NFA arbitration program',
+        'Minimum capital requirements',
+        'Regular examinations',
+        'SIPC protection available',
+        'Whistleblower programs'
+      ],
+      capitalRequirements: '$20 million adjusted net capital',
+      compensationScheme: 'NFA arbitration up to $500,000',
+      brokerCount: 6
+    }
+  }
+];
+
+regulatorRoutes.forEach(regulator => {
+  pageRoutes.get(`/regulators/${regulator.slug}`, (c) => {
+    return c.html(renderRegulatorPage(regulator.info, {
+      canonicalUrl: `/regulators/${regulator.slug}`,
+      request: c.req.raw
+    }));
+  });
+});
+
+// Individual Country Pages - USA
+pageRoutes.get('/countries/usa', (c) => {
+  return c.html(renderLayout(renderUSACountryPage({
+    canonicalUrl: '/countries/usa',
+    request: c.req.raw
+  }), {
+    title: 'Best Forex Brokers in USA 2025 - CFTC/NFA Regulated | BrokerAnalysis',
+    description: 'Compare top US forex brokers with CFTC/NFA regulation. Find the best spreads, platforms, and trading conditions for American forex traders. Updated 2025.',
+    keywords: 'USA forex brokers, US forex trading, CFTC regulated brokers, NFA forex brokers, American forex brokers, Interactive Brokers, TD Ameritrade, Charles Schwab, E*TRADE, Forex.com, OANDA',
+    canonicalUrl: '/countries/usa',
+    request: c.req.raw,
+    additionalHead: `
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+      <meta name="geo.region" content="US" />
+      <meta name="geo.placename" content="United States" />
+      <meta name="robots" content="index, follow, max-image-preview:large" />
+      <meta property="og:locale" content="en_US" />
+      <meta property="og:type" content="website" />
+      <meta property="article:publisher" content="https://www.facebook.com/brokeranalysis" />
+      <link rel="alternate" hreflang="en" href="${getCurrentDomain(c.req.raw)}/countries/usa" />
+    `
+  }));
+});
+
+// Individual Country Pages - India
+pageRoutes.get('/countries/india', (c) => {
+  return c.html(renderLayout(renderIndiaCountryPage({
+    canonicalUrl: '/countries/india',
+    request: c.req.raw
+  }), {
+    title: 'Best Forex Brokers in India 2025 - SEBI Regulated | BrokerAnalysis',
+    description: 'Compare the best forex brokers for Indian traders in 2025. Find top-rated brokers with SEBI oversight, competitive spreads, UPI payments, and advanced platforms.',
+    keywords: 'forex brokers India, SEBI regulated, Indian traders, MetaTrader, forex trading India, UPI payments, XM Group, Exness, OctaFX, FXCM, AvaTrade, Pepperstone, IC Markets',
+    canonicalUrl: '/countries/india',
+    request: c.req.raw,
+    additionalHead: `
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+      <meta name="geo.region" content="IN" />
+      <meta name="geo.placename" content="India" />
+      <meta name="robots" content="index, follow, max-image-preview:large" />
+      <meta property="og:locale" content="en_IN" />
+      <meta property="og:type" content="website" />
+      <link rel="alternate" hreflang="en" href="${getCurrentDomain(c.req.raw)}/countries/india" />
+      <link rel="alternate" hreflang="hi" href="${getCurrentDomain(c.req.raw)}/countries/india" />
+    `
+  }));
+});
+
+// Individual Country Pages - Canada
+pageRoutes.get('/countries/canada', (c) => {
+  return c.html(renderLayout(renderCanadaCountryPage({
+    canonicalUrl: '/countries/canada',
+    request: c.req.raw
+  }), {
+    title: 'Best Forex Brokers in Canada 2025 - CIRO Regulated | BrokerAnalysis',
+    description: 'Compare the best forex brokers for Canadian traders in 2025. Find top-rated brokers with CIRO regulation, CIPF protection, competitive spreads, and CAD support.',
+    keywords: 'forex brokers Canada, CIRO regulated, Canadian traders, MetaTrader, forex trading Canada, CAD trading, Interactive Brokers, OANDA, Questrade, XM Group, Pepperstone',
+    canonicalUrl: '/countries/canada',
+    request: c.req.raw,
+    additionalHead: `
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+      <meta name="geo.region" content="CA" />
+      <meta name="geo.placename" content="Canada" />
+      <meta name="robots" content="index, follow, max-image-preview:large" />
+      <meta property="og:locale" content="en_CA" />
+      <meta property="og:type" content="website" />
+      <link rel="alternate" hreflang="en" href="${getCurrentDomain(c.req.raw)}/countries/canada" />
+      <link rel="alternate" hreflang="fr" href="${getCurrentDomain(c.req.raw)}/countries/canada" />
+    `
+  }));
+});
+
+// Individual Country Pages - Australia
+pageRoutes.get('/countries/australia', (c) => {
+  return c.html(renderLayout(renderAustraliaCountryPage({
+    canonicalUrl: '/countries/australia',
+    request: c.req.raw
+  }), {
+    title: 'Best Forex Brokers in Australia 2025 - ASIC Regulated | BrokerAnalysis',
+    description: 'Compare the best ASIC regulated forex brokers for Australian traders in 2025. Find top-rated brokers with competitive spreads from 0.0 pips, advanced platforms, and AUD support.',
+    keywords: 'forex brokers Australia, ASIC regulated, Australian traders, MetaTrader, forex trading Australia, AUD trading, IC Markets, Pepperstone, IG Markets, CMC Markets, Vantage FX',
+    canonicalUrl: '/countries/australia',
+    request: c.req.raw,
+    additionalHead: `
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+      <meta name="geo.region" content="AU" />
+      <meta name="geo.placename" content="Australia" />
+      <meta name="robots" content="index, follow, max-image-preview:large" />
+      <meta property="og:locale" content="en_AU" />
+      <meta property="og:type" content="website" />
+      <link rel="alternate" hreflang="en" href="${getCurrentDomain(c.req.raw)}/countries/australia" />
+    `
+  }));
+});
+
+// Individual Country Pages - Belgium
+pageRoutes.get('/countries/belgium', (c) => {
+  return c.html(renderLayout(renderBelgiumCountryPage({
+    canonicalUrl: '/countries/belgium',
+    request: c.req.raw
+  }), {
+    title: 'Best Forex Brokers in Belgium 2025 - FSMA Regulated | BrokerAnalysis',
+    description: 'Compare the best forex brokers for Belgian traders in 2025. Find top-rated FSMA regulated brokers with competitive spreads, EUR support, and MiFID II compliance.',
+    keywords: 'forex brokers Belgium, FSMA regulated, Belgian traders, MetaTrader, forex trading Belgium, EUR trading, XTB, IG Markets, Saxo Bank, Plus500, Pepperstone',
+    canonicalUrl: '/countries/belgium',
+    request: c.req.raw,
+    additionalHead: `
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+      <meta name="geo.region" content="BE" />
+      <meta name="geo.placename" content="Belgium" />
+      <meta name="robots" content="index, follow, max-image-preview:large" />
+      <meta property="og:locale" content="en_BE" />
+      <meta property="og:type" content="website" />
+      <link rel="alternate" hreflang="en" href="${getCurrentDomain(c.req.raw)}/countries/belgium" />
+      <link rel="alternate" hreflang="nl" href="${getCurrentDomain(c.req.raw)}/countries/belgium" />
+      <link rel="alternate" hreflang="fr" href="${getCurrentDomain(c.req.raw)}/countries/belgium" />
+      <link rel="alternate" hreflang="de" href="${getCurrentDomain(c.req.raw)}/countries/belgium" />
+    `
+  }));
+});
+
+// Individual Country Pages - Singapore
+pageRoutes.get('/countries/singapore', (c) => {
+  return c.html(renderLayout(renderSingaporeCountryPage({
+    canonicalUrl: '/countries/singapore',
+    request: c.req.raw
+  }), {
+    title: 'Best Forex Brokers in Singapore 2025 - MAS Regulated | BrokerAnalysis',
+    description: 'Compare top Singapore forex brokers with MAS regulation. Find the best spreads, platforms, and trading conditions for Singaporean forex traders.',
+    keywords: 'Singapore forex brokers, MAS regulated brokers, Singapore forex trading, IC Markets, Pepperstone, Vantage FX, IG Markets, CMC Markets, Saxo Bank',
+    canonicalUrl: '/countries/singapore',
+    request: c.req.raw
+  }));
+});
+
+// Individual Country Pages - Dubai/UAE
+pageRoutes.get('/countries/dubai', (c) => {
+  return c.html(renderLayout(renderDubaiCountryPage({
+    canonicalUrl: '/countries/dubai',
+    request: c.req.raw
+  }), {
+    title: 'Best Forex Brokers in Dubai 2025 - DFSA Regulated | BrokerAnalysis',
+    description: 'Compare top Dubai forex brokers with DFSA regulation. Find the best spreads, platforms, and trading conditions for UAE forex traders.',
+    keywords: 'Dubai forex brokers, UAE forex trading, DFSA regulated brokers, IG Markets, Swissquote, Saxo Bank, ADSS, ThinkMarkets, XTB',
+    canonicalUrl: '/countries/dubai',
+    request: c.req.raw
+  }));
+});
+
+// Individual Country Pages - South Africa
+pageRoutes.get('/countries/south-africa', (c) => {
+  return c.html(renderLayout(renderSouthAfricaCountryPage({
+    canonicalUrl: '/countries/south-africa',
+    request: c.req.raw
+  }), {
+    title: 'Best Forex Brokers in South Africa 2025 - FSCA Regulated | BrokerAnalysis',
+    description: 'Compare top South African forex brokers with FSCA regulation. Find the best spreads, platforms, and trading conditions for South African traders.',
+    keywords: 'South Africa forex brokers, FSCA regulated brokers, AvaTrade, FXCM, IG Markets, Pepperstone, XM Group, Exness',
+    canonicalUrl: '/countries/south-africa',
+    request: c.req.raw
+  }));
+});
+
+// Individual Country Pages - Philippines
+pageRoutes.get('/countries/philippines', (c) => {
+  return c.html(renderLayout(renderPhilippinesCountryPage({
+    canonicalUrl: '/countries/philippines',
+    request: c.req.raw
+  }), {
+    title: 'Best Forex Brokers in Philippines 2025 - BSP Regulated | BrokerAnalysis',
+    description: 'Compare top Philippines forex brokers with BSP oversight. Find the best spreads, platforms, and trading conditions for Filipino traders.',
+    keywords: 'Philippines forex brokers, BSP regulated brokers, Filipino forex trading, XM Group, FXCM, RoboForex, Exness, Pepperstone',
+    canonicalUrl: '/countries/philippines',
+    request: c.req.raw
+  }));
+});
+
+// Individual Country Pages - Pakistan
+pageRoutes.get('/countries/pakistan', (c) => {
+  return c.html(renderLayout(renderPakistanCountryPage({
+    canonicalUrl: '/countries/pakistan',
+    request: c.req.raw
+  }), {
+    title: 'Best Forex Brokers in Pakistan 2025 - SECP Regulated | BrokerAnalysis',
+    description: 'Compare top Pakistan forex brokers with SECP oversight. Find Islamic accounts, competitive spreads, and trading platforms for Pakistani traders.',
+    keywords: 'Pakistan forex brokers, SECP regulated brokers, Islamic forex accounts, OctaFX, Exness, FBS, XM Group, InstaForex',
+    canonicalUrl: '/countries/pakistan',
+    request: c.req.raw
+  }));
+});
+
+// Individual Country Pages - Nepal
+pageRoutes.get('/countries/nepal', (c) => {
+  return c.html(renderLayout(renderNepalCountryPage({
+    canonicalUrl: '/countries/nepal',
+    request: c.req.raw
+  }), {
+    title: 'Best Forex Brokers in Nepal 2025 - International Trading | BrokerAnalysis',
+    description: 'Compare the best international forex brokers for Nepali traders in 2025. Find ultra-low deposits, high leverage, and NPR support with comprehensive regulatory insights.',
+    keywords: 'Nepal forex brokers, Nepali traders, international forex trading, XM Group, Exness, FBS, OctaFX, IC Markets, Pepperstone, NPR trading, Nepal Rastra Bank',
+    canonicalUrl: '/countries/nepal',
+    request: c.req.raw,
+    additionalHead: `
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+      <meta name="geo.region" content="NP" />
+      <meta name="geo.placename" content="Nepal" />
+      <meta name="robots" content="index, follow, max-image-preview:large" />
+      <meta property="og:locale" content="en_NP" />
+      <meta property="og:type" content="website" />
+      <link rel="alternate" hreflang="en" href="${getCurrentDomain(c.req.raw)}/countries/nepal" />
+      <link rel="alternate" hreflang="ne" href="${getCurrentDomain(c.req.raw)}/countries/nepal" />
+    `
+  }));
+});
+
+// Individual Country Pages - Malaysia
+pageRoutes.get('/countries/malaysia', (c) => {
+  return c.html(renderLayout(renderMalaysiaCountryPage({
+    canonicalUrl: '/countries/malaysia',
+    request: c.req.raw
+  }), {
+    title: 'Best Forex Brokers in Malaysia 2025 - SC Compliant Trading | BrokerAnalysis',
+    description: 'Compare top international forex brokers for Malaysian traders in 2025. Find MYR support, Islamic accounts, and SC-compliant brokers with local bank integration.',
+    keywords: 'Malaysia forex brokers, Malaysian traders, SC Malaysia, Islamic forex accounts, MYR trading, XM Group, Exness, OctaFX, FBS, IC Markets, Pepperstone, Shariah compliant',
+    canonicalUrl: '/countries/malaysia',
+    request: c.req.raw,
+    additionalHead: `
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+      <meta name="geo.region" content="MY" />
+      <meta name="geo.placename" content="Malaysia" />
+      <meta name="robots" content="index, follow, max-image-preview:large" />
+      <meta property="og:locale" content="en_MY" />
+      <meta property="og:type" content="website" />
+      <link rel="alternate" hreflang="en" href="${getCurrentDomain(c.req.raw)}/countries/malaysia" />
+      <link rel="alternate" hreflang="ms" href="${getCurrentDomain(c.req.raw)}/countries/malaysia" />
+    `
+  }));
+});
+
+// Individual Country Pages - Ethiopia
+pageRoutes.get('/countries/ethiopia', (c) => {
+  return c.html(renderLayout(renderEthiopiaCountryPage({
+    canonicalUrl: '/countries/ethiopia',
+    request: c.req.raw
+  }), {
+    title: 'Best Forex Brokers in Ethiopia 2025 - International Trading Access | BrokerAnalysis',
+    description: 'Compare top international forex brokers for Ethiopian traders in 2025. Find ETB support, Islamic accounts, and NBE-aware brokers with African market expertise.',
+    keywords: 'Ethiopia forex brokers, Ethiopian traders, ETB trading, National Bank of Ethiopia, NBE, Islamic forex accounts, XM Group, Exness, OctaFX, FBS, IC Markets, Ethiopian Birr',
+    canonicalUrl: '/countries/ethiopia',
+    request: c.req.raw,
+    additionalHead: `
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+      <meta name="geo.region" content="ET" />
+      <meta name="geo.placename" content="Ethiopia" />
+      <meta name="robots" content="index, follow, max-image-preview:large" />
+      <meta property="og:locale" content="en_ET" />
+      <meta property="og:type" content="website" />
+      <link rel="alternate" hreflang="en" href="${getCurrentDomain(c.req.raw)}/countries/ethiopia" />
+      <link rel="alternate" hreflang="am" href="${getCurrentDomain(c.req.raw)}/countries/ethiopia" />
+    `
+  }));
+});
+
+// Individual Country Pages - Bangladesh
+pageRoutes.get('/countries/bangladesh', (c) => {
+  return c.html(renderLayout(renderBangladeshCountryPage({
+    canonicalUrl: '/countries/bangladesh',
+    request: c.req.raw
+  }), {
+    title: 'Best Forex Brokers in Bangladesh 2025 - BB Compliant Trading | BrokerAnalysis',
+    description: 'Compare top international forex brokers for Bangladeshi traders in 2025. Find BDT support, mobile banking integration, Islamic accounts, and BB-compliant brokers.',
+    keywords: 'Bangladesh forex brokers, Bangladeshi traders, BDT trading, Bangladesh Bank, BB regulation, mobile banking, bKash, Rocket, Nagad, Islamic forex accounts, Bengali support',
+    canonicalUrl: '/countries/bangladesh',
+    request: c.req.raw,
+    additionalHead: `
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+      <meta name="geo.region" content="BD" />
+      <meta name="geo.placename" content="Bangladesh" />
+      <meta name="robots" content="index, follow, max-image-preview:large" />
+      <meta property="og:locale" content="en_BD" />
+      <meta property="og:type" content="website" />
+      <link rel="alternate" hreflang="en" href="${getCurrentDomain(c.req.raw)}/countries/bangladesh" />
+      <link rel="alternate" hreflang="bn" href="${getCurrentDomain(c.req.raw)}/countries/bangladesh" />
     `
   }));
 });
@@ -116,6 +644,488 @@ pageRoutes.get('/reviews', (c) => {
                 loadBrokers();
                 setupFilters();
             });
+        </script>
+    </body>
+    </html>
+  `);
+});
+
+// Compare brokers page
+pageRoutes.get('/compare', (c) => {
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        ${generateMetaTags(
+          'Compare Forex Brokers 2025 - Side-by-Side Comparison Tool | BrokerAnalysis',
+          'Compare forex brokers side-by-side. Analyze spreads, regulation, platforms, fees, and features to find the perfect broker for your trading needs.',
+          'compare forex brokers, broker comparison tool, forex broker analysis, side by side comparison, trading costs',
+          '/compare',
+          undefined,
+          c.req.raw
+        )}
+        
+        <link rel="stylesheet" href="/static/styles.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body class="bg-gray-50">
+        ${generateNavigation()}
+        
+        <main class="max-w-7xl mx-auto py-12 px-4">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl font-bold text-gray-900 mb-4">Compare Forex Brokers</h1>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Compare up to 4 forex brokers side-by-side. Analyze spreads, regulation, platforms, 
+                    and features to make an informed decision.
+                </p>
+            </div>
+
+            <!-- Broker Selection -->
+            <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+                <h2 class="text-xl font-semibold mb-4">Select Brokers to Compare</h2>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4" id="broker-selection">
+                    <!-- Broker selection dropdowns will be loaded here -->
+                </div>
+                <div class="mt-4">
+                    <button id="compare-button" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed">
+                        <i class="fas fa-balance-scale mr-2"></i>
+                        Compare Selected Brokers
+                    </button>
+                </div>
+            </div>
+
+            <!-- Comparison Results -->
+            <div id="comparison-results" class="bg-white rounded-lg shadow-sm p-6 mb-8 hidden">
+                <h2 class="text-xl font-semibold mb-6">Broker Comparison Results</h2>
+                <div id="comparison-table">
+                    <!-- Comparison table will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Quick Compare Popular Brokers -->
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <h2 class="text-xl font-semibold mb-6">Popular Comparisons</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="border border-gray-200 rounded-lg p-4 hover:border-blue-300 cursor-pointer" onclick="loadComparison(['ic-markets', 'pepperstone'])">
+                        <h3 class="font-semibold text-gray-900 mb-2">IC Markets vs Pepperstone</h3>
+                        <p class="text-sm text-gray-600">Compare Australia's top two ECN brokers</p>
+                        <div class="mt-2 text-xs text-blue-600">Click to compare →</div>
+                    </div>
+                    <div class="border border-gray-200 rounded-lg p-4 hover:border-blue-300 cursor-pointer" onclick="loadComparison(['fp-markets', 'ic-markets'])">
+                        <h3 class="font-semibold text-gray-900 mb-2">FP Markets vs IC Markets</h3>
+                        <p class="text-sm text-gray-600">ASIC-regulated brokers head-to-head</p>
+                        <div class="mt-2 text-xs text-blue-600">Click to compare →</div>
+                    </div>
+                    <div class="border border-gray-200 rounded-lg p-4 hover:border-blue-300 cursor-pointer" onclick="loadComparison(['exness', 'xm'])">
+                        <h3 class="font-semibold text-gray-900 mb-2">Exness vs XM</h3>
+                        <p class="text-sm text-gray-600">Popular international brokers comparison</p>
+                        <div class="mt-2 text-xs text-blue-600">Click to compare →</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEO Content -->
+            <div class="mt-16 prose max-w-none">
+                <h2 class="text-3xl font-bold text-gray-900 mb-6">How to Compare Forex Brokers</h2>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4">Key Comparison Factors</h3>
+                        <ul class="space-y-2 text-gray-700">
+                            <li><strong>Regulation:</strong> Check for FCA, ASIC, CySEC, or CFTC oversight</li>
+                            <li><strong>Spreads & Costs:</strong> Compare EUR/USD spreads and commission structures</li>
+                            <li><strong>Trading Platforms:</strong> MT4, MT5, or proprietary platform features</li>
+                            <li><strong>Execution:</strong> Market vs ECN execution models</li>
+                            <li><strong>Leverage:</strong> Maximum leverage offered for your region</li>
+                            <li><strong>Deposit Requirements:</strong> Minimum deposit amounts</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4">Advanced Features</h3>
+                        <ul class="space-y-2 text-gray-700">
+                            <li><strong>Asset Classes:</strong> Forex, indices, commodities, cryptocurrencies</li>
+                            <li><strong>Research Tools:</strong> Market analysis and trading signals</li>
+                            <li><strong>Education:</strong> Webinars, tutorials, and learning resources</li>
+                            <li><strong>Customer Support:</strong> 24/7 availability and response quality</li>
+                            <li><strong>Mobile Trading:</strong> App features and usability</li>
+                            <li><strong>Payment Methods:</strong> Deposit and withdrawal options</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        ${generateFooter()}
+        
+        <script>
+            class ComparisonTool {
+                constructor() {
+                    this.brokers = [];
+                    this.selectedBrokers = [];
+                    this.init();
+                }
+
+                async init() {
+                    await this.loadBrokers();
+                    this.setupSelectors();
+                    this.setupEventListeners();
+                }
+
+                async loadBrokers() {
+                    try {
+                        const response = await fetch('/api/brokers?limit=100');
+                        const data = await response.json();
+                        this.brokers = data.brokers || [];
+                        console.log('Loaded brokers:', this.brokers.length);
+                    } catch (error) {
+                        console.error('Failed to load brokers:', error);
+                    }
+                }
+
+                setupSelectors() {
+                    const container = document.getElementById('broker-selection');
+                    container.innerHTML = '';
+                    
+                    for (let i = 1; i <= 4; i++) {
+                        const selectorDiv = document.createElement('div');
+                        selectorDiv.className = 'bg-gray-50 p-4 rounded-lg';
+                        selectorDiv.innerHTML = \`
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Broker \${i}</label>
+                            <select id="broker-\${i}" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                                <option value="">Select a broker</option>
+                                \${this.brokers.map(broker => 
+                                    \`<option value="\${broker.id}">\${broker.name}</option>\`
+                                ).join('')}
+                            </select>
+                        \`;
+                        container.appendChild(selectorDiv);
+                    }
+                }
+
+                setupEventListeners() {
+                    const compareButton = document.getElementById('compare-button');
+                    compareButton.addEventListener('click', () => this.compareBrokers());
+
+                    // Add change listeners to selectors
+                    for (let i = 1; i <= 4; i++) {
+                        const selector = document.getElementById(\`broker-\${i}\`);
+                        selector.addEventListener('change', () => this.updateCompareButton());
+                    }
+                }
+
+                updateCompareButton() {
+                    const selectedIds = [];
+                    for (let i = 1; i <= 4; i++) {
+                        const selector = document.getElementById(\`broker-\${i}\`);
+                        if (selector.value) {
+                            selectedIds.push(selector.value);
+                        }
+                    }
+
+                    const compareButton = document.getElementById('compare-button');
+                    compareButton.disabled = selectedIds.length < 2;
+                    compareButton.textContent = \`Compare \${selectedIds.length} Brokers\`;
+                }
+
+                async compareBrokers() {
+                    const selectedIds = [];
+                    for (let i = 1; i <= 4; i++) {
+                        const selector = document.getElementById(\`broker-\${i}\`);
+                        if (selector.value) {
+                            selectedIds.push(selector.value);
+                        }
+                    }
+
+                    if (selectedIds.length < 2) {
+                        alert('Please select at least 2 brokers to compare');
+                        return;
+                    }
+
+                    try {
+                        const response = await fetch(\`/api/compare?brokers=\${selectedIds.join(',')}\`);
+                        const data = await response.json();
+                        this.displayComparison(data.brokers);
+                    } catch (error) {
+                        console.error('Comparison failed:', error);
+                        alert('Failed to load comparison data');
+                    }
+                }
+
+                displayComparison(brokers) {
+                    const resultsContainer = document.getElementById('comparison-results');
+                    const tableContainer = document.getElementById('comparison-table');
+                    
+                    if (!brokers || brokers.length === 0) {
+                        tableContainer.innerHTML = '<p>No comparison data available</p>';
+                        return;
+                    }
+
+                    // Create comparison table
+                    let tableHTML = \`
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full border border-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-4 py-2 text-left">Criteria</th>
+                                        \${brokers.map(broker => 
+                                            \`<th class="px-4 py-2 text-center">\${broker.name}</th>\`
+                                        ).join('')}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                    \`;
+
+                    // Add comparison rows
+                    const criteria = [
+                        {label: 'Overall Rating', key: 'rating', formatter: (v) => \`\${v}/5 ⭐\`},
+                        {label: 'Min Deposit', key: 'min_deposit_usd', formatter: (v) => \`$\${v}\`},
+                        {label: 'Max Leverage', key: 'max_leverage', formatter: (v) => v},
+                        {label: 'Spread Type', key: 'spread_type', formatter: (v) => v},
+                        {label: 'Regulation Score', key: 'regulation_trust_score', formatter: (v) => \`\${v}/10\`},
+                        {label: 'Fees Score', key: 'fees_score', formatter: (v) => \`\${v}/10\`}
+                    ];
+
+                    criteria.forEach(criterion => {
+                        tableHTML += \`
+                            <tr class="border-t">
+                                <td class="px-4 py-2 font-medium">\${criterion.label}</td>
+                                \${brokers.map(broker => 
+                                    \`<td class="px-4 py-2 text-center">\${criterion.formatter(broker[criterion.key] || 'N/A')}</td>\`
+                                ).join('')}
+                            </tr>
+                        \`;
+                    });
+
+                    tableHTML += \`
+                                </tbody>
+                            </table>
+                        </div>
+                    \`;
+
+                    tableContainer.innerHTML = tableHTML;
+                    resultsContainer.classList.remove('hidden');
+                }
+            }
+
+            function loadComparison(brokerSlugs) {
+                // This would need to be implemented for predefined comparisons
+                console.log('Loading comparison for:', brokerSlugs);
+                // For now, we'll skip this functionality
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                new ComparisonTool();
+            });
+        </script>
+    </body>
+    </html>
+  `);
+});
+
+// Contact page
+pageRoutes.get('/contact', (c) => {
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        ${generateMetaTags(
+          'Contact BrokerAnalysis - Get in Touch | Forex Broker Reviews',
+          'Contact our team for questions about forex brokers, reviews, or website features. We\'re here to help you find the perfect trading partner.',
+          'contact broker analysis, forex broker questions, support, help',
+          '/contact',
+          undefined,
+          c.req.raw
+        )}
+        
+        <link rel="stylesheet" href="/static/styles.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body class="bg-gray-50">
+        ${generateNavigation()}
+        
+        <main class="max-w-4xl mx-auto py-12 px-4">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl font-bold text-gray-900 mb-4">Contact Us</h1>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    Have questions about forex brokers or our platform? We're here to help you make informed trading decisions.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- Contact Form -->
+                <div class="bg-white rounded-lg shadow-sm p-8">
+                    <h2 class="text-2xl font-semibold mb-6">Send us a Message</h2>
+                    <form id="contact-form" class="space-y-6">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                            <input type="text" id="name" name="name" required
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                        
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                            <input type="email" id="email" name="email" required
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                        
+                        <div>
+                            <label for="subject" class="block text-sm font-medium text-gray-700 mb-2">Subject</label>
+                            <select id="subject" name="subject" required
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                                <option value="">Select a topic</option>
+                                <option value="broker-inquiry">Broker Inquiry</option>
+                                <option value="review-question">Review Question</option>
+                                <option value="technical-support">Technical Support</option>
+                                <option value="partnership">Partnership Inquiry</option>
+                                <option value="general">General Question</option>
+                                <option value="feedback">Feedback</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label for="message" class="block text-sm font-medium text-gray-700 mb-2">Message</label>
+                            <textarea id="message" name="message" rows="5" required
+                                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors">
+                            <i class="fas fa-paper-plane mr-2"></i>
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Contact Information -->
+                <div>
+                    <div class="bg-white rounded-lg shadow-sm p-8 mb-8">
+                        <h2 class="text-2xl font-semibold mb-6">Get in Touch</h2>
+                        
+                        <div class="space-y-6">
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-envelope text-blue-600"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-lg font-semibold text-gray-900">Email Support</h3>
+                                    <p class="text-gray-600">contact@brokeranalysis.com</p>
+                                    <p class="text-sm text-gray-500">We typically respond within 24 hours</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-clock text-green-600"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-lg font-semibold text-gray-900">Response Time</h3>
+                                    <p class="text-gray-600">Mon-Fri: Within 24 hours</p>
+                                    <p class="text-gray-600">Weekends: Within 48 hours</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-question-circle text-purple-600"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-lg font-semibold text-gray-900">FAQ</h3>
+                                    <p class="text-gray-600">Check our FAQ section for quick answers</p>
+                                    <a href="/#faq" class="text-blue-600 hover:underline text-sm">View FAQ →</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Common Questions -->
+                    <div class="bg-blue-50 rounded-lg p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                            <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>
+                            Common Questions
+                        </h3>
+                        <div class="space-y-3 text-sm">
+                            <div>
+                                <p class="font-medium text-gray-900">How do you rate brokers?</p>
+                                <p class="text-gray-600">We use a comprehensive 6-category scoring system based on regulation, costs, platforms, and more.</p>
+                            </div>
+                            <div>
+                                <p class="font-medium text-gray-900">Are your reviews independent?</p>
+                                <p class="text-gray-600">Yes, all reviews are based on our objective methodology with no pay-for-placement policies.</p>
+                            </div>
+                            <div>
+                                <p class="font-medium text-gray-900">How often are reviews updated?</p>
+                                <p class="text-gray-600">We update broker information and ratings quarterly to ensure accuracy.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        ${generateFooter()}
+        
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                setupContactForm();
+            });
+            
+            function setupContactForm() {
+                const form = document.getElementById('contact-form');
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // Basic form validation
+                    const name = document.getElementById('name').value.trim();
+                    const email = document.getElementById('email').value.trim();
+                    const subject = document.getElementById('subject').value;
+                    const message = document.getElementById('message').value.trim();
+                    
+                    if (!name || !email || !subject || !message) {
+                        alert('Please fill in all required fields');
+                        return;
+                    }
+                    
+                    // Email validation
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(email)) {
+                        alert('Please enter a valid email address');
+                        return;
+                    }
+                    
+                    // Show success message (in real implementation, send to backend)
+                    const button = form.querySelector('button[type="submit"]');
+                    const originalText = button.innerHTML;
+                    
+                    button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Sending...';
+                    button.disabled = true;
+                    
+                    // Simulate API call
+                    setTimeout(() => {
+                        button.innerHTML = '<i class="fas fa-check mr-2"></i>Message Sent!';
+                        button.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+                        button.classList.add('bg-green-600');
+                        
+                        // Show success message
+                        const successMsg = document.createElement('div');
+                        successMsg.className = 'mt-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded';
+                        successMsg.innerHTML = '<i class="fas fa-check-circle mr-2"></i>Thank you! Your message has been sent. We\'ll get back to you within 24 hours.';
+                        form.appendChild(successMsg);
+                        
+                        setTimeout(() => {
+                            button.innerHTML = originalText;
+                            button.disabled = false;
+                            button.classList.remove('bg-green-600');
+                            button.classList.add('bg-blue-600', 'hover:bg-blue-700');
+                            form.reset();
+                            successMsg.remove();
+                        }, 5000);
+                    }, 1500);
+                });
+            }
         </script>
     </body>
     </html>
@@ -483,8 +1493,37 @@ countryPages.forEach(country => {
                       <i class="fas fa-shield-alt text-green-600 text-xl mr-3"></i>
                       <h2 class="text-xl font-semibold">About ${country.regulator} Regulation</h2>
                   </div>
-                  <div id="regulation-info" class="text-gray-700">
-                      <!-- Regulation information will be loaded here -->
+                  <div class="text-gray-700">
+                      <p class="mb-4">
+                          The ${country.regulator} regulates forex and financial services in ${country.name}, 
+                          ensuring strict compliance standards and comprehensive investor protection measures.
+                      </p>
+                      <div class="grid md:grid-cols-2 gap-6">
+                          <div>
+                              <h3 class="font-semibold mb-2">Key Benefits:</h3>
+                              <ul class="text-sm space-y-1">
+                                  <li>• Segregated client fund protection</li>
+                                  <li>• Compensation scheme coverage</li>
+                                  <li>• Regular financial audits</li>
+                                  <li>• Professional dispute resolution</li>
+                              </ul>
+                          </div>
+                          <div>
+                              <h3 class="font-semibold mb-2">Trader Protection:</h3>
+                              <ul class="text-sm space-y-1">
+                                  <li>• Negative balance protection</li>
+                                  <li>• Transparent fee structures</li>
+                                  <li>• Best execution standards</li>
+                                  <li>• Market conduct oversight</li>
+                              </ul>
+                          </div>
+                      </div>
+                      <div class="mt-4">
+                          <a href="/regulators/${country.regulator.toLowerCase().replace('/', '-')}" 
+                             class="text-blue-600 hover:text-blue-800 font-medium text-sm">
+                              Learn more about ${country.regulator} regulation →
+                          </a>
+                      </div>
                   </div>
               </div>
 
@@ -738,10 +1777,13 @@ function generateNavigation(): string {
                 </div>
                 
                 <div class="hidden md:flex items-center space-x-8">
+                    <a href="/brokers" class="text-gray-700 hover:text-blue-600 transition-colors">Brokers</a>
+                    <a href="/countries" class="text-gray-700 hover:text-blue-600 transition-colors">Countries</a>
                     <a href="/reviews" class="text-gray-700 hover:text-blue-600 transition-colors">Reviews</a>
                     <a href="/compare" class="text-gray-700 hover:text-blue-600 transition-colors">Compare</a>
                     <a href="/simulator" class="text-gray-700 hover:text-blue-600 transition-colors">Calculator</a>
                     <a href="/about" class="text-gray-700 hover:text-blue-600 transition-colors">About</a>
+                    <a href="/contact" class="text-gray-700 hover:text-blue-600 transition-colors">Contact</a>
                 </div>
 
                 <div class="flex items-center space-x-4">
@@ -757,10 +1799,13 @@ function generateNavigation(): string {
         
         <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
             <div class="px-4 py-2 space-y-2">
+                <a href="/brokers" class="block py-2 text-gray-700">Brokers</a>
+                <a href="/countries" class="block py-2 text-gray-700">Countries</a>
                 <a href="/reviews" class="block py-2 text-gray-700">Reviews</a>
                 <a href="/compare" class="block py-2 text-gray-700">Compare</a>
                 <a href="/simulator" class="block py-2 text-gray-700">Calculator</a>
                 <a href="/about" class="block py-2 text-gray-700">About</a>
+                <a href="/contact" class="block py-2 text-gray-700">Contact</a>
             </div>
         </div>
     </nav>

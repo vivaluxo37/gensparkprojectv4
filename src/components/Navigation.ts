@@ -31,7 +31,8 @@ export function generateCompleteNavigation(): string {
                             </button>
                             <div class="absolute left-0 mt-1 w-80 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                                 <div class="py-2">
-                                    <a href="/brokers/top-100" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-blue-600 transition-colors">Top 100 Forex Brokers</a>
+                                    <a href="/brokers" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-blue-600 transition-colors font-medium">All Brokers Directory</a>
+                                    <a href="/countries" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-blue-600 transition-colors font-medium">Countries & Regulators</a>
                                     <div class="px-4 py-2 text-sm font-semibold text-blue-900 bg-blue-50 border-b border-blue-200">By Country</div>
                                     <div class="grid grid-cols-2 gap-0 max-h-64 overflow-y-auto">
                                         <a href="/brokers/australia" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 hover:text-blue-600 transition-colors border-r border-blue-100">Australia</a>

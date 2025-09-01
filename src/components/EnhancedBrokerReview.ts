@@ -1,6 +1,7 @@
 // Enhanced Broker Review Component - Comprehensive like dailyforex.com and forexbrokers.com
 import type { ComprehensiveBroker } from '../types';
 import { getCurrentDomain } from '../utils';
+import { generateBrokerLogo, generateLogoScript } from './BrokerLogo.js';
 
 export function generateComprehensiveBrokerReviewHTML(broker: ComprehensiveBroker, request?: Request): string {
   const domain = getCurrentDomain(request);
@@ -21,7 +22,7 @@ export function generateComprehensiveBrokerReviewHTML(broker: ComprehensiveBroke
         <meta property="og:title" content="${broker.name} Review 2025 - Expert Analysis & Rating">
         <meta property="og:description" content="Comprehensive ${broker.name} review covering spreads, regulation, platforms, and trading conditions. Expert analysis with pros, cons, and detailed ratings.">
         <meta property="og:image" content="${domain}/static/images/brokers/${broker.slug}-og.png">
-        <meta property="og:url" content="${domain}/reviews/${broker.slug}">
+        <meta property="og:url" content="${domain}/review/${broker.slug}">
         <meta property="og:article:author" content="BrokerAnalysis">
         <meta property="og:article:published_time" content="${new Date().toISOString()}">
         
@@ -31,7 +32,7 @@ export function generateComprehensiveBrokerReviewHTML(broker: ComprehensiveBroke
         <meta property="twitter:description" content="Comprehensive ${broker.name} review covering spreads, regulation, platforms, and trading conditions.">
         <meta property="twitter:image" content="${domain}/static/images/brokers/${broker.slug}-og.png">
         
-        <link rel="canonical" href="${domain}/reviews/${broker.slug}">
+        <link rel="canonical" href="${domain}/review/${broker.slug}">
         
         <!-- Favicon -->
         <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
