@@ -1,12 +1,12 @@
 export default {
   apps: [{
-    name: 'brokeranalysis-dev',
+    name: 'brokeranalysis-sandbox',
     script: 'npm',
-    args: 'run dev',
+    args: 'run dev:sandbox',
     cwd: '/home/user/webapp',
     env: {
       NODE_ENV: 'development',
-      PORT: 5173
+      PORT: 3000
     },
     watch: false,
     ignore_watch: ['node_modules', '.git', 'dist'],

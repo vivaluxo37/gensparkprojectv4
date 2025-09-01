@@ -30,6 +30,10 @@ import { renderIslamicAccountBrokersPage } from '../components/IslamicAccountBro
 import { renderAutomatedTradingBrokersPage } from '../components/AutomatedTradingBrokersPage.js';
 import { renderHighLeverageBrokersPage } from '../components/HighLeverageBrokersPage.js';
 import { renderOilTradingBrokersPage } from '../components/OilTradingBrokersPage.js';
+import { renderCopyTradingBrokersPage } from '../components/CopyTradingBrokersPage.js';
+import { renderECNBrokersPage } from '../components/ECNBrokersPage.js';
+import { renderScalpingBrokersPage } from '../components/ScalpingBrokersPage.js';
+import { renderDemoAccountsBrokersPage } from '../components/DemoAccountsBrokersPage.js';
 import { generateComprehensiveBrokerReviewHTML } from '../components/EnhancedBrokerReview.js';
 import { generateCompleteNavigation } from '../components/Navigation.js';
 
@@ -1625,6 +1629,286 @@ pageRoutes.get('/brokers/oil-trading', (c) => {
   } catch (error) {
     console.error('Oil trading page error:', error);
     return c.html(`<h1>Error loading oil trading page: ${error.message}</h1>`, 500);
+  }
+});
+
+// Copy Trading Brokers Page
+pageRoutes.get('/brokers/copy-trading', (c) => {
+  try {
+    const content = renderCopyTradingBrokersPage({
+      canonicalUrl: '/brokers/copy-trading',
+      request: c.req.raw
+    });
+    
+    return c.html(renderLayout(content, {
+      title: 'Best Copy Trading Brokers 2025 - Social Trading Platforms | BrokerAnalysis',
+      description: 'Compare the top 8 copy trading brokers and social trading platforms. Find brokers with advanced signal copying, large communities, and proven performance tracking.',
+      keywords: 'copy trading brokers, social trading platforms, signal providers, eToro copy trading, ZuluTrade, mirror trading, automated copying, social forex trading',
+      canonicalUrl: '/brokers/copy-trading',
+      request: c.req.raw,
+      additionalHead: `
+        <!-- Copy Trading Schema -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "name": "Best Copy Trading Brokers 2025",
+          "description": "Compare top copy trading brokers and social trading platforms for automated signal copying",
+          "url": "${getCurrentDomain(c.req.raw)}/brokers/copy-trading",
+          "mainEntity": {
+            "@type": "ItemList",
+            "name": "Copy Trading Brokers",
+            "numberOfItems": 8
+          }
+        }
+        </script>
+
+        <!-- FAQ Schema for Copy Trading -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Is copy trading profitable?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Copy trading can be profitable if you choose skilled signal providers and manage risk properly. However, past performance doesn't guarantee future results, and all trading involves risk of loss."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Which broker is best for copy trading beginners?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "eToro is ideal for beginners with its user-friendly interface, social features, and CopyTrader™ system designed specifically for copy trading with extensive educational resources."
+              }
+            }
+          ]
+        }
+        </script>
+      `
+    }));
+  } catch (error) {
+    console.error('Copy trading page error:', error);
+    return c.html(`<h1>Error loading copy trading page: ${error.message}</h1>`, 500);
+  }
+});
+
+// ECN Brokers Page
+pageRoutes.get('/brokers/ecn', (c) => {
+  try {
+    const content = renderECNBrokersPage({
+      canonicalUrl: '/brokers/ecn',
+      request: c.req.raw
+    });
+    
+    return c.html(renderLayout(content, {
+      title: 'Best ECN Forex Brokers 2025 - True ECN & Raw Spreads | BrokerAnalysis',
+      description: 'Compare the top 8 ECN (Electronic Communication Network) forex brokers offering raw spreads from 0.0 pips, DMA execution, and professional trading conditions.',
+      keywords: 'ECN forex brokers, raw spreads, DMA execution, electronic communication network, ECN vs STP, IC Markets ECN, FP Markets ECN, Pepperstone ECN, BlackBull ECN',
+      canonicalUrl: '/brokers/ecn',
+      request: c.req.raw,
+      additionalHead: `
+        <!-- ECN Brokers Schema -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "name": "Best ECN Forex Brokers 2025",
+          "description": "Compare top ECN forex brokers with raw spreads and direct market access execution",
+          "url": "${getCurrentDomain(c.req.raw)}/brokers/ecn",
+          "mainEntity": {
+            "@type": "ItemList",
+            "name": "ECN Forex Brokers",
+            "numberOfItems": 8
+          }
+        }
+        </script>
+
+        <!-- FAQ Schema for ECN -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What is an ECN broker?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "An ECN (Electronic Communication Network) broker provides direct market access where trades are executed directly with liquidity providers, banks, and other traders, offering raw spreads with commission-based pricing."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What's the difference between ECN and STP brokers?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "ECN brokers offer direct access to the interbank market with raw spreads plus commission, while STP brokers route orders to liquidity providers but may mark up spreads instead of charging commission."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Which ECN broker has the lowest spreads?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "IC Markets offers the tightest ECN spreads starting from 0.0 pips on EUR/USD with $3.50 commission per lot, followed by FP Markets and Pepperstone with similar raw spread offerings."
+              }
+            }
+          ]
+        }
+        </script>
+      `
+    }));
+  } catch (error) {
+    console.error('ECN page error:', error);
+    return c.html(`<h1>Error loading ECN page: ${error.message}</h1>`, 500);
+  }
+});
+
+// Scalping Brokers Page
+pageRoutes.get('/brokers/scalping', (c) => {
+  try {
+    const content = renderScalpingBrokersPage({
+      canonicalUrl: '/brokers/scalping',
+      request: c.req.raw
+    });
+    
+    return c.html(renderLayout(content, {
+      title: 'Best Scalping Forex Brokers 2025 - Ultra-Fast Execution | BrokerAnalysis',
+      description: 'Compare the top 8 scalping forex brokers with ultra-fast execution speeds, raw spreads from 0.02 pips, VPS hosting, and professional trading infrastructure for high-frequency strategies.',
+      keywords: 'scalping forex brokers, fast execution, ultra-low spreads, high frequency trading, scalping strategies, BlackBull Markets, IC Markets, Pepperstone scalping, raw spreads',
+      canonicalUrl: '/brokers/scalping',
+      request: c.req.raw,
+      additionalHead: `
+        <!-- Scalping Brokers Schema -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "name": "Best Scalping Forex Brokers 2025",
+          "description": "Compare top forex brokers for scalping with ultra-fast execution speeds and raw spreads",
+          "url": "${getCurrentDomain(c.req.raw)}/brokers/scalping",
+          "mainEntity": {
+            "@type": "ItemList",
+            "name": "Scalping Forex Brokers",
+            "numberOfItems": 8
+          }
+        }
+        </script>
+
+        <!-- FAQ Schema for Scalping -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What is forex scalping?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Forex scalping is a high-frequency trading strategy where traders make numerous small trades throughout the day, typically holding positions for seconds to minutes to profit from small price movements."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Which broker has the fastest execution for scalping?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "BlackBull Markets offers the fastest execution speeds at 72ms average, followed by Pepperstone at 77ms and IC Markets at 134ms, making them ideal choices for scalping strategies."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Are raw spreads better for scalping?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, raw spreads with commission typically offer lower total trading costs for scalpers compared to standard accounts, as they provide transparent interbank pricing without markup."
+              }
+            }
+          ]
+        }
+        </script>
+      `
+    }));
+  } catch (error) {
+    console.error('Scalping page error:', error);
+    return c.html(`<h1>Error loading scalping page: ${error.message}</h1>`, 500);
+  }
+});
+
+// Demo Accounts Brokers Page
+pageRoutes.get('/brokers/demo-accounts', (c) => {
+  try {
+    const content = renderDemoAccountsBrokersPage({
+      canonicalUrl: '/brokers/demo-accounts',
+      request: c.req.raw
+    });
+    
+    return c.html(renderLayout(content, {
+      title: 'Best Demo Account Forex Brokers 2025 - Free Practice Trading | BrokerAnalysis',
+      description: 'Compare the top 8 forex brokers with unlimited demo accounts, virtual funds up to $100K+, and real market conditions for risk-free practice trading and strategy testing.',
+      keywords: 'demo account forex brokers, free demo trading, practice forex trading, unlimited demo accounts, virtual trading, IC Markets demo, Pepperstone demo, XM demo',
+      canonicalUrl: '/brokers/demo-accounts',
+      request: c.req.raw,
+      additionalHead: `
+        <!-- Demo Account Brokers Schema -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "name": "Best Demo Account Forex Brokers 2025",
+          "description": "Compare top forex brokers offering unlimited demo accounts with virtual funds and real market conditions",
+          "url": "${getCurrentDomain(c.req.raw)}/brokers/demo-accounts",
+          "mainEntity": {
+            "@type": "ItemList",
+            "name": "Demo Account Forex Brokers",
+            "numberOfItems": 8
+          }
+        }
+        </script>
+
+        <!-- FAQ Schema for Demo Accounts -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Are demo accounts completely free?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, all reputable forex brokers offer completely free demo accounts with no deposits or fees required. The virtual funds are for practice only and cannot be withdrawn."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How accurate are demo account conditions?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Quality demo accounts provide real-time market data and similar execution conditions to live trading, though there can be slight differences in execution speed and slippage."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "When should I switch to a live account?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Switch to live trading after demonstrating consistent profitability for 3+ months in demo, developing proper risk management skills, and having adequate trading capital."
+              }
+            }
+          ]
+        }
+        </script>
+      `
+    }));
+  } catch (error) {
+    console.error('Demo accounts page error:', error);
+    return c.html(`<h1>Error loading demo accounts page: ${error.message}</h1>`, 500);
   }
 });
 
