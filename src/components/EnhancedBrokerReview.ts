@@ -6,6 +6,13 @@ import { generateBrokerLogo, generateLogoScript } from './BrokerLogo.js';
 export function generateComprehensiveBrokerReviewHTML(broker: ComprehensiveBroker, request?: Request): string {
   const domain = getCurrentDomain(request);
   const starRating = generateStarRating(broker.rating);
+  
+  // Safely handle URLs to prevent "Invalid URL string" errors
+  const safeWebsiteUrl = broker.website_url || 'https://example.com';
+  const safeLogoUrl = broker.logo_url || `${domain}/static/images/brokers/default-logo.svg`;
+  const safeDescription = (broker.details?.description_short || 'Professional forex and CFD trading services').replace(/"/g, '\\"');
+  const safeName = broker.name.replace(/"/g, '\\"');
+  const safeHeadquarters = (broker.headquarters || 'Global').replace(/"/g, '\\"');
 
   return `
     <!DOCTYPE html>
@@ -13,14 +20,14 @@ export function generateComprehensiveBrokerReviewHTML(broker: ComprehensiveBroke
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>${broker.name} Review 2025 - Detailed Analysis, Spreads, Regulation & Rating | BrokerAnalysis</title>
-        <meta name="description" content="Comprehensive ${broker.name} review 2025. Expert analysis of spreads, regulation, trading platforms, fees, and execution. ${broker.name} pros and cons with detailed ratings.">
-        <meta name="keywords" content="${broker.name} review, ${broker.name} spreads, ${broker.name} regulation, ${broker.name} fees, ${broker.name} trading platform, forex broker review">
+        <title>${safeName} Review 2025 - Detailed Analysis, Spreads, Regulation & Rating | BrokerAnalysis</title>
+        <meta name="description" content="Comprehensive ${safeName} review 2025. Expert analysis of spreads, regulation, trading platforms, fees, and execution. ${safeName} pros and cons with detailed ratings.">
+        <meta name="keywords" content="${safeName} review, ${safeName} spreads, ${safeName} regulation, ${safeName} fees, ${safeName} trading platform, forex broker review">
         
         <!-- Open Graph / Facebook -->
         <meta property="og:type" content="article">
-        <meta property="og:title" content="${broker.name} Review 2025 - Expert Analysis & Rating">
-        <meta property="og:description" content="Comprehensive ${broker.name} review covering spreads, regulation, platforms, and trading conditions. Expert analysis with pros, cons, and detailed ratings.">
+        <meta property="og:title" content="${safeName} Review 2025 - Expert Analysis & Rating">
+        <meta property="og:description" content="Comprehensive ${safeName} review covering spreads, regulation, platforms, and trading conditions. Expert analysis with pros, cons, and detailed ratings.">
         <meta property="og:image" content="${domain}/static/images/brokers/${broker.slug}-og.png">
         <meta property="og:url" content="${domain}/review/${broker.slug}">
         <meta property="og:article:author" content="BrokerAnalysis">
@@ -28,8 +35,8 @@ export function generateComprehensiveBrokerReviewHTML(broker: ComprehensiveBroke
         
         <!-- Twitter -->
         <meta property="twitter:card" content="summary_large_image">
-        <meta property="twitter:title" content="${broker.name} Review 2025 - Expert Analysis & Rating">
-        <meta property="twitter:description" content="Comprehensive ${broker.name} review covering spreads, regulation, platforms, and trading conditions.">
+        <meta property="twitter:title" content="${safeName} Review 2025 - Expert Analysis & Rating">
+        <meta property="twitter:description" content="Comprehensive ${safeName} review covering spreads, regulation, platforms, and trading conditions.">
         <meta property="twitter:image" content="${domain}/static/images/brokers/${broker.slug}-og.png">
         
         <link rel="canonical" href="${domain}/review/${broker.slug}">
@@ -41,7 +48,7 @@ export function generateComprehensiveBrokerReviewHTML(broker: ComprehensiveBroke
         <link rel="apple-touch-icon" href="/static/images/apple-touch-icon.png">
         
         <!-- CSS -->
-        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="/static/styles.css" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
         
         <!-- Structured Data - Review Schema -->
@@ -51,13 +58,13 @@ export function generateComprehensiveBrokerReviewHTML(broker: ComprehensiveBroke
           "@type": "Review",
           "itemReviewed": {
             "@type": "FinancialService",
-            "name": "${broker.name}",
-            "description": "${broker.details?.description_short || 'Professional forex and CFD trading services'}",
-            "url": "${broker.website_url}",
-            "logo": "${broker.logo_url}",
+            "name": "${safeName}",
+            "description": "${safeDescription}",
+            "url": "${safeWebsiteUrl}",
+            "logo": "${safeLogoUrl}",
             "address": {
               "@type": "PostalAddress",
-              "addressLocality": "${broker.headquarters || 'Global'}"
+              "addressLocality": "${safeHeadquarters}"
             }
           },
           "author": {
@@ -83,7 +90,7 @@ export function generateComprehensiveBrokerReviewHTML(broker: ComprehensiveBroke
             "name": "BrokerAnalysis"
           },
           "datePublished": "${new Date().toISOString()}",
-          "reviewBody": "Comprehensive review of ${broker.name} covering regulation, trading costs, platform features, execution quality, and customer service."
+          "reviewBody": "Comprehensive review of ${safeName} covering regulation, trading costs, platform features, execution quality, and customer service."
         }
         </script>
 
@@ -108,7 +115,7 @@ export function generateComprehensiveBrokerReviewHTML(broker: ComprehensiveBroke
             {
               "@type": "ListItem",
               "position": 3,
-              "name": "${broker.name}",
+              "name": "${safeName}",
               "item": "${domain}/reviews/${broker.slug}"
             }
           ]
@@ -205,6 +212,7 @@ function generateNavigation(): string {
 }
 
 function generateBreadcrumb(broker: ComprehensiveBroker, domain: string): string {
+  const safeName = broker.name.replace(/"/g, '\\"');
   return `
     <div class="bg-white border-b">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
@@ -217,7 +225,7 @@ function generateBreadcrumb(broker: ComprehensiveBroker, domain: string): string
                     </li>
                     <li class="flex items-center">
                         <i class="fas fa-chevron-right text-gray-400 mx-2 text-sm"></i>
-                        <span class="text-gray-500">${broker.name}</span>
+                        <span class="text-gray-500">${safeName}</span>
                     </li>
                 </ol>
             </nav>
@@ -228,20 +236,24 @@ function generateBreadcrumb(broker: ComprehensiveBroker, domain: string): string
 
 function generateHeroSection(broker: ComprehensiveBroker): string {
   const starRating = generateStarRating(broker.rating);
+  const safeName = broker.name.replace(/"/g, '\\"');
+  const safeWebsiteUrl = broker.website_url || 'https://example.com';
+  const safeLogoUrl = broker.logo_url || '/static/images/brokers/default-logo.svg';
+  const safeDescription = (broker.details?.description_short || 'Professional forex and CFD broker with competitive trading conditions').replace(/"/g, '\\"');
 
   return `
     <div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col md:flex-row items-center gap-8">
                 <div class="bg-white rounded-lg p-4 flex-shrink-0">
-                    <img src="${broker.logo_url || '/static/images/broker-placeholder.png'}" 
-                         alt="${broker.name} logo" 
+                    <img src="${safeLogoUrl}" 
+                         alt="${safeName} logo" 
                          class="h-20 w-auto"
-                         onerror="this.src='/static/images/broker-placeholder.png'">
+                         onerror="this.src='/static/images/brokers/default-logo.svg'">
                 </div>
                 <div class="flex-1 text-center md:text-left">
-                    <h1 class="text-4xl md:text-5xl font-bold mb-4">${broker.name} Review 2025</h1>
-                    <p class="text-xl text-blue-100 mb-6">${broker.details?.description_short || 'Professional forex and CFD broker with competitive trading conditions'}</p>
+                    <h1 class="text-4xl md:text-5xl font-bold mb-4">${safeName} Review 2025</h1>
+                    <p class="text-xl text-blue-100 mb-6">${safeDescription}</p>
                     <div class="flex flex-col sm:flex-row gap-6 items-center justify-center md:justify-start mb-6">
                         <div class="flex items-center gap-3">
                             <div class="flex text-yellow-400 text-2xl">
@@ -256,11 +268,11 @@ function generateHeroSection(broker: ComprehensiveBroker): string {
                         </div>
                     </div>
                     <div class="flex flex-col sm:flex-row gap-4 items-center justify-center md:justify-start">
-                        <a href="${broker.website_url}" 
+                        <a href="${safeWebsiteUrl}" 
                            target="_blank" 
                            rel="noopener noreferrer" 
                            class="bg-yellow-400 text-blue-900 px-8 py-3 rounded-lg font-bold hover:bg-yellow-300 transition-colors text-lg">
-                            Visit ${broker.name}
+                            Visit ${safeName}
                         </a>
                         <a href="#detailed-review" 
                            class="bg-white/10 text-white px-8 py-3 rounded-lg font-semibold hover:bg-white/20 transition-colors border border-white/30">
@@ -335,6 +347,7 @@ function generateTableOfContents(): string {
 }
 
 function generateExecutiveSummary(broker: ComprehensiveBroker): string {
+  const safeName = broker.name.replace(/"/g, '\\"');
   return `
     <section id="executive-summary" class="bg-white rounded-lg shadow-sm p-8">
         <h2 class="text-3xl font-bold text-gray-900 mb-6 flex items-center">
@@ -343,10 +356,10 @@ function generateExecutiveSummary(broker: ComprehensiveBroker): string {
         </h2>
         <div class="prose prose-lg max-w-none">
             <p class="text-xl text-gray-700 mb-6 leading-relaxed">
-                ${broker.name} is ${broker.is_regulated ? 'a regulated' : 'an offshore'} forex and CFD broker 
+                ${safeName} is ${broker.is_regulated ? 'a regulated' : 'an offshore'} forex and CFD broker 
                 ${broker.established ? `established in ${broker.established}` : 'with years of experience'} 
                 ${broker.headquarters ? `and headquartered in ${broker.headquarters}` : ''}. 
-                ${broker.name} offers competitive trading conditions with 
+                ${safeName} offers competitive trading conditions with 
                 ${broker.spread_type?.toLowerCase() || 'variable'} spreads and maximum leverage of 1:${broker.max_leverage}.
             </p>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -378,6 +391,7 @@ function generateExecutiveSummary(broker: ComprehensiveBroker): string {
 }
 
 function generateRegulationSection(broker: ComprehensiveBroker): string {
+  const safeName = broker.name.replace(/"/g, '\\"');
   return `
     <section id="regulation" class="bg-white rounded-lg shadow-sm p-8">
         <h2 class="text-3xl font-bold text-gray-900 mb-6 flex items-center">
@@ -392,7 +406,7 @@ function generateRegulationSection(broker: ComprehensiveBroker): string {
                         <h3 class="text-xl font-semibold text-green-800">Regulated Broker</h3>
                     </div>
                     <p class="text-green-700 mb-4">
-                        ${broker.name} is a regulated broker, which means it operates under the oversight of 
+                        ${safeName} is a regulated broker, which means it operates under the oversight of 
                         financial regulatory authorities and must comply with strict operational standards.
                     </p>
                     ${broker.regulations?.length ? `
@@ -414,7 +428,7 @@ function generateRegulationSection(broker: ComprehensiveBroker): string {
                         <h3 class="text-xl font-semibold text-orange-800">Offshore Broker</h3>
                     </div>
                     <p class="text-orange-700">
-                        ${broker.name} operates as an offshore broker without regulation from major financial authorities. 
+                        ${safeName} operates as an offshore broker without regulation from major financial authorities. 
                         While this allows for more flexible trading conditions, it may offer less client protection.
                     </p>
                 </div>
@@ -444,6 +458,7 @@ function generateRegulationSection(broker: ComprehensiveBroker): string {
 }
 
 function generateTradingCostsSection(broker: ComprehensiveBroker): string {
+  const safeName = broker.name.replace(/"/g, '\\"');
   return `
     <section id="trading-costs" class="bg-white rounded-lg shadow-sm p-8">
         <h2 class="text-3xl font-bold text-gray-900 mb-6 flex items-center">
@@ -475,7 +490,7 @@ function generateTradingCostsSection(broker: ComprehensiveBroker): string {
                 </div>
             ` : `
                 <div class="bg-blue-50 p-6 rounded-lg">
-                    <p class="text-blue-800">Spread data will be updated shortly. Contact ${broker.name} directly for current pricing.</p>
+                    <p class="text-blue-800">Spread data will be updated shortly. Contact ${safeName} directly for current pricing.</p>
                 </div>
             `}
         </div>
@@ -562,15 +577,18 @@ function generatePlatformsSection(broker: ComprehensiveBroker): string {
 }
 
 function generateBrokerFactsWidget(broker: ComprehensiveBroker): string {
+  const safeName = broker.name.replace(/"/g, '\\"');
+  const safeWebsiteUrl = broker.website_url || 'https://example.com';
+  const safeLogoUrl = broker.logo_url || '/static/images/brokers/default-logo.svg';
   return `
     <div class="bg-white rounded-lg shadow-sm p-6 sticky top-20">
-        <h3 class="text-lg font-semibold mb-4 text-center">${broker.name} Quick Facts</h3>
+        <h3 class="text-lg font-semibold mb-4 text-center">${safeName} Quick Facts</h3>
         <div class="space-y-4">
             <div class="text-center">
-                <img src="${broker.logo_url || '/static/images/broker-placeholder.png'}" 
-                     alt="${broker.name} logo" 
+                <img src="${safeLogoUrl}" 
+                     alt="${safeName} logo" 
                      class="h-16 w-auto mx-auto mb-4"
-                     onerror="this.src='/static/images/broker-placeholder.png'">
+                     onerror="this.src='/static/images/brokers/default-logo.svg'">
             </div>
             <div class="text-center">
                 <div class="text-3xl font-bold text-blue-600">${broker.rating}</div>
@@ -601,11 +619,11 @@ function generateBrokerFactsWidget(broker: ComprehensiveBroker): string {
                 </div>
             </div>
             <hr>
-            <a href="${broker.website_url}" 
+            <a href="${safeWebsiteUrl}" 
                target="_blank" 
                rel="noopener noreferrer" 
                class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-center block">
-                Visit ${broker.name}
+                Visit ${safeName}
             </a>
         </div>
     </div>
@@ -664,6 +682,8 @@ function generateProsConsSection(broker: ComprehensiveBroker): string {
 }
 
 function generateFinalVerdict(broker: ComprehensiveBroker): string {
+  const safeName = broker.name.replace(/"/g, '\\"');
+  const safeWebsiteUrl = broker.website_url || 'https://example.com';
   return `
     <section id="verdict" class="bg-white rounded-lg shadow-sm p-8">
         <h2 class="text-3xl font-bold text-gray-900 mb-6 flex items-center">
@@ -679,7 +699,7 @@ function generateFinalVerdict(broker: ComprehensiveBroker): string {
                 </div>
             </div>
             <p class="text-blue-800 text-lg leading-relaxed">
-                ${broker.name} ${broker.rating >= 4 ? 'is a strong choice' : broker.rating >= 3 ? 'offers decent services' : 'has room for improvement'} 
+                ${safeName} ${broker.rating >= 4 ? 'is a strong choice' : broker.rating >= 3 ? 'offers decent services' : 'has room for improvement'} 
                 for forex and CFD trading. With ${broker.is_regulated ? 'proper regulation' : 'offshore status'} and 
                 ${broker.spread_type?.toLowerCase() || 'competitive'} spreads, it caters to 
                 ${broker.rating >= 4 ? 'both beginners and experienced traders' : 'specific trader needs'}.
@@ -688,11 +708,11 @@ function generateFinalVerdict(broker: ComprehensiveBroker): string {
         </div>
         
         <div class="text-center">
-            <a href="${broker.website_url}" 
+            <a href="${safeWebsiteUrl}" 
                target="_blank" 
                rel="noopener noreferrer" 
                class="inline-block bg-blue-600 text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-blue-700 transition-colors">
-                Start Trading with ${broker.name}
+                Start Trading with ${safeName}
             </a>
             <p class="text-sm text-gray-600 mt-2">Risk Warning: Trading involves significant risk of loss</p>
         </div>
