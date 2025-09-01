@@ -24,6 +24,7 @@ import { renderNepalCountryPage } from '../components/NepalCountryPage.js';
 import { renderMalaysiaCountryPage } from '../components/MalaysiaCountryPage.js';
 import { renderEthiopiaCountryPage } from '../components/EthiopiaCountryPage.js';
 import { renderBangladeshCountryPage } from '../components/BangladeshCountryPage.js';
+import { UserDashboard } from '../components/UserDashboard.js';
 
 const pageRoutes = new Hono<{ Bindings: Bindings }>();
 
@@ -114,6 +115,72 @@ pageRoutes.get('/', (c) => {
       })}
     `
   }));
+});
+
+// Dashboard route - User's personalized trading dashboard
+pageRoutes.get('/dashboard', async (c) => {
+  try {
+    // Check authentication
+    const sessionId = getCookie(c, 'sessionId');
+    if (!sessionId) {
+      return c.redirect('/?auth=required');
+    }
+
+    // Get user data from database
+    const db = c.env.DB;
+    const userQuery = await db.prepare(
+      'SELECT * FROM users WHERE sessionId = ?'
+    ).bind(sessionId).first();
+
+    if (!userQuery) {
+      return c.redirect('/?auth=expired');
+    }
+
+    // Get user's broker matches
+    const brokerMatches = await db.prepare(
+      'SELECT * FROM broker_matches WHERE userId = ? ORDER BY timestamp DESC'
+    ).bind(userQuery.id).all();
+
+    const latestMatch = brokerMatches.results?.[0] || null;
+
+    // Parse recommendations if they exist
+    if (latestMatch && latestMatch.recommendations) {
+      try {
+        latestMatch.recommendations = JSON.parse(latestMatch.recommendations);
+      } catch (e) {
+        console.error('Error parsing recommendations:', e);
+        latestMatch.recommendations = [];
+      }
+    }
+
+    if (latestMatch && latestMatch.userProfile) {
+      try {
+        latestMatch.userProfile = JSON.parse(latestMatch.userProfile);
+      } catch (e) {
+        console.error('Error parsing user profile:', e);
+        latestMatch.userProfile = {};
+      }
+    }
+
+    // Render dashboard
+    return c.html(UserDashboard({
+      user: {
+        id: userQuery.id,
+        name: userQuery.name,
+        email: userQuery.email
+      },
+      latestMatch,
+      brokerMatches: brokerMatches.results?.map(match => ({
+        ...match,
+        recommendations: match.recommendations ? JSON.parse(match.recommendations) : [],
+        userProfile: match.userProfile ? JSON.parse(match.userProfile) : {}
+      })) || []
+    }));
+
+  } catch (error) {
+    console.error('Dashboard error:', error);
+    return c.redirect('/?error=dashboard');
+  }
 });
 
 // Main brokers directory page - comprehensive listing with SEO optimization
