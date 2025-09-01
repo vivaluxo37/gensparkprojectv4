@@ -21,6 +21,7 @@ import { renderCanadaCountryPage } from '../components/CanadaCountryPage.js';
 import { renderAustraliaCountryPage } from '../components/AustraliaCountryPage.js';
 import { renderBelgiumCountryPage } from '../components/BelgiumCountryPage.js';
 import { renderNepalCountryPage } from '../components/NepalCountryPage.js';
+import { renderMalaysiaCountryPage } from '../components/MalaysiaCountryPage.js';
 
 const pageRoutes = new Hono<{ Bindings: Bindings }>();
 
@@ -485,6 +486,31 @@ pageRoutes.get('/countries/nepal', (c) => {
       <meta property="og:type" content="website" />
       <link rel="alternate" hreflang="en" href="${getCurrentDomain(c.req.raw)}/countries/nepal" />
       <link rel="alternate" hreflang="ne" href="${getCurrentDomain(c.req.raw)}/countries/nepal" />
+    `
+  }));
+});
+
+// Individual Country Pages - Malaysia
+pageRoutes.get('/countries/malaysia', (c) => {
+  return c.html(renderLayout(renderMalaysiaCountryPage({
+    canonicalUrl: '/countries/malaysia',
+    request: c.req.raw
+  }), {
+    title: 'Best Forex Brokers in Malaysia 2025 - SC Compliant Trading | BrokerAnalysis',
+    description: 'Compare top international forex brokers for Malaysian traders in 2025. Find MYR support, Islamic accounts, and SC-compliant brokers with local bank integration.',
+    keywords: 'Malaysia forex brokers, Malaysian traders, SC Malaysia, Islamic forex accounts, MYR trading, XM Group, Exness, OctaFX, FBS, IC Markets, Pepperstone, Shariah compliant',
+    canonicalUrl: '/countries/malaysia',
+    request: c.req.raw,
+    additionalHead: `
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+      <meta name="geo.region" content="MY" />
+      <meta name="geo.placename" content="Malaysia" />
+      <meta name="robots" content="index, follow, max-image-preview:large" />
+      <meta property="og:locale" content="en_MY" />
+      <meta property="og:type" content="website" />
+      <link rel="alternate" hreflang="en" href="${getCurrentDomain(c.req.raw)}/countries/malaysia" />
+      <link rel="alternate" hreflang="ms" href="${getCurrentDomain(c.req.raw)}/countries/malaysia" />
     `
   }));
 });
