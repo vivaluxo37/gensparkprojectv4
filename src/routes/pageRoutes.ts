@@ -22,6 +22,7 @@ import { renderAustraliaCountryPage } from '../components/AustraliaCountryPage.j
 import { renderBelgiumCountryPage } from '../components/BelgiumCountryPage.js';
 import { renderNepalCountryPage } from '../components/NepalCountryPage.js';
 import { renderMalaysiaCountryPage } from '../components/MalaysiaCountryPage.js';
+import { renderEthiopiaCountryPage } from '../components/EthiopiaCountryPage.js';
 
 const pageRoutes = new Hono<{ Bindings: Bindings }>();
 
@@ -127,7 +128,9 @@ pageRoutes.get('/countries', (c) => {
     { slug: 'indonesia', name: 'Indonesia', regulator: 'Bappebti', brokerCount: 6,
       description: 'Indonesia\'s Bappebti regulates commodity and forex trading with emphasis on market development and protection.' },
     { slug: 'nepal', name: 'Nepal', regulator: 'NRB', brokerCount: 6,
-      description: 'Nepal\'s forex market operates with Nepal Rastra Bank oversight. International brokers serve Nepali traders with ultra-low deposits and high leverage access.' }
+      description: 'Nepal\'s forex market operates with Nepal Rastra Bank oversight. International brokers serve Nepali traders with ultra-low deposits and high leverage access.' },
+    { slug: 'ethiopia', name: 'Ethiopia', regulator: 'NBE', brokerCount: 6,
+      description: 'Ethiopia\'s growing economy offers forex trading opportunities through international brokers with NBE awareness and ETB currency support for African traders.' }
   ];
 
   return c.html(renderCountriesDirectoryPage(countries, {
@@ -511,6 +514,31 @@ pageRoutes.get('/countries/malaysia', (c) => {
       <meta property="og:type" content="website" />
       <link rel="alternate" hreflang="en" href="${getCurrentDomain(c.req.raw)}/countries/malaysia" />
       <link rel="alternate" hreflang="ms" href="${getCurrentDomain(c.req.raw)}/countries/malaysia" />
+    `
+  }));
+});
+
+// Individual Country Pages - Ethiopia
+pageRoutes.get('/countries/ethiopia', (c) => {
+  return c.html(renderLayout(renderEthiopiaCountryPage({
+    canonicalUrl: '/countries/ethiopia',
+    request: c.req.raw
+  }), {
+    title: 'Best Forex Brokers in Ethiopia 2025 - International Trading Access | BrokerAnalysis',
+    description: 'Compare top international forex brokers for Ethiopian traders in 2025. Find ETB support, Islamic accounts, and NBE-aware brokers with African market expertise.',
+    keywords: 'Ethiopia forex brokers, Ethiopian traders, ETB trading, National Bank of Ethiopia, NBE, Islamic forex accounts, XM Group, Exness, OctaFX, FBS, IC Markets, Ethiopian Birr',
+    canonicalUrl: '/countries/ethiopia',
+    request: c.req.raw,
+    additionalHead: `
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+      <meta name="geo.region" content="ET" />
+      <meta name="geo.placename" content="Ethiopia" />
+      <meta name="robots" content="index, follow, max-image-preview:large" />
+      <meta property="og:locale" content="en_ET" />
+      <meta property="og:type" content="website" />
+      <link rel="alternate" hreflang="en" href="${getCurrentDomain(c.req.raw)}/countries/ethiopia" />
+      <link rel="alternate" hreflang="am" href="${getCurrentDomain(c.req.raw)}/countries/ethiopia" />
     `
   }));
 });
