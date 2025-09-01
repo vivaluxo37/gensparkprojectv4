@@ -25,6 +25,11 @@ import { renderMalaysiaCountryPage } from '../components/MalaysiaCountryPage.js'
 import { renderEthiopiaCountryPage } from '../components/EthiopiaCountryPage.js';
 import { renderBangladeshCountryPage } from '../components/BangladeshCountryPage.js';
 import { renderTradingSimulatorPage } from '../components/TradingSimulatorPage.js';
+import { renderGoldTradingBrokersPage } from '../components/GoldTradingBrokersPage.js';
+import { renderIslamicAccountBrokersPage } from '../components/IslamicAccountBrokersPage.js';
+import { renderAutomatedTradingBrokersPage } from '../components/AutomatedTradingBrokersPage.js';
+import { renderHighLeverageBrokersPage } from '../components/HighLeverageBrokersPage.js';
+import { renderOilTradingBrokersPage } from '../components/OilTradingBrokersPage.js';
 import { generateComprehensiveBrokerReviewHTML } from '../components/EnhancedBrokerReview.js';
 import { generateCompleteNavigation } from '../components/Navigation.js';
 
@@ -1381,6 +1386,252 @@ const countryPages = [
   { slug: 'qatar', name: 'Qatar', regulator: 'QFCRA' },
   { slug: 'indonesia', name: 'Indonesia', regulator: 'Bappebti' }
 ];
+
+// ========================
+// SPECIFIC BROKER CATEGORY ROUTES
+// CRITICAL: These MUST be defined BEFORE the dynamic country routes to avoid conflicts
+// ========================
+
+// Gold Trading Brokers Page
+pageRoutes.get('/brokers/gold-trading', (c) => {
+  try {
+    const content = renderGoldTradingBrokersPage({
+      canonicalUrl: '/brokers/gold-trading',
+      request: c.req.raw
+    });
+    
+    return c.html(renderLayout(content, {
+      title: 'Best Gold Trading Brokers 2025 - XAU/USD Specialists | BrokerAnalysis',
+      description: 'Compare the top 7 gold trading brokers for 2025. Find brokers with tight XAU/USD spreads, multiple gold instruments, and advanced precious metals trading platforms.',
+      keywords: 'gold trading brokers, XAU/USD brokers, gold CFD trading, precious metals brokers, gold forex trading, FXTM, Pepperstone, FP Markets, AvaTrade, gold trading platforms',
+      canonicalUrl: '/brokers/gold-trading',
+      request: c.req.raw,
+      additionalHead: `
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        
+        <!-- Gold Trading Schema -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "name": "Best Gold Trading Brokers 2025",
+          "description": "Compare top forex brokers for gold trading with XAU/USD specialization",
+          "url": "${getCurrentDomain(c.req.raw)}/brokers/gold-trading",
+          "mainEntity": {
+            "@type": "ItemList",
+            "name": "Gold Trading Brokers",
+            "numberOfItems": 7
+          }
+        }
+        </script>
+
+        <!-- FAQ Schema for Gold Trading -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What are the best brokers for gold trading?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The best gold trading brokers include FXTM, Pepperstone, FP Markets, and XM, offering tight spreads, multiple gold instruments, and advanced trading platforms."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What is XAU/USD in gold trading?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "XAU/USD is the most popular gold trading pair representing 1 troy ounce of gold priced in US Dollars. It's the standard for gold CFD trading."
+              }
+            }
+          ]
+        }
+        </script>
+      `
+    }));
+  } catch (error) {
+    console.error('Gold trading page error:', error);
+    return c.html(`<h1>Error: ${error.message}</h1>`, 500);
+  }
+});
+
+// Islamic Account Brokers Page
+pageRoutes.get('/brokers/islamic-accounts', (c) => {
+  try {
+    const content = renderIslamicAccountBrokersPage({
+      canonicalUrl: '/brokers/islamic-accounts',
+      request: c.req.raw
+    });
+    
+    return c.html(renderLayout(content, {
+      title: 'Best Islamic Forex Brokers 2025 - Halal & Swap-Free Accounts | BrokerAnalysis',
+      description: 'Compare the top 6 Islamic (Halal) forex brokers offering Shariah-compliant swap-free accounts. Find trusted brokers with no overnight interest charges for Muslim traders.',
+      keywords: 'Islamic forex brokers, halal forex trading, swap-free accounts, Shariah compliant brokers, Muslim forex trading, FXTM Islamic, Pepperstone swap-free, Islamic trading accounts',
+      canonicalUrl: '/brokers/islamic-accounts',
+      request: c.req.raw
+    }));
+  } catch (error) {
+    console.error('Islamic accounts page error:', error);
+    return c.html(`<h1>Error loading Islamic accounts page: ${error.message}</h1>`, 500);
+  }
+});
+
+// Automated Trading Brokers Page
+pageRoutes.get('/brokers/automated-trading', (c) => {
+  try {
+    const content = renderAutomatedTradingBrokersPage({
+      canonicalUrl: '/brokers/automated-trading',
+      request: c.req.raw
+    });
+    
+    return c.html(renderLayout(content, {
+      title: 'Best Automated Forex Trading Brokers 2025 - EA & API Support | BrokerAnalysis',
+      description: 'Compare the top 5 forex brokers for automated trading, Expert Advisors (EAs), and algorithmic strategies. Find platforms with fast execution, API access, and VPS hosting.',
+      keywords: 'automated forex trading, Expert Advisors, EA brokers, algorithmic trading, forex APIs, MT4 EA, MT5 EA, Alpari, Pepperstone automated trading, forex robots',
+      canonicalUrl: '/brokers/automated-trading',
+      request: c.req.raw
+    }));
+  } catch (error) {
+    console.error('Automated trading page error:', error);
+    return c.html(`<h1>Error loading automated trading page: ${error.message}</h1>`, 500);
+  }
+});
+
+// High Leverage Brokers Page
+pageRoutes.get('/brokers/high-leverage', (c) => {
+  try {
+    const content = renderHighLeverageBrokersPage({
+      canonicalUrl: '/brokers/high-leverage',
+      request: c.req.raw
+    });
+    
+    return c.html(renderLayout(content, {
+      title: 'Best High Leverage Forex Brokers 2025 - Up to 1:2000 Leverage | BrokerAnalysis',
+      description: 'Compare the top high leverage forex brokers offering 1:500, 1:1000, and 1:2000+ leverage. Find brokers with professional accounts, tight spreads, and advanced risk management.',
+      keywords: 'high leverage forex brokers, 1:500 leverage, 1:1000 leverage, 1:2000 leverage, professional forex accounts, FXTM, BlackBull Markets, Pepperstone, high leverage trading',
+      canonicalUrl: '/brokers/high-leverage',
+      request: c.req.raw,
+      additionalHead: `
+        <!-- High Leverage Schema -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "name": "Best High Leverage Forex Brokers 2025",
+          "description": "Compare top forex brokers offering high leverage up to 1:2000",
+          "url": "${getCurrentDomain(c.req.raw)}/brokers/high-leverage",
+          "mainEntity": {
+            "@type": "ItemList",
+            "name": "High Leverage Forex Brokers",
+            "numberOfItems": 6
+          }
+        }
+        </script>
+
+        <!-- FAQ Schema for High Leverage -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What is the highest leverage available in forex?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Some offshore brokers offer leverage up to 1:3000, but common high leverage ratios are 1:500 to 1:2000. FXTM offers up to 1:2000 through offshore entities."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Is high leverage trading safe?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "High leverage trading carries significant risk and amplifies both profits and losses. Only experienced traders with proper risk management should consider high leverage."
+              }
+            }
+          ]
+        }
+        </script>
+      `
+    }));
+  } catch (error) {
+    console.error('High leverage page error:', error);
+    return c.html(`<h1>Error loading high leverage page: ${error.message}</h1>`, 500);
+  }
+});
+
+// Oil Trading Brokers Page
+pageRoutes.get('/brokers/oil-trading', (c) => {
+  try {
+    const content = renderOilTradingBrokersPage({
+      canonicalUrl: '/brokers/oil-trading',
+      request: c.req.raw
+    });
+    
+    return c.html(renderLayout(content, {
+      title: 'Best Oil Trading Brokers 2025 - WTI & Brent Crude Oil CFDs | BrokerAnalysis',
+      description: 'Compare the top 8 oil trading brokers for WTI and Brent crude oil CFDs. Find brokers with tight spreads, professional platforms, and energy market specialization.',
+      keywords: 'oil trading brokers, crude oil CFD, WTI trading, Brent crude trading, energy CFDs, commodity brokers, oil futures, FXTM oil, Axi oil trading, IG oil',
+      canonicalUrl: '/brokers/oil-trading',
+      request: c.req.raw,
+      additionalHead: `
+        <!-- Oil Trading Schema -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "name": "Best Oil Trading Brokers 2025",
+          "description": "Compare top forex brokers for WTI and Brent crude oil CFD trading",
+          "url": "${getCurrentDomain(c.req.raw)}/brokers/oil-trading",
+          "mainEntity": {
+            "@type": "ItemList",
+            "name": "Oil Trading Brokers",
+            "numberOfItems": 8
+          }
+        }
+        </script>
+
+        <!-- FAQ Schema for Oil Trading -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What is the difference between WTI and Brent crude oil?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "WTI (West Texas Intermediate) is the US benchmark for crude oil, while Brent Crude is the international benchmark. Brent is typically priced $2-5 higher than WTI due to different quality characteristics and transportation costs."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Which broker offers the tightest oil trading spreads?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Axi offers the tightest spreads with raw spreads starting from 0.0 pips, followed by FXTM with 0.4 pips average. However, always check current live spreads as they vary with market conditions."
+              }
+            }
+          ]
+        }
+        </script>
+      `
+    }));
+  } catch (error) {
+    console.error('Oil trading page error:', error);
+    return c.html(`<h1>Error loading oil trading page: ${error.message}</h1>`, 500);
+  }
+});
+
+// ========================
+// DYNAMIC COUNTRY ROUTES
+// These must come AFTER specific routes to avoid conflicts
+// ========================
 
 countryPages.forEach(country => {
   pageRoutes.get(`/brokers/${country.slug}`, (c) => {
