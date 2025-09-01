@@ -33,6 +33,10 @@ import { renderOilTradingBrokersPage } from '../components/OilTradingBrokersPage
 import { renderCopyTradingBrokersPage } from '../components/CopyTradingBrokersPage.js';
 import { renderECNBrokersPage } from '../components/ECNBrokersPage.js';
 import { renderScalpingBrokersPage } from '../components/ScalpingBrokersPage.js';
+import { renderDemoAccountBrokersPage } from '../components/DemoAccountBrokersPage.js';
+import { renderMT4BrokersPage } from '../components/MT4BrokersPage.js';
+import { renderStockTradingBrokersPage } from '../components/StockTradingBrokersPage.js';
+import { renderBeginnersBrokersPage } from '../components/BeginnersBrokersPage.js';
 import { renderDemoAccountsBrokersPage } from '../components/DemoAccountsBrokersPage.js';
 import { generateComprehensiveBrokerReviewHTML } from '../components/EnhancedBrokerReview.js';
 import { generateCompleteNavigation } from '../components/Navigation.js';
@@ -1765,6 +1769,162 @@ pageRoutes.get('/brokers/ecn', (c) => {
   } catch (error) {
     console.error('ECN page error:', error);
     return c.html(`<h1>Error loading ECN page: ${error.message}</h1>`, 500);
+  }
+});
+
+// Scalping Brokers Page
+pageRoutes.get('/brokers/scalping', (c) => {
+  try {
+    const content = renderScalpingBrokersPage({
+      canonicalUrl: '/brokers/scalping',
+      request: c.req.raw
+    });
+    
+    return c.html(renderLayout(content, {
+      title: 'Best Scalping Forex Brokers 2025 - Ultra-Fast Execution & Low Spreads | BrokerAnalysis',
+      description: 'Compare the top 8 scalping forex brokers with ultra-fast execution speeds, raw spreads from 0.02 pips, VPS hosting, and professional trading infrastructure for scalpers.',
+      keywords: 'scalping forex brokers, fast execution brokers, ultra low spreads, VPS hosting, ECN scalping, BlackBull Markets, IC Markets scalping, Pepperstone scalping',
+      canonicalUrl: '/brokers/scalping',
+      request: c.req.raw,
+      additionalHead: `
+        <!-- Scalping Brokers Schema -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "name": "Best Scalping Forex Brokers 2025",
+          "description": "Compare top forex brokers for scalping with ultra-fast execution, raw spreads, and professional trading infrastructure",
+          "url": "${getCurrentDomain(c.req.raw)}/brokers/scalping",
+          "mainEntity": {
+            "@type": "ItemList",
+            "name": "Scalping Forex Brokers",
+            "numberOfItems": 8
+          }
+        }
+        </script>
+
+        <!-- FAQ Schema for Scalping -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What is forex scalping?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Forex scalping is a high-frequency trading strategy where traders make numerous small trades throughout the day, typically holding positions for seconds to minutes, aiming to profit from small price movements."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Which broker has the fastest execution for scalping?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "BlackBull Markets offers the fastest execution speeds at 72ms average, followed by Pepperstone at 77ms and IC Markets at 134ms, making them ideal for scalping strategies."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Is scalping profitable?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Scalping can be profitable for experienced traders with proper risk management, but it requires discipline, fast execution, and low trading costs. Most scalpers need significant capital and professional tools to succeed."
+              }
+            }
+          ]
+        }
+        </script>
+      `
+    }));
+  } catch (error) {
+    console.error('Scalping page error:', error);
+    return c.html(`<h1>Error loading scalping page: ${error.message}</h1>`, 500);
+  }
+});
+
+// Demo Account Brokers Page
+pageRoutes.get('/brokers/demo-accounts', (c) => {
+  try {
+    const content = renderDemoAccountBrokersPage({
+      canonicalUrl: '/brokers/demo-accounts',
+      request: c.req.raw
+    });
+    
+    return c.html(renderLayout(content, {
+      title: 'Best Forex Demo Accounts 2025 - Risk-Free Practice Trading | BrokerAnalysis',
+      description: 'Compare the top 8 forex demo accounts for risk-free practice trading. Find brokers with unlimited demos, real market data, and comprehensive educational resources.',
+      keywords: 'forex demo accounts, practice trading, risk-free forex, demo trading platforms, XM demo, eToro demo, IG Markets demo, OANDA demo',
+      canonicalUrl: '/brokers/demo-accounts',
+      request: c.req.raw
+    }));
+  } catch (error) {
+    console.error('Demo accounts page error:', error);
+    return c.html(`<h1>Error loading demo accounts page: ${error.message}</h1>`, 500);
+  }
+});
+
+// MT4 Brokers Page
+pageRoutes.get('/brokers/mt4', (c) => {
+  try {
+    const content = renderMT4BrokersPage({
+      canonicalUrl: '/brokers/mt4',
+      request: c.req.raw
+    });
+    
+    return c.html(renderLayout(content, {
+      title: 'Best MT4 Forex Brokers 2025 - MetaTrader 4 Specialists | BrokerAnalysis',
+      description: 'Compare the top 8 MetaTrader 4 forex brokers with advanced tools, Expert Advisor support, and enhanced MT4 features for professional trading.',
+      keywords: 'MT4 forex brokers, MetaTrader 4, Expert Advisors, MT4 tools, Pepperstone Smart Trader Tools, IC Markets MT4, automated trading',
+      canonicalUrl: '/brokers/mt4',
+      request: c.req.raw
+    }));
+  } catch (error) {
+    console.error('MT4 page error:', error);
+    return c.html(`<h1>Error loading MT4 page: ${error.message}</h1>`, 500);
+  }
+});
+
+// Stock Trading Brokers Page
+pageRoutes.get('/brokers/stock-trading', (c) => {
+  try {
+    const content = renderStockTradingBrokersPage({
+      canonicalUrl: '/brokers/stock-trading',
+      request: c.req.raw
+    });
+    
+    return c.html(renderLayout(content, {
+      title: 'Best Stock Trading Brokers 2025 - Global Equity Markets | BrokerAnalysis',
+      description: 'Compare the top 8 stock trading brokers offering access to global markets, commission-free trading, and professional research tools for equity investors.',
+      keywords: 'stock trading brokers, equity trading, global stock markets, commission-free stocks, Interactive Brokers, eToro stocks, IG Markets stocks',
+      canonicalUrl: '/brokers/stock-trading',
+      request: c.req.raw
+    }));
+  } catch (error) {
+    console.error('Stock trading page error:', error);
+    return c.html(`<h1>Error loading stock trading page: ${error.message}</h1>`, 500);
+  }
+});
+
+// Beginners Brokers Page
+pageRoutes.get('/brokers/beginners', (c) => {
+  try {
+    const content = renderBeginnersBrokersPage({
+      canonicalUrl: '/brokers/beginners',
+      request: c.req.raw
+    });
+    
+    return c.html(renderLayout(content, {
+      title: 'Best Forex Brokers for Beginners 2025 - Start Trading Safely | BrokerAnalysis',
+      description: 'Compare the top 8 beginner-friendly forex brokers offering comprehensive education, demo accounts, low deposits, and user-friendly platforms for new traders.',
+      keywords: 'forex brokers beginners, beginner forex trading, forex education, demo accounts, low minimum deposit, eToro beginners, XM beginners',
+      canonicalUrl: '/brokers/beginners',
+      request: c.req.raw
+    }));
+  } catch (error) {
+    console.error('Beginners page error:', error);
+    return c.html(`<h1>Error loading beginners page: ${error.message}</h1>`, 500);
   }
 });
 
