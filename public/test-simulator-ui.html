@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trading Simulator UI Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div class="p-8">
+        <h1 class="text-2xl font-bold mb-4">Trading Simulator UI Test</h1>
+        
+        <div class="mb-6">
+            <h2 class="text-lg font-semibold mb-2">Test Results:</h2>
+            <div id="test-results" class="space-y-2">
+                <div class="p-2 bg-yellow-100 rounded">Testing...</div>
+            </div>
+        </div>
+        
+        <button onclick="testSimulator()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+            Test Trading Simulator
+        </button>
+    </div>
+
+    <script>
+        async function testSimulator() {
+            const results = document.getElementById('test-results');
+            results.innerHTML = '<div class="p-2 bg-blue-100 rounded">Running tests...</div>';
+            
+            try {
+                // Test 1: Page loads
+                const response = await fetch('/simulator');
+                const html = await response.text();
+                
+                let testResults = [];
+                
+                // Test if page loads
+                if (response.ok) {
+                    testResults.push({ test: 'Page loads', status: 'pass', detail: 'HTTP 200' });
+                } else {
+                    testResults.push({ test: 'Page loads', status: 'fail', detail: `HTTP ${response.status}` });
+                }
+                
+                // Test if title is correct
+                if (html.includes('Trading Cost Calculator 2025')) {
+                    testResults.push({ test: 'SEO Title', status: 'pass', detail: 'Enhanced title found' });
+                } else {
+                    testResults.push({ test: 'SEO Title', status: 'fail', detail: 'Title not found' });
+                }
+                
+                // Test if structured data exists
+                if (html.includes('"@type": "WebApplication"')) {
+                    testResults.push({ test: 'Structured Data', status: 'pass', detail: 'WebApplication schema found' });
+                } else {
+                    testResults.push({ test: 'Structured Data', status: 'fail', detail: 'Schema missing' });
+                }
+                
+                // Test if hero section exists
+                if (html.includes('hero-gradient')) {
+                    testResults.push({ test: 'Hero Section', status: 'pass', detail: 'Hero gradient found' });
+                } else {
+                    testResults.push({ test: 'Hero Section', status: 'fail', detail: 'Hero section missing' });
+                }
+                
+                // Test if trading style buttons exist
+                if (html.includes('trading-style-btn')) {
+                    testResults.push({ test: 'Trading Style Buttons', status: 'pass', detail: 'Interactive buttons found' });
+                } else {
+                    testResults.push({ test: 'Trading Style Buttons', status: 'fail', detail: 'Buttons missing' });
+                }
+                
+                // Test if calculator interface exists
+                if (html.includes('calculator-interface')) {
+                    testResults.push({ test: 'Calculator Interface', status: 'pass', detail: 'Calculator div found' });
+                } else {
+                    testResults.push({ test: 'Calculator Interface', status: 'fail', detail: 'Calculator missing' });
+                }
+                
+                // Test if JavaScript file is referenced
+                if (html.includes('enhanced-trading-simulator-2025.js')) {
+                    testResults.push({ test: 'JavaScript Engine', status: 'pass', detail: 'Enhanced JS referenced' });
+                } else {
+                    testResults.push({ test: 'JavaScript Engine', status: 'fail', detail: 'JS file not found' });
+                }
+                
+                // Test if FAQ section exists
+                if (html.includes('Frequently Asked Questions')) {
+                    testResults.push({ test: 'FAQ Section', status: 'pass', detail: 'SEO FAQ found' });
+                } else {
+                    testResults.push({ test: 'FAQ Section', status: 'fail', detail: 'FAQ missing' });
+                }
+                
+                // Display results
+                results.innerHTML = testResults.map(result => {
+                    const bgColor = result.status === 'pass' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
+                    const icon = result.status === 'pass' ? '✅' : '❌';
+                    return `<div class="p-3 ${bgColor} rounded-lg">
+                        ${icon} <strong>${result.test}</strong>: ${result.detail}
+                    </div>`;
+                }).join('');
+                
+            } catch (error) {
+                results.innerHTML = `<div class="p-3 bg-red-100 text-red-800 rounded-lg">
+                    ❌ <strong>Test Error</strong>: ${error.message}
+                </div>`;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -25,8 +25,6 @@ import { renderMalaysiaCountryPage } from '../components/MalaysiaCountryPage.js'
 import { renderEthiopiaCountryPage } from '../components/EthiopiaCountryPage.js';
 import { renderBangladeshCountryPage } from '../components/BangladeshCountryPage.js';
 import { renderTradingSimulatorPage } from '../components/TradingSimulatorPage.js';
-import { generateComprehensiveBrokerReviewHTML } from '../components/EnhancedBrokerReview.js';
-import { generateCompleteNavigation } from '../components/Navigation.js';
 
 const pageRoutes = new Hono<{ Bindings: Bindings }>();
 
@@ -1693,8 +1691,51 @@ pageRoutes.get('/test-simulator', (c) => {
 
 // Helper functions for generating common HTML components
 function generateNavigation(): string {
-  // Use enhanced navigation component for consistency
-  return generateCompleteNavigation();
+  return `
+    <nav class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center">
+                    <a href="/" class="text-2xl font-bold text-gray-900">
+                        <i class="fas fa-chart-line text-blue-600 mr-2"></i>
+                        BrokerAnalysis
+                    </a>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/brokers" class="text-gray-700 hover:text-blue-600 transition-colors">Brokers</a>
+                    <a href="/countries" class="text-gray-700 hover:text-blue-600 transition-colors">Countries</a>
+                    <a href="/reviews" class="text-gray-700 hover:text-blue-600 transition-colors">Reviews</a>
+                    <a href="/compare" class="text-gray-700 hover:text-blue-600 transition-colors">Compare</a>
+                    <a href="/simulator" class="text-gray-700 hover:text-blue-600 transition-colors">Calculator</a>
+                    <a href="/about" class="text-gray-700 hover:text-blue-600 transition-colors">About</a>
+                    <a href="/contact" class="text-gray-700 hover:text-blue-600 transition-colors">Contact</a>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <div id="auth-section">
+                        <!-- Auth buttons will be loaded here -->
+                    </div>
+                    <button id="mobile-menu-toggle" class="md:hidden text-gray-700">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
+            <div class="px-4 py-2 space-y-2">
+                <a href="/brokers" class="block py-2 text-gray-700">Brokers</a>
+                <a href="/countries" class="block py-2 text-gray-700">Countries</a>
+                <a href="/reviews" class="block py-2 text-gray-700">Reviews</a>
+                <a href="/compare" class="block py-2 text-gray-700">Compare</a>
+                <a href="/simulator" class="block py-2 text-gray-700">Calculator</a>
+                <a href="/about" class="block py-2 text-gray-700">About</a>
+                <a href="/contact" class="block py-2 text-gray-700">Contact</a>
+            </div>
+        </div>
+    </nav>
+  `;
 }
 
 function generateFooter(): string {
