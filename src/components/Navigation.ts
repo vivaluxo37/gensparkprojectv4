@@ -96,8 +96,11 @@ export function generateCompleteNavigation(): string {
                                     <div class="px-4 py-2">
                                         <h3 class="text-sm font-semibold text-blue-900 uppercase tracking-wide">Trading Styles</h3>
                                     </div>
+                                    <a href="/calculators" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-blue-600 transition-colors font-medium">
+                                        <i class="fas fa-calculator mr-2 text-green-600"></i>Trading Calculators
+                                    </a>
                                     <a href="/simulator" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-blue-600 transition-colors font-medium">
-                                        <i class="fas fa-calculator mr-2 text-green-600"></i>Trading Cost Calculator
+                                        <i class="fas fa-coins mr-2 text-orange-500"></i>Cost Calculator
                                     </a>
                                     <a href="/compare" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-blue-600 transition-colors">
                                         <i class="fas fa-bolt mr-2 text-yellow-500"></i>Scalping Brokers
@@ -201,8 +204,11 @@ export function generateCompleteNavigation(): string {
                                     <div class="px-4 py-2">
                                         <h3 class="text-sm font-semibold text-blue-900 uppercase tracking-wide">Trading Tools</h3>
                                     </div>
+                                    <a href="/calculators" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-blue-600 transition-colors font-medium">
+                                        <i class="fas fa-calculator mr-2 text-green-600"></i>Trading Calculators
+                                    </a>
                                     <a href="/simulator" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-blue-600 transition-colors font-medium">
-                                        <i class="fas fa-calculator mr-2 text-green-600"></i>Cost Calculator
+                                        <i class="fas fa-coins mr-2 text-orange-500"></i>Cost Calculator
                                     </a>
                                     <a href="/compare" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-blue-600 transition-colors font-medium">
                                         <i class="fas fa-balance-scale mr-2 text-blue-600"></i>Broker Comparison
@@ -213,17 +219,17 @@ export function generateCompleteNavigation(): string {
                                     
                                     <hr class="my-2 border-gray-200">
                                     <div class="px-4 py-2">
-                                        <h3 class="text-sm font-semibold text-blue-900 uppercase tracking-wide">Coming Soon</h3>
+                                        <h3 class="text-sm font-semibold text-blue-900 uppercase tracking-wide">Individual Calculators</h3>
                                     </div>
-                                    <div class="px-4 py-2 text-sm text-gray-500">
-                                        <i class="fas fa-chart-pie mr-2"></i>Profit Calculator
-                                    </div>
-                                    <div class="px-4 py-2 text-sm text-gray-500">
-                                        <i class="fas fa-percentage mr-2"></i>Margin Calculator
-                                    </div>
-                                    <div class="px-4 py-2 text-sm text-gray-500">
-                                        <i class="fas fa-ruler mr-2"></i>Pip Calculator
-                                    </div>
+                                    <a href="/calculators#profit-calculator" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 transition-colors">
+                                        <i class="fas fa-chart-line mr-2 text-green-500"></i>Profit Calculator
+                                    </a>
+                                    <a href="/calculators#margin-calculator" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 transition-colors">
+                                        <i class="fas fa-percentage mr-2 text-blue-500"></i>Margin Calculator
+                                    </a>
+                                    <a href="/calculators#pip-calculator" class="block px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 transition-colors">
+                                        <i class="fas fa-calculator mr-2 text-purple-500"></i>Pip Calculator
+                                    </a>
                                 </div>
                             </div>
                         </div>

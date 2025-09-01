@@ -25,6 +25,7 @@ import { renderMalaysiaCountryPage } from '../components/MalaysiaCountryPage.js'
 import { renderEthiopiaCountryPage } from '../components/EthiopiaCountryPage.js';
 import { renderBangladeshCountryPage } from '../components/BangladeshCountryPage.js';
 import { renderTradingSimulatorPage } from '../components/TradingSimulatorPage.js';
+import { renderTradingCalculatorsPage } from '../components/TradingCalculatorsPage.js';
 import { renderGoldTradingBrokersPage } from '../components/GoldTradingBrokersPage.js';
 import { renderIslamicAccountBrokersPage } from '../components/IslamicAccountBrokersPage.js';
 import { renderAutomatedTradingBrokersPage } from '../components/AutomatedTradingBrokersPage.js';
@@ -2866,6 +2867,14 @@ regulatoryAuthorities.forEach(regulator => {
       return c.html('Error loading regulatory information', 500);
     }
   });
+});
+
+// Trading Calculators Page - Profit, Margin & Pip Calculators
+pageRoutes.get('/calculators', (c) => {
+  return c.html(renderTradingCalculatorsPage({
+    canonicalUrl: '/calculators',
+    request: c.req.raw
+  }));
 });
 
 // Enhanced Trading Cost Simulator Page with 2025 SEO Best Practices
