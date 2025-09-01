@@ -1,4 +1,4 @@
-import { generateStructuredData } from '../utils.js';
+import { generateStructuredData } from '../utils';
 
 interface StockTradingBroker {
   name: string;
