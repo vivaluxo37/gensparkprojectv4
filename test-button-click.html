@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Button Click</title>
+    <script>
+        // Simulate clicking the button after the page loads
+        setTimeout(() => {
+            console.log('Testing button click simulation...');
+            
+            // Navigate to the target page and execute JavaScript
+            fetch('https://3000-iz06f1q0kw9r1svxgxaql-6532622b.e2b.dev')
+                .then(response => response.text())
+                .then(html => {
+                    console.log('Page loaded, now testing authentication flow');
+                    
+                    // Test the auth endpoint directly
+                    return fetch('https://3000-iz06f1q0kw9r1svxgxaql-6532622b.e2b.dev/api/auth/me', {
+                        method: 'GET',
+                        credentials: 'include'
+                    });
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Auth check result:', data);
+                    console.log('Expected: authenticated should be false');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }, 2000);
+    </script>
+</head>
+<body>
+    <h1>Testing Authentication Flow</h1>
+    <p>Check console for results...</p>
+</body>
+</html>

@@ -149,8 +149,43 @@ export function generateCompleteNavigation(): string {
                     </div>
                     
                     <!-- Auth Navigation -->
-                    <div class="nav-auth-container">
-                        <!-- Will be populated by auth system -->
+                    <div class="nav-auth-container flex items-center space-x-3" id="nav-auth-container">
+                        <!-- Default: Not authenticated -->
+                        <div id="nav-auth-signin" class="flex items-center space-x-2">
+                            <button onclick="window.smartRecommendation?.createAuthModal()" class="text-blue-600 hover:text-blue-700 font-medium transition-colors">
+                                <i class="fas fa-sign-in-alt mr-1"></i>Sign In
+                            </button>
+                            <span class="text-gray-300">|</span>
+                            <button onclick="window.smartRecommendation?.showSignUpForm()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                                Sign Up Free
+                            </button>
+                        </div>
+                        
+                        <!-- Authenticated: User menu -->
+                        <div id="nav-auth-user" class="hidden relative group">
+                            <button class="flex items-center space-x-2 text-blue-800 hover:text-blue-600 transition-colors py-2 px-3 rounded-md" 
+                                    aria-label="User menu" 
+                                    aria-expanded="false" 
+                                    aria-haspopup="true">
+                                <i class="fas fa-user-circle text-lg" aria-hidden="true"></i>
+                                <span id="nav-user-name" class="font-medium">User</span>
+                                <i class="fas fa-chevron-down text-xs" aria-hidden="true"></i>
+                            </button>
+                            <div class="absolute right-0 mt-1 w-48 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                <div class="py-2">
+                                    <a href="/dashboard" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-blue-600 transition-colors font-medium">
+                                        <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+                                    </a>
+                                    <a href="/profile" class="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                                        <i class="fas fa-user mr-2"></i>Profile
+                                    </a>
+                                    <div class="border-t border-gray-200 my-1"></div>
+                                    <a href="/api/auth/logout" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">
+                                        <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     
                     <button id="mobile-menu-btn" class="md:hidden p-2 text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2" aria-label="Open mobile navigation menu" aria-expanded="false" aria-controls="mobile-menu">
