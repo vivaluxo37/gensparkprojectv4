@@ -737,6 +737,11 @@ pageRoutes.get('/compare', (c) => {
                 </p>
             </div>
 
+            <!-- Enhanced Compare Interface -->
+            <div id="compare-interface">
+                <!-- Interface will be rendered by enhanced-compare.js -->
+            </div>
+
             <!-- Broker Selection -->
             <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
                 <h2 class="text-xl font-semibold mb-4">Select Brokers to Compare</h2>
@@ -973,6 +978,9 @@ pageRoutes.get('/compare', (c) => {
                 new ComparisonTool();
             });
         </script>
+
+        <!-- Enhanced Compare System -->
+        <script src="/static/enhanced-compare.js"></script>
     </body>
     </html>
   `);
@@ -2127,12 +2135,34 @@ Allow: /static/webfonts/`;
   return c.text(robotsTxt);
 });
 
-// SEO Enhancement: Popular Broker vs Broker Comparison Pages
+// SEO Enhancement: Comprehensive Broker vs Broker Comparison Pages
 const popularComparisons = [
+  // Top-tier brokers comparisons
   { slug: 'ic-markets-vs-pepperstone', title: 'IC Markets vs Pepperstone', brokers: ['ic-markets', 'pepperstone'] },
   { slug: 'ic-markets-vs-oanda', title: 'IC Markets vs OANDA', brokers: ['ic-markets', 'oanda'] },
   { slug: 'pepperstone-vs-oanda', title: 'Pepperstone vs OANDA', brokers: ['pepperstone', 'oanda'] },
-  { slug: 'interactive-brokers-vs-ic-markets', title: 'Interactive Brokers vs IC Markets', brokers: ['interactive-brokers', 'ic-markets'] }
+  { slug: 'interactive-brokers-vs-ic-markets', title: 'Interactive Brokers vs IC Markets', brokers: ['interactive-brokers', 'ic-markets'] },
+  
+  // Interactive Brokers comparisons
+  { slug: 'interactive-brokers-vs-pepperstone', title: 'Interactive Brokers vs Pepperstone', brokers: ['interactive-brokers', 'pepperstone'] },
+  { slug: 'interactive-brokers-vs-oanda', title: 'Interactive Brokers vs OANDA', brokers: ['interactive-brokers', 'oanda'] },
+  { slug: 'interactive-brokers-vs-forex-com', title: 'Interactive Brokers vs Forex.com', brokers: ['interactive-brokers', 'forex-com'] },
+  
+  // Forex.com comparisons  
+  { slug: 'forex-com-vs-ic-markets', title: 'Forex.com vs IC Markets', brokers: ['forex-com', 'ic-markets'] },
+  { slug: 'forex-com-vs-pepperstone', title: 'Forex.com vs Pepperstone', brokers: ['forex-com', 'pepperstone'] },
+  { slug: 'forex-com-vs-oanda', title: 'Forex.com vs OANDA', brokers: ['forex-com', 'oanda'] },
+  
+  // TastyFX comparisons
+  { slug: 'tastyfx-vs-ic-markets', title: 'TastyFX vs IC Markets', brokers: ['tastyfx', 'ic-markets'] },
+  { slug: 'tastyfx-vs-pepperstone', title: 'TastyFX vs Pepperstone', brokers: ['tastyfx', 'pepperstone'] },
+  { slug: 'tastyfx-vs-oanda', title: 'TastyFX vs OANDA', brokers: ['tastyfx', 'oanda'] },
+  { slug: 'tastyfx-vs-interactive-brokers', title: 'TastyFX vs Interactive Brokers', brokers: ['tastyfx', 'interactive-brokers'] },
+  { slug: 'tastyfx-vs-forex-com', title: 'TastyFX vs Forex.com', brokers: ['tastyfx', 'forex-com'] },
+  
+  // Cross comparisons for competitive terms
+  { slug: 'pepperstone-vs-forex-com', title: 'Pepperstone vs Forex.com', brokers: ['pepperstone', 'forex-com'] },
+  { slug: 'oanda-vs-forex-com', title: 'OANDA vs Forex.com', brokers: ['oanda', 'forex-com'] }
 ];
 
 popularComparisons.forEach(comparison => {
@@ -2316,6 +2346,106 @@ regulatoryAuthorities.forEach(regulator => {
       return c.html('Error loading regulatory information', 500);
     }
   });
+});
+
+// Trading Cost Simulator Page
+pageRoutes.get('/simulator', (c) => {
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        ${generateMetaTags(
+          'Trading Cost Calculator 2025 - Compare Broker Fees & Spreads | BrokerAnalysis',
+          'Calculate and compare trading costs across multiple forex brokers. Analyze spreads, commissions, and total trading expenses for your strategy.',
+          'trading cost calculator, forex calculator, broker fees, spread calculator, trading expenses, commission calculator',
+          '/simulator',
+          undefined,
+          c.req.raw
+        )}
+        <link href="/static/styles.css" rel="stylesheet">
+    </head>
+    <body class="bg-gray-50">
+        ${generateNavigation()}
+        
+        <main class="max-w-7xl mx-auto py-12 px-4">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl font-bold text-gray-900 mb-4">Trading Cost Calculator</h1>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Calculate and compare real trading costs across multiple brokers. 
+                    Input your trading parameters to see which broker offers the best value for your strategy.
+                </p>
+            </div>
+
+            <!-- Enhanced Simulator Interface -->
+            <div id="simulator-interface">
+                <!-- Interface will be rendered by enhanced-simulator.js -->
+            </div>
+
+            <!-- SEO Content -->
+            <div class="bg-white rounded-xl shadow-lg p-8 mt-12">
+                <h2 class="text-2xl font-bold mb-6">How Trading Costs Impact Your Profits</h2>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-lg font-semibold mb-3">Understanding Trading Costs</h3>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-600 mt-1 mr-2"></i>
+                                <span><strong>Spreads:</strong> The difference between bid and ask prices</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-600 mt-1 mr-2"></i>
+                                <span><strong>Commissions:</strong> Fixed fees charged per trade or lot</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-600 mt-1 mr-2"></i>
+                                <span><strong>Overnight Fees:</strong> Swap rates for positions held overnight</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-600 mt-1 mr-2"></i>
+                                <span><strong>Slippage:</strong> Price differences during order execution</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold mb-3">Cost Impact by Strategy</h3>
+                        <div class="space-y-3">
+                            <div class="p-3 bg-blue-50 rounded-lg">
+                                <div class="font-medium text-blue-900">Scalping</div>
+                                <div class="text-sm text-blue-700">High frequency = low spreads critical</div>
+                            </div>
+                            <div class="p-3 bg-green-50 rounded-lg">
+                                <div class="font-medium text-green-900">Day Trading</div>
+                                <div class="text-sm text-green-700">Balance of spreads and commissions</div>
+                            </div>
+                            <div class="p-3 bg-purple-50 rounded-lg">
+                                <div class="font-medium text-purple-900">Swing Trading</div>
+                                <div class="text-sm text-purple-700">Overnight fees become important</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 p-6 bg-yellow-50 border border-yellow-200 rounded-lg">
+                    <h4 class="font-semibold text-yellow-800 mb-2">
+                        <i class="fas fa-lightbulb mr-2"></i>Pro Tip
+                    </h4>
+                    <p class="text-yellow-700">
+                        A difference of just 0.5 pips in spreads can cost a day trader hundreds of dollars per month. 
+                        Use our calculator to see the real impact on your trading budget.
+                    </p>
+                </div>
+            </div>
+        </main>
+
+        ${generateFooter()}
+
+        <!-- Enhanced Simulator JavaScript -->
+        <script src="/static/enhanced-simulator.js"></script>
+    </body>
+    </html>
+  `);
 });
 
 export { pageRoutes };

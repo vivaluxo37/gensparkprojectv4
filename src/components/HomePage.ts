@@ -141,5 +141,8 @@ export function renderHomePage(): string {
             </div>
         </div>
     </section>
+
+    <!-- Smart Recommendation JavaScript -->
+    <script src="/static/smart-recommendation.js"></script>
   `;
 }

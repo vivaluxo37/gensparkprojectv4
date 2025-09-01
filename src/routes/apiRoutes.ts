@@ -444,4 +444,142 @@ apiRoutes.post('/api/calculate-costs', async (c) => {
   }
 });
 
+// Enhanced Broker Comparison API
+apiRoutes.get('/api/compare', async (c) => {
+  try {
+    const brokerIds = c.req.query('brokers')?.split(',').filter(Boolean);
+    
+    if (!brokerIds || brokerIds.length === 0) {
+      return c.json({ success: false, error: 'Broker IDs required' }, 400);
+    }
+
+    if (brokerIds.length > 4) {
+      return c.json({ success: false, error: 'Maximum 4 brokers allowed for comparison' }, 400);
+    }
+
+    const { DB } = c.env;
+    const brokerService = new BrokerService(DB);
+    
+    // Get detailed broker data for comparison
+    const brokers = [];
+    
+    for (const brokerId of brokerIds) {
+      const broker = await brokerService.getBrokerBySlug(brokerId);
+      if (broker) {
+        // Get additional details
+        const details = await DB.prepare(`
+          SELECT 
+            bd.pros_text,
+            bd.cons_text,
+            bd.overview_text,
+            GROUP_CONCAT(DISTINCT r.regulator_name) as regulators,
+            GROUP_CONCAT(DISTINCT r.country_name) as regulated_countries,
+            GROUP_CONCAT(DISTINCT s.currency_pair || ':' || s.spread_pip) as spreads_data
+          FROM broker_details bd
+          LEFT JOIN regulations r ON bd.broker_id = r.broker_id  
+          LEFT JOIN spreads s ON bd.broker_id = s.broker_id
+          WHERE bd.broker_id = ?
+          GROUP BY bd.broker_id
+        `).bind(broker.id).first();
+
+        // Parse spreads data
+        const spreadsMap = {};
+        if (details?.spreads_data) {
+          details.spreads_data.split(',').forEach(spread => {
+            const [pair, pip] = spread.split(':');
+            if (pair && pip) spreadsMap[pair] = parseFloat(pip);
+          });
+        }
+
+        brokers.push({
+          ...broker,
+          details: details || {},
+          spreads: spreadsMap
+        });
+      }
+    }
+
+    if (brokers.length === 0) {
+      return c.json({ success: false, error: 'No valid brokers found' }, 404);
+    }
+
+    // Generate comparison matrix
+    const comparisonMatrix = generateComparisonMatrix(brokers);
+    
+    return c.json({
+      success: true,
+      brokers,
+      comparison: comparisonMatrix,
+      count: brokers.length
+    });
+
+  } catch (error) {
+    console.error('Comparison API error:', error);
+    return c.json({ 
+      success: false, 
+      error: 'Internal server error',
+      message: error.message 
+    }, 500);
+  }
+});
+
+function generateComparisonMatrix(brokers) {
+  const features = [
+    { key: 'rating', label: 'Overall Rating', type: 'rating' },
+    { key: 'min_deposit_usd', label: 'Min Deposit', type: 'currency', unit: 'USD' },
+    { key: 'max_leverage', label: 'Max Leverage', type: 'text' },
+    { key: 'is_regulated', label: 'Regulated', type: 'boolean' },
+    { key: 'demo_account', label: 'Demo Account', type: 'boolean' },
+    { key: 'mobile_app', label: 'Mobile App', type: 'boolean' },
+    { key: 'copy_trading', label: 'Copy Trading', type: 'boolean' },
+    { key: 'social_trading', label: 'Social Trading', type: 'boolean' },
+    { key: 'spread_type', label: 'Spread Type', type: 'text' },
+    { key: 'headquarters', label: 'Headquarters', type: 'text' }
+  ];
+
+  const matrix = features.map(feature => {
+    const row = {
+      feature: feature.label,
+      type: feature.type,
+      unit: feature.unit,
+      values: brokers.map(broker => {
+        let value = broker[feature.key];
+        
+        if (feature.type === 'boolean') {
+          return value ? 'Yes' : 'No';
+        }
+        
+        if (feature.type === 'currency' && value) {
+          return `$${value}`;
+        }
+        
+        if (feature.type === 'rating' && value) {
+          return `${value}/5`;
+        }
+        
+        return value || 'N/A';
+      }),
+      winner: null
+    };
+
+    // Determine winner for this feature
+    if (feature.type === 'rating') {
+      const maxRating = Math.max(...brokers.map(b => parseFloat(b[feature.key]) || 0));
+      row.winner = brokers.findIndex(b => parseFloat(b[feature.key]) === maxRating);
+    } else if (feature.key === 'min_deposit_usd') {
+      const minDeposit = Math.min(...brokers.map(b => parseFloat(b[feature.key]) || Infinity));
+      row.winner = brokers.findIndex(b => parseFloat(b[feature.key]) === minDeposit);
+    } else if (feature.type === 'boolean') {
+      const hasFeature = brokers.some(b => b[feature.key]);
+      if (hasFeature) {
+        row.winner = brokers.findIndex(b => b[feature.key]);
+      }
+    }
+
+    return row;
+  });
+
+  return matrix;
+}
+
 export { apiRoutes };
