@@ -3,7 +3,8 @@ export function renderJavaScriptIncludes(): string {
     <!-- External JavaScript Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
     
-    <!-- Note: Static JS files temporarily disabled for development - functionality is embedded inline below -->
+    <!-- Core JavaScript Files -->
+    <script src="/static/smart-recommendation.js"></script>
     
     <!-- Inline JavaScript for immediate functionality -->
     <script>
@@ -149,22 +150,17 @@ export function renderJavaScriptIncludes(): string {
             });
         });
 
-        // Broker Match Button Functionality
-        document.querySelectorAll('[data-action="broker-match"]').forEach(button => {
-            button.addEventListener('click', function() {
-                const recommendationWidget = document.getElementById('recommendation-widget');
-                if (recommendationWidget) {
-                    recommendationWidget.classList.remove('hidden');
-                    recommendationWidget.scrollIntoView({ behavior: 'smooth' });
-                }
-            });
-        });
+        // Broker Match Button Functionality - Handled by smart-recommendation.js
+        // The Smart Broker Recommendation System now handles authentication-gated access
 
         // Load featured brokers
         loadFeaturedBrokers();
 
         // Update total brokers count
         updateBrokerCount();
+        
+        // Check authentication status and update navigation
+        checkAuthAndUpdateNav();
     });
 
     // Quick message function for chatbot
@@ -244,6 +240,42 @@ export function renderJavaScriptIncludes(): string {
             }
         } catch (error) {
             console.error('Error updating broker count:', error);
+        }
+    }
+
+    // Check authentication status and update navigation
+    async function checkAuthAndUpdateNav() {
+        try {
+            const response = await fetch('/api/auth/me', {
+                method: 'GET',
+                credentials: 'include'
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                
+                const signinContainer = document.getElementById('nav-auth-signin');
+                const userContainer = document.getElementById('nav-auth-user');
+                const userNameElement = document.getElementById('nav-user-name');
+                
+                if (data.authenticated && data.user) {
+                    // User is authenticated - show user menu
+                    if (signinContainer) signinContainer.classList.add('hidden');
+                    if (userContainer) userContainer.classList.remove('hidden');
+                    if (userNameElement) userNameElement.textContent = data.user.name || 'User';
+                } else {
+                    // User is not authenticated - show sign-in buttons
+                    if (signinContainer) signinContainer.classList.remove('hidden');
+                    if (userContainer) userContainer.classList.add('hidden');
+                }
+            }
+        } catch (error) {
+            console.error('Error checking authentication:', error);
+            // On error, show sign-in buttons
+            const signinContainer = document.getElementById('nav-auth-signin');
+            const userContainer = document.getElementById('nav-auth-user');
+            if (signinContainer) signinContainer.classList.remove('hidden');
+            if (userContainer) userContainer.classList.add('hidden');
         }
     }
     </script>
