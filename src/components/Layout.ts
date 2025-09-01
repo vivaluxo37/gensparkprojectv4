@@ -66,14 +66,11 @@ export function renderLayout(content: string, options: LayoutOptions = {}): stri
         <link rel="icon" type="image/png" sizes="16x16" href="/static/images/favicon-16x16.png">
         <link rel="apple-touch-icon" href="/static/images/apple-touch-icon.png">
         
-        <!-- Preconnect to external domains -->
-        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+        <!-- DNS prefetch for performance -->
         <link rel="dns-prefetch" href="https://fonts.googleapis.com">
         
-        <!-- CSS -->
-        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
-        <!-- Tailwind CSS CDN for development -->
-        <script src="https://cdn.tailwindcss.com"></script>
+        <!-- Compiled CSS -->
+        <link href="/static/styles.css" rel="stylesheet">
         
         <!-- Structured Data - Organization -->
         <script type="application/ld+json">

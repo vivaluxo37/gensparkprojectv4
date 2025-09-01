@@ -31,6 +31,12 @@ app.use('/static/*', serveStatic({ root: './public' }));
 app.get('/data/brokers.json', async (c) => {
   try {
     const { DB } = c.env;
+    console.log('Testing database connection...');
+    
+    // First test basic database connection
+    const tables = await DB.prepare("SELECT name FROM sqlite_master WHERE type='table'").all();
+    console.log('Available tables:', tables);
+    
     const brokers = await DB.prepare(`
       SELECT 
         id, name, slug, rating, logo_url, website_url, 
@@ -38,17 +44,42 @@ app.get('/data/brokers.json', async (c) => {
         demo_account, mobile_app, copy_trading, social_trading, headquarters
       FROM brokers
       ORDER BY rating DESC
+      LIMIT 5
     `).all();
+
+    console.log('Found brokers:', brokers.results?.length || 0);
 
     return c.json({
       success: true,
-      brokers: brokers.results,
-      count: brokers.results.length,
-      last_updated: new Date().toISOString()
+      brokers: brokers.results || [],
+      count: brokers.results?.length || 0,
+      last_updated: new Date().toISOString(),
+      debug: {
+        tables: tables.results,
+        env_keys: Object.keys(c.env)
+      }
     });
   } catch (error) {
     console.error('Data brokers error:', error);
-    return c.json({ success: false, error: 'Failed to fetch broker data' }, 500);
+    return c.json({ 
+      success: false, 
+      error: 'Failed to fetch broker data', 
+      message: error.message,
+      debug: {
+        env_keys: Object.keys(c.env)
+      }
+    }, 500);
+  }
+});
+
+// Simple test endpoint to debug database connection
+app.get('/test/db', async (c) => {
+  try {
+    const { DB } = c.env;
+    const result = await DB.prepare("SELECT 1 as test").first();
+    return c.json({ success: true, result, env: Object.keys(c.env) });
+  } catch (error) {
+    return c.json({ success: false, error: error.message }, 500);
   }
 });
 
@@ -59,11 +90,11 @@ app.route('/', authRoutes);
 // 2. Core API routes (recommendations, search, stats, chatbot)
 app.route('/', apiRoutes);
 
-// 3. Broker-specific routes (includes /api/brokers, /reviews/*, /api/compare)
-app.route('/', brokerRoutes);
-
-// 4. Page routes (homepage, static pages, country pages) - least specific
+// 3. Page routes with specific broker review routes (PRIORITIZED for SEO)
 app.route('/', pageRoutes);
+
+// 4. Broker-specific routes (includes /api/brokers, generic /reviews/*, /api/compare)
+app.route('/', brokerRoutes);
 
 // Error handling middleware
 app.onError((err, c) => {
@@ -125,7 +156,7 @@ app.notFound((c) => {
         <title>Page Not Found - BrokerAnalysis</title>
         <meta name="description" content="The page you're looking for doesn't exist. Explore our forex broker reviews and comparisons.">
         <link href="/static/styles.css" rel="stylesheet">
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+        <link href="/static/styles.css" rel="stylesheet">
     </head>
     <body class="bg-gray-50">
         <!-- Navigation -->

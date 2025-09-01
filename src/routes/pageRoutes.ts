@@ -35,15 +35,16 @@ pageRoutes.get('/', (c) => {
   `;
 
   return c.html(renderLayout(homeContent, {
-    title: 'Best Forex Brokers 2025 - Compare 67+ Regulated Brokers | BrokerAnalysis',
-    description: 'Find the perfect forex broker with our intelligent matching system. Compare spreads, regulation, and features of 67+ top-rated brokers. Get personalized recommendations now.',
+    title: 'Best Forex Brokers 2025 - Compare Top 6 Regulated Brokers | BrokerAnalysis',
+    description: 'Find the perfect forex broker with our intelligent matching system. Compare spreads, regulation, and features of 6 top-rated brokers including IC Markets, Pepperstone, OANDA & more.',
     keywords: 'forex brokers, best forex brokers 2025, regulated forex brokers, forex broker comparison, forex trading, broker reviews, forex spreads, trading platforms',
     canonicalUrl: '/',
     request: c.req.raw,
     additionalHead: `
       <!-- Static CSS preload disabled for development -->
       <link rel="preconnect" href="https://fonts.googleapis.com">
-      <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
+      <!-- Website Schema -->
       ${generateStructuredData({
         "@context": "https://schema.org",
         "@type": "WebSite",
@@ -54,6 +55,61 @@ pageRoutes.get('/', (c) => {
           "@type": "SearchAction",
           "target": "https://brokeranalysis.com/search?q={search_term_string}",
           "query-input": "required name=search_term_string"
+        }
+      })}
+      
+      <!-- Organization Schema -->
+      ${generateStructuredData({
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "BrokerAnalysis",
+        "url": "https://brokeranalysis.com",
+        "logo": "https://brokeranalysis.com/static/images/brokeranalysis-logo.png",
+        "description": "Leading forex broker comparison and review platform",
+        "sameAs": [
+          "https://twitter.com/brokeranalysis",
+          "https://linkedin.com/company/brokeranalysis"
+        ],
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "Customer Service",
+          "email": "support@brokeranalysis.com"
+        }
+      })}
+      
+      <!-- Service Schema -->
+      ${generateStructuredData({
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "name": "Forex Broker Comparison",
+        "description": "Compare top forex brokers, read reviews, and find the perfect trading platform for your needs",
+        "provider": {
+          "@type": "Organization",
+          "name": "BrokerAnalysis"
+        },
+        "serviceType": "Financial Comparison Service",
+        "areaServed": "Worldwide",
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Broker Reviews",
+          "itemListElement": [
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Broker Reviews",
+                "description": "Comprehensive forex broker reviews and ratings"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Broker Comparison",
+                "description": "Side-by-side broker comparison tools"
+              }
+            }
+          ]
         }
       })}
     `
@@ -288,7 +344,7 @@ pageRoutes.get('/countries/usa', (c) => {
     request: c.req.raw,
     additionalHead: `
       <link rel="preconnect" href="https://fonts.googleapis.com">
-      <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
       <meta name="geo.region" content="US" />
       <meta name="geo.placename" content="United States" />
       <meta name="robots" content="index, follow, max-image-preview:large" />
@@ -313,7 +369,7 @@ pageRoutes.get('/countries/india', (c) => {
     request: c.req.raw,
     additionalHead: `
       <link rel="preconnect" href="https://fonts.googleapis.com">
-      <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
       <meta name="geo.region" content="IN" />
       <meta name="geo.placename" content="India" />
       <meta name="robots" content="index, follow, max-image-preview:large" />
@@ -338,7 +394,7 @@ pageRoutes.get('/countries/canada', (c) => {
     request: c.req.raw,
     additionalHead: `
       <link rel="preconnect" href="https://fonts.googleapis.com">
-      <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
       <meta name="geo.region" content="CA" />
       <meta name="geo.placename" content="Canada" />
       <meta name="robots" content="index, follow, max-image-preview:large" />
@@ -363,7 +419,7 @@ pageRoutes.get('/countries/australia', (c) => {
     request: c.req.raw,
     additionalHead: `
       <link rel="preconnect" href="https://fonts.googleapis.com">
-      <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
       <meta name="geo.region" content="AU" />
       <meta name="geo.placename" content="Australia" />
       <meta name="robots" content="index, follow, max-image-preview:large" />
@@ -387,7 +443,7 @@ pageRoutes.get('/countries/belgium', (c) => {
     request: c.req.raw,
     additionalHead: `
       <link rel="preconnect" href="https://fonts.googleapis.com">
-      <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
       <meta name="geo.region" content="BE" />
       <meta name="geo.placename" content="Belgium" />
       <meta name="robots" content="index, follow, max-image-preview:large" />
@@ -484,7 +540,7 @@ pageRoutes.get('/countries/nepal', (c) => {
     request: c.req.raw,
     additionalHead: `
       <link rel="preconnect" href="https://fonts.googleapis.com">
-      <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
       <meta name="geo.region" content="NP" />
       <meta name="geo.placename" content="Nepal" />
       <meta name="robots" content="index, follow, max-image-preview:large" />
@@ -509,7 +565,7 @@ pageRoutes.get('/countries/malaysia', (c) => {
     request: c.req.raw,
     additionalHead: `
       <link rel="preconnect" href="https://fonts.googleapis.com">
-      <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
       <meta name="geo.region" content="MY" />
       <meta name="geo.placename" content="Malaysia" />
       <meta name="robots" content="index, follow, max-image-preview:large" />
@@ -534,7 +590,7 @@ pageRoutes.get('/countries/ethiopia', (c) => {
     request: c.req.raw,
     additionalHead: `
       <link rel="preconnect" href="https://fonts.googleapis.com">
-      <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
       <meta name="geo.region" content="ET" />
       <meta name="geo.placename" content="Ethiopia" />
       <meta name="robots" content="index, follow, max-image-preview:large" />
@@ -559,7 +615,7 @@ pageRoutes.get('/countries/bangladesh', (c) => {
     request: c.req.raw,
     additionalHead: `
       <link rel="preconnect" href="https://fonts.googleapis.com">
-      <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
       <meta name="geo.region" content="BD" />
       <meta name="geo.placename" content="Bangladesh" />
       <meta name="robots" content="index, follow, max-image-preview:large" />
@@ -589,7 +645,7 @@ pageRoutes.get('/reviews', (c) => {
         )}
         
         <link rel="stylesheet" href="/static/styles.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="stylesheet" href="/static/styles.css">
     </head>
     <body class="bg-gray-50">
         ${generateNavigation()}
@@ -667,9 +723,7 @@ pageRoutes.get('/compare', (c) => {
           c.req.raw
         )}
         
-        <link rel="stylesheet" href="/static/styles.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="/static/styles.css" rel="stylesheet">
     </head>
     <body class="bg-gray-50">
         ${generateNavigation()}
@@ -941,9 +995,7 @@ pageRoutes.get('/contact', (c) => {
           c.req.raw
         )}
         
-        <link rel="stylesheet" href="/static/styles.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="/static/styles.css" rel="stylesheet">
     </head>
     <body class="bg-gray-50">
         ${generateNavigation()}
@@ -1150,7 +1202,7 @@ pageRoutes.get('/about', (c) => {
         )}
         
         <link rel="stylesheet" href="/static/styles.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="stylesheet" href="/static/styles.css">
     </head>
     <body class="bg-gray-50">
         ${generateNavigation()}
@@ -1319,7 +1371,7 @@ pageRoutes.get('/simulator', (c) => {
         )}
         
         <link rel="stylesheet" href="/static/styles.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="stylesheet" href="/static/styles.css">
     </head>
     <body class="bg-gray-50">
         ${generateNavigation()}
@@ -1472,7 +1524,7 @@ countryPages.forEach(country => {
           )}
           
           <link rel="stylesheet" href="/static/styles.css">
-          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+          <link rel="stylesheet" href="/static/styles.css">
       </head>
       <body class="bg-gray-50">
           ${generateNavigation()}
@@ -1560,7 +1612,7 @@ pageRoutes.get('/dashboard', async (c) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Dashboard - BrokerAnalysis</title>
         <link rel="stylesheet" href="/static/styles.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="stylesheet" href="/static/styles.css">
     </head>
     <body class="bg-gray-50">
         ${generateNavigation()}
@@ -1861,5 +1913,409 @@ function generateFooter(): string {
     </footer>
   `;
 }
+
+// CRITICAL SEO FIX: Individual Broker Review Pages
+// These routes were moved from brokerRoutes.ts due to mounting issues
+// This ensures the most important SEO pages (individual broker reviews) work properly
+
+pageRoutes.get('/reviews/ic-markets', async (c) => {
+  const { DB } = c.env;
+  const brokerService = new BrokerService(DB);
+  
+  try {
+    const broker = await brokerService.getBrokerBySlug('ic-markets');
+    if (!broker) {
+      return c.html('<div style="padding:2rem;text-align:center;"><h1>IC Markets not found</h1><p>Broker data not available.</p><a href="/brokers">← Back to Brokers</a></div>', 404);
+    }
+    
+    return c.html(generateComprehensiveBrokerReviewHTML(broker, c.req.raw));
+  } catch (error) {
+    console.error('IC Markets review error:', error);
+    return c.html(`<div style="padding:2rem;text-align:center;"><h1>Error</h1><p>Database error: ${error.message}</p><a href="/brokers">← Back to Brokers</a></div>`, 500);
+  }
+});
+
+pageRoutes.get('/reviews/pepperstone', async (c) => {
+  const { DB } = c.env;
+  const brokerService = new BrokerService(DB);
+  
+  try {
+    const broker = await brokerService.getBrokerBySlug('pepperstone');
+    if (!broker) {
+      return c.html('<div style="padding:2rem;text-align:center;"><h1>Pepperstone not found</h1><p>Broker data not available.</p><a href="/brokers">← Back to Brokers</a></div>', 404);
+    }
+    
+    return c.html(generateComprehensiveBrokerReviewHTML(broker, c.req.raw));
+  } catch (error) {
+    console.error('Pepperstone review error:', error);
+    return c.html(`<div style="padding:2rem;text-align:center;"><h1>Error</h1><p>Database error: ${error.message}</p><a href="/brokers">← Back to Brokers</a></div>`, 500);
+  }
+});
+
+pageRoutes.get('/reviews/xm-group', async (c) => {
+  const { DB } = c.env;
+  const brokerService = new BrokerService(DB);
+  
+  try {
+    const broker = await brokerService.getBrokerBySlug('xm-group');
+    if (!broker) {
+      return c.html('<div style="padding:2rem;text-align:center;"><h1>XM Group not found</h1><p>Broker data not available.</p><a href="/brokers">← Back to Brokers</a></div>', 404);
+    }
+    
+    return c.html(generateComprehensiveBrokerReviewHTML(broker, c.req.raw));
+  } catch (error) {
+    console.error('XM Group review error:', error);
+    return c.html(`<div style="padding:2rem;text-align:center;"><h1>Error</h1><p>Database error: ${error.message}</p><a href="/brokers">← Back to Brokers</a></div>`, 500);
+  }
+});
+
+pageRoutes.get('/reviews/oanda', async (c) => {
+  const { DB } = c.env;
+  const brokerService = new BrokerService(DB);
+  
+  try {
+    const broker = await brokerService.getBrokerBySlug('oanda');
+    if (!broker) {
+      return c.html('<div style="padding:2rem;text-align:center;"><h1>OANDA not found</h1><p>Broker data not available.</p><a href="/brokers">← Back to Brokers</a></div>', 404);
+    }
+    
+    return c.html(generateComprehensiveBrokerReviewHTML(broker, c.req.raw));
+  } catch (error) {
+    console.error('OANDA review error:', error);
+    return c.html(`<div style="padding:2rem;text-align:center;"><h1>Error</h1><p>Database error: ${error.message}</p><a href="/brokers">← Back to Brokers</a></div>`, 500);
+  }
+});
+
+pageRoutes.get('/reviews/interactive-brokers', async (c) => {
+  const { DB } = c.env;
+  const brokerService = new BrokerService(DB);
+  
+  try {
+    const broker = await brokerService.getBrokerBySlug('interactive-brokers');
+    if (!broker) {
+      return c.html('<div style="padding:2rem;text-align:center;"><h1>Interactive Brokers not found</h1><p>Broker data not available.</p><a href="/brokers">← Back to Brokers</a></div>', 404);
+    }
+    
+    return c.html(generateComprehensiveBrokerReviewHTML(broker, c.req.raw));
+  } catch (error) {
+    console.error('Interactive Brokers review error:', error);
+    return c.html(`<div style="padding:2rem;text-align:center;"><h1>Error</h1><p>Database error: ${error.message}</p><a href="/brokers">← Back to Brokers</a></div>`, 500);
+  }
+});
+
+// Generic dynamic broker review route (catch-all for other brokers)
+pageRoutes.get('/reviews/:brokerSlug', async (c) => {
+  const { DB } = c.env;
+  const brokerService = new BrokerService(DB);
+  const brokerSlug = c.req.param('brokerSlug');
+  
+  // Skip the static routes we've already handled
+  const handledRoutes = ['ic-markets', 'pepperstone', 'xm-group', 'oanda', 'interactive-brokers'];
+  if (handledRoutes.includes(brokerSlug)) {
+    return c.notFound(); // Let the static routes handle these
+  }
+  
+  try {
+    const broker = await brokerService.getBrokerBySlug(brokerSlug);
+    if (!broker) {
+      return c.html(`
+        <div style="padding:2rem;text-align:center;">
+          <h1>Broker "${brokerSlug}" not found</h1>
+          <p>This broker is not available in our database.</p>
+          <p><strong>Available reviews:</strong> <a href="/reviews/ic-markets">IC Markets</a>, <a href="/reviews/pepperstone">Pepperstone</a>, <a href="/reviews/xm-group">XM Group</a></p>
+          <p><a href="/brokers">← View all brokers</a></p>
+        </div>
+      `, 404);
+    }
+    
+    return c.html(generateComprehensiveBrokerReviewHTML(broker, c.req.raw));
+  } catch (error) {
+    console.error(`Broker review error for ${brokerSlug}:`, error);
+    return c.html(`<div style="padding:2rem;text-align:center;"><h1>Error</h1><p>Database error: ${error.message}</p><a href="/brokers">← Back to Brokers</a></div>`, 500);
+  }
+});
+
+// SEO Enhancement: Dynamic Sitemap
+pageRoutes.get('/sitemap.xml', async (c) => {
+  try {
+    const { DB } = c.env;
+    const brokerService = new BrokerService(DB);
+    const brokers = await brokerService.getAllBrokers();
+    
+    const domain = getCurrentDomain(c.req.raw);
+    const now = new Date().toISOString();
+    
+    const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>${domain}/</loc>
+    <lastmod>${now}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>${domain}/brokers</loc>
+    <lastmod>${now}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>${domain}/countries</loc>
+    <lastmod>${now}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>${domain}/compare</loc>
+    <lastmod>${now}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>${domain}/contact</loc>
+    <lastmod>${now}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  ${brokers.map(broker => `
+  <url>
+    <loc>${domain}/reviews/${broker.slug}</loc>
+    <lastmod>${now}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>`).join('')}
+  ${['australia', 'usa', 'canada', 'singapore', 'dubai', 'south-africa', 'philippines', 'pakistan', 'india', 'belgium', 'nepal', 'malaysia', 'ethiopia', 'bangladesh'].map(country => `
+  <url>
+    <loc>${domain}/brokers/${country}</loc>
+    <lastmod>${now}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>`).join('')}
+</urlset>`;
+
+    c.header('Content-Type', 'application/xml');
+    c.header('Cache-Control', 'public, max-age=3600');
+    return c.text(sitemapXml);
+  } catch (error) {
+    console.error('Sitemap generation error:', error);
+    return c.text('Error generating sitemap', 500);
+  }
+});
+
+// SEO Enhancement: Robots.txt
+pageRoutes.get('/robots.txt', (c) => {
+  const domain = getCurrentDomain(c.req.raw);
+  const robotsTxt = `User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: ${domain}/sitemap.xml
+
+# Disallow admin areas
+Disallow: /admin/
+Disallow: /api/
+Disallow: /_next/
+Disallow: /static/
+
+# Allow important pages
+Allow: /static/styles.css
+Allow: /static/images/
+Allow: /static/webfonts/`;
+
+  c.header('Content-Type', 'text/plain');
+  c.header('Cache-Control', 'public, max-age=86400');
+  return c.text(robotsTxt);
+});
+
+// SEO Enhancement: Popular Broker vs Broker Comparison Pages
+const popularComparisons = [
+  { slug: 'ic-markets-vs-pepperstone', title: 'IC Markets vs Pepperstone', brokers: ['ic-markets', 'pepperstone'] },
+  { slug: 'ic-markets-vs-oanda', title: 'IC Markets vs OANDA', brokers: ['ic-markets', 'oanda'] },
+  { slug: 'pepperstone-vs-oanda', title: 'Pepperstone vs OANDA', brokers: ['pepperstone', 'oanda'] },
+  { slug: 'interactive-brokers-vs-ic-markets', title: 'Interactive Brokers vs IC Markets', brokers: ['interactive-brokers', 'ic-markets'] }
+];
+
+popularComparisons.forEach(comparison => {
+  pageRoutes.get(`/compare/${comparison.slug}`, async (c) => {
+    const { DB } = c.env;
+    const brokerService = new BrokerService(DB);
+    
+    try {
+      const [broker1, broker2] = await Promise.all([
+        brokerService.getBrokerBySlug(comparison.brokers[0]),
+        brokerService.getBrokerBySlug(comparison.brokers[1])
+      ]);
+
+      if (!broker1 || !broker2) {
+        return c.html('Brokers not found', 404);
+      }
+
+      const domain = getCurrentDomain(c.req.raw);
+      const title = `${comparison.title} Comparison 2025 - Which is Better?`;
+      const description = `Compare ${broker1.name} vs ${broker2.name}. Detailed side-by-side analysis of spreads, regulation, platforms, and fees to help you choose the better broker.`;
+
+      return c.html(`<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    ${generateMetaTags(title, description, `broker comparison, ${comparison.brokers[0]}, ${comparison.brokers[1]}, forex broker`, `/compare/${comparison.slug}`, undefined, c.req.raw)}
+    <link href="/static/styles.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <h1 class="text-4xl font-bold text-center mb-8">${comparison.title} Comparison</h1>
+        
+        <div class="grid md:grid-cols-2 gap-8 mb-8">
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-2xl font-bold mb-4">\${broker1.name}</h2>
+                <div class="space-y-3">
+                    <div class="flex justify-between">
+                        <span class="font-medium">Rating:</span>
+                        <span>\${broker1.rating}/5</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="font-medium">Min Deposit:</span>
+                        <span>$\${broker1.min_deposit_usd || 'N/A'}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="font-medium">Max Leverage:</span>
+                        <span>\${broker1.max_leverage || 'N/A'}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="font-medium">Regulated:</span>
+                        <span>\${broker1.is_regulated ? 'Yes' : 'No'}</span>
+                    </div>
+                </div>
+                <a href="/reviews/\${broker1.slug}" class="mt-4 block bg-blue-600 text-white text-center py-2 rounded hover:bg-blue-700">Read Full Review</a>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-2xl font-bold mb-4">\${broker2.name}</h2>
+                <div class="space-y-3">
+                    <div class="flex justify-between">
+                        <span class="font-medium">Rating:</span>
+                        <span>\${broker2.rating}/5</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="font-medium">Min Deposit:</span>
+                        <span>$\${broker2.min_deposit_usd || 'N/A'}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="font-medium">Max Leverage:</span>
+                        <span>\${broker2.max_leverage || 'N/A'}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="font-medium">Regulated:</span>
+                        <span>\${broker2.is_regulated ? 'Yes' : 'No'}</span>
+                    </div>
+                </div>
+                <a href="/reviews/\${broker2.slug}" class="mt-4 block bg-blue-600 text-white text-center py-2 rounded hover:bg-blue-700">Read Full Review</a>
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow p-6">
+            <h3 class="text-xl font-bold mb-4">Quick Comparison Summary</h3>
+            <p class="text-gray-700 mb-4">
+                Both \${broker1.name} and \${broker2.name} are \${broker1.is_regulated && broker2.is_regulated ? 'regulated' : 'established'} brokers offering competitive trading conditions. 
+                \${broker1.rating > broker2.rating ? broker1.name + ' has a higher overall rating' : broker2.rating > broker1.rating ? broker2.name + ' has a higher overall rating' : 'Both brokers have similar ratings'}.
+            </p>
+            <div class="grid md:grid-cols-3 gap-4">
+                <a href="/compare" class="text-center bg-gray-100 p-4 rounded hover:bg-gray-200">Compare More Brokers</a>
+                <a href="/brokers" class="text-center bg-blue-100 p-4 rounded hover:bg-blue-200">Browse All Brokers</a>
+                <a href="/" class="text-center bg-green-100 p-4 rounded hover:bg-green-200">Find My Broker</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>`);
+    } catch (error) {
+      console.error('Comparison page error:', error);
+      return c.html('Error loading comparison', 500);
+    }
+  });
+});
+
+// SEO Enhancement: Regulatory Authority Pages
+const regulatoryAuthorities = [
+  { slug: 'asic', name: 'ASIC (Australian Securities and Investments Commission)', country: 'Australia', description: 'Australia\'s financial services regulator' },
+  { slug: 'fca', name: 'FCA (Financial Conduct Authority)', country: 'United Kingdom', description: 'UK\'s financial services regulator' },
+  { slug: 'cysec', name: 'CySEC (Cyprus Securities and Exchange Commission)', country: 'Cyprus', description: 'Cyprus financial regulator' },
+  { slug: 'cftc', name: 'CFTC (Commodity Futures Trading Commission)', country: 'United States', description: 'US derivatives regulator' },
+  { slug: 'finma', name: 'FINMA (Swiss Financial Market Supervisory Authority)', country: 'Switzerland', description: 'Switzerland\'s financial regulator' }
+];
+
+regulatoryAuthorities.forEach(regulator => {
+  pageRoutes.get(`/regulation/${regulator.slug}`, async (c) => {
+    const { DB } = c.env;
+    const brokerService = new BrokerService(DB);
+    
+    try {
+      const brokers = await brokerService.getAllBrokers();
+      const domain = getCurrentDomain(c.req.raw);
+      
+      const title = `${regulator.name} Regulated Forex Brokers 2025`;
+      const description = `Find ${regulator.name} regulated forex brokers. Compare spreads, platforms, and features of brokers supervised by ${regulator.country}'s financial regulator.`;
+
+      return c.html(`<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    ${generateMetaTags(title, description, `${regulator.slug}, regulated brokers, ${regulator.country.toLowerCase()} brokers`, `/regulation/${regulator.slug}`, undefined, c.req.raw)}
+    <link href="/static/styles.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <h1 class="text-4xl font-bold text-center mb-8">${regulator.name} Regulated Brokers</h1>
+        
+        <div class="bg-white rounded-lg shadow p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">About ${regulator.name}</h2>
+            <p class="text-gray-700 mb-4">
+                ${regulator.description}. Brokers regulated by ${regulator.name} must comply with strict financial standards, 
+                client fund protection requirements, and operational transparency rules.
+            </p>
+            <div class="grid md:grid-cols-3 gap-4">
+                <div class="text-center p-4 bg-blue-50 rounded">
+                    <h3 class="font-semibold text-blue-800">Client Protection</h3>
+                    <p class="text-sm text-blue-600">Segregated client funds</p>
+                </div>
+                <div class="text-center p-4 bg-green-50 rounded">
+                    <h3 class="font-semibold text-green-800">Financial Standards</h3>
+                    <p class="text-sm text-green-600">Strict capital requirements</p>
+                </div>
+                <div class="text-center p-4 bg-purple-50 rounded">
+                    <h3 class="font-semibold text-purple-800">Transparency</h3>
+                    <p class="text-sm text-purple-600">Regular reporting & audits</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow p-6">
+            <h3 class="text-xl font-bold mb-4">${regulator.name} Regulated Brokers</h3>
+            <div class="text-center py-8">
+                <p class="text-gray-600 mb-4">Our database is being updated with regulatory information.</p>
+                <div class="space-y-2">
+                    <a href="/brokers" class="inline-block bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 mr-4">Browse All Brokers</a>
+                    <a href="/countries" class="inline-block bg-gray-600 text-white px-6 py-2 rounded hover:bg-gray-700">View by Country</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-8 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+            <h4 class="font-semibold text-yellow-800 mb-2">Important Notice</h4>
+            <p class="text-yellow-700 text-sm">
+                Regulation status can change. Always verify a broker's current regulatory status directly with the relevant authority before trading.
+            </p>
+        </div>
+    </div>
+</body>
+</html>`);
+    } catch (error) {
+      console.error('Regulatory page error:', error);
+      return c.html('Error loading regulatory information', 500);
+    }
+  });
+});
 
 export { pageRoutes };

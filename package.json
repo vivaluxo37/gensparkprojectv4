@@ -17,6 +17,7 @@
     "test": "curl http://localhost:3000"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^7.0.0",
     "hono": "^4.9.5"
   },
   "devDependencies": {

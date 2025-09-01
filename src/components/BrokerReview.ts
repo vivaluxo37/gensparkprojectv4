@@ -30,7 +30,7 @@ export function generateBrokerReviewHTML(broker: ComprehensiveBroker): string {
         <meta property="twitter:image" content="https://brokeranalysis.com/static/images/brokers/${broker.slug}-og.png">
         
         <link rel="canonical" href="https://brokeranalysis.com/reviews/${broker.slug}">
-        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+        <link href="/static/styles.css" rel="stylesheet">
         <link href="/static/styles.css" rel="stylesheet">
         
         <!-- Structured Data - Review Schema -->

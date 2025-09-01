@@ -111,8 +111,8 @@ export function renderCountriesDirectoryPage(countries: Country[], options: {
         <link rel="apple-touch-icon" href="/static/images/apple-touch-icon.png">
         
         <!-- CSS -->
-        <script src="https://cdn.tailwindcss.com"></script>
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+        <link href="/static/styles.css" rel="stylesheet">
+        <link href="/static/styles.css" rel="stylesheet">
         
         <!-- Structured Data - ItemList Schema -->
         <script type="application/ld+json">

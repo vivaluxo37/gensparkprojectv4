@@ -188,7 +188,7 @@ app.notFound((c) => {
         <title>Page Not Found - BrokerAnalysis</title>
         <meta name="description" content="The page you're looking for doesn't exist. Explore our forex broker reviews and comparisons.">
         <link href="/static/styles.css" rel="stylesheet">
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+        <link href="/static/styles.css" rel="stylesheet">
     </head>
     <body class="bg-gray-50">
         <!-- Navigation -->
