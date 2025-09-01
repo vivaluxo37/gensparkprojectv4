@@ -117,4 +117,3 @@ if (typeof module !== 'undefined') {
     getUploadInstructions
   };
 }
-`;

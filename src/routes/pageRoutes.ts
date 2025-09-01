@@ -24,6 +24,7 @@ import { renderNepalCountryPage } from '../components/NepalCountryPage.js';
 import { renderMalaysiaCountryPage } from '../components/MalaysiaCountryPage.js';
 import { renderEthiopiaCountryPage } from '../components/EthiopiaCountryPage.js';
 import { renderBangladeshCountryPage } from '../components/BangladeshCountryPage.js';
+import { renderTradingSimulatorPage } from '../components/TradingSimulatorPage.js';
 
 const pageRoutes = new Hono<{ Bindings: Bindings }>();
 
@@ -1361,142 +1362,7 @@ pageRoutes.get('/about', (c) => {
   `);
 });
 
-// Simulator page
-pageRoutes.get('/simulator', (c) => {
-  return c.html(`
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        ${generateMetaTags(
-          'Trading Cost Calculator - Compare Forex Broker Fees & Spreads | BrokerAnalysis',
-          'Calculate real trading costs across multiple brokers. Compare spreads, commissions, and total costs based on your trading strategy and volume.',
-          'trading cost calculator, forex fees calculator, spread comparison, broker costs, trading simulator',
-          '/simulator',
-          undefined,
-          c.req.raw
-        )}
-        
-        <link rel="stylesheet" href="/static/styles.css">
-        <link rel="stylesheet" href="/static/styles.css">
-    </head>
-    <body class="bg-gray-50">
-        ${generateNavigation()}
-        
-        <main class="max-w-6xl mx-auto py-12 px-4">
-            <div class="text-center mb-12">
-                <h1 class="text-4xl font-bold text-gray-900 mb-4">Trading Cost Calculator</h1>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                    Calculate and compare real trading costs across multiple forex brokers. 
-                    Factor in your trading strategy, volume, and preferred instruments.
-                </p>
-            </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Calculator Input Panel -->
-                <div class="lg:col-span-1">
-                    <div class="bg-white rounded-lg shadow-sm p-6 sticky top-6">
-                        <h2 class="text-xl font-semibold mb-6">Calculator Settings</h2>
-                        
-                        <div class="space-y-6">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Trading Strategy</label>
-                                <select id="strategy-select" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
-                                    <option value="scalping">Scalping (200+ trades/month)</option>
-                                    <option value="day-trading">Day Trading (100 trades/month)</option>
-                                    <option value="swing-trading" selected>Swing Trading (40 trades/month)</option>
-                                    <option value="position-trading">Position Trading (10 trades/month)</option>
-                                </select>
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Trade Volume (USD)</label>
-                                <input type="number" id="volume-input" value="100000" min="1000" max="10000000" step="1000"
-                                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
-                                <p class="text-xs text-gray-500 mt-1">Standard lot = $100,000</p>
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Currency Pair</label>
-                                <select id="instrument-select" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
-                                    <option value="EURUSD" selected>EUR/USD</option>
-                                    <option value="GBPUSD">GBP/USD</option>
-                                    <option value="USDJPY">USD/JPY</option>
-                                    <option value="AUDUSD">AUD/USD</option>
-                                    <option value="USDCAD">USD/CAD</option>
-                                </select>
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Select Brokers to Compare</label>
-                                <div id="broker-checkboxes" class="space-y-2">
-                                    <!-- Broker checkboxes will be loaded here -->
-                                </div>
-                            </div>
-
-                            <button id="calculate-costs" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors">
-                                <i class="fas fa-calculator mr-2"></i>
-                                Calculate Costs
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Results Panel -->
-                <div class="lg:col-span-2">
-                    <div class="bg-white rounded-lg shadow-sm p-6">
-                        <h2 class="text-xl font-semibold mb-6">Cost Comparison Results</h2>
-                        
-                        <div id="cost-results">
-                            <div class="text-center py-12 text-gray-500">
-                                <i class="fas fa-chart-bar text-4xl mb-4"></i>
-                                <p>Configure your settings and click "Calculate Costs" to see results</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Strategy Information -->
-                    <div class="bg-blue-50 rounded-lg p-6 mt-6">
-                        <h3 class="font-semibold text-lg mb-3">
-                            <i class="fas fa-info-circle text-blue-600 mr-2"></i>
-                            Understanding Trading Costs
-                        </h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                            <div>
-                                <h4 class="font-medium mb-2">Spreads</h4>
-                                <p class="text-gray-700">The difference between bid and ask prices. Lower spreads reduce your trading costs.</p>
-                            </div>
-                            <div>
-                                <h4 class="font-medium mb-2">Commissions</h4>
-                                <p class="text-gray-700">Fixed fees charged per lot traded. Common in ECN/Raw spread accounts.</p>
-                            </div>
-                            <div>
-                                <h4 class="font-medium mb-2">Slippage</h4>
-                                <p class="text-gray-700">Price difference between expected and actual execution, especially during volatility.</p>
-                            </div>
-                            <div>
-                                <h4 class="font-medium mb-2">Swap Rates</h4>
-                                <p class="text-gray-700">Interest charges or credits for positions held overnight.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-
-        ${generateFooter()}
-        
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                initializeCalculator();
-                loadBrokerOptions();
-            });
-        </script>
-    </body>
-    </html>
-  `);
-});
 
 // Country-specific broker pages
 const countryPages = [
@@ -2348,104 +2214,12 @@ regulatoryAuthorities.forEach(regulator => {
   });
 });
 
-// Trading Cost Simulator Page
+// Enhanced Trading Cost Simulator Page with 2025 SEO Best Practices
 pageRoutes.get('/simulator', (c) => {
-  return c.html(`
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        ${generateMetaTags(
-          'Trading Cost Calculator 2025 - Compare Broker Fees & Spreads | BrokerAnalysis',
-          'Calculate and compare trading costs across multiple forex brokers. Analyze spreads, commissions, and total trading expenses for your strategy.',
-          'trading cost calculator, forex calculator, broker fees, spread calculator, trading expenses, commission calculator',
-          '/simulator',
-          undefined,
-          c.req.raw
-        )}
-        <link href="/static/styles.css" rel="stylesheet">
-    </head>
-    <body class="bg-gray-50">
-        ${generateNavigation()}
-        
-        <main class="max-w-7xl mx-auto py-12 px-4">
-            <div class="text-center mb-12">
-                <h1 class="text-4xl font-bold text-gray-900 mb-4">Trading Cost Calculator</h1>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                    Calculate and compare real trading costs across multiple brokers. 
-                    Input your trading parameters to see which broker offers the best value for your strategy.
-                </p>
-            </div>
-
-            <!-- Enhanced Simulator Interface -->
-            <div id="simulator-interface">
-                <!-- Interface will be rendered by enhanced-simulator.js -->
-            </div>
-
-            <!-- SEO Content -->
-            <div class="bg-white rounded-xl shadow-lg p-8 mt-12">
-                <h2 class="text-2xl font-bold mb-6">How Trading Costs Impact Your Profits</h2>
-                <div class="grid md:grid-cols-2 gap-8">
-                    <div>
-                        <h3 class="text-lg font-semibold mb-3">Understanding Trading Costs</h3>
-                        <ul class="space-y-2 text-gray-700">
-                            <li class="flex items-start">
-                                <i class="fas fa-check text-green-600 mt-1 mr-2"></i>
-                                <span><strong>Spreads:</strong> The difference between bid and ask prices</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check text-green-600 mt-1 mr-2"></i>
-                                <span><strong>Commissions:</strong> Fixed fees charged per trade or lot</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check text-green-600 mt-1 mr-2"></i>
-                                <span><strong>Overnight Fees:</strong> Swap rates for positions held overnight</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check text-green-600 mt-1 mr-2"></i>
-                                <span><strong>Slippage:</strong> Price differences during order execution</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-semibold mb-3">Cost Impact by Strategy</h3>
-                        <div class="space-y-3">
-                            <div class="p-3 bg-blue-50 rounded-lg">
-                                <div class="font-medium text-blue-900">Scalping</div>
-                                <div class="text-sm text-blue-700">High frequency = low spreads critical</div>
-                            </div>
-                            <div class="p-3 bg-green-50 rounded-lg">
-                                <div class="font-medium text-green-900">Day Trading</div>
-                                <div class="text-sm text-green-700">Balance of spreads and commissions</div>
-                            </div>
-                            <div class="p-3 bg-purple-50 rounded-lg">
-                                <div class="font-medium text-purple-900">Swing Trading</div>
-                                <div class="text-sm text-purple-700">Overnight fees become important</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mt-8 p-6 bg-yellow-50 border border-yellow-200 rounded-lg">
-                    <h4 class="font-semibold text-yellow-800 mb-2">
-                        <i class="fas fa-lightbulb mr-2"></i>Pro Tip
-                    </h4>
-                    <p class="text-yellow-700">
-                        A difference of just 0.5 pips in spreads can cost a day trader hundreds of dollars per month. 
-                        Use our calculator to see the real impact on your trading budget.
-                    </p>
-                </div>
-            </div>
-        </main>
-
-        ${generateFooter()}
-
-        <!-- Enhanced Simulator JavaScript -->
-        <script src="/static/enhanced-simulator.js"></script>
-    </body>
-    </html>
-  `);
+  return c.html(renderTradingSimulatorPage({
+    canonicalUrl: '/simulator',
+    request: c.req.raw
+  }));
 });
 
 export { pageRoutes };

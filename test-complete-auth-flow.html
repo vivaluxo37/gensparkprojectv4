@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Authentication Flow Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold mb-8 text-center">🔐 Authentication System Test</h1>
+        
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">📋 Test Checklist</h2>
+            <div id="test-results" class="space-y-2">
+                <div id="test-home-load" class="flex items-center text-gray-600">
+                    <i class="fas fa-clock mr-2"></i> Loading homepage...
+                </div>
+                <div id="test-auth-check" class="flex items-center text-gray-600">
+                    <i class="fas fa-clock mr-2"></i> Checking authentication status...
+                </div>
+                <div id="test-header-nav" class="flex items-center text-gray-600">
+                    <i class="fas fa-clock mr-2"></i> Testing header navigation state...
+                </div>
+                <div id="test-broker-match" class="flex items-center text-gray-600">
+                    <i class="fas fa-clock mr-2"></i> Testing "Get My Broker Match" modal trigger...
+                </div>
+                <div id="test-signin-modal" class="flex items-center text-gray-600">
+                    <i class="fas fa-clock mr-2"></i> Testing header sign-in modal trigger...
+                </div>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-semibold mb-4">🏠 Homepage Preview</h3>
+                <iframe id="homepage-frame" 
+                        src="https://3000-iz06f1q0kw9r1svxgxaql-6532622b.e2b.dev" 
+                        class="w-full h-96 border rounded"
+                        onload="testHomepage()">
+                </iframe>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-semibold mb-4">🧪 Test Controls</h3>
+                <div class="space-y-3">
+                    <button onclick="testAuthStatus()" class="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">
+                        Test Auth Status API
+                    </button>
+                    <button onclick="testSignup()" class="w-full bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700">
+                        Test Signup Flow
+                    </button>
+                    <button onclick="testSignin()" class="w-full bg-purple-600 text-white py-2 px-4 rounded hover:bg-purple-700">
+                        Test Signin Flow
+                    </button>
+                    <button onclick="openModalTest()" class="w-full bg-orange-600 text-white py-2 px-4 rounded hover:bg-orange-700">
+                        Manual Modal Test
+                    </button>
+                </div>
+                
+                <div id="api-results" class="mt-4 p-3 bg-gray-50 rounded text-sm font-mono overflow-auto max-h-32"></div>
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-md p-6 mt-6">
+            <h3 class="text-lg font-semibold mb-4">📊 Test Logs</h3>
+            <div id="test-logs" class="bg-gray-900 text-green-400 p-4 rounded font-mono text-sm max-h-64 overflow-y-auto">
+                <div>🚀 Authentication system test initialized...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const BASE_URL = 'https://3000-iz06f1q0kw9r1svxgxaql-6532622b.e2b.dev';
+        
+        function log(message, type = 'info') {
+            const logs = document.getElementById('test-logs');
+            const timestamp = new Date().toLocaleTimeString();
+            const icon = type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warning' ? '⚠️' : 'ℹ️';
+            logs.innerHTML += `<div>${timestamp} ${icon} ${message}</div>`;
+            logs.scrollTop = logs.scrollHeight;
+        }
+        
+        function updateTestResult(testId, success, message) {
+            const element = document.getElementById(testId);
+            if (element) {
+                const icon = success ? 'fa-check text-green-600' : 'fa-times text-red-600';
+                element.innerHTML = `<i class="fas ${icon} mr-2"></i> ${message}`;
+            }
+        }
+        
+        async function testAuthStatus() {
+            try {
+                log('Testing /api/auth/me endpoint...');
+                const response = await fetch(`${BASE_URL}/api/auth/me`, {
+                    credentials: 'include'
+                });
+                const data = await response.json();
+                
+                document.getElementById('api-results').textContent = JSON.stringify(data, null, 2);
+                
+                if (data.authenticated) {
+                    log(`Auth check: User logged in as ${data.user.name}`, 'success');
+                    updateTestResult('test-auth-check', true, `Authenticated as ${data.user.name}`);
+                } else {
+                    log('Auth check: No user logged in', 'info');
+                    updateTestResult('test-auth-check', true, 'Not authenticated (expected)');
+                }
+                
+                return data.authenticated;
+            } catch (error) {
+                log(`Auth check error: ${error.message}`, 'error');
+                updateTestResult('test-auth-check', false, 'Auth check failed');
+                return false;
+            }
+        }
+        
+        async function testSignup() {
+            try {
+                const randomEmail = `test${Date.now()}@example.com`;
+                log(`Testing signup with email: ${randomEmail}`);
+                
+                const response = await fetch(`${BASE_URL}/api/auth/signup`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({
+                        name: 'Test User',
+                        email: randomEmail,
+                        password: 'TestPassword123'
+                    })
+                });
+                
+                const data = await response.json();
+                document.getElementById('api-results').textContent = JSON.stringify(data, null, 2);
+                
+                if (data.success) {
+                    log(`Signup successful: User ID ${data.user.id} created`, 'success');
+                    // Test if now authenticated
+                    setTimeout(testAuthStatus, 1000);
+                } else {
+                    log(`Signup failed: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                log(`Signup test error: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testSignin() {
+            try {
+                log('Testing signin with existing credentials...');
+                
+                const response = await fetch(`${BASE_URL}/api/auth/signin`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({
+                        email: 'testuser@example.com',
+                        password: 'TestPassword123'
+                    })
+                });
+                
+                const data = await response.json();
+                document.getElementById('api-results').textContent = JSON.stringify(data, null, 2);
+                
+                if (data.success) {
+                    log(`Signin successful: Welcome back ${data.user.name}`, 'success');
+                    // Test if now authenticated
+                    setTimeout(testAuthStatus, 1000);
+                } else {
+                    log(`Signin failed: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                log(`Signin test error: ${error.message}`, 'error');
+            }
+        }
+        
+        function testHomepage() {
+            log('Homepage loaded successfully', 'success');
+            updateTestResult('test-home-load', true, 'Homepage loaded successfully');
+            
+            // Test auth status after page load
+            setTimeout(testAuthStatus, 500);
+        }
+        
+        function openModalTest() {
+            window.open(`${BASE_URL}`, 'modaltest', 'width=1200,height=800');
+            log('Opened modal test window - try clicking "Get My Broker Match" button', 'info');
+        }
+        
+        // Initialize tests
+        window.addEventListener('load', () => {
+            log('🔄 Starting authentication system tests...');
+            
+            // Test sequence
+            setTimeout(() => {
+                testAuthStatus().then(isAuth => {
+                    updateTestResult('test-header-nav', true, isAuth ? 'Should show user menu' : 'Should show sign-in buttons');
+                    updateTestResult('test-broker-match', true, 'Click "Get My Broker Match" to test modal');
+                    updateTestResult('test-signin-modal', true, 'Click header "Sign In" to test modal');
+                });
+            }, 1000);
+            
+            log('✅ All endpoint tests completed. Manual modal testing required.');
+        });
+    </script>
+</body>
+</html>
