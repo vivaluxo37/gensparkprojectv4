@@ -29,7 +29,8 @@ export function generateCompleteFooter(): string {
                         <li><a href="/" class="hover:text-white transition-colors">Home</a></li>
                         <li><a href="/reviews" class="hover:text-white transition-colors">Reviews</a></li>
                         <li><a href="/compare" class="hover:text-white transition-colors">Compare</a></li>
-                        <li><a href="/simulator" class="hover:text-white transition-colors">Simulator</a></li>
+                        <li><a href="/calculators" class="hover:text-white transition-colors">Calculators</a></li>
+                        <li><a href="/simulator" class="hover:text-white transition-colors">Cost Calculator</a></li>
                     </ul>
                 </div>
                 <div>
