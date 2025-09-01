@@ -30,7 +30,7 @@ export function renderCountriesDirectoryPage(countries: Country[], options: {
           </div>
           <div>
             <h3 class="text-xl font-semibold text-gray-900 mb-1">
-              <a href="${['usa', 'canada', 'australia', 'belgium', 'india', 'singapore', 'dubai', 'south-africa', 'philippines', 'pakistan', 'nepal', 'malaysia', 'ethiopia'].includes(country.slug) ? '/countries/' + country.slug : '/brokers/' + country.slug}" class="hover:text-blue-600 transition-colors">
+              <a href="${['usa', 'canada', 'australia', 'belgium', 'india', 'singapore', 'dubai', 'south-africa', 'philippines', 'pakistan', 'nepal', 'malaysia', 'ethiopia', 'bangladesh'].includes(country.slug) ? '/countries/' + country.slug : '/brokers/' + country.slug}" class="hover:text-blue-600 transition-colors">
                 ${country.name}
               </a>
             </h3>
@@ -52,7 +52,7 @@ export function renderCountriesDirectoryPage(countries: Country[], options: {
       </div>
       
       <div class="flex gap-2">
-        <a href="${['usa', 'canada', 'australia', 'belgium', 'india', 'singapore', 'dubai', 'south-africa', 'philippines', 'pakistan', 'nepal', 'malaysia', 'ethiopia'].includes(country.slug) ? '/countries/' + country.slug : '/brokers/' + country.slug}" 
+        <a href="${['usa', 'canada', 'australia', 'belgium', 'india', 'singapore', 'dubai', 'south-africa', 'philippines', 'pakistan', 'nepal', 'malaysia', 'ethiopia', 'bangladesh'].includes(country.slug) ? '/countries/' + country.slug : '/brokers/' + country.slug}" 
            class="flex-1 bg-blue-600 text-white py-2 px-4 rounded text-center hover:bg-blue-700 transition-colors font-medium text-sm">
           View Brokers
         </a>

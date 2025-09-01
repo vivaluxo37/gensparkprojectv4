@@ -23,6 +23,7 @@ import { renderBelgiumCountryPage } from '../components/BelgiumCountryPage.js';
 import { renderNepalCountryPage } from '../components/NepalCountryPage.js';
 import { renderMalaysiaCountryPage } from '../components/MalaysiaCountryPage.js';
 import { renderEthiopiaCountryPage } from '../components/EthiopiaCountryPage.js';
+import { renderBangladeshCountryPage } from '../components/BangladeshCountryPage.js';
 
 const pageRoutes = new Hono<{ Bindings: Bindings }>();
 
@@ -130,7 +131,9 @@ pageRoutes.get('/countries', (c) => {
     { slug: 'nepal', name: 'Nepal', regulator: 'NRB', brokerCount: 6,
       description: 'Nepal\'s forex market operates with Nepal Rastra Bank oversight. International brokers serve Nepali traders with ultra-low deposits and high leverage access.' },
     { slug: 'ethiopia', name: 'Ethiopia', regulator: 'NBE', brokerCount: 6,
-      description: 'Ethiopia\'s growing economy offers forex trading opportunities through international brokers with NBE awareness and ETB currency support for African traders.' }
+      description: 'Ethiopia\'s growing economy offers forex trading opportunities through international brokers with NBE awareness and ETB currency support for African traders.' },
+    { slug: 'bangladesh', name: 'Bangladesh', regulator: 'BB', brokerCount: 6,
+      description: 'Bangladesh\'s advanced digital payment ecosystem supports forex trading through international brokers with BDT support and mobile banking integration.' }
   ];
 
   return c.html(renderCountriesDirectoryPage(countries, {
@@ -539,6 +542,31 @@ pageRoutes.get('/countries/ethiopia', (c) => {
       <meta property="og:type" content="website" />
       <link rel="alternate" hreflang="en" href="${getCurrentDomain(c.req.raw)}/countries/ethiopia" />
       <link rel="alternate" hreflang="am" href="${getCurrentDomain(c.req.raw)}/countries/ethiopia" />
+    `
+  }));
+});
+
+// Individual Country Pages - Bangladesh
+pageRoutes.get('/countries/bangladesh', (c) => {
+  return c.html(renderLayout(renderBangladeshCountryPage({
+    canonicalUrl: '/countries/bangladesh',
+    request: c.req.raw
+  }), {
+    title: 'Best Forex Brokers in Bangladesh 2025 - BB Compliant Trading | BrokerAnalysis',
+    description: 'Compare top international forex brokers for Bangladeshi traders in 2025. Find BDT support, mobile banking integration, Islamic accounts, and BB-compliant brokers.',
+    keywords: 'Bangladesh forex brokers, Bangladeshi traders, BDT trading, Bangladesh Bank, BB regulation, mobile banking, bKash, Rocket, Nagad, Islamic forex accounts, Bengali support',
+    canonicalUrl: '/countries/bangladesh',
+    request: c.req.raw,
+    additionalHead: `
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+      <meta name="geo.region" content="BD" />
+      <meta name="geo.placename" content="Bangladesh" />
+      <meta name="robots" content="index, follow, max-image-preview:large" />
+      <meta property="og:locale" content="en_BD" />
+      <meta property="og:type" content="website" />
+      <link rel="alternate" hreflang="en" href="${getCurrentDomain(c.req.raw)}/countries/bangladesh" />
+      <link rel="alternate" hreflang="bn" href="${getCurrentDomain(c.req.raw)}/countries/bangladesh" />
     `
   }));
 });
