@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Authentication Flow Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold mb-8 text-center">🔄 Complete Authentication Flow Test</h1>
+        
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">📋 Expected Flow Test</h2>
+            <div class="space-y-3">
+                <div class="p-4 bg-blue-50 border-l-4 border-blue-400">
+                    <h4 class="font-semibold text-blue-800">Step 1: Click "Get My Broker Match"</h4>
+                    <p class="text-blue-700">Should trigger authentication check → Show modal if not logged in</p>
+                </div>
+                <div class="p-4 bg-green-50 border-l-4 border-green-400">
+                    <h4 class="font-semibold text-green-800">Step 2: Complete Authentication</h4>
+                    <p class="text-green-700">Sign in or sign up through modal → Automatic modal close</p>
+                </div>
+                <div class="p-4 bg-purple-50 border-l-4 border-purple-400">
+                    <h4 class="font-semibold text-purple-800">Step 3: Proceed to Questionnaire</h4>
+                    <p class="text-purple-700">Automatically continue to broker recommendation questionnaire</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h3 class="text-lg font-semibold mb-4">🧪 Test Actions</h3>
+            <div class="space-y-3">
+                <button onclick="testAuthStatus()" class="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">
+                    Check Current Auth Status
+                </button>
+                <button onclick="testBrokerMatchClick()" class="w-full bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700">
+                    Simulate "Get My Broker Match" Click
+                </button>
+                <button onclick="testCompleteSignup()" class="w-full bg-purple-600 text-white py-2 px-4 rounded hover:bg-purple-700">
+                    Test Complete Signup Flow
+                </button>
+                <button onclick="testLogout()" class="w-full bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700">
+                    Logout (Clear Session)
+                </button>
+            </div>
+            
+            <div id="test-results" class="mt-4 p-3 bg-gray-50 rounded text-sm font-mono overflow-auto max-h-40"></div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h3 class="text-lg font-semibold mb-4">🌐 Live Application Frame</h3>
+            <iframe id="app-frame" 
+                    src="https://3000-iz06f1q0kw9r1svxgxaql-6532622b.e2b.dev" 
+                    class="w-full h-96 border rounded">
+            </iframe>
+            <p class="text-sm text-gray-600 mt-2">
+                👆 Click "Get My Broker Match" in the iframe above to test the complete flow
+            </p>
+        </div>
+    </div>
+
+    <script>
+        const BASE_URL = 'https://3000-iz06f1q0kw9r1svxgxaql-6532622b.e2b.dev';
+        
+        function log(message) {
+            const results = document.getElementById('test-results');
+            const timestamp = new Date().toLocaleTimeString();
+            results.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+            results.scrollTop = results.scrollHeight;
+        }
+        
+        async function testAuthStatus() {
+            try {
+                log('🔍 Checking authentication status...');
+                const response = await fetch(`${BASE_URL}/api/auth/me`, {
+                    credentials: 'include'
+                });
+                const data = await response.json();
+                
+                if (data.authenticated) {
+                    log(`✅ User logged in: ${data.user.name} (${data.user.email})`);
+                } else {
+                    log('❌ User not logged in');
+                }
+                
+                return data.authenticated;
+            } catch (error) {
+                log(`❌ Auth check failed: ${error.message}`);
+                return false;
+            }
+        }
+        
+        async function testBrokerMatchClick() {
+            log('🖱️ Simulating "Get My Broker Match" click...');
+            
+            // Check if user is authenticated first
+            const isAuth = await testAuthStatus();
+            
+            if (isAuth) {
+                log('✅ User is authenticated - should proceed directly to questionnaire');
+            } else {
+                log('⚠️ User not authenticated - should show authentication modal');
+            }
+            
+            // Post message to iframe to trigger click
+            const iframe = document.getElementById('app-frame');
+            iframe.contentWindow.postMessage({
+                action: 'simulateBrokerMatchClick'
+            }, BASE_URL);
+        }
+        
+        async function testCompleteSignup() {
+            try {
+                log('📝 Testing complete signup flow...');
+                
+                // Generate random email
+                const randomEmail = `test${Date.now()}@example.com`;
+                
+                const response = await fetch(`${BASE_URL}/api/auth/signup`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({
+                        name: 'Test User',
+                        email: randomEmail,
+                        password: 'TestPassword123'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    log(`✅ Signup successful: ${data.user.name} (${data.user.email})`);
+                    log('🔄 Now testing if questionnaire would trigger...');
+                    
+                    // Simulate what should happen after successful auth
+                    setTimeout(testAuthStatus, 1000);
+                } else {
+                    log(`❌ Signup failed: ${data.error}`);
+                }
+            } catch (error) {
+                log(`❌ Signup test failed: ${error.message}`);
+            }
+        }
+        
+        async function testLogout() {
+            try {
+                log('🚪 Logging out...');
+                
+                // Clear cookies by making logout request
+                const response = await fetch(`${BASE_URL}/api/auth/logout`, {
+                    method: 'POST',
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    log('✅ Logout successful');
+                } else {
+                    log('⚠️ Logout response not OK, but continuing...');
+                }
+                
+                // Verify logout worked
+                setTimeout(testAuthStatus, 500);
+                
+            } catch (error) {
+                log(`❌ Logout failed: ${error.message}`);
+            }
+        }
+        
+        // Listen for messages from iframe
+        window.addEventListener('message', (event) => {
+            if (event.origin !== BASE_URL) return;
+            
+            if (event.data.type === 'modalShown') {
+                log('✅ Authentication modal appeared as expected');
+            } else if (event.data.type === 'questionnaireStarted') {
+                log('✅ Questionnaire started successfully');
+            } else if (event.data.type === 'authSuccess') {
+                log('✅ Authentication successful - proceeding to questionnaire');
+            }
+        });
+        
+        // Initial status check
+        window.addEventListener('load', () => {
+            setTimeout(testAuthStatus, 1000);
+        });
+    </script>
+</body>
+</html>

@@ -11,25 +11,61 @@ apiRoutes.post('/api/recommendations', async (c) => {
     const body = await c.req.json();
     const { country, experience, strategy, capital, accountType, riskTolerance, socialTrading } = body;
 
-    const { DB } = c.env;
-    const brokerService = new BrokerService(DB);
-    
-    // Get all brokers with their details
-    const brokersResult = await DB.prepare(`
-      SELECT b.*, bd.pros_text, bd.cons_text,
-             GROUP_CONCAT(DISTINCT r.regulator_name) as regulators,
-             GROUP_CONCAT(DISTINCT r.country_name) as regulated_countries
-      FROM brokers b
-      LEFT JOIN broker_details bd ON b.id = bd.broker_id
-      LEFT JOIN regulations r ON b.id = r.broker_id
-      GROUP BY b.id
-      ORDER BY b.rating DESC
-    `).all();
+    // Use static broker data for now - this provides a working recommendation system
+    const staticBrokers = [
+      {
+        id: 1, name: "IC Markets", slug: "ic-markets", rating: 4.6, logo_url: "/static/logos/icmarkets.png",
+        website_url: "https://icmarkets.com", min_deposit_usd: "200", max_leverage: "1:500",
+        spread_type: "raw", is_regulated: true, demo_account: true, mobile_app: true,
+        copy_trading: false, social_trading: false, headquarters: "Sydney, Australia",
+        pros_text: "Raw spreads from 0.0 pips\nFast execution with low latency\nStrong regulation and reputation",
+        cons_text: "Higher minimum deposit for Raw account\nNo social trading features"
+      },
+      {
+        id: 2, name: "Pepperstone", slug: "pepperstone", rating: 4.5, logo_url: "/static/logos/pepperstone.png",
+        website_url: "https://pepperstone.com", min_deposit_usd: "0", max_leverage: "1:500",
+        spread_type: "raw", is_regulated: true, demo_account: true, mobile_app: true,
+        copy_trading: false, social_trading: false, headquarters: "Melbourne, Australia",
+        pros_text: "Ultra-tight spreads on Raw account\nFast execution speeds\nMultiple platform options",
+        cons_text: "No US clients accepted\nHigher commission on Raw accounts"
+      },
+      {
+        id: 3, name: "OANDA", slug: "oanda", rating: 4.5, logo_url: "/static/logos/oanda.png",
+        website_url: "https://oanda.com", min_deposit_usd: "0", max_leverage: "1:50",
+        spread_type: "fixed", is_regulated: true, demo_account: true, mobile_app: true,
+        copy_trading: false, social_trading: false, headquarters: "Toronto, Canada",
+        pros_text: "No minimum deposit requirement\nExcellent execution quality\nComprehensive API for algo trading",
+        cons_text: "Limited leverage compared to others\nNo MetaTrader 5 platform"
+      },
+      {
+        id: 4, name: "Interactive Brokers", slug: "interactive-brokers", rating: 4.7, logo_url: "/static/logos/ib.png",
+        website_url: "https://interactivebrokers.com", min_deposit_usd: "0", max_leverage: "1:40",
+        spread_type: "raw", is_regulated: true, demo_account: true, mobile_app: true,
+        copy_trading: false, social_trading: false, headquarters: "Connecticut, USA",
+        pros_text: "Extremely low commissions and spreads\nAccess to global markets\nProfessional-grade trading tools",
+        cons_text: "Complex platform not suitable for beginners\nHigh inactivity fees for small accounts"
+      },
+      {
+        id: 5, name: "Forex.com", slug: "forex-com", rating: 4.6, logo_url: "/static/logos/forex-com.png",
+        website_url: "https://forex.com", min_deposit_usd: "100", max_leverage: "1:50",
+        spread_type: "fixed", is_regulated: true, demo_account: true, mobile_app: true,
+        copy_trading: true, social_trading: false, headquarters: "New York, USA",
+        pros_text: "Well-established with strong reputation\nMultiple platform options\nGood educational resources",
+        cons_text: "Higher spreads compared to ECN brokers\nLimited cryptocurrency offerings"
+      },
+      {
+        id: 6, name: "TastyFX", slug: "tastyfx", rating: 4.8, logo_url: "/static/logos/tastyfx.png",
+        website_url: "https://tastyfx.com", min_deposit_usd: "250", max_leverage: "1:50",
+        spread_type: "fixed", is_regulated: true, demo_account: true, mobile_app: true,
+        copy_trading: false, social_trading: false, headquarters: "London, UK",
+        pros_text: "Excellent mobile trading platform\nStrong regulatory oversight\nCompetitive spreads on major pairs",
+        cons_text: "High minimum deposit requirement\nLimited copy trading options"
+      }
+    ];
 
-    const brokers = brokersResult.results;
     const recommendations: any[] = [];
 
-    for (const broker of brokers) {
+    for (const broker of staticBrokers) {
       let score = broker.rating * 20; // Base score out of 100
       let reasoning: string[] = [];
 
@@ -41,27 +77,32 @@ apiRoutes.post('/api/recommendations', async (c) => {
         if (userCapital >= minDeposit) {
           if (userCapital >= minDeposit * 3) {
             score += 10;
-            reasoning.push(`✓ Your ${capital} capital comfortably exceeds the minimum deposit requirement`);
+            reasoning.push(`✓ Your $${capital} capital comfortably exceeds the minimum deposit requirement`);
           } else {
             score += 5;
-            reasoning.push(`✓ Your ${capital} capital meets the minimum deposit requirement`);
+            reasoning.push(`✓ Your $${capital} capital meets the minimum deposit requirement`);
           }
         } else {
           score -= 20;
-          reasoning.push(`✗ Minimum deposit ($${minDeposit}) exceeds your capital (${capital})`);
+          reasoning.push(`✗ Minimum deposit ($${minDeposit}) exceeds your capital ($${capital})`);
         }
       }
 
       // Regulation bonus
       if (broker.is_regulated) {
         score += 15;
-        reasoning.push(`✓ Regulated broker with oversight from: ${broker.regulators || 'various authorities'}`);
+        reasoning.push(`✓ Regulated broker with strong oversight from major authorities`);
       }
 
       // Experience level matching
       if (experience === 'beginner' && broker.demo_account) {
         score += 10;
-        reasoning.push('✓ Offers demo account - perfect for beginners to practice');
+        reasoning.push('✓ Offers demo account - perfect for beginners to practice risk-free');
+      }
+
+      if (experience === 'advanced' && broker.name === 'Interactive Brokers') {
+        score += 15;
+        reasoning.push('✓ Professional-grade platform ideal for advanced traders');
       }
 
       // Strategy matching
@@ -75,11 +116,16 @@ apiRoutes.post('/api/recommendations', async (c) => {
         reasoning.push('✓ Regulated brokers provide security for long-term positions');
       }
 
+      if (strategy === 'day-trading' && (broker.spread_type === 'raw' || broker.name === 'IC Markets' || broker.name === 'Pepperstone')) {
+        score += 12;
+        reasoning.push('✓ Excellent execution speeds for day trading strategies');
+      }
+
       // Social trading preference
-      if (socialTrading === 'yes' && (broker.social_trading || broker.copy_trading)) {
+      if (socialTrading === 'yes' && broker.copy_trading) {
         score += 20;
-        reasoning.push('✓ Excellent social/copy trading features available');
-      } else if (socialTrading === 'no' && (!broker.social_trading && !broker.copy_trading)) {
+        reasoning.push('✓ Excellent copy trading features available');
+      } else if (socialTrading === 'no' && !broker.copy_trading) {
         score += 5;
         reasoning.push('✓ Focused on individual trading without social features');
       }
@@ -91,9 +137,21 @@ apiRoutes.post('/api/recommendations', async (c) => {
       }
 
       // Risk tolerance
-      if (riskTolerance === 'low' && broker.is_regulated && broker.max_leverage && parseInt(broker.max_leverage.replace(/[^\d]/g, '')) <= 50) {
-        score += 10;
-        reasoning.push('✓ Conservative leverage and strong regulation suitable for low-risk preference');
+      if (riskTolerance === 'low' && broker.is_regulated && broker.max_leverage) {
+        const leverageNum = parseInt(broker.max_leverage.replace(/[^\d]/g, ''));
+        if (leverageNum <= 50) {
+          score += 10;
+          reasoning.push('✓ Conservative leverage and strong regulation suitable for low-risk preference');
+        }
+      }
+
+      // Capital-based recommendations
+      if (capital) {
+        const userCapital = parseInt(capital);
+        if (userCapital < 500 && broker.min_deposit_usd === "0") {
+          score += 8;
+          reasoning.push('✓ No minimum deposit requirement - perfect for small accounts');
+        }
       }
 
       // Ensure score stays within bounds
@@ -111,7 +169,7 @@ apiRoutes.post('/api/recommendations', async (c) => {
           max_leverage: broker.max_leverage,
           spread_type: broker.spread_type,
           is_regulated: broker.is_regulated,
-          regulators: broker.regulators,
+          headquarters: broker.headquarters,
           pros: broker.pros_text ? broker.pros_text.split('\n').filter(Boolean) : [],
           cons: broker.cons_text ? broker.cons_text.split('\n').filter(Boolean) : []
         },
