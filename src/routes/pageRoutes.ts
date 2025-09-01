@@ -20,6 +20,7 @@ import { renderIndiaCountryPage } from '../components/IndiaCountryPage.js';
 import { renderCanadaCountryPage } from '../components/CanadaCountryPage.js';
 import { renderAustraliaCountryPage } from '../components/AustraliaCountryPage.js';
 import { renderBelgiumCountryPage } from '../components/BelgiumCountryPage.js';
+import { renderNepalCountryPage } from '../components/NepalCountryPage.js';
 
 const pageRoutes = new Hono<{ Bindings: Bindings }>();
 
@@ -123,7 +124,9 @@ pageRoutes.get('/countries', (c) => {
     { slug: 'qatar', name: 'Qatar', regulator: 'QFCRA', brokerCount: 4,
       description: 'Qatar\'s QFCRA provides Gulf region financial oversight with focus on institutional and retail market development.' },
     { slug: 'indonesia', name: 'Indonesia', regulator: 'Bappebti', brokerCount: 6,
-      description: 'Indonesia\'s Bappebti regulates commodity and forex trading with emphasis on market development and protection.' }
+      description: 'Indonesia\'s Bappebti regulates commodity and forex trading with emphasis on market development and protection.' },
+    { slug: 'nepal', name: 'Nepal', regulator: 'NRB', brokerCount: 6,
+      description: 'Nepal\'s forex market operates with Nepal Rastra Bank oversight. International brokers serve Nepali traders with ultra-low deposits and high leverage access.' }
   ];
 
   return c.html(renderCountriesDirectoryPage(countries, {
@@ -458,6 +461,31 @@ pageRoutes.get('/countries/pakistan', (c) => {
     keywords: 'Pakistan forex brokers, SECP regulated brokers, Islamic forex accounts, OctaFX, Exness, FBS, XM Group, InstaForex',
     canonicalUrl: '/countries/pakistan',
     request: c.req.raw
+  }));
+});
+
+// Individual Country Pages - Nepal
+pageRoutes.get('/countries/nepal', (c) => {
+  return c.html(renderLayout(renderNepalCountryPage({
+    canonicalUrl: '/countries/nepal',
+    request: c.req.raw
+  }), {
+    title: 'Best Forex Brokers in Nepal 2025 - International Trading | BrokerAnalysis',
+    description: 'Compare the best international forex brokers for Nepali traders in 2025. Find ultra-low deposits, high leverage, and NPR support with comprehensive regulatory insights.',
+    keywords: 'Nepal forex brokers, Nepali traders, international forex trading, XM Group, Exness, FBS, OctaFX, IC Markets, Pepperstone, NPR trading, Nepal Rastra Bank',
+    canonicalUrl: '/countries/nepal',
+    request: c.req.raw,
+    additionalHead: `
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+      <meta name="geo.region" content="NP" />
+      <meta name="geo.placename" content="Nepal" />
+      <meta name="robots" content="index, follow, max-image-preview:large" />
+      <meta property="og:locale" content="en_NP" />
+      <meta property="og:type" content="website" />
+      <link rel="alternate" hreflang="en" href="${getCurrentDomain(c.req.raw)}/countries/nepal" />
+      <link rel="alternate" hreflang="ne" href="${getCurrentDomain(c.req.raw)}/countries/nepal" />
+    `
   }));
 });
 
