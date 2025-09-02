@@ -282,7 +282,7 @@ export function renderJavaScriptIncludes(): string {
         // Delay to allow focus to move to menu items
         setTimeout(() => {
             const activeElement = document.activeElement;
-            const menuButton = document.querySelector(`[onfocus="handleMenuFocus('${menuType}')"]`);
+            const menuButton = document.querySelector('[onfocus="handleMenuFocus(\\'' + menuType + '\\')"]');
             const menu = menuButton?.nextElementSibling;
             
             if (menu && !menu.contains(activeElement) && activeElement !== menuButton) {
