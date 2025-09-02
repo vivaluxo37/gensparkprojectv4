@@ -410,7 +410,6 @@ export function UserDashboard({ user, latestMatch, brokerMatches }: DashboardDat
     </footer>
 
     <!-- Scripts -->
-    <script src="/static/smart-recommendation.js"></script>
 </body>
 </html>
     `;

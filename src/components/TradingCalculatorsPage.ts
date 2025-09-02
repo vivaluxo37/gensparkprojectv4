@@ -1,5 +1,5 @@
 // Comprehensive Trading Calculators Page - 2025 SEO Optimized
-import { generateMetaTags, getCurrentDomain } from '../utils';
+import { generateMetaTags, getCurrentDomain } from '../utils/index.js';
 
 // Navigation component for the trading calculators page
 function generateNavigation(): string {
