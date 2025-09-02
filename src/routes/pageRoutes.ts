@@ -2,6 +2,47 @@
 import { Hono } from 'hono';
 import { getCookie } from 'hono/cookie';
 import type { Bindings } from '../types';
+
+// CSS inlining helper to fix CSS serving issues in development
+let cachedCSS: string | null = null;
+
+const getInlineCSS = async (): Promise<string> => {
+  if (cachedCSS) {
+    return cachedCSS;
+  }
+  
+  try {
+    const { readFile } = await import('fs/promises');
+    const cssContent = await readFile('./dist/static/styles.css', 'utf-8');
+    cachedCSS = `<style>${cssContent}</style>`;
+    return cachedCSS;
+  } catch (error) {
+    console.error('Error reading CSS file:', error);
+    const fallbackCSS = `<style>
+      /* Fallback CSS when file cannot be read */
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font-family: system-ui, -apple-system, sans-serif; line-height: 1.5; }
+      .bg-gray-50 { background-color: #f9fafb; }
+      .bg-white { background-color: white; }
+      .text-gray-900 { color: #111827; }
+      .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+      .max-w-6xl { max-width: 72rem; }
+      .mx-auto { margin-left: auto; margin-right: auto; }
+      .px-4 { padding-left: 1rem; padding-right: 1rem; }
+      .py-12 { padding-top: 3rem; padding-bottom: 3rem; }
+    </style>`;
+    cachedCSS = fallbackCSS;
+    return cachedCSS;
+  }
+};
+
+const replaceExternalCSSWithInline = async (html: string): Promise<string> => {
+  const inlineCSS = await getInlineCSS();
+  // Replace CSS link tags with inline styles
+  return html
+    .replace(/<link[^>]*href=["']\/static\/styles\.css["'][^>]*>/g, inlineCSS)
+    .replace(/<link[^>]*rel=["']stylesheet["'][^>]*href=["']\/static\/styles\.css["'][^>]*>/g, inlineCSS);
+};
 import { BrokerService } from '../services/brokerService';
 import { generateMetaTags, generateStructuredData, getCurrentDomain } from '../utils';
 import { renderLayout } from '../components/Layout.js';

@@ -16,16 +16,25 @@ export default defineConfig({
   css: {
     postcss: './postcss.config.js'
   },
+  server: {
+    // Allow external hosts for sandbox development
+    host: '0.0.0.0',
+    allowedHosts: 'all'
+  },
   build: {
-    cssCodeSplit: true,
+    cssCodeSplit: false,  // Don't split CSS, keep it in one file
     // Enable tree shaking and optimization
     minify: 'esbuild',
     target: 'esnext',
     rollupOptions: {
+      input: {
+        app: 'src/app.tsx',
+        styles: 'src/styles.css'  // Explicitly include CSS as entry point
+      },
       output: {
         assetFileNames: (assetInfo) => {
           if (assetInfo.name && assetInfo.name.endsWith('.css')) {
-            return 'static/css/[name]-[hash][extname]'
+            return 'static/styles.css'  // Force consistent CSS filename
           }
           return 'static/[name]-[hash][extname]'
         }
