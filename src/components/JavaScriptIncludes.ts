@@ -1,10 +1,13 @@
 export function renderJavaScriptIncludes(): string {
   return `
-    <!-- External JavaScript Libraries -->
-    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+    <!-- External JavaScript Libraries - Optimized Loading -->
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js" defer></script>
     
-    <!-- Core JavaScript Files -->
-    <script src="/static/smart-recommendation.js"></script>
+    <!-- Core JavaScript Files - Non-blocking -->
+    <script src="/static/smart-recommendation.js" defer></script>
+    
+    <!-- FontAwesome - Optimized Loading -->
+    <script src="https://kit.fontawesome.com/your-kit-id.js" crossorigin="anonymous" defer></script>
     
     <!-- Inline JavaScript for immediate functionality -->
     <script>
@@ -161,6 +164,10 @@ export function renderJavaScriptIncludes(): string {
         
         // Check authentication status and update navigation
         checkAuthAndUpdateNav();
+        
+        // Initialize loading states and lazy loading
+        initializeLoadingStates();
+        initializeLazyLoading();
     });
 
     // Quick message function for chatbot
@@ -242,6 +249,236 @@ export function renderJavaScriptIncludes(): string {
             console.error('Error updating broker count:', error);
         }
     }
+
+    // Enhanced Navigation Accessibility Functions
+    function handleMenuKeydown(event, menuType) {
+        const key = event.key;
+        const menuButton = event.target;
+        const menu = menuButton.nextElementSibling;
+        
+        switch(key) {
+            case 'Enter':
+            case ' ':
+                event.preventDefault();
+                toggleMenu(menuButton, menu);
+                break;
+            case 'ArrowDown':
+                event.preventDefault();
+                openMenu(menuButton, menu);
+                focusFirstMenuItem(menu);
+                break;
+            case 'Escape':
+                closeMenu(menuButton, menu);
+                menuButton.focus();
+                break;
+        }
+    }
+    
+    function handleMenuFocus(menuType) {
+        // Optional: Add focus handling logic if needed
+    }
+    
+    function handleMenuBlur(menuType) {
+        // Delay to allow focus to move to menu items
+        setTimeout(() => {
+            const activeElement = document.activeElement;
+            const menuButton = document.querySelector(`[onfocus="handleMenuFocus('${menuType}')"]`);
+            const menu = menuButton?.nextElementSibling;
+            
+            if (menu && !menu.contains(activeElement) && activeElement !== menuButton) {
+                closeMenu(menuButton, menu);
+            }
+        }, 100);
+    }
+    
+    function toggleMenu(button, menu) {
+        const isExpanded = button.getAttribute('aria-expanded') === 'true';
+        if (isExpanded) {
+            closeMenu(button, menu);
+        } else {
+            openMenu(button, menu);
+        }
+    }
+    
+    function openMenu(button, menu) {
+        button.setAttribute('aria-expanded', 'true');
+        menu.classList.remove('opacity-0', 'invisible');
+        menu.classList.add('opacity-100', 'visible');
+    }
+    
+    function closeMenu(button, menu) {
+        button.setAttribute('aria-expanded', 'false');
+        menu.classList.remove('opacity-100', 'visible');
+        menu.classList.add('opacity-0', 'invisible');
+    }
+    
+    function focusFirstMenuItem(menu) {
+        const firstMenuItem = menu.querySelector('a, button');
+        if (firstMenuItem) {
+            firstMenuItem.focus();
+        }
+    }
+    
+    // Newsletter subscription form handler with accessibility
+    function handleNewsletterSubscription(event) {
+        event.preventDefault();
+        
+        const form = event.target;
+        const emailInput = form.querySelector('#newsletter-email');
+        const errorDiv = form.querySelector('#newsletter-error');
+        const submitButton = form.querySelector('button[type="submit"]');
+        
+        // Clear previous errors
+        errorDiv.classList.add('hidden');
+        emailInput.setAttribute('aria-invalid', 'false');
+        
+        // Validate email
+        const email = emailInput.value.trim();
+        if (!email) {
+            showNewsletterError(errorDiv, emailInput, 'Please enter your email address');
+            return;
+        }
+        
+        if (!isValidEmail(email)) {
+            showNewsletterError(errorDiv, emailInput, 'Please enter a valid email address');
+            return;
+        }
+        
+        // Show loading state
+        const originalText = submitButton.innerHTML;
+        submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2" aria-hidden="true"></i>Subscribing...';
+        submitButton.disabled = true;
+        
+        // Simulate subscription (replace with actual API call)
+        setTimeout(() => {
+            showNewsletterSuccess(errorDiv, form, submitButton, originalText);
+        }, 2000);
+    }
+    
+    function showNewsletterError(errorDiv, emailInput, message) {
+        errorDiv.textContent = message;
+        errorDiv.classList.remove('hidden');
+        emailInput.setAttribute('aria-invalid', 'true');
+        emailInput.focus();
+    }
+    
+    function showNewsletterSuccess(errorDiv, form, submitButton, originalText) {
+        errorDiv.textContent = '✅ Successfully subscribed! Check your email for confirmation.';
+        errorDiv.className = 'text-xs text-green-400';
+        errorDiv.classList.remove('hidden');
+        
+        // Reset form
+        form.reset();
+        
+        // Reset button
+        submitButton.innerHTML = originalText;
+        submitButton.disabled = false;
+        
+        // Hide success message after 5 seconds
+        setTimeout(() => {
+            errorDiv.classList.add('hidden');
+            errorDiv.className = 'hidden text-xs text-red-400';
+        }, 5000);
+    }
+    
+    function isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    // Progressive Enhancement and Loading States
+    function initializeLoadingStates() {
+        // Add loading states to buttons that trigger async operations
+        document.querySelectorAll('[data-action]').forEach(button => {
+            button.addEventListener('click', function() {
+                if (this.disabled) return;
+                
+                const originalText = this.innerHTML;
+                this.innerHTML = '<i class="fas fa-spinner fa-spin mr-2" aria-hidden="true"></i>Loading...';
+                this.disabled = true;
+                
+                // Reset after 5 seconds if no other reset occurs
+                setTimeout(() => {
+                    if (this.disabled) {
+                        this.innerHTML = originalText;
+                        this.disabled = false;
+                    }
+                }, 5000);
+            });
+        });
+    }
+    
+    function initializeLazyLoading() {
+        // Intersection Observer for lazy loading
+        const observerOptions = {
+            root: null,
+            rootMargin: '50px',
+            threshold: 0.1
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const element = entry.target;
+                    
+                    // Lazy load images
+                    if (element.tagName === 'IMG' && element.dataset.src) {
+                        element.src = element.dataset.src;
+                        element.classList.add('loaded');
+                        observer.unobserve(element);
+                    }
+                    
+                    // Animate in sections
+                    if (element.classList.contains('lazy-load')) {
+                        element.classList.add('loaded');
+                        observer.unobserve(element);
+                    }
+                }
+            });
+        }, observerOptions);
+        
+        // Observe lazy load elements
+        document.querySelectorAll('.lazy-load, img[data-src]').forEach(el => {
+            observer.observe(el);
+        });
+    }
+    
+    function enhanceAccessibility() {
+        // Add keyboard navigation for custom elements
+        document.querySelectorAll('[role="button"]:not(button)').forEach(element => {
+            element.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.click();
+                }
+            });
+            
+            // Add tabindex if not present
+            if (!element.hasAttribute('tabindex')) {
+                element.setAttribute('tabindex', '0');
+            }
+        });
+        
+        // Enhance focus management
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Tab') {
+                document.body.classList.add('keyboard-navigation');
+            }
+        });
+        
+        document.addEventListener('mousedown', function() {
+            document.body.classList.remove('keyboard-navigation');
+        });
+    }
+
+    // Global functions for navigation accessibility
+    window.handleMenuKeydown = handleMenuKeydown;
+    window.handleMenuFocus = handleMenuFocus;
+    window.handleMenuBlur = handleMenuBlur;
+    window.handleNewsletterSubscription = handleNewsletterSubscription;
+    window.initializeLoadingStates = initializeLoadingStates;
+    window.initializeLazyLoading = initializeLazyLoading;
+    window.enhanceAccessibility = enhanceAccessibility;
 
     // Check authentication status and update navigation
     async function checkAuthAndUpdateNav() {

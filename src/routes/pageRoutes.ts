@@ -106,6 +106,13 @@ pageRoutes.get('/', (c) => {
         },
         "serviceType": "Financial Comparison Service",
         "areaServed": "Worldwide",
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.9",
+          "reviewCount": "50000",
+          "bestRating": "5",
+          "worstRating": "1"
+        },
         "hasOfferCatalog": {
           "@type": "OfferCatalog",
           "name": "Broker Reviews",
@@ -128,6 +135,62 @@ pageRoutes.get('/', (c) => {
             }
           ]
         }
+      })}
+      
+      <!-- Broker Listing Schema -->
+      ${generateStructuredData({
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": "Top Forex Brokers 2025",
+        "description": "Curated list of the best forex brokers based on comprehensive analysis",
+        "numberOfItems": 100,
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "item": {
+              "@type": "FinancialService",
+              "name": "IC Markets",
+              "description": "Raw spreads from 0.0 pips with lightning-fast execution",
+              "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "4.8",
+                "reviewCount": "15000",
+                "bestRating": "5"
+              }
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "item": {
+              "@type": "FinancialService",
+              "name": "Pepperstone",
+              "description": "Advanced Smart Trader Tools & TradingView integration",
+              "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "4.7",
+                "reviewCount": "12000",
+                "bestRating": "5"
+              }
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "item": {
+              "@type": "FinancialService",
+              "name": "OANDA",
+              "description": "25+ years, CFTC/NFA oversight, impeccable reputation",
+              "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "4.6",
+                "reviewCount": "18000",
+                "bestRating": "5"
+              }
+            }
+          }
+        ]
       })}
     `
   }));

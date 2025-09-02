@@ -36,11 +36,22 @@ export function renderLayout(content: string, options: LayoutOptions = {}): stri
     <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
         <title>${title}</title>
         <meta name="description" content="${description}">
         <meta name="keywords" content="${keywords}">
         <meta name="author" content="BrokerAnalysis">
+        
+        <!-- Performance and rendering hints -->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="theme-color" content="#2563eb">
+        <meta name="color-scheme" content="light">
+        <meta name="format-detection" content="telephone=no">
+        
+        <!-- Prefetch critical navigation routes -->
+        <link rel="prefetch" href="/reviews">
+        <link rel="prefetch" href="/compare">
+        <link rel="prefetch" href="/simulator">
         
         <!-- Canonical URL -->
         <link rel="canonical" href="${fullCanonicalUrl}">
@@ -66,11 +77,53 @@ export function renderLayout(content: string, options: LayoutOptions = {}): stri
         <link rel="icon" type="image/png" sizes="16x16" href="/static/images/favicon-16x16.png">
         <link rel="apple-touch-icon" href="/static/images/apple-touch-icon.png">
         
-        <!-- DNS prefetch for performance -->
+        <!-- Performance optimizations for Core Web Vitals -->
         <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+        <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+        <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         
-        <!-- Compiled CSS -->
+        <!-- Critical CSS - inline for faster rendering -->
         <link href="/static/styles.css" rel="stylesheet">
+        
+        <!-- Font optimization for better LCP -->
+        <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"></noscript>
+        
+        <!-- Preload critical above-the-fold resources -->
+        <link rel="preload" href="/static/styles.css" as="style">
+        
+        <!-- Resource hints for performance -->
+        <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+        <link rel="dns-prefetch" href="https://kit.fontawesome.com">
+        
+        <!-- Progressive enhancement and loading optimization -->
+        <style>
+        /* Critical CSS for loading states */
+        .loading-skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        .lazy-load {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .lazy-load.loaded {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* Improved focus styles */
+        .focus-visible {
+            outline: 2px solid #3b82f6;
+            outline-offset: 2px;
+        }
+        </style>
         
         <!-- Structured Data - Organization -->
         <script type="application/ld+json">

@@ -9,13 +9,13 @@ export function generateCompleteNavigation(): string {
         Skip to main content
     </a>
     
-    <!-- Redesigned Navigation Header 2025 -->
+    <!-- Redesigned Navigation Header 2025 - Enhanced for Accessibility -->
     <nav class="bg-white shadow-lg border-b border-gray-200" role="navigation" aria-label="Main navigation">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <!-- Enhanced Logo with Tagline -->
                 <div class="flex items-center space-x-3">
-                    <a href="/" class="flex items-center space-x-2 hover:opacity-80 transition-opacity group">
+                    <a href="/" class="flex items-center space-x-2 hover:opacity-80 transition-opacity group focus:outline-none focus:ring-4 focus:ring-blue-300/50 rounded-lg" aria-label="BrokerAnalysis - Go to homepage">
                         <i class="fas fa-chart-line text-blue-600 text-2xl group-hover:scale-110 transition-transform" aria-hidden="true"></i>
                         <div class="flex flex-col">
                             <span class="text-xl font-bold text-blue-900">BrokerAnalysis</span>
@@ -24,21 +24,25 @@ export function generateCompleteNavigation(): string {
                     </a>
                 </div>
                 
-                <!-- Streamlined 4-Menu Navigation -->
-                <div class="hidden lg:flex items-center justify-center flex-1" id="main-navigation">
+                <!-- Streamlined 4-Menu Navigation with Enhanced Accessibility -->
+                <div class="hidden lg:flex items-center justify-center flex-1" id="main-navigation" role="menubar">
                     <div class="flex items-center space-x-2">
                         
                         <!-- 1. 🏢 Find Brokers (Mega Menu) -->
-                        <div class="relative group">
-                            <button class="flex items-center space-x-1 text-blue-800 hover:text-blue-600 transition-colors py-3 px-4 rounded-lg nav-menu-button font-semibold bg-blue-50 hover:bg-blue-100" 
+                        <div class="relative group" role="none">
+                            <button class="flex items-center space-x-1 text-blue-800 hover:text-blue-600 focus:text-blue-600 transition-colors py-3 px-4 rounded-lg nav-menu-button font-semibold bg-blue-50 hover:bg-blue-100 focus:bg-blue-100 focus:outline-none focus:ring-4 focus:ring-blue-300/50" 
+                                    role="menuitem"
                                     aria-label="Find brokers menu" 
                                     aria-expanded="false" 
-                                    aria-haspopup="true">
+                                    aria-haspopup="true"
+                                    onkeydown="handleMenuKeydown(event, 'brokers')"
+                                    onfocus="handleMenuFocus('brokers')"
+                                    onblur="handleMenuBlur('brokers')">
                                 <i class="fas fa-building text-base" aria-hidden="true"></i>
                                 <span>Find Brokers</span>
                                 <i class="fas fa-chevron-down text-xs ml-1" aria-hidden="true"></i>
                             </button>
-                            <div class="absolute left-0 mt-1 w-[640px] bg-white rounded-lg shadow-xl border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                            <div class="absolute left-0 mt-1 w-[640px] bg-white rounded-lg shadow-xl border opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-200 z-50" role="menu" aria-labelledby="brokers-menu-button">
                                 <div class="py-4">
                                     <div class="grid grid-cols-3 gap-6 px-6">
                                         <!-- Column 1: By Country -->
@@ -141,16 +145,20 @@ export function generateCompleteNavigation(): string {
                         </div>
                         
                         <!-- 2. 📊 Compare & Tools Menu -->
-                        <div class="relative group">
-                            <button class="flex items-center space-x-1 text-blue-800 hover:text-blue-600 transition-colors py-3 px-4 rounded-lg nav-menu-button font-semibold hover:bg-blue-50" 
+                        <div class="relative group" role="none">
+                            <button class="flex items-center space-x-1 text-blue-800 hover:text-blue-600 focus:text-blue-600 transition-colors py-3 px-4 rounded-lg nav-menu-button font-semibold hover:bg-blue-50 focus:bg-blue-50 focus:outline-none focus:ring-4 focus:ring-blue-300/50" 
+                                    role="menuitem"
                                     aria-label="Compare and tools menu" 
                                     aria-expanded="false" 
-                                    aria-haspopup="true">
+                                    aria-haspopup="true"
+                                    onkeydown="handleMenuKeydown(event, 'tools')"
+                                    onfocus="handleMenuFocus('tools')"
+                                    onblur="handleMenuBlur('tools')">
                                 <i class="fas fa-tools text-base" aria-hidden="true"></i>
                                 <span>Compare & Tools</span>
                                 <i class="fas fa-chevron-down text-xs ml-1" aria-hidden="true"></i>
                             </button>
-                            <div class="absolute left-0 mt-1 w-80 bg-white rounded-lg shadow-xl border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                            <div class="absolute left-0 mt-1 w-80 bg-white rounded-lg shadow-xl border opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-200 z-50" role="menu" aria-labelledby="tools-menu-button">
                                 <div class="py-4">
                                     <div class="px-4 pb-2 mb-3 border-b border-gray-200">
                                         <h3 class="text-sm font-bold text-blue-900 uppercase tracking-wide">
@@ -193,16 +201,20 @@ export function generateCompleteNavigation(): string {
                         </div>
                         
                         <!-- 3. 📚 Learn Menu -->
-                        <div class="relative group">
-                            <button class="flex items-center space-x-1 text-blue-800 hover:text-blue-600 transition-colors py-3 px-4 rounded-lg nav-menu-button font-semibold hover:bg-blue-50" 
+                        <div class="relative group" role="none">
+                            <button class="flex items-center space-x-1 text-blue-800 hover:text-blue-600 focus:text-blue-600 transition-colors py-3 px-4 rounded-lg nav-menu-button font-semibold hover:bg-blue-50 focus:bg-blue-50 focus:outline-none focus:ring-4 focus:ring-blue-300/50" 
+                                    role="menuitem"
                                     aria-label="Learn menu" 
                                     aria-expanded="false" 
-                                    aria-haspopup="true">
+                                    aria-haspopup="true"
+                                    onkeydown="handleMenuKeydown(event, 'learn')"
+                                    onfocus="handleMenuFocus('learn')"
+                                    onblur="handleMenuBlur('learn')">
                                 <i class="fas fa-graduation-cap text-base" aria-hidden="true"></i>
                                 <span>Learn</span>
                                 <i class="fas fa-chevron-down text-xs ml-1" aria-hidden="true"></i>
                             </button>
-                            <div class="absolute left-0 mt-1 w-72 bg-white rounded-lg shadow-xl border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                            <div class="absolute left-0 mt-1 w-72 bg-white rounded-lg shadow-xl border opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-200 z-50" role="menu" aria-labelledby="learn-menu-button">
                                 <div class="py-4">
                                     <div class="px-4 pb-2 mb-3 border-b border-gray-200">
                                         <h3 class="text-sm font-bold text-blue-900 uppercase tracking-wide">
@@ -304,7 +316,7 @@ export function generateCompleteNavigation(): string {
                     </div>
                     
                     <!-- Mobile Menu Button -->
-                    <button id="mobile-menu-btn" class="lg:hidden p-2 text-blue-800 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2" aria-label="Open mobile navigation menu" aria-expanded="false" aria-controls="mobile-menu">
+                    <button id="mobile-menu-btn" class="lg:hidden p-2 text-blue-800 hover:text-blue-600 focus:text-blue-600 hover:bg-blue-50 focus:bg-blue-50 rounded-lg transition-colors focus:outline-none focus:ring-4 focus:ring-blue-300/50" aria-label="Open mobile navigation menu" aria-expanded="false" aria-controls="mobile-menu">
                         <i class="fas fa-bars text-xl" aria-hidden="true"></i>
                     </button>
                 </div>
