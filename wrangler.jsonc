@@ -11,11 +11,11 @@
     {
       "binding": "DB",
       "database_name": "brokeranalysis-production",
-      "database_id": "your-database-id-here"
+      "database_id": "local-database-id"
     }
   ],
   "vars": {
-    "ENVIRONMENT": "production",
-    "GOOGLE_CLIENT_ID": "your-google-client-id-here.apps.googleusercontent.com"
+    "ENVIRONMENT": "development",
+    "GOOGLE_CLIENT_ID": "demo-client-id.apps.googleusercontent.com"
   }
 }
