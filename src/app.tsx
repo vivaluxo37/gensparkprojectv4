@@ -41,6 +41,21 @@ const getInlineCSS = async () => {
   }
 };
 
+// Inline CSS route for complete Tailwind CSS
+app.get('/inline-css', async (c) => {
+  try {
+    const { readFile } = await import('fs/promises');
+    const cssContent = await readFile('./dist/static/styles.css', 'utf-8');
+    
+    c.header('Content-Type', 'text/plain');
+    c.header('Cache-Control', 'public, max-age=3600');
+    return c.text(cssContent);
+  } catch (error) {
+    console.error('Error serving inline CSS:', error);
+    return c.text('/* CSS file not found */', 500);
+  }
+});
+
 // CSS serving route (fallback)
 app.get('/static/styles.css', async (c) => {
   try {

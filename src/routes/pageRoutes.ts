@@ -86,13 +86,13 @@ import { generateCompleteNavigation } from '../components/Navigation.js';
 const pageRoutes = new Hono<{ Bindings: Bindings }>();
 
 // Homepage - Complete migrated version with all features
-pageRoutes.get('/', (c) => {
+pageRoutes.get('/', async (c) => {
   const homeContent = `
     ${renderHomePage()}
     ${renderFAQ()}
   `;
 
-  return c.html(renderLayout(homeContent, {
+  return c.html(await renderLayout(homeContent, {
     title: 'Best Forex Brokers 2025 - Compare Top 6 Regulated Brokers | BrokerAnalysis',
     description: 'Find the perfect forex broker with our intelligent matching system. Compare spreads, regulation, and features of 6 top-rated brokers including IC Markets, Pepperstone, OANDA & more.',
     keywords: 'forex brokers, best forex brokers 2025, regulated forex brokers, forex broker comparison, forex trading, broker reviews, forex spreads, trading platforms',
@@ -278,7 +278,7 @@ pageRoutes.get('/brokers', async (c) => {
 });
 
 // Countries directory page - comprehensive listing of countries with regulated brokers
-pageRoutes.get('/countries', (c) => {
+pageRoutes.get('/countries', async (c) => {
   // Define countries with enhanced information
   const countries = [
     { slug: 'australia', name: 'Australia', regulator: 'ASIC', brokerCount: 15, 
@@ -444,7 +444,7 @@ const regulatorRoutes = [
 ];
 
 regulatorRoutes.forEach(regulator => {
-  pageRoutes.get(`/regulators/${regulator.slug}`, (c) => {
+  pageRoutes.get(`/regulators/${regulator.slug}`, async (c) => {
     return c.html(renderRegulatorPage(regulator.info, {
       canonicalUrl: `/regulators/${regulator.slug}`,
       request: c.req.raw
@@ -453,8 +453,8 @@ regulatorRoutes.forEach(regulator => {
 });
 
 // Individual Country Pages - USA
-pageRoutes.get('/countries/usa', (c) => {
-  return c.html(renderLayout(renderUSACountryPage({
+pageRoutes.get('/countries/usa', async (c) => {
+  return c.html(await renderLayout(renderUSACountryPage({
     canonicalUrl: '/countries/usa',
     request: c.req.raw
   }), {
@@ -478,8 +478,8 @@ pageRoutes.get('/countries/usa', (c) => {
 });
 
 // Individual Country Pages - India
-pageRoutes.get('/countries/india', (c) => {
-  return c.html(renderLayout(renderIndiaCountryPage({
+pageRoutes.get('/countries/india', async (c) => {
+  return c.html(await renderLayout(renderIndiaCountryPage({
     canonicalUrl: '/countries/india',
     request: c.req.raw
   }), {
@@ -503,8 +503,8 @@ pageRoutes.get('/countries/india', (c) => {
 });
 
 // Individual Country Pages - Canada
-pageRoutes.get('/countries/canada', (c) => {
-  return c.html(renderLayout(renderCanadaCountryPage({
+pageRoutes.get('/countries/canada', async (c) => {
+  return c.html(await renderLayout(renderCanadaCountryPage({
     canonicalUrl: '/countries/canada',
     request: c.req.raw
   }), {
@@ -528,8 +528,8 @@ pageRoutes.get('/countries/canada', (c) => {
 });
 
 // Individual Country Pages - Australia
-pageRoutes.get('/countries/australia', (c) => {
-  return c.html(renderLayout(renderAustraliaCountryPage({
+pageRoutes.get('/countries/australia', async (c) => {
+  return c.html(await renderLayout(renderAustraliaCountryPage({
     canonicalUrl: '/countries/australia',
     request: c.req.raw
   }), {
@@ -552,8 +552,8 @@ pageRoutes.get('/countries/australia', (c) => {
 });
 
 // Individual Country Pages - Belgium
-pageRoutes.get('/countries/belgium', (c) => {
-  return c.html(renderLayout(renderBelgiumCountryPage({
+pageRoutes.get('/countries/belgium', async (c) => {
+  return c.html(await renderLayout(renderBelgiumCountryPage({
     canonicalUrl: '/countries/belgium',
     request: c.req.raw
   }), {
@@ -579,8 +579,8 @@ pageRoutes.get('/countries/belgium', (c) => {
 });
 
 // Individual Country Pages - Singapore
-pageRoutes.get('/countries/singapore', (c) => {
-  return c.html(renderLayout(renderSingaporeCountryPage({
+pageRoutes.get('/countries/singapore', async (c) => {
+  return c.html(await renderLayout(renderSingaporeCountryPage({
     canonicalUrl: '/countries/singapore',
     request: c.req.raw
   }), {
@@ -593,8 +593,8 @@ pageRoutes.get('/countries/singapore', (c) => {
 });
 
 // Individual Country Pages - Dubai/UAE
-pageRoutes.get('/countries/dubai', (c) => {
-  return c.html(renderLayout(renderDubaiCountryPage({
+pageRoutes.get('/countries/dubai', async (c) => {
+  return c.html(await renderLayout(renderDubaiCountryPage({
     canonicalUrl: '/countries/dubai',
     request: c.req.raw
   }), {
@@ -607,8 +607,8 @@ pageRoutes.get('/countries/dubai', (c) => {
 });
 
 // Individual Country Pages - South Africa
-pageRoutes.get('/countries/south-africa', (c) => {
-  return c.html(renderLayout(renderSouthAfricaCountryPage({
+pageRoutes.get('/countries/south-africa', async (c) => {
+  return c.html(await renderLayout(renderSouthAfricaCountryPage({
     canonicalUrl: '/countries/south-africa',
     request: c.req.raw
   }), {
@@ -621,8 +621,8 @@ pageRoutes.get('/countries/south-africa', (c) => {
 });
 
 // Individual Country Pages - Philippines
-pageRoutes.get('/countries/philippines', (c) => {
-  return c.html(renderLayout(renderPhilippinesCountryPage({
+pageRoutes.get('/countries/philippines', async (c) => {
+  return c.html(await renderLayout(renderPhilippinesCountryPage({
     canonicalUrl: '/countries/philippines',
     request: c.req.raw
   }), {
@@ -635,8 +635,8 @@ pageRoutes.get('/countries/philippines', (c) => {
 });
 
 // Individual Country Pages - Pakistan
-pageRoutes.get('/countries/pakistan', (c) => {
-  return c.html(renderLayout(renderPakistanCountryPage({
+pageRoutes.get('/countries/pakistan', async (c) => {
+  return c.html(await renderLayout(renderPakistanCountryPage({
     canonicalUrl: '/countries/pakistan',
     request: c.req.raw
   }), {
@@ -649,8 +649,8 @@ pageRoutes.get('/countries/pakistan', (c) => {
 });
 
 // Individual Country Pages - Nepal
-pageRoutes.get('/countries/nepal', (c) => {
-  return c.html(renderLayout(renderNepalCountryPage({
+pageRoutes.get('/countries/nepal', async (c) => {
+  return c.html(await renderLayout(renderNepalCountryPage({
     canonicalUrl: '/countries/nepal',
     request: c.req.raw
   }), {
@@ -674,8 +674,8 @@ pageRoutes.get('/countries/nepal', (c) => {
 });
 
 // Individual Country Pages - Malaysia
-pageRoutes.get('/countries/malaysia', (c) => {
-  return c.html(renderLayout(renderMalaysiaCountryPage({
+pageRoutes.get('/countries/malaysia', async (c) => {
+  return c.html(await renderLayout(renderMalaysiaCountryPage({
     canonicalUrl: '/countries/malaysia',
     request: c.req.raw
   }), {
@@ -699,8 +699,8 @@ pageRoutes.get('/countries/malaysia', (c) => {
 });
 
 // Individual Country Pages - Ethiopia
-pageRoutes.get('/countries/ethiopia', (c) => {
-  return c.html(renderLayout(renderEthiopiaCountryPage({
+pageRoutes.get('/countries/ethiopia', async (c) => {
+  return c.html(await renderLayout(renderEthiopiaCountryPage({
     canonicalUrl: '/countries/ethiopia',
     request: c.req.raw
   }), {
@@ -724,8 +724,8 @@ pageRoutes.get('/countries/ethiopia', (c) => {
 });
 
 // Individual Country Pages - Bangladesh
-pageRoutes.get('/countries/bangladesh', (c) => {
-  return c.html(renderLayout(renderBangladeshCountryPage({
+pageRoutes.get('/countries/bangladesh', async (c) => {
+  return c.html(await renderLayout(renderBangladeshCountryPage({
     canonicalUrl: '/countries/bangladesh',
     request: c.req.raw
   }), {
@@ -749,7 +749,7 @@ pageRoutes.get('/countries/bangladesh', (c) => {
 });
 
 // Reviews listing page
-pageRoutes.get('/reviews', (c) => {
+pageRoutes.get('/reviews', async (c) => {
   return c.html(`
     <!DOCTYPE html>
     <html lang="en">
@@ -828,7 +828,7 @@ pageRoutes.get('/reviews', (c) => {
 });
 
 // Compare brokers page
-pageRoutes.get('/compare', (c) => {
+pageRoutes.get('/compare', async (c) => {
   return c.html(`
     <!DOCTYPE html>
     <html lang="en">
@@ -1108,7 +1108,7 @@ pageRoutes.get('/compare', (c) => {
 });
 
 // Contact page
-pageRoutes.get('/contact', (c) => {
+pageRoutes.get('/contact', async (c) => {
   return c.html(`
     <!DOCTYPE html>
     <html lang="en">
@@ -1314,7 +1314,7 @@ pageRoutes.get('/contact', (c) => {
 });
 
 // About page
-pageRoutes.get('/about', (c) => {
+pageRoutes.get('/about', async (c) => {
   return c.html(`
     <!DOCTYPE html>
     <html lang="en">
@@ -1506,14 +1506,14 @@ const countryPages = [
 // ========================
 
 // Gold Trading Brokers Page
-pageRoutes.get('/brokers/gold-trading', (c) => {
+pageRoutes.get('/brokers/gold-trading', async (c) => {
   try {
     const content = renderGoldTradingBrokersPage({
       canonicalUrl: '/brokers/gold-trading',
       request: c.req.raw
     });
     
-    return c.html(renderLayout(content, {
+    return c.html(await renderLayout(content, {
       title: 'Best Gold Trading Brokers 2025 - XAU/USD Specialists | BrokerAnalysis',
       description: 'Compare the top 7 gold trading brokers for 2025. Find brokers with tight XAU/USD spreads, multiple gold instruments, and advanced precious metals trading platforms.',
       keywords: 'gold trading brokers, XAU/USD brokers, gold CFD trading, precious metals brokers, gold forex trading, FXTM, Pepperstone, FP Markets, AvaTrade, gold trading platforms',
@@ -1572,14 +1572,14 @@ pageRoutes.get('/brokers/gold-trading', (c) => {
 });
 
 // Islamic Account Brokers Page
-pageRoutes.get('/brokers/islamic-accounts', (c) => {
+pageRoutes.get('/brokers/islamic-accounts', async (c) => {
   try {
     const content = renderIslamicAccountBrokersPage({
       canonicalUrl: '/brokers/islamic-accounts',
       request: c.req.raw
     });
     
-    return c.html(renderLayout(content, {
+    return c.html(await renderLayout(content, {
       title: 'Best Islamic Forex Brokers 2025 - Halal & Swap-Free Accounts | BrokerAnalysis',
       description: 'Compare the top 6 Islamic (Halal) forex brokers offering Shariah-compliant swap-free accounts. Find trusted brokers with no overnight interest charges for Muslim traders.',
       keywords: 'Islamic forex brokers, halal forex trading, swap-free accounts, Shariah compliant brokers, Muslim forex trading, FXTM Islamic, Pepperstone swap-free, Islamic trading accounts',
@@ -1593,14 +1593,14 @@ pageRoutes.get('/brokers/islamic-accounts', (c) => {
 });
 
 // Automated Trading Brokers Page
-pageRoutes.get('/brokers/automated-trading', (c) => {
+pageRoutes.get('/brokers/automated-trading', async (c) => {
   try {
     const content = renderAutomatedTradingBrokersPage({
       canonicalUrl: '/brokers/automated-trading',
       request: c.req.raw
     });
     
-    return c.html(renderLayout(content, {
+    return c.html(await renderLayout(content, {
       title: 'Best Automated Forex Trading Brokers 2025 - EA & API Support | BrokerAnalysis',
       description: 'Compare the top 5 forex brokers for automated trading, Expert Advisors (EAs), and algorithmic strategies. Find platforms with fast execution, API access, and VPS hosting.',
       keywords: 'automated forex trading, Expert Advisors, EA brokers, algorithmic trading, forex APIs, MT4 EA, MT5 EA, Alpari, Pepperstone automated trading, forex robots',
@@ -1614,14 +1614,14 @@ pageRoutes.get('/brokers/automated-trading', (c) => {
 });
 
 // High Leverage Brokers Page
-pageRoutes.get('/brokers/high-leverage', (c) => {
+pageRoutes.get('/brokers/high-leverage', async (c) => {
   try {
     const content = renderHighLeverageBrokersPage({
       canonicalUrl: '/brokers/high-leverage',
       request: c.req.raw
     });
     
-    return c.html(renderLayout(content, {
+    return c.html(await renderLayout(content, {
       title: 'Best High Leverage Forex Brokers 2025 - Up to 1:2000 Leverage | BrokerAnalysis',
       description: 'Compare the top high leverage forex brokers offering 1:500, 1:1000, and 1:2000+ leverage. Find brokers with professional accounts, tight spreads, and advanced risk management.',
       keywords: 'high leverage forex brokers, 1:500 leverage, 1:1000 leverage, 1:2000 leverage, professional forex accounts, FXTM, BlackBull Markets, Pepperstone, high leverage trading',
@@ -1678,14 +1678,14 @@ pageRoutes.get('/brokers/high-leverage', (c) => {
 });
 
 // Oil Trading Brokers Page
-pageRoutes.get('/brokers/oil-trading', (c) => {
+pageRoutes.get('/brokers/oil-trading', async (c) => {
   try {
     const content = renderOilTradingBrokersPage({
       canonicalUrl: '/brokers/oil-trading',
       request: c.req.raw
     });
     
-    return c.html(renderLayout(content, {
+    return c.html(await renderLayout(content, {
       title: 'Best Oil Trading Brokers 2025 - WTI & Brent Crude Oil CFDs | BrokerAnalysis',
       description: 'Compare the top 8 oil trading brokers for WTI and Brent crude oil CFDs. Find brokers with tight spreads, professional platforms, and energy market specialization.',
       keywords: 'oil trading brokers, crude oil CFD, WTI trading, Brent crude trading, energy CFDs, commodity brokers, oil futures, FXTM oil, Axi oil trading, IG oil',
@@ -1742,14 +1742,14 @@ pageRoutes.get('/brokers/oil-trading', (c) => {
 });
 
 // Copy Trading Brokers Page
-pageRoutes.get('/brokers/copy-trading', (c) => {
+pageRoutes.get('/brokers/copy-trading', async (c) => {
   try {
     const content = renderCopyTradingBrokersPage({
       canonicalUrl: '/brokers/copy-trading',
       request: c.req.raw
     });
     
-    return c.html(renderLayout(content, {
+    return c.html(await renderLayout(content, {
       title: 'Best Copy Trading Brokers 2025 - Social Trading Platforms | BrokerAnalysis',
       description: 'Compare the top 8 copy trading brokers and social trading platforms. Find brokers with advanced signal copying, large communities, and proven performance tracking.',
       keywords: 'copy trading brokers, social trading platforms, signal providers, eToro copy trading, ZuluTrade, mirror trading, automated copying, social forex trading',
@@ -1806,14 +1806,14 @@ pageRoutes.get('/brokers/copy-trading', (c) => {
 });
 
 // ECN Brokers Page
-pageRoutes.get('/brokers/ecn', (c) => {
+pageRoutes.get('/brokers/ecn', async (c) => {
   try {
     const content = renderECNBrokersPage({
       canonicalUrl: '/brokers/ecn',
       request: c.req.raw
     });
     
-    return c.html(renderLayout(content, {
+    return c.html(await renderLayout(content, {
       title: 'Best ECN Forex Brokers 2025 - True ECN & Raw Spreads | BrokerAnalysis',
       description: 'Compare the top 8 ECN (Electronic Communication Network) forex brokers offering raw spreads from 0.0 pips, DMA execution, and professional trading conditions.',
       keywords: 'ECN forex brokers, raw spreads, DMA execution, electronic communication network, ECN vs STP, IC Markets ECN, FP Markets ECN, Pepperstone ECN, BlackBull ECN',
@@ -1878,14 +1878,14 @@ pageRoutes.get('/brokers/ecn', (c) => {
 });
 
 // Scalping Brokers Page
-pageRoutes.get('/brokers/scalping', (c) => {
+pageRoutes.get('/brokers/scalping', async (c) => {
   try {
     const content = renderScalpingBrokersPage({
       canonicalUrl: '/brokers/scalping',
       request: c.req.raw
     });
     
-    return c.html(renderLayout(content, {
+    return c.html(await renderLayout(content, {
       title: 'Best Scalping Forex Brokers 2025 - Ultra-Fast Execution & Low Spreads | BrokerAnalysis',
       description: 'Compare the top 8 scalping forex brokers with ultra-fast execution speeds, raw spreads from 0.02 pips, VPS hosting, and professional trading infrastructure for scalpers.',
       keywords: 'scalping forex brokers, fast execution brokers, ultra low spreads, VPS hosting, ECN scalping, BlackBull Markets, IC Markets scalping, Pepperstone scalping',
@@ -1950,14 +1950,14 @@ pageRoutes.get('/brokers/scalping', (c) => {
 });
 
 // Demo Account Brokers Page
-pageRoutes.get('/brokers/demo-accounts', (c) => {
+pageRoutes.get('/brokers/demo-accounts', async (c) => {
   try {
     const content = renderDemoAccountBrokersPage({
       canonicalUrl: '/brokers/demo-accounts',
       request: c.req.raw
     });
     
-    return c.html(renderLayout(content, {
+    return c.html(await renderLayout(content, {
       title: 'Best Forex Demo Accounts 2025 - Risk-Free Practice Trading | BrokerAnalysis',
       description: 'Compare the top 8 forex demo accounts for risk-free practice trading. Find brokers with unlimited demos, real market data, and comprehensive educational resources.',
       keywords: 'forex demo accounts, practice trading, risk-free forex, demo trading platforms, XM demo, eToro demo, IG Markets demo, OANDA demo',
@@ -1971,14 +1971,14 @@ pageRoutes.get('/brokers/demo-accounts', (c) => {
 });
 
 // MT4 Brokers Page
-pageRoutes.get('/brokers/mt4', (c) => {
+pageRoutes.get('/brokers/mt4', async (c) => {
   try {
     const content = renderMT4BrokersPage({
       canonicalUrl: '/brokers/mt4',
       request: c.req.raw
     });
     
-    return c.html(renderLayout(content, {
+    return c.html(await renderLayout(content, {
       title: 'Best MT4 Forex Brokers 2025 - MetaTrader 4 Specialists | BrokerAnalysis',
       description: 'Compare the top 8 MetaTrader 4 forex brokers with advanced tools, Expert Advisor support, and enhanced MT4 features for professional trading.',
       keywords: 'MT4 forex brokers, MetaTrader 4, Expert Advisors, MT4 tools, Pepperstone Smart Trader Tools, IC Markets MT4, automated trading',
@@ -1992,14 +1992,14 @@ pageRoutes.get('/brokers/mt4', (c) => {
 });
 
 // Stock Trading Brokers Page
-pageRoutes.get('/brokers/stock-trading', (c) => {
+pageRoutes.get('/brokers/stock-trading', async (c) => {
   try {
     const content = renderStockTradingBrokersPage({
       canonicalUrl: '/brokers/stock-trading',
       request: c.req.raw
     });
     
-    return c.html(renderLayout(content, {
+    return c.html(await renderLayout(content, {
       title: 'Best Stock Trading Brokers 2025 - Global Equity Markets | BrokerAnalysis',
       description: 'Compare the top 8 stock trading brokers offering access to global markets, commission-free trading, and professional research tools for equity investors.',
       keywords: 'stock trading brokers, equity trading, global stock markets, commission-free stocks, Interactive Brokers, eToro stocks, IG Markets stocks',
@@ -2013,14 +2013,14 @@ pageRoutes.get('/brokers/stock-trading', (c) => {
 });
 
 // Beginners Brokers Page
-pageRoutes.get('/brokers/beginners', (c) => {
+pageRoutes.get('/brokers/beginners', async (c) => {
   try {
     const content = renderBeginnersBrokersPage({
       canonicalUrl: '/brokers/beginners',
       request: c.req.raw
     });
     
-    return c.html(renderLayout(content, {
+    return c.html(await renderLayout(content, {
       title: 'Best Forex Brokers for Beginners 2025 - Start Trading Safely | BrokerAnalysis',
       description: 'Compare the top 8 beginner-friendly forex brokers offering comprehensive education, demo accounts, low deposits, and user-friendly platforms for new traders.',
       keywords: 'forex brokers beginners, beginner forex trading, forex education, demo accounts, low minimum deposit, eToro beginners, XM beginners',
@@ -2034,14 +2034,14 @@ pageRoutes.get('/brokers/beginners', (c) => {
 });
 
 // Scalping Brokers Page
-pageRoutes.get('/brokers/scalping', (c) => {
+pageRoutes.get('/brokers/scalping', async (c) => {
   try {
     const content = renderScalpingBrokersPage({
       canonicalUrl: '/brokers/scalping',
       request: c.req.raw
     });
     
-    return c.html(renderLayout(content, {
+    return c.html(await renderLayout(content, {
       title: 'Best Scalping Forex Brokers 2025 - Ultra-Fast Execution | BrokerAnalysis',
       description: 'Compare the top 8 scalping forex brokers with ultra-fast execution speeds, raw spreads from 0.02 pips, VPS hosting, and professional trading infrastructure for high-frequency strategies.',
       keywords: 'scalping forex brokers, fast execution, ultra-low spreads, high frequency trading, scalping strategies, BlackBull Markets, IC Markets, Pepperstone scalping, raw spreads',
@@ -2106,14 +2106,14 @@ pageRoutes.get('/brokers/scalping', (c) => {
 });
 
 // Demo Accounts Brokers Page
-pageRoutes.get('/brokers/demo-accounts', (c) => {
+pageRoutes.get('/brokers/demo-accounts', async (c) => {
   try {
     const content = renderDemoAccountsBrokersPage({
       canonicalUrl: '/brokers/demo-accounts',
       request: c.req.raw
     });
     
-    return c.html(renderLayout(content, {
+    return c.html(await renderLayout(content, {
       title: 'Best Demo Account Forex Brokers 2025 - Free Practice Trading | BrokerAnalysis',
       description: 'Compare the top 8 forex brokers with unlimited demo accounts, virtual funds up to $100K+, and real market conditions for risk-free practice trading and strategy testing.',
       keywords: 'demo account forex brokers, free demo trading, practice forex trading, unlimited demo accounts, virtual trading, IC Markets demo, Pepperstone demo, XM demo',
@@ -2183,7 +2183,7 @@ pageRoutes.get('/brokers/demo-accounts', (c) => {
 // ========================
 
 countryPages.forEach(country => {
-  pageRoutes.get(`/brokers/${country.slug}`, (c) => {
+  pageRoutes.get(`/brokers/${country.slug}`, async (c) => {
     return c.html(`
       <!DOCTYPE html>
       <html lang="en">
@@ -2355,7 +2355,7 @@ pageRoutes.get('/dashboard', async (c) => {
 });
 
 // SEO pages (robots.txt, sitemap.xml)
-pageRoutes.get('/robots.txt', (c) => {
+pageRoutes.get('/robots.txt', async (c) => {
   const domain = getCurrentDomain(c.req.raw);
   return c.text(`User-agent: *
 Allow: /
@@ -2468,7 +2468,7 @@ pageRoutes.get('/sitemap.xml', async (c) => {
 });
 
 // Test routes
-pageRoutes.get('/test-simulator', (c) => {
+pageRoutes.get('/test-simulator', async (c) => {
   return c.html(`
     <!DOCTYPE html>
     <html>
@@ -2736,7 +2736,7 @@ pageRoutes.get('/sitemap.xml', async (c) => {
 });
 
 // SEO Enhancement: Robots.txt
-pageRoutes.get('/robots.txt', (c) => {
+pageRoutes.get('/robots.txt', async (c) => {
   const domain = getCurrentDomain(c.req.raw);
   const robotsTxt = `User-agent: *
 Allow: /
@@ -2974,7 +2974,7 @@ regulatoryAuthorities.forEach(regulator => {
 });
 
 // Trading Calculators Page - Profit, Margin & Pip Calculators
-pageRoutes.get('/calculators', (c) => {
+pageRoutes.get('/calculators', async (c) => {
   return c.html(renderTradingCalculatorsPage({
     canonicalUrl: '/calculators',
     request: c.req.raw
@@ -2982,7 +2982,7 @@ pageRoutes.get('/calculators', (c) => {
 });
 
 // Enhanced Trading Cost Simulator Page with 2025 SEO Best Practices
-pageRoutes.get('/simulator', (c) => {
+pageRoutes.get('/simulator', async (c) => {
   return c.html(renderTradingSimulatorPage({
     canonicalUrl: '/simulator',
     request: c.req.raw
