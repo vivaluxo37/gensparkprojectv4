@@ -24,8 +24,52 @@ app.use('/api/*', cors({
   credentials: true
 }));
 
-// Serve static files
-app.use('/static/*', serveStatic({ root: './public' }));
+// Serve static files properly
+app.use('/static/*', serveStatic({ 
+  root: './dist'
+}));
+
+// Function to inline CSS directly into HTML
+const getInlineCSS = async () => {
+  try {
+    const { readFile } = await import('fs/promises');
+    const cssContent = await readFile('./dist/static/styles.css', 'utf-8');
+    return `<style>${cssContent}</style>`;
+  } catch (error) {
+    console.error('Error reading CSS file:', error);
+    return '<style>/* CSS file not found */</style>';
+  }
+};
+
+// Inline CSS route for complete Tailwind CSS
+app.get('/inline-css', async (c) => {
+  try {
+    const { readFile } = await import('fs/promises');
+    const cssContent = await readFile('./dist/static/styles.css', 'utf-8');
+    
+    c.header('Content-Type', 'text/plain');
+    c.header('Cache-Control', 'public, max-age=3600');
+    return c.text(cssContent);
+  } catch (error) {
+    console.error('Error serving inline CSS:', error);
+    return c.text('/* CSS file not found */', 500);
+  }
+});
+
+// CSS serving route (fallback)
+app.get('/static/styles.css', async (c) => {
+  try {
+    const { readFile } = await import('fs/promises');
+    const cssContent = await readFile('./dist/static/styles.css', 'utf-8');
+    
+    c.header('Content-Type', 'text/css');
+    c.header('Cache-Control', 'public, max-age=3600');
+    return c.text(cssContent);
+  } catch (error) {
+    console.error('Error serving CSS:', error);
+    return c.text('/* CSS file not found */', 404);
+  }
+});
 
 // Legacy data endpoint for backward compatibility
 app.get('/data/brokers.json', async (c) => {
