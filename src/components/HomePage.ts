@@ -1,14 +1,14 @@
 export function renderHomePage(): string {
   return `
     <!-- Enhanced Hero Section with SEO & Performance Optimizations -->
-    <section id="home" class="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-900 text-white py-16 md:py-20 relative overflow-hidden" role="banner">
+    <section id="home" class="hero-section bg-gradient-to-br from-blue-600 via-blue-700 to-blue-900 text-white py-16 md:py-20 relative overflow-hidden" role="banner">
         <!-- Optimized Background Pattern with better performance -->
         <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.03"%3E%3Cpath d="m36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-30 will-change-auto"></div>
         
         <!-- Skip Link for Accessibility -->
         <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-white text-blue-900 px-4 py-2 rounded-lg font-medium z-50">Skip to main content</a>
         
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+        <div class="hero-container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
             <!-- Enhanced Trust Indicators with ARIA -->
             <div class="mb-6 md:mb-8" role="complementary" aria-label="Trust indicators">
                 <div class="inline-flex items-center flex-wrap justify-center space-x-4 md:space-x-6 bg-white/10 backdrop-blur-sm rounded-full px-4 md:px-6 py-2 text-sm font-medium">
@@ -28,7 +28,7 @@ export function renderHomePage(): string {
             </div>
             
             <!-- Optimized H1 with better semantic structure -->
-            <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 leading-tight max-w-4xl mx-auto">
+            <h1 class="hero-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 leading-tight max-w-4xl mx-auto">
                 <span class="block">Find Your Perfect Forex Broker</span>
                 <span class="block bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent mt-2">in 2 Minutes</span>
             </h1>

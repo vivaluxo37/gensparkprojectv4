@@ -7,13 +7,6 @@
   "build": {
     "command": "npm run build"
   },
-  "d1_databases": [
-    {
-      "binding": "DB",
-      "database_name": "brokeranalysis-production",
-      "database_id": "your-database-id-here"
-    }
-  ],
   "vars": {
     "ENVIRONMENT": "production",
     "GOOGLE_CLIENT_ID": "your-google-client-id-here.apps.googleusercontent.com"

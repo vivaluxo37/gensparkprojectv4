@@ -3,6 +3,7 @@ import { generateCompleteFooter } from './Footer.js';
 import { renderChatbot } from './Chatbot.js';
 import { renderJavaScriptIncludes } from './JavaScriptIncludes.js';
 import { generateMetaTags, getCurrentDomain } from '../utils/index.js';
+import { getCriticalCSS } from './CriticalCSS.js';
 
 // Cache for complete CSS to avoid repeated file reads - CLEARED FOR FRESH START
 let completeCSS: string | null = null;
@@ -187,6 +188,9 @@ export async function renderLayout(content: string, options: LayoutOptions = {})
         <link rel="icon" type="image/png" sizes="32x32" href="/static/images/favicon-32x32.png">
         <link rel="icon" type="image/png" sizes="16x16" href="/static/images/favicon-16x16.png">
         <link rel="apple-touch-icon" href="/static/images/apple-touch-icon.png">
+        
+        <!-- Critical CSS - Loaded Immediately to Prevent FOUC -->
+        ${getCriticalCSS()}
         
         <!-- Performance optimizations for Core Web Vitals -->
         <link rel="dns-prefetch" href="https://fonts.googleapis.com">
