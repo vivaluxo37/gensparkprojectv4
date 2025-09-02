@@ -1,53 +1,71 @@
 export function renderHomePage(): string {
   return `
-    <!-- Enhanced Hero Section -->
-    <section id="home" class="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-900 text-white py-20 relative overflow-hidden">
-        <!-- Background Pattern -->
-        <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.05"%3E%3Cpath d="m36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-20"></div>
+    <!-- Enhanced Hero Section with SEO & Performance Optimizations -->
+    <section id="home" class="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-900 text-white py-16 md:py-20 relative overflow-hidden" role="banner">
+        <!-- Optimized Background Pattern with better performance -->
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.03"%3E%3Cpath d="m36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-30 will-change-auto"></div>
+        
+        <!-- Skip Link for Accessibility -->
+        <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-white text-blue-900 px-4 py-2 rounded-lg font-medium z-50">Skip to main content</a>
         
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-            <!-- Trust Indicators -->
-            <div class="mb-8">
-                <div class="inline-flex items-center space-x-6 bg-white/10 backdrop-blur-sm rounded-full px-6 py-2 text-sm font-medium">
-                    <span class="flex items-center">
-                        <i class="fas fa-shield-check text-green-400 mr-2"></i>
-                        67+ Brokers Analyzed
+            <!-- Enhanced Trust Indicators with ARIA -->
+            <div class="mb-6 md:mb-8" role="complementary" aria-label="Trust indicators">
+                <div class="inline-flex items-center flex-wrap justify-center space-x-4 md:space-x-6 bg-white/10 backdrop-blur-sm rounded-full px-4 md:px-6 py-2 text-sm font-medium">
+                    <span class="flex items-center" aria-label="100 brokers analyzed">
+                        <i class="fas fa-shield-check text-green-400 mr-2" aria-hidden="true"></i>
+                        100+ Brokers Analyzed
                     </span>
-                    <span class="flex items-center">
-                        <i class="fas fa-users text-blue-300 mr-2"></i>
+                    <span class="flex items-center" aria-label="50,000 traders helped">
+                        <i class="fas fa-users text-blue-300 mr-2" aria-hidden="true"></i>
                         50,000+ Traders Helped
                     </span>
-                    <span class="flex items-center">
-                        <i class="fas fa-star text-yellow-400 mr-2"></i>
+                    <span class="flex items-center" aria-label="100% independent platform">
+                        <i class="fas fa-star text-yellow-400 mr-2" aria-hidden="true"></i>
                         100% Independent
                     </span>
                 </div>
             </div>
             
-            <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-                Find Your Perfect Forex Broker 
-                <span class="bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">in 2 Minutes</span>
+            <!-- Optimized H1 with better semantic structure -->
+            <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 leading-tight max-w-4xl mx-auto">
+                <span class="block">Find Your Perfect Forex Broker</span>
+                <span class="block bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent mt-2">in 2 Minutes</span>
             </h1>
-            <p class="text-xl md:text-2xl mb-8 text-blue-100 max-w-3xl mx-auto leading-relaxed">
+            
+            <!-- Enhanced description with better hierarchy -->
+            <p class="text-lg sm:text-xl md:text-2xl mb-6 md:mb-8 text-blue-100 max-w-3xl mx-auto leading-relaxed">
                 Join <strong class="text-yellow-300">50,000+ traders</strong> who found their ideal broker with our 
                 <strong class="text-white">AI-powered matching system</strong>. No guesswork, just perfect matches.
             </p>
             
-            <!-- CTA Buttons -->
-            <div class="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-                <button data-action="broker-match" class="bg-gradient-to-r from-yellow-400 to-orange-400 text-blue-900 px-8 py-4 rounded-lg text-lg font-bold hover:from-yellow-300 hover:to-orange-300 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105">
-                    <i class="fas fa-brain mr-2"></i>
+            <!-- Enhanced CTA Buttons with improved contrast and accessibility -->
+            <div class="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center mb-6 md:mb-8" role="group" aria-label="Primary actions">
+                <button 
+                    data-action="broker-match" 
+                    class="bg-gradient-to-r from-yellow-400 to-orange-400 text-blue-900 px-6 md:px-8 py-3 md:py-4 rounded-lg text-base md:text-lg font-bold hover:from-yellow-300 hover:to-orange-300 focus:from-yellow-300 focus:to-orange-300 transition-all duration-200 shadow-lg hover:shadow-xl focus:shadow-xl transform hover:scale-105 focus:scale-105 focus:outline-none focus:ring-4 focus:ring-yellow-300/50"
+                    aria-describedby="primary-cta-desc"
+                >
+                    <i class="fas fa-brain mr-2" aria-hidden="true"></i>
                     Get My Broker Match
                 </button>
-                <a href="/reviews" class="border-2 border-white/30 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-white hover:text-blue-800 transition-all duration-200 backdrop-blur-sm">
-                    <i class="fas fa-list mr-2"></i>
+                <span id="primary-cta-desc" class="sr-only">Start our AI questionnaire to get personalized broker recommendations</span>
+                
+                <a 
+                    href="/reviews" 
+                    class="border-2 border-white/40 text-white px-6 md:px-8 py-3 md:py-4 rounded-lg text-base md:text-lg font-semibold hover:bg-white hover:text-blue-800 focus:bg-white focus:text-blue-800 transition-all duration-200 backdrop-blur-sm focus:outline-none focus:ring-4 focus:ring-white/30"
+                    aria-label="Browse all forex broker reviews"
+                >
+                    <i class="fas fa-list mr-2" aria-hidden="true"></i>
                     Browse All Brokers
                 </a>
             </div>
             
-            <!-- Social Proof -->
-            <div class="text-sm text-blue-200">
-                ✨ <strong>Latest:</strong> 2,847 matches made this week • ⭐ Rated #1 Broker Comparison Platform 2025
+            <!-- Enhanced Social Proof with better semantics -->
+            <div class="text-sm md:text-base text-blue-200" role="complementary" aria-label="Recent activity">
+                <span class="inline-flex items-center">
+                    ✨ <strong class="ml-1">Latest:</strong> 2,847 matches made this week • ⭐ Rated #1 Broker Comparison Platform 2025
+                </span>
             </div>
         </div>
     </section>
@@ -261,7 +279,7 @@ export function renderHomePage(): string {
                         </div>
                     </div>
                     
-                    <a href="/reviews/ic-markets" class="block w-full bg-yellow-400 text-black text-center font-bold py-3 rounded-lg mt-6 hover:bg-yellow-300 transition-colors">
+                    <a href="/reviews/ic-markets" class="block w-full bg-yellow-500 text-black text-center font-bold py-3 rounded-lg mt-6 hover:bg-yellow-400 focus:bg-yellow-400 transition-colors focus:outline-none focus:ring-4 focus:ring-yellow-300/50 shadow-md hover:shadow-lg" aria-label="Read detailed IC Markets broker review">
                         View Detailed Review
                     </a>
                 </div>
@@ -310,7 +328,7 @@ export function renderHomePage(): string {
                         </div>
                     </div>
                     
-                    <a href="/reviews/pepperstone" class="block w-full bg-blue-400 text-white text-center font-bold py-3 rounded-lg mt-6 hover:bg-blue-300 transition-colors">
+                    <a href="/reviews/pepperstone" class="block w-full bg-blue-500 text-white text-center font-bold py-3 rounded-lg mt-6 hover:bg-blue-400 focus:bg-blue-400 transition-colors focus:outline-none focus:ring-4 focus:ring-blue-300/50 shadow-md hover:shadow-lg" aria-label="Read detailed Pepperstone broker review">
                         View Detailed Review
                     </a>
                 </div>
@@ -359,7 +377,7 @@ export function renderHomePage(): string {
                         </div>
                     </div>
                     
-                    <a href="/reviews/oanda" class="block w-full bg-green-400 text-white text-center font-bold py-3 rounded-lg mt-6 hover:bg-green-300 transition-colors">
+                    <a href="/reviews/oanda" class="block w-full bg-green-500 text-white text-center font-bold py-3 rounded-lg mt-6 hover:bg-green-400 focus:bg-green-400 transition-colors focus:outline-none focus:ring-4 focus:ring-green-300/50 shadow-md hover:shadow-lg" aria-label="Read detailed OANDA broker review">
                         View Detailed Review
                     </a>
                 </div>
@@ -370,15 +388,16 @@ export function renderHomePage(): string {
                 <p class="text-lg text-gray-600 mb-6">
                     See detailed analysis of <strong>12+ thoroughly tested brokers</strong> with pros, cons, and real trading costs
                 </p>
-                <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a href="/reviews" class="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-4 rounded-lg font-semibold hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105">
-                        <i class="fas fa-star mr-2"></i>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center" role="group" aria-label="Broker review actions">
+                    <a href="/reviews" class="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-4 rounded-lg font-semibold hover:from-blue-700 hover:to-blue-800 focus:from-blue-700 focus:to-blue-800 transition-all duration-200 shadow-lg hover:shadow-xl focus:shadow-xl transform hover:scale-105 focus:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300/50" aria-label="View all broker reviews and ratings">
+                        <i class="fas fa-star mr-2" aria-hidden="true"></i>
                         View All Broker Reviews
                     </a>
-                    <button data-action="broker-match" class="border-2 border-blue-600 text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-blue-600 hover:text-white transition-colors">
-                        <i class="fas fa-brain mr-2"></i>
+                    <button data-action="broker-match" class="border-2 border-blue-600 text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-blue-600 hover:text-white focus:bg-blue-600 focus:text-white transition-colors focus:outline-none focus:ring-4 focus:ring-blue-300/50" aria-describedby="personalized-match-desc">
+                        <i class="fas fa-brain mr-2" aria-hidden="true"></i>
                         Get Personalized Match
                     </button>
+                    <span id="personalized-match-desc" class="sr-only">Start questionnaire to get broker recommendations tailored to your needs</span>
                 </div>
             </div>
         </div>
@@ -407,7 +426,7 @@ export function renderHomePage(): string {
                         <p class="text-gray-600 text-sm mb-6">
                             Get beginner-friendly brokers with educational resources and demo accounts
                         </p>
-                        <a href="/brokers/beginners" class="inline-block bg-green-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-600 transition-colors w-full">
+                        <a href="/brokers/beginners" class="inline-block bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 focus:bg-green-700 transition-colors w-full focus:outline-none focus:ring-4 focus:ring-green-300/50 shadow-md hover:shadow-lg" aria-label="Find beginner-friendly forex brokers">
                             Start Learning →
                         </a>
                     </div>
@@ -423,7 +442,7 @@ export function renderHomePage(): string {
                         <p class="text-gray-600 text-sm mb-6">
                             Find ECN brokers with raw spreads, advanced platforms, and institutional features
                         </p>
-                        <a href="/brokers/ecn" class="inline-block bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 transition-colors w-full">
+                        <a href="/brokers/ecn" class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 focus:bg-blue-700 transition-colors w-full focus:outline-none focus:ring-4 focus:ring-blue-300/50 shadow-md hover:shadow-lg" aria-label="Find professional ECN forex brokers">
                             See Pro Brokers →
                         </a>
                     </div>
@@ -439,7 +458,7 @@ export function renderHomePage(): string {
                         <p class="text-gray-600 text-sm mb-6">
                             Browse regulated brokers for your country with local insights and regulations
                         </p>
-                        <a href="/countries" class="inline-block bg-purple-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-600 transition-colors w-full">
+                        <a href="/countries" class="inline-block bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 focus:bg-purple-700 transition-colors w-full focus:outline-none focus:ring-4 focus:ring-purple-300/50 shadow-md hover:shadow-lg" aria-label="Find brokers regulated in your country">
                             Choose Country →
                         </a>
                     </div>
@@ -455,7 +474,7 @@ export function renderHomePage(): string {
                         <p class="text-gray-600 text-sm mb-6">
                             Ultra-fast execution brokers with minimal spreads and professional infrastructure
                         </p>
-                        <a href="/brokers/scalping" class="inline-block bg-orange-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-orange-600 transition-colors w-full">
+                        <a href="/brokers/scalping" class="inline-block bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-orange-700 focus:bg-orange-700 transition-colors w-full focus:outline-none focus:ring-4 focus:ring-orange-300/50 shadow-md hover:shadow-lg" aria-label="Find fast execution brokers for scalping">
                             See Speed Demons →
                         </a>
                     </div>
@@ -478,7 +497,7 @@ export function renderHomePage(): string {
                         <i class="fas fa-brain text-4xl text-blue-600 mb-4"></i>
                         <h4 class="font-bold text-lg mb-2">AI Matcher</h4>
                         <p class="text-sm text-gray-600 mb-4">Get personalized broker recommendations in 2 minutes</p>
-                        <button data-action="broker-match" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                        <button data-action="broker-match" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 focus:bg-blue-700 transition-colors focus:outline-none focus:ring-4 focus:ring-blue-300/50 shadow-md hover:shadow-lg" aria-label="Try AI broker matching tool">
                             Try Now
                         </button>
                     </div>
@@ -487,7 +506,7 @@ export function renderHomePage(): string {
                         <i class="fas fa-calculator text-4xl text-green-600 mb-4"></i>
                         <h4 class="font-bold text-lg mb-2">Cost Calculator</h4>
                         <p class="text-sm text-gray-600 mb-4">See real trading costs for different strategies</p>
-                        <a href="/simulator" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors inline-block">
+                        <a href="/simulator" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 focus:bg-green-700 transition-colors inline-block focus:outline-none focus:ring-4 focus:ring-green-300/50 shadow-md hover:shadow-lg" aria-label="Calculate real trading costs">
                             Calculate
                         </a>
                     </div>
@@ -496,7 +515,7 @@ export function renderHomePage(): string {
                         <i class="fas fa-balance-scale text-4xl text-purple-600 mb-4"></i>
                         <h4 class="font-bold text-lg mb-2">Compare Tool</h4>
                         <p class="text-sm text-gray-600 mb-4">Side-by-side analysis of up to 4 brokers</p>
-                        <a href="/compare" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors inline-block">
+                        <a href="/compare" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 focus:bg-purple-700 transition-colors inline-block focus:outline-none focus:ring-4 focus:ring-purple-300/50 shadow-md hover:shadow-lg" aria-label="Compare brokers side by side">
                             Compare
                         </a>
                     </div>
@@ -570,17 +589,19 @@ export function renderHomePage(): string {
                 </div>
             </div>
             
-            <!-- Primary CTA Buttons -->
-            <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-                <button data-action="broker-match" class="bg-gradient-to-r from-yellow-400 to-orange-400 text-black px-10 py-5 rounded-xl text-xl font-bold hover:from-yellow-300 hover:to-orange-300 transition-all duration-200 shadow-2xl hover:shadow-yellow-400/25 transform hover:scale-105">
-                    <i class="fas fa-brain mr-3"></i>
-                    Start My Broker Analysis
+            <!-- Primary CTA Buttons with Enhanced Accessibility -->
+            <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12" role="group" aria-label="Primary call-to-action buttons">
+                <button data-action="broker-match" class="bg-gradient-to-r from-yellow-400 to-orange-400 text-black px-10 py-5 rounded-xl text-xl font-bold hover:from-yellow-300 hover:to-orange-300 focus:from-yellow-300 focus:to-orange-300 transition-all duration-200 shadow-2xl hover:shadow-yellow-400/25 focus:shadow-yellow-400/25 transform hover:scale-105 focus:scale-105 focus:outline-none focus:ring-4 focus:ring-yellow-300/50" aria-describedby="primary-analysis-desc">
+                    <i class="fas fa-brain mr-3" aria-hidden="true"></i>
+                    <span>Start My Broker Analysis</span>
                     <div class="text-sm opacity-80 mt-1">✨ 2 minutes • 100% Free • Instant Results</div>
                 </button>
-                <a href="/reviews" class="border-2 border-white/50 text-white px-10 py-5 rounded-xl text-xl font-semibold hover:bg-white hover:text-gray-900 transition-all duration-200 backdrop-blur-sm">
-                    <i class="fas fa-list mr-3"></i>
-                    Browse All Reviews
-                    <div class="text-sm opacity-80 mt-1">📊 67+ Detailed Broker Reviews</div>
+                <span id="primary-analysis-desc" class="sr-only">Begin comprehensive broker analysis questionnaire to get personalized recommendations</span>
+                
+                <a href="/reviews" class="border-2 border-white/60 text-white px-10 py-5 rounded-xl text-xl font-semibold hover:bg-white hover:text-gray-900 focus:bg-white focus:text-gray-900 transition-all duration-200 backdrop-blur-sm focus:outline-none focus:ring-4 focus:ring-white/30" aria-label="Browse all detailed broker reviews">
+                    <i class="fas fa-list mr-3" aria-hidden="true"></i>
+                    <span>Browse All Reviews</span>
+                    <div class="text-sm opacity-80 mt-1">📊 100+ Detailed Broker Reviews</div>
                 </a>
             </div>
             

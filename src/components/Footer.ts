@@ -179,16 +179,32 @@ export function generateCompleteFooter(): string {
                         </ul>
                     </div>
                     
-                    <!-- Newsletter Signup -->
-                    <div class="bg-gradient-to-br from-blue-800/30 to-purple-800/30 rounded-lg p-4 border border-blue-700/30">
-                        <h4 class="font-semibold text-sm mb-2 text-blue-300">📧 Stay Updated</h4>
-                        <p class="text-xs text-gray-400 mb-3">Get weekly broker insights & market updates</p>
-                        <div class="flex flex-col space-y-2">
-                            <input type="email" placeholder="Your email" class="bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm text-white placeholder-gray-400 focus:outline-none focus:border-blue-500">
-                            <button class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 rounded transition-colors">
-                                Subscribe
+                    <!-- Newsletter Signup with Enhanced Accessibility -->
+                    <div class="bg-gradient-to-br from-blue-800/30 to-purple-800/30 rounded-lg p-4 border border-blue-700/30" role="form" aria-labelledby="newsletter-title">
+                        <h4 id="newsletter-title" class="font-semibold text-sm mb-2 text-blue-300">📧 Stay Updated</h4>
+                        <p class="text-xs text-gray-400 mb-3" id="newsletter-description">Get weekly broker insights & market updates</p>
+                        <form class="flex flex-col space-y-2" onsubmit="handleNewsletterSubscription(event)" novalidate>
+                            <label for="newsletter-email" class="sr-only">Email address for newsletter subscription</label>
+                            <input 
+                                type="email" 
+                                id="newsletter-email"
+                                name="email"
+                                placeholder="Your email" 
+                                class="bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50" 
+                                aria-describedby="newsletter-description newsletter-error"
+                                required
+                                autocomplete="email">
+                            <div id="newsletter-error" class="hidden text-xs text-red-400" role="alert" aria-live="polite"></div>
+                            <button 
+                                type="submit" 
+                                class="bg-blue-600 hover:bg-blue-700 focus:bg-blue-700 text-white text-sm font-medium py-2 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900"
+                                aria-describedby="newsletter-description">
+                                <span class="flex items-center justify-center">
+                                    <i class="fas fa-envelope mr-2" aria-hidden="true"></i>
+                                    Subscribe
+                                </span>
                             </button>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
