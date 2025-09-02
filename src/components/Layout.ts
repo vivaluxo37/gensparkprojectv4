@@ -4,7 +4,7 @@ import { renderChatbot } from './Chatbot.js';
 import { renderJavaScriptIncludes } from './JavaScriptIncludes.js';
 import { generateMetaTags, getCurrentDomain } from '../utils/index.js';
 
-// Cache for complete CSS to avoid repeated file reads
+// Cache for complete CSS to avoid repeated file reads - CLEARED FOR FRESH START
 let completeCSS: string | null = null;
 
 async function getInlineCompleteCSS(): Promise<string> {
@@ -13,25 +13,102 @@ async function getInlineCompleteCSS(): Promise<string> {
   }
   
   try {
-    const { readFile } = await import('fs/promises');
-    const cssContent = await readFile('./dist/static/styles.css', 'utf-8');
-    completeCSS = `<style id="complete-tailwind">${cssContent}</style>`;
-    return completeCSS;
+    // Use fetch to get CSS from our own inline CSS route instead of fs.readFile
+    // This works in Cloudflare Workers environment
+    const response = await fetch('http://localhost:3000/inline-css');
+    if (response.ok) {
+      const cssContent = await response.text();
+      completeCSS = `<style id="complete-tailwind">${cssContent}</style>`;
+      console.log('✅ Successfully loaded complete Tailwind CSS inline');
+      return completeCSS;
+    } else {
+      throw new Error(`Failed to fetch CSS: ${response.status}`);
+    }
   } catch (error) {
     console.error('Error reading complete CSS file:', error);
+    // Comprehensive fallback CSS with more Tailwind classes
     const fallback = `<style id="complete-tailwind-fallback">
-      /* Complete CSS fallback when file cannot be read */
-      body { font-family: system-ui, -apple-system, sans-serif; }
-      .bg-blue-50 { background-color: #eff6ff; }
-      .bg-white { background-color: white; }
-      .text-blue-900 { color: #1e3a8a; }
-      .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
-      .max-w-7xl { max-width: 80rem; }
-      .mx-auto { margin: 0 auto; }
-      .px-4 { padding-left: 1rem; padding-right: 1rem; }
-      .flex { display: flex; }
-      .items-center { align-items: center; }
-      .justify-between { justify-content: space-between; }
+      /* Comprehensive Tailwind CSS fallback */
+      *,:before,:after{box-sizing:border-box;border:0 solid #e5e7eb}*,:before,:after{--tw-content:''}html{line-height:1.5;-webkit-text-size-adjust:100%;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif}body{margin:0;line-height:inherit}
+      .bg-blue-50{background-color:#eff6ff}
+      .bg-white{background-color:#fff}
+      .bg-gray-50{background-color:#f9fafb}
+      .bg-blue-600{background-color:#2563eb}
+      .bg-blue-700{background-color:#1d4ed8}
+      .bg-blue-100{background-color:#dbeafe}
+      .text-blue-900{color:#1e3a8a}
+      .text-white{color:#fff}
+      .text-gray-900{color:#111827}
+      .text-gray-700{color:#374151}
+      .text-gray-600{color:#4b5563}
+      .text-blue-600{color:#2563eb}
+      .text-blue-800{color:#1e40af}
+      .shadow-lg{box-shadow:0 10px 15px -3px rgba(0,0,0,0.1),0 4px 6px -4px rgba(0,0,0,0.1)}
+      .border-b{border-bottom-width:1px}
+      .border-gray-200{border-color:#e5e7eb}
+      .max-w-7xl{max-width:80rem}
+      .max-w-6xl{max-width:72rem}
+      .mx-auto{margin-left:auto;margin-right:auto}
+      .px-4{padding-left:1rem;padding-right:1rem}
+      .px-6{padding-left:1.5rem;padding-right:1.5rem}
+      .py-2{padding-top:0.5rem;padding-bottom:0.5rem}
+      .py-3{padding-top:0.75rem;padding-bottom:0.75rem}
+      .py-4{padding-top:1rem;padding-bottom:1rem}
+      .py-12{padding-top:3rem;padding-bottom:3rem}
+      .min-h-screen{min-height:100vh}
+      .h-16{height:4rem}
+      .flex{display:flex}
+      .inline-flex{display:inline-flex}
+      .grid{display:grid}
+      .hidden{display:none}
+      .items-center{align-items:center}
+      .items-start{align-items:flex-start}
+      .justify-between{justify-content:space-between}
+      .justify-center{justify-content:center}
+      .space-x-1>:not([hidden])~:not([hidden]){margin-right:0.25rem}
+      .space-x-2>:not([hidden])~:not([hidden]){margin-right:0.5rem}
+      .space-x-3>:not([hidden])~:not([hidden]){margin-right:0.75rem}
+      .space-x-8>:not([hidden])~:not([hidden]){margin-right:2rem}
+      .space-y-4>:not([hidden])~:not([hidden]){margin-top:1rem}
+      .rounded{border-radius:0.25rem}
+      .rounded-lg{border-radius:0.5rem}
+      .font-bold{font-weight:700}
+      .font-semibold{font-weight:600}
+      .text-xl{font-size:1.25rem;line-height:1.75rem}
+      .text-2xl{font-size:1.5rem;line-height:2rem}
+      .hover\\:text-blue-600:hover{color:#2563eb}
+      .hover\\:bg-blue-700:hover{background-color:#1d4ed8}
+      .hover\\:bg-blue-100:hover{background-color:#dbeafe}
+      .hover\\:opacity-80:hover{opacity:0.8}
+      .focus\\:text-blue-600:focus{color:#2563eb}
+      .focus\\:bg-blue-100:focus{background-color:#dbeafe}
+      .focus\\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}
+      .focus\\:ring-4:focus{box-shadow:0 0 0 4px rgba(59,130,246,0.5)}
+      .transition-colors{transition:color,background-color,border-color,text-decoration-color,fill,stroke 150ms cubic-bezier(0.4,0,0.2,1)}
+      .transition-opacity{transition:opacity 150ms cubic-bezier(0.4,0,0.2,1)}
+      .transition-transform{transition:transform 150ms cubic-bezier(0.4,0,0.2,1)}
+      .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}
+      .focus\\:not-sr-only:focus{position:static;width:auto;height:auto;padding:0;margin:0;overflow:visible;clip:auto;white-space:normal}
+      .absolute{position:absolute}
+      .relative{position:relative}
+      .top-4{top:1rem}
+      .left-4{left:1rem}
+      .z-50{z-index:50}
+      .flex-col{flex-direction:column}
+      .group:hover .group-hover\\:scale-110{transform:scale(1.1)}
+      .mb-4{margin-bottom:1rem}
+      .mb-8{margin-bottom:2rem}
+      .mt-8{margin-top:2rem}
+      .w-full{width:100%}
+      .grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}
+      .grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+      .gap-4{gap:1rem}
+      .gap-6{gap:1.5rem}
+      .gap-8{gap:2rem}
+      @media (min-width: 640px){.sm\\:px-6{padding-left:1.5rem;padding-right:1.5rem}.sm\\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}}
+      @media (min-width: 768px){.md\\:flex{display:flex}.md\\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}}
+      @media (min-width: 1024px){.lg\\:px-8{padding-left:2rem;padding-right:2rem}.lg\\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}}
     </style>`;
     completeCSS = fallback;
     return completeCSS;
@@ -117,8 +194,27 @@ export async function renderLayout(content: string, options: LayoutOptions = {})
         <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         
-        <!-- Complete Tailwind CSS - Directly embedded inline -->
-        ${await getInlineCompleteCSS()}
+        <!-- Complete Tailwind CSS - Client-side injection to bypass Workers limitations -->
+        <script>
+        // Inject complete CSS on client-side to ensure all Tailwind classes are available
+        (async function() {
+          try {
+            const response = await fetch('/inline-css');
+            if (response.ok) {
+              const css = await response.text();
+              const style = document.createElement('style');
+              style.id = 'complete-tailwind-injected';
+              style.textContent = css;
+              document.head.appendChild(style);
+              console.log('✅ Complete Tailwind CSS loaded and injected');
+            } else {
+              console.log('Using fallback CSS - fetch failed:', response.status);
+            }
+          } catch (error) {
+            console.log('Using fallback CSS - fetch error:', error.message);
+          }
+        })();
+        </script>
         
         <!-- Immediate critical styles to prevent FOUC -->
         <style>

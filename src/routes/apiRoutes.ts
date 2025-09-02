@@ -272,9 +272,10 @@ apiRoutes.get('/api/stats', async (c) => {
   }
 });
 
-// Chatbot API
+// Enhanced Chatbot API with Database Integration
 apiRoutes.post('/api/chatbot', async (c) => {
   try {
+    const { DB } = c.env;
     const body = await c.req.json();
     const { message, context } = body;
 
@@ -288,92 +289,489 @@ apiRoutes.post('/api/chatbot', async (c) => {
     const lowerMessage = message.toLowerCase();
     let response = '';
     let suggestions: string[] = [];
+    let internalLinks: Array<{title: string, url: string, description: string}> = [];
 
-    // Simple rule-based responses (in production, integrate with AI service)
-    if (lowerMessage.includes('spread') || lowerMessage.includes('cost')) {
-      response = `Trading spreads vary significantly between brokers. For example:
-      • IC Markets offers RAW spreads from 0.0 pips + $3.50 commission
-      • Pepperstone provides Razor spreads from 0.0 pips + $3.50 commission  
-      • OANDA has fixed spreads starting from 0.8 pips on EUR/USD
-      
-      Would you like me to compare specific brokers or help you calculate trading costs?`;
+    // Database-powered responses with real broker data
+    if (lowerMessage.includes('spread') || lowerMessage.includes('cost') || lowerMessage.includes('fee')) {
+      // Get actual spread data from database
+      const lowSpreadBrokers = await DB.prepare(`
+        SELECT b.name, b.slug, b.rating, s.eur_usd_spread, s.gbp_usd_spread, s.account_type
+        FROM brokers b 
+        JOIN spreads s ON b.id = s.broker_id 
+        WHERE s.eur_usd_spread < 1.5 
+        ORDER BY s.eur_usd_spread ASC, b.rating DESC 
+        LIMIT 5
+      `).all();
+
+      if (lowSpreadBrokers.results && lowSpreadBrokers.results.length > 0) {
+        response = `Here are the **lowest spread brokers** from our database:\n\n`;
+        lowSpreadBrokers.results.forEach((broker: any, index: number) => {
+          response += `**${index + 1}. ${broker.name}** (${broker.rating}⭐)\n`;
+          response += `• EUR/USD: ${broker.eur_usd_spread} pips (${broker.account_type})\n`;
+          response += `• GBP/USD: ${broker.gbp_usd_spread} pips\n\n`;
+          
+          internalLinks.push({
+            title: `${broker.name} Review`,
+            url: `/reviews/${broker.slug}`,
+            description: `Detailed review of ${broker.name} spreads and features`
+          });
+        });
+        
+        response += `💡 **Tip**: Raw/ECN accounts typically offer lower spreads but charge commissions.\n\n`;
+        
+        internalLinks.push({
+          title: "Trading Cost Calculator",
+          url: "/simulator",
+          description: "Calculate your exact trading costs with different brokers"
+        });
+        
+        internalLinks.push({
+          title: "Compare Brokers",
+          url: "/compare",
+          description: "Side-by-side comparison of spreads and fees"
+        });
+      }
       
       suggestions = [
-        'Compare IC Markets vs Pepperstone spreads',
-        'Calculate my trading costs',
-        'Show me the lowest spread brokers'
+        'Show ECN account types',
+        'Calculate my exact trading costs',
+        'Compare commission vs spread accounts'
       ];
-    } else if (lowerMessage.includes('regulation') || lowerMessage.includes('safe')) {
-      response = `Broker regulation is crucial for trader safety. Here are key regulators:
-      • **ASIC** (Australia) - Very strong consumer protection
-      • **FCA** (UK) - Strict capital requirements  
-      • **CySEC** (Cyprus) - EU-wide protections
-      • **CFTC/NFA** (USA) - Highest capital requirements
       
-      All our top-rated brokers are regulated by at least one major authority.`;
+    } else if (lowerMessage.includes('regulation') || lowerMessage.includes('safe') || lowerMessage.includes('license')) {
+      // Get regulated brokers from database
+      const regulatedBrokers = await DB.prepare(`
+        SELECT DISTINCT b.name, b.slug, b.rating, r.authority, r.license_number, r.country
+        FROM brokers b 
+        JOIN regulations r ON b.id = r.broker_id 
+        WHERE r.authority IN ('ASIC', 'FCA', 'CySEC', 'CFTC', 'NFA') 
+        AND b.rating >= 4.0
+        ORDER BY b.rating DESC, r.authority
+        LIMIT 8
+      `).all();
+
+      if (regulatedBrokers.results && regulatedBrokers.results.length > 0) {
+        response = `Here are our **top-rated regulated brokers**:\n\n`;
+        
+        const brokersByRegulator: {[key: string]: any[]} = {};
+        regulatedBrokers.results.forEach((broker: any) => {
+          if (!brokersByRegulator[broker.authority]) {
+            brokersByRegulator[broker.authority] = [];
+          }
+          brokersByRegulator[broker.authority].push(broker);
+        });
+
+        Object.keys(brokersByRegulator).forEach(regulator => {
+          response += `**${regulator} Regulated:**\n`;
+          brokersByRegulator[regulator].slice(0, 2).forEach((broker: any) => {
+            response += `• [${broker.name}](/reviews/${broker.slug}) - ${broker.rating}⭐ (License: ${broker.license_number})\n`;
+            
+            internalLinks.push({
+              title: `${broker.name} Regulation Details`,
+              url: `/reviews/${broker.slug}#regulation`,
+              description: `${broker.authority} regulation and safety information`
+            });
+          });
+          response += '\n';
+        });
+        
+        response += `🛡️ **Safety Tip**: All listed brokers offer investor protection and segregated client funds.\n`;
+      }
       
       suggestions = [
-        'Show ASIC regulated brokers',
-        'Compare FCA vs ASIC regulation',
-        'What is investor compensation?'
+        'Show ASIC vs FCA regulation differences',
+        'What is investor compensation?',
+        'Find brokers in my country'
       ];
-    } else if (lowerMessage.includes('beginner') || lowerMessage.includes('new')) {
-      response = `For beginners, I recommend focusing on:
-      1. **Regulated brokers** for safety
-      2. **Demo accounts** to practice risk-free
-      3. **Educational resources** and webinars
-      4. **Lower minimum deposits** to start small
-      5. **User-friendly platforms** like MetaTrader 4
       
-      Top beginner-friendly brokers: IC Markets, Pepperstone, and AvaTrade.`;
+    } else if (lowerMessage.includes('beginner') || lowerMessage.includes('new') || lowerMessage.includes('start')) {
+      // Get beginner-friendly brokers
+      const beginnerBrokers = await DB.prepare(`
+        SELECT b.name, b.slug, b.rating, b.min_deposit_usd, b.demo_account, b.mobile_app
+        FROM brokers b 
+        WHERE b.demo_account = 1 
+        AND b.mobile_app = 1 
+        AND b.min_deposit_usd <= 200 
+        AND b.rating >= 4.0
+        ORDER BY b.rating DESC, b.min_deposit_usd ASC 
+        LIMIT 5
+      `).all();
+
+      response = `**Perfect brokers for beginners:**\n\n`;
+      if (beginnerBrokers.results && beginnerBrokers.results.length > 0) {
+        beginnerBrokers.results.forEach((broker: any, index: number) => {
+          response += `**${index + 1}. ${broker.name}** (${broker.rating}⭐)\n`;
+          response += `• Minimum deposit: $${broker.min_deposit_usd}\n`;
+          response += `• Demo account: ✅ | Mobile app: ✅\n\n`;
+          
+          internalLinks.push({
+            title: `${broker.name} Beginner Guide`,
+            url: `/reviews/${broker.slug}#beginners`,
+            description: `Why ${broker.name} is perfect for new traders`
+          });
+        });
+      }
+      
+      response += `📚 **Getting Started Tips:**\n`;
+      response += `1. Start with a demo account\n`;
+      response += `2. Begin with major currency pairs\n`;
+      response += `3. Use proper risk management\n`;
+      response += `4. Take advantage of educational resources\n`;
+      
+      internalLinks.push({
+        title: "Forex Trading Guide",
+        url: "/guides/beginners",
+        description: "Complete guide to starting forex trading"
+      });
       
       suggestions = [
-        'Show beginner-friendly brokers',
-        'How do I start forex trading?',
-        'What is a demo account?'
+        'How to open a demo account',
+        'What are the best currency pairs for beginners?',
+        'Show educational resources'
       ];
-    } else if (lowerMessage.includes('scalping')) {
-      response = `For scalping, you need:
-      • **Raw/ECN spreads** (lowest possible)
-      • **Fast execution** (under 50ms)
-      • **No restrictions** on scalping
-      • **Professional platforms** with advanced tools
       
-      Best scalping brokers: IC Markets, Pepperstone, and FP Markets with their RAW account types.`;
+    } else if (lowerMessage.includes('scalping') || lowerMessage.includes('fast') || lowerMessage.includes('ecn')) {
+      // Get ECN/Raw account brokers
+      const scalpingBrokers = await DB.prepare(`
+        SELECT DISTINCT b.name, b.slug, b.rating, s.eur_usd_spread, s.account_type
+        FROM brokers b 
+        JOIN spreads s ON b.id = s.broker_id 
+        WHERE s.account_type LIKE '%RAW%' OR s.account_type LIKE '%ECN%'
+        AND s.eur_usd_spread <= 0.5
+        ORDER BY s.eur_usd_spread ASC, b.rating DESC 
+        LIMIT 5
+      `).all();
+
+      response = `**Best brokers for scalping:**\n\n`;
+      if (scalpingBrokers.results && scalpingBrokers.results.length > 0) {
+        scalpingBrokers.results.forEach((broker: any, index: number) => {
+          response += `**${index + 1}. ${broker.name}** (${broker.rating}⭐)\n`;
+          response += `• ${broker.account_type}: ${broker.eur_usd_spread} pips\n`;
+          response += `• Fast execution & no scalping restrictions\n\n`;
+          
+          internalLinks.push({
+            title: `${broker.name} ECN Account`,
+            url: `/reviews/${broker.slug}#accounts`,
+            description: `${broker.account_type} details and scalping conditions`
+          });
+        });
+      }
+      
+      response += `⚡ **Scalping Requirements:**\n`;
+      response += `• Raw spreads (0.0-0.5 pips) + commission\n`;
+      response += `• Ultra-fast execution (<50ms)\n`;
+      response += `• No restrictions on trading style\n`;
       
       suggestions = [
-        'Compare RAW spread accounts',
-        'Show execution speeds',
-        'What is ECN trading?'
+        'Compare execution speeds',
+        'Show commission structures',
+        'What is the difference between RAW and Standard accounts?'
       ];
-    } else if (lowerMessage.includes('minimum deposit') || lowerMessage.includes('how much')) {
-      response = `Minimum deposits vary widely:
-      • **$0-50**: XM Group, Exness, FBS
-      • **$100-200**: Pepperstone, IC Markets  
-      • **$500+**: Interactive Brokers, Saxo Bank
       
-      Remember: start with what you can afford to lose, and many brokers offer demo accounts to practice first.`;
+    } else if (lowerMessage.includes('deposit') || lowerMessage.includes('money') || lowerMessage.includes('fund')) {
+      // Get brokers by minimum deposit
+      const depositBrokers = await DB.prepare(`
+        SELECT name, slug, rating, min_deposit_usd
+        FROM brokers 
+        WHERE min_deposit_usd IS NOT NULL 
+        ORDER BY min_deposit_usd ASC, rating DESC 
+        LIMIT 6
+      `).all();
+
+      response = `**Brokers by minimum deposit:**\n\n`;
+      if (depositBrokers.results && depositBrokers.results.length > 0) {
+        depositBrokers.results.forEach((broker: any) => {
+          response += `• **${broker.name}**: $${broker.min_deposit_usd} (${broker.rating}⭐)\n`;
+          
+          internalLinks.push({
+            title: `${broker.name} Account Types`,
+            url: `/reviews/${broker.slug}#accounts`,
+            description: `Deposit requirements and account options`
+          });
+        });
+      }
+      
+      response += `\n💰 **Funding Tips:**\n`;
+      response += `• Start small with what you can afford to lose\n`;
+      response += `• Many brokers offer demo accounts with virtual funds\n`;
+      response += `• Consider deposit bonuses but read terms carefully\n`;
       
       suggestions = [
-        'Show low deposit brokers',
+        'Show deposit methods',
         'Compare account types',
-        'How much should I start with?'
+        'What about deposit bonuses?'
       ];
-    } else {
-      response = `I'm here to help you find the perfect forex broker! I can assist with:
       
-      🔍 **Broker Comparisons** - Side-by-side analysis
-      📊 **Cost Calculations** - Trading cost estimates  
-      🛡️ **Regulation Info** - Safety and compliance
-      📚 **Trading Education** - Guides for all levels
-      
-      What specific aspect of forex trading interests you most?`;
+    } else if (lowerMessage.includes('copy trading') || lowerMessage.includes('social trading') || lowerMessage.includes('copy')) {
+      // Get brokers with copy trading features
+      const copyTradingBrokers = await DB.prepare(`
+        SELECT name, slug, rating, copy_trading, social_trading, min_deposit_usd
+        FROM brokers 
+        WHERE copy_trading = 1 OR social_trading = 1
+        ORDER BY rating DESC 
+        LIMIT 6
+      `).all();
+
+      response = `**Brokers with Copy Trading:**\n\n`;
+      if (copyTradingBrokers.results && copyTradingBrokers.results.length > 0) {
+        copyTradingBrokers.results.forEach((broker: any, index: number) => {
+          const features = [];
+          if (broker.copy_trading) features.push('Copy Trading');
+          if (broker.social_trading) features.push('Social Trading');
+          
+          response += `**${index + 1}. ${broker.name}** (${broker.rating}⭐)\n`;
+          response += `• Features: ${features.join(', ')}\n`;
+          response += `• Min Deposit: $${broker.min_deposit_usd}\n\n`;
+          
+          internalLinks.push({
+            title: `${broker.name} Copy Trading Features`,
+            url: `/reviews/${broker.slug}#social-trading`,
+            description: `Social and copy trading options at ${broker.name}`
+          });
+        });
+        
+        response += `📈 **Copy Trading Benefits:**\n`;
+        response += `• Follow successful traders automatically\n`;
+        response += `• Learn from experienced professionals\n`;
+        response += `• Diversify your trading strategies\n`;
+        
+      } else {
+        response = `Currently, our database shows limited copy trading options. However, many brokers are adding these features. Check individual broker reviews for the latest information.\n\n`;
+      }
       
       suggestions = [
-        'Compare top 3 brokers',
+        'Show social trading platforms',
+        'What are the risks of copy trading?',
+        'Compare copy trading fees'
+      ];
+      
+    } else if (lowerMessage.includes('platform') || lowerMessage.includes('mt4') || lowerMessage.includes('mt5') || lowerMessage.includes('metatrader')) {
+      // Get brokers by trading platform preferences
+      const platformBrokers = await DB.prepare(`
+        SELECT DISTINCT b.name, b.slug, b.rating, b.min_deposit_usd, p.platform_name
+        FROM brokers b
+        LEFT JOIN platforms p ON b.id = p.broker_id
+        WHERE p.platform_name LIKE '%MetaTrader%' OR p.platform_name LIKE '%MT%'
+        ORDER BY b.rating DESC 
+        LIMIT 8
+      `).all();
+
+      response = `**MetaTrader Platform Brokers:**\n\n`;
+      if (platformBrokers.results && platformBrokers.results.length > 0) {
+        platformBrokers.results.forEach((broker: any, index: number) => {
+          response += `**${index + 1}. ${broker.name}** (${broker.rating}⭐)\n`;
+          response += `• Platform: ${broker.platform_name || 'MetaTrader 4/5'}\n`;
+          response += `• Min Deposit: $${broker.min_deposit_usd}\n\n`;
+          
+          internalLinks.push({
+            title: `${broker.name} Platform Details`,
+            url: `/reviews/${broker.slug}#platforms`,
+            description: `Trading platform options at ${broker.name}`
+          });
+        });
+        
+        response += `💻 **Platform Features:**\n`;
+        response += `• Advanced charting and analysis tools\n`;
+        response += `• Expert Advisors (EAs) support\n`;
+        response += `• Mobile and desktop versions\n`;
+        
+      } else {
+        response = `Most major forex brokers support MetaTrader 4 and 5 platforms. Here are our top-rated brokers:\n\n`;
+        
+        const fallbackBrokers = await DB.prepare(`
+          SELECT name, slug, rating, min_deposit_usd
+          FROM brokers 
+          ORDER BY rating DESC 
+          LIMIT 5
+        `).all();
+        
+        if (fallbackBrokers.results) {
+          fallbackBrokers.results.forEach((broker: any, index: number) => {
+            response += `• **${broker.name}** (${broker.rating}⭐) - Min: $${broker.min_deposit_usd}\n`;
+          });
+        }
+      }
+      
+      suggestions = [
+        'Show mobile trading apps',
+        'Compare trading platforms',
+        'What about proprietary platforms?'
+      ];
+      
+    } else if (lowerMessage.includes('leverage') || lowerMessage.includes('high leverage') || lowerMessage.includes('1:500')) {
+      // Get brokers by leverage offerings
+      const leverageBrokers = await DB.prepare(`
+        SELECT name, slug, rating, max_leverage, min_deposit_usd, headquarters
+        FROM brokers 
+        WHERE max_leverage IS NOT NULL
+        ORDER BY CAST(max_leverage AS INTEGER) DESC, rating DESC
+        LIMIT 8
+      `).all();
+
+      response = `**High Leverage Forex Brokers:**\n\n`;
+      if (leverageBrokers.results && leverageBrokers.results.length > 0) {
+        leverageBrokers.results.forEach((broker: any, index: number) => {
+          response += `**${index + 1}. ${broker.name}** (${broker.rating}⭐)\n`;
+          response += `• Max Leverage: 1:${broker.max_leverage}\n`;
+          response += `• Min Deposit: $${broker.min_deposit_usd} | Based in: ${broker.headquarters}\n\n`;
+          
+          internalLinks.push({
+            title: `${broker.name} Leverage Details`,
+            url: `/reviews/${broker.slug}#leverage`,
+            description: `Leverage options and margin requirements`
+          });
+        });
+        
+        response += `⚠️ **Leverage Warning:**\n`;
+        response += `• High leverage increases both profits and losses\n`;
+        response += `• Regulated brokers may have leverage limits\n`;
+        response += `• Always use proper risk management\n`;
+      }
+      
+      suggestions = [
+        'Show leverage by regulation',
+        'What are margin requirements?',
+        'Compare regulated vs unregulated leverage'
+      ];
+      
+    } else if (lowerMessage.includes('country') || lowerMessage.includes('usa') || lowerMessage.includes('uk') || lowerMessage.includes('australia') || lowerMessage.includes('europe')) {
+      // Get brokers by country/region
+      let countryFilter = '';
+      let regionName = '';
+      
+      if (lowerMessage.includes('usa') || lowerMessage.includes('united states')) {
+        countryFilter = `WHERE headquarters LIKE '%USA%' OR headquarters LIKE '%United States%'`;
+        regionName = 'USA';
+      } else if (lowerMessage.includes('uk') || lowerMessage.includes('britain') || lowerMessage.includes('england')) {
+        countryFilter = `WHERE headquarters LIKE '%UK%' OR headquarters LIKE '%London%' OR headquarters LIKE '%Britain%'`;
+        regionName = 'UK';
+      } else if (lowerMessage.includes('australia') || lowerMessage.includes('aussie')) {
+        countryFilter = `WHERE headquarters LIKE '%Australia%' OR headquarters LIKE '%Sydney%' OR headquarters LIKE '%Melbourne%'`;
+        regionName = 'Australia';
+      } else if (lowerMessage.includes('europe') || lowerMessage.includes('eu')) {
+        countryFilter = `WHERE headquarters LIKE '%Cyprus%' OR headquarters LIKE '%Germany%' OR headquarters LIKE '%Netherlands%' OR headquarters LIKE '%Switzerland%'`;
+        regionName = 'Europe';
+      }
+      
+      if (countryFilter) {
+        const regionBrokers = await DB.prepare(`
+          SELECT name, slug, rating, headquarters, min_deposit_usd, is_regulated
+          FROM brokers 
+          ${countryFilter}
+          ORDER BY rating DESC 
+          LIMIT 6
+        `).all();
+
+        response = `**${regionName} Based Forex Brokers:**\n\n`;
+        if (regionBrokers.results && regionBrokers.results.length > 0) {
+          regionBrokers.results.forEach((broker: any, index: number) => {
+            const regulated = broker.is_regulated ? '🛡️ Regulated' : '⚠️ Check regulation';
+            response += `**${index + 1}. ${broker.name}** (${broker.rating}⭐)\n`;
+            response += `• Location: ${broker.headquarters}\n`;
+            response += `• Status: ${regulated} | Min Deposit: $${broker.min_deposit_usd}\n\n`;
+            
+            internalLinks.push({
+              title: `${broker.name} Regional Info`,
+              url: `/reviews/${broker.slug}#regulation`,
+              description: `Regulation and regional details for ${regionName}`
+            });
+          });
+        } else {
+          response = `I couldn't find specific brokers based in ${regionName}. However, many international brokers serve ${regionName} clients. Check our regulated brokers section.\n\n`;
+        }
+        
+        suggestions = [
+          'Show regulated brokers in ' + regionName,
+          'What about client protection?',
+          'Compare international vs local brokers'
+        ];
+      } else {
+        response = `I can help you find brokers by region! Try asking about:\n\n`;
+        response += `• "Show me USA brokers"\n`;
+        response += `• "UK regulated brokers"\n`;
+        response += `• "Australian forex brokers"\n`;
+        response += `• "European brokers"\n`;
+        
+        suggestions = [
+          'Show USA brokers',
+          'Find UK regulated brokers',
+          'Australian forex brokers'
+        ];
+      }
+      
+    } else if (lowerMessage.includes('compare') || lowerMessage.includes('vs') || lowerMessage.includes('difference')) {
+      // Get top brokers for comparison
+      const topBrokers = await DB.prepare(`
+        SELECT name, slug, rating, min_deposit_usd, max_leverage, headquarters
+        FROM brokers 
+        ORDER BY rating DESC 
+        LIMIT 5
+      `).all();
+
+      response = `**Top Forex Brokers Comparison:**\n\n`;
+      if (topBrokers.results && topBrokers.results.length > 0) {
+        topBrokers.results.forEach((broker: any, index: number) => {
+          response += `**${index + 1}. ${broker.name}** (${broker.rating}⭐)\n`;
+          response += `• Min Deposit: $${broker.min_deposit_usd} | Max Leverage: 1:${broker.max_leverage}\n`;
+          response += `• Headquarters: ${broker.headquarters}\n\n`;
+          
+          internalLinks.push({
+            title: `${broker.name} Full Review`,
+            url: `/reviews/${broker.slug}`,
+            description: `Complete analysis of ${broker.name}`
+          });
+        });
+      }
+      
+      internalLinks.push({
+        title: "Detailed Broker Comparison",
+        url: "/compare",
+        description: "Side-by-side comparison of all features"
+      });
+      
+      suggestions = [
+        'Compare specific brokers',
+        'Show detailed feature comparison',
+        'Which broker is best for my needs?'
+      ];
+      
+    } else {
+      // Default welcome response with database stats
+      const stats = await DB.prepare(`
+        SELECT 
+          COUNT(*) as total_brokers,
+          COUNT(CASE WHEN is_regulated = 1 THEN 1 END) as regulated_count,
+          AVG(rating) as avg_rating
+        FROM brokers
+      `).first();
+
+      response = `👋 **Welcome to BrokerAnalysis Assistant!**\n\n`;
+      response += `I'm here to help you navigate our database of **${stats?.total_brokers || 74} forex brokers** with real data and reviews.\n\n`;
+      response += `🔍 **I can help you with:**\n`;
+      response += `• Find brokers by spreads, regulation, or features\n`;
+      response += `• Compare brokers side-by-side\n`;
+      response += `• Calculate trading costs\n`;
+      response += `• Get personalized recommendations\n`;
+      response += `• Answer questions about forex trading\n\n`;
+      response += `💡 **Try asking**: "Show me regulated brokers" or "Which broker has the lowest spreads?"\n`;
+      
+      internalLinks.push({
+        title: "Browse All Brokers",
+        url: "/reviews",
+        description: "Complete list of reviewed forex brokers"
+      });
+      
+      internalLinks.push({
+        title: "Broker Comparison Tool",
+        url: "/compare",
+        description: "Compare brokers side-by-side"
+      });
+      
+      suggestions = [
+        'Show me the top 5 brokers',
         'Find regulated brokers',
-        'Calculate trading costs',
-        'Best brokers for beginners'
+        'Which broker is best for beginners?',
+        'Calculate my trading costs'
       ];
     }
 
@@ -381,13 +779,20 @@ apiRoutes.post('/api/chatbot', async (c) => {
       success: true,
       response,
       suggestions,
+      internalLinks,
       timestamp: new Date().toISOString()
     });
   } catch (error) {
     console.error('Chatbot error:', error);
     return c.json({ 
       success: false, 
-      error: 'Failed to process message' 
+      error: 'Failed to process message',
+      response: 'Sorry, I encountered an error. Please try asking your question again.',
+      suggestions: [
+        'Show me top brokers',
+        'Find regulated brokers',
+        'Help with broker comparison'
+      ]
     }, 500);
   }
 });
