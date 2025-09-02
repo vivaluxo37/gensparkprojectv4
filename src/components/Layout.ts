@@ -1,5 +1,5 @@
-import { generateCompleteNavigation } from './Navigation.js';
-import { generateCompleteFooter } from './Footer.js';
+import { renderProfessionalNavigation } from './ProfessionalNavigation.js';
+import { renderProfessionalFooter } from './ProfessionalFooter.js';
 import { renderChatbot } from './Chatbot.js';
 import { renderJavaScriptIncludes } from './JavaScriptIncludes.js';
 import { generateMetaTags, getCurrentDomain } from '../utils/index.js';
@@ -355,7 +355,7 @@ export async function renderLayout(content: string, options: LayoutOptions = {})
             Skip to main content
         </a>
         
-        ${generateCompleteNavigation()}
+        ${renderProfessionalNavigation()}
         
         <!-- Main Content -->
         <main id="main-content" class="min-h-screen">
@@ -364,7 +364,7 @@ export async function renderLayout(content: string, options: LayoutOptions = {})
 
         ${renderChatbot()}
         
-        ${generateCompleteFooter()}
+        ${renderProfessionalFooter()}
         
         ${renderJavaScriptIncludes()}
         <script src="/static/dashboard.js" defer></script>

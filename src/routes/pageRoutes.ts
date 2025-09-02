@@ -3058,4 +3058,530 @@ pageRoutes.get('/simulator', async (c) => {
   }));
 });
 
+// Trading Calculators page (redirect to simulator for now)
+pageRoutes.get('/calculators', async (c) => {
+  return c.redirect('/simulator');
+});
+
+// Methodology page
+pageRoutes.get('/methodology', async (c) => {
+  return c.html(await renderLayout(`
+    <div class="max-w-4xl mx-auto py-12 px-4">
+      <div class="bg-white rounded-lg shadow-sm p-8">
+        <h1 class="text-4xl font-bold text-gray-900 mb-6">Our Methodology</h1>
+        
+        <div class="prose prose-lg max-w-none">
+          <p class="text-xl text-gray-600 mb-8">
+            BrokerAnalysis uses a comprehensive, data-driven methodology to evaluate and rate forex brokers. 
+            Our approach combines quantitative analysis with real-world testing to provide accurate, unbiased assessments.
+          </p>
+
+          <h2 class="text-2xl font-bold mt-8 mb-4">Evaluation Framework</h2>
+          <p>Our proprietary scoring system evaluates brokers across six key dimensions:</p>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
+            <div class="bg-blue-50 p-6 rounded-lg">
+              <h3 class="font-semibold text-lg mb-3">🛡️ Regulation & Safety (25%)</h3>
+              <ul class="text-sm space-y-1">
+                <li>• Regulatory oversight quality</li>
+                <li>• Capital adequacy requirements</li>
+                <li>• Investor protection schemes</li>
+                <li>• Corporate transparency</li>
+              </ul>
+            </div>
+            
+            <div class="bg-green-50 p-6 rounded-lg">
+              <h3 class="font-semibold text-lg mb-3">💰 Trading Costs (25%)</h3>
+              <ul class="text-sm space-y-1">
+                <li>• Spread competitiveness</li>
+                <li>• Commission structures</li>
+                <li>• Swap/rollover rates</li>
+                <li>• Hidden fees analysis</li>
+              </ul>
+            </div>
+            
+            <div class="bg-purple-50 p-6 rounded-lg">
+              <h3 class="font-semibold text-lg mb-3">💻 Trading Platforms (20%)</h3>
+              <ul class="text-sm space-y-1">
+                <li>• Platform reliability & speed</li>
+                <li>• Available features & tools</li>
+                <li>• Mobile app quality</li>
+                <li>• Third-party integration</li>
+              </ul>
+            </div>
+            
+            <div class="bg-orange-50 p-6 rounded-lg">
+              <h3 class="font-semibold text-lg mb-3">📞 Service & Support (15%)</h3>
+              <ul class="text-sm space-y-1">
+                <li>• Customer support quality</li>
+                <li>• Educational resources</li>
+                <li>• Account management</li>
+                <li>• Market research & analysis</li>
+              </ul>
+            </div>
+            
+            <div class="bg-red-50 p-6 rounded-lg">
+              <h3 class="font-semibold text-lg mb-3">📈 Market Access (10%)</h3>
+              <ul class="text-sm space-y-1">
+                <li>• Available instruments</li>
+                <li>• Market depth & liquidity</li>
+                <li>• Execution quality</li>
+                <li>• Market hours coverage</li>
+              </ul>
+            </div>
+            
+            <div class="bg-gray-50 p-6 rounded-lg">
+              <h3 class="font-semibold text-lg mb-3">⭐ User Experience (5%)</h3>
+              <ul class="text-sm space-y-1">
+                <li>• Account opening process</li>
+                <li>• Deposit/withdrawal ease</li>
+                <li>• Website usability</li>
+                <li>• Overall user satisfaction</li>
+              </ul>
+            </div>
+          </div>
+
+          <h2 class="text-2xl font-bold mt-8 mb-4">Testing Process</h2>
+          <ol class="list-decimal list-inside space-y-3">
+            <li><strong>Account Opening:</strong> We open real accounts with each broker to test the onboarding process</li>
+            <li><strong>Platform Testing:</strong> All trading platforms are tested with real funds to assess execution quality</li>
+            <li><strong>Spread Monitoring:</strong> Continuous monitoring of spreads during different market conditions</li>
+            <li><strong>Support Evaluation:</strong> Testing customer support response times and quality across channels</li>
+            <li><strong>Withdrawal Testing:</strong> Processing actual withdrawals to verify payment processing</li>
+          </ol>
+
+          <h2 class="text-2xl font-bold mt-8 mb-4">Data Collection</h2>
+          <p>We gather data from multiple sources to ensure accuracy:</p>
+          <ul class="list-disc list-inside mt-4 space-y-2">
+            <li>Direct broker testing and verification</li>
+            <li>Official regulatory filings and reports</li>
+            <li>Real-time spread and pricing data feeds</li>
+            <li>User feedback and community surveys</li>
+            <li>Third-party auditing and certification reports</li>
+          </ul>
+
+          <h2 class="text-2xl font-bold mt-8 mb-4">Independence & Transparency</h2>
+          <p>
+            BrokerAnalysis maintains complete editorial independence. We do not accept payment for placement 
+            in our rankings, and all brokers are evaluated using the same objective criteria. Our methodology 
+            is regularly reviewed and updated to reflect market changes and regulatory developments.
+          </p>
+
+          <div class="bg-blue-50 p-6 rounded-lg mt-8">
+            <h3 class="text-xl font-bold mb-2">Questions About Our Methodology?</h3>
+            <p class="text-gray-700 mb-4">
+              We're committed to transparency in our review process. If you have questions about how we evaluate 
+              brokers or would like more information about our methodology, please don't hesitate to reach out.
+            </p>
+            <a href="/contact" class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+              Contact Our Team
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  `, {
+    title: 'Our Methodology - How We Review Forex Brokers | BrokerAnalysis',
+    description: 'Learn about our comprehensive methodology for reviewing and rating forex brokers. Discover our 6-point evaluation framework and testing process.',
+    keywords: 'forex broker methodology, broker review process, rating system, evaluation criteria',
+    canonicalUrl: '/methodology',
+    request: c.req.raw
+  }));
+});
+
+// Privacy Policy page
+pageRoutes.get('/privacy', async (c) => {
+  return c.html(await renderLayout(`
+    <div class="max-w-4xl mx-auto py-12 px-4">
+      <div class="bg-white rounded-lg shadow-sm p-8">
+        <h1 class="text-4xl font-bold text-gray-900 mb-6">Privacy Policy</h1>
+        <p class="text-sm text-gray-600 mb-8">Last updated: January 2025</p>
+        
+        <div class="prose prose-lg max-w-none">
+          <h2 class="text-2xl font-bold mt-8 mb-4">Introduction</h2>
+          <p>
+            BrokerAnalysis ("we", "our", or "us") is committed to protecting your privacy. This Privacy Policy 
+            explains how we collect, use, disclose, and safeguard your information when you visit our website.
+          </p>
+
+          <h2 class="text-2xl font-bold mt-8 mb-4">Information We Collect</h2>
+          <p>We may collect information about you in various ways:</p>
+          <ul class="list-disc list-inside mt-4 space-y-2">
+            <li><strong>Personal Data:</strong> Name, email address when you voluntarily provide it</li>
+            <li><strong>Derivative Data:</strong> IP address, browser type, operating system, access times</li>
+            <li><strong>Financial Data:</strong> We do NOT collect any financial information</li>
+            <li><strong>Mobile Device Data:</strong> Device model and operating system when using our mobile site</li>
+          </ul>
+
+          <h2 class="text-2xl font-bold mt-8 mb-4">Use of Your Information</h2>
+          <p>We use the information we collect to:</p>
+          <ul class="list-disc list-inside mt-4 space-y-2">
+            <li>Provide and maintain our services</li>
+            <li>Improve user experience</li>
+            <li>Send you newsletters (with your consent)</li>
+            <li>Respond to inquiries and offer support</li>
+            <li>Monitor and analyze usage and trends</li>
+          </ul>
+
+          <h2 class="text-2xl font-bold mt-8 mb-4">Disclosure of Your Information</h2>
+          <p>We may share your information in the following situations:</p>
+          <ul class="list-disc list-inside mt-4 space-y-2">
+            <li>By Law or to Protect Rights</li>
+            <li>Business Transfers (in case of merger or acquisition)</li>
+            <li>With your consent</li>
+            <li>With service providers who assist our operations</li>
+          </ul>
+
+          <h2 class="text-2xl font-bold mt-8 mb-4">Security of Your Information</h2>
+          <p>
+            We use administrative, technical, and physical security measures to protect your personal information. 
+            However, no method of transmission over the Internet is 100% secure.
+          </p>
+
+          <h2 class="text-2xl font-bold mt-8 mb-4">Contact Us</h2>
+          <p>If you have questions about this Privacy Policy, please contact us at:</p>
+          <p class="mt-4">
+            Email: privacy@brokeranalysis.com<br/>
+            Website: <a href="/contact" class="text-blue-600 hover:underline">Contact Form</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  `, {
+    title: 'Privacy Policy - BrokerAnalysis',
+    description: 'Read our privacy policy to understand how BrokerAnalysis collects, uses, and protects your information.',
+    keywords: 'privacy policy, data protection, user privacy',
+    canonicalUrl: '/privacy',
+    request: c.req.raw
+  }));
+});
+
+// Terms of Service page
+pageRoutes.get('/terms', async (c) => {
+  return c.html(await renderLayout(`
+    <div class="max-w-4xl mx-auto py-12 px-4">
+      <div class="bg-white rounded-lg shadow-sm p-8">
+        <h1 class="text-4xl font-bold text-gray-900 mb-6">Terms of Service</h1>
+        <p class="text-sm text-gray-600 mb-8">Effective Date: January 2025</p>
+        
+        <div class="prose prose-lg max-w-none">
+          <h2 class="text-2xl font-bold mt-8 mb-4">Agreement to Terms</h2>
+          <p>
+            By accessing and using BrokerAnalysis, you agree to be bound by these Terms of Service and all 
+            applicable laws and regulations.
+          </p>
+
+          <h2 class="text-2xl font-bold mt-8 mb-4">Use License</h2>
+          <p>Permission is granted to temporarily access the materials on BrokerAnalysis for personal, non-commercial use only.</p>
+
+          <h2 class="text-2xl font-bold mt-8 mb-4">Disclaimer</h2>
+          <p>
+            The information on BrokerAnalysis is provided "as is". We make no warranties, expressed or implied, 
+            and hereby disclaim all warranties including, without limitation, implied warranties of merchantability, 
+            fitness for a particular purpose, or non-infringement.
+          </p>
+
+          <h2 class="text-2xl font-bold mt-8 mb-4">Risk Warning</h2>
+          <p>
+            Trading foreign exchange on margin carries a high level of risk and may not be suitable for all investors. 
+            The high degree of leverage can work against you as well as for you. Before deciding to trade foreign exchange, 
+            you should carefully consider your investment objectives, level of experience, and risk appetite.
+          </p>
+
+          <h2 class="text-2xl font-bold mt-8 mb-4">Limitations</h2>
+          <p>
+            In no event shall BrokerAnalysis or its suppliers be liable for any damages arising out of the use or 
+            inability to use the materials on BrokerAnalysis.
+          </p>
+
+          <h2 class="text-2xl font-bold mt-8 mb-4">Contact Information</h2>
+          <p>For questions regarding these Terms of Service, please contact us at legal@brokeranalysis.com</p>
+        </div>
+      </div>
+    </div>
+  `, {
+    title: 'Terms of Service - BrokerAnalysis',
+    description: 'Read the terms of service for using BrokerAnalysis forex broker comparison platform.',
+    keywords: 'terms of service, legal terms, user agreement',
+    canonicalUrl: '/terms',
+    request: c.req.raw
+  }));
+});
+
+// Risk Disclaimer page
+pageRoutes.get('/disclaimer', async (c) => {
+  return c.html(await renderLayout(`
+    <div class="max-w-4xl mx-auto py-12 px-4">
+      <div class="bg-white rounded-lg shadow-sm p-8">
+        <h1 class="text-4xl font-bold text-gray-900 mb-6">Risk Disclaimer</h1>
+        
+        <div class="prose prose-lg max-w-none">
+          <div class="bg-red-50 border-l-4 border-red-600 p-6 mb-8">
+            <p class="font-semibold text-red-900">
+              ⚠️ HIGH RISK WARNING: Foreign exchange trading carries a high level of risk that may not be suitable 
+              for all investors. Leverage creates additional risk and loss exposure.
+            </p>
+          </div>
+
+          <h2 class="text-2xl font-bold mt-8 mb-4">Trading Risks</h2>
+          <p>
+            Before you decide to trade foreign exchange, carefully consider your investment objectives, experience level, 
+            and risk tolerance. You could lose some or all of your initial investment. Do not invest money that you cannot 
+            afford to lose.
+          </p>
+
+          <h2 class="text-2xl font-bold mt-8 mb-4">Educational Purpose</h2>
+          <p>
+            All content on BrokerAnalysis is provided for informational and educational purposes only and should not be 
+            considered as financial advice. We do not provide personalized recommendations.
+          </p>
+
+          <h2 class="text-2xl font-bold mt-8 mb-4">No Guarantees</h2>
+          <p>
+            Past performance does not guarantee future results. The forex market can be volatile and unpredictable. 
+            No trading system or methodology can guarantee profits or prevent losses.
+          </p>
+
+          <h2 class="text-2xl font-bold mt-8 mb-4">Seek Professional Advice</h2>
+          <p>
+            You should seek advice from an independent financial advisor if you have any doubts about trading forex. 
+            Educate yourself on the risks associated with foreign exchange trading.
+          </p>
+        </div>
+      </div>
+    </div>
+  `, {
+    title: 'Risk Disclaimer - Important Trading Warnings | BrokerAnalysis',
+    description: 'Important risk disclaimer about forex trading. Understand the risks involved in foreign exchange trading.',
+    keywords: 'forex risk disclaimer, trading risks, investment warning',
+    canonicalUrl: '/disclaimer',
+    request: c.req.raw
+  }));
+});
+
+// Cookie Policy page
+pageRoutes.get('/cookies', async (c) => {
+  return c.html(await renderLayout(`
+    <div class="max-w-4xl mx-auto py-12 px-4">
+      <div class="bg-white rounded-lg shadow-sm p-8">
+        <h1 class="text-4xl font-bold text-gray-900 mb-6">Cookie Policy</h1>
+        
+        <div class="prose prose-lg max-w-none">
+          <h2 class="text-2xl font-bold mt-8 mb-4">What Are Cookies</h2>
+          <p>
+            Cookies are small text files that are placed on your computer or mobile device when you visit our website. 
+            They help us provide you with a better experience.
+          </p>
+
+          <h2 class="text-2xl font-bold mt-8 mb-4">How We Use Cookies</h2>
+          <p>We use cookies to:</p>
+          <ul class="list-disc list-inside mt-4 space-y-2">
+            <li>Remember your preferences</li>
+            <li>Understand how you use our website</li>
+            <li>Improve your user experience</li>
+            <li>Provide personalized content</li>
+          </ul>
+
+          <h2 class="text-2xl font-bold mt-8 mb-4">Types of Cookies We Use</h2>
+          <ul class="list-disc list-inside mt-4 space-y-2">
+            <li><strong>Essential Cookies:</strong> Required for the website to function properly</li>
+            <li><strong>Analytics Cookies:</strong> Help us understand how visitors interact with our website</li>
+            <li><strong>Preference Cookies:</strong> Remember your settings and preferences</li>
+          </ul>
+
+          <h2 class="text-2xl font-bold mt-8 mb-4">Managing Cookies</h2>
+          <p>
+            You can control and/or delete cookies as you wish. You can delete all cookies that are already on your 
+            computer and you can set most browsers to prevent them from being placed.
+          </p>
+        </div>
+      </div>
+    </div>
+  `, {
+    title: 'Cookie Policy - BrokerAnalysis',
+    description: 'Learn about how BrokerAnalysis uses cookies to improve your browsing experience.',
+    keywords: 'cookie policy, website cookies, privacy',
+    canonicalUrl: '/cookies',
+    request: c.req.raw
+  }));
+});
+
+// Affiliate Disclosure page
+pageRoutes.get('/affiliate-disclosure', async (c) => {
+  return c.html(await renderLayout(`
+    <div class="max-w-4xl mx-auto py-12 px-4">
+      <div class="bg-white rounded-lg shadow-sm p-8">
+        <h1 class="text-4xl font-bold text-gray-900 mb-6">Affiliate Disclosure</h1>
+        
+        <div class="prose prose-lg max-w-none">
+          <h2 class="text-2xl font-bold mt-8 mb-4">Transparency Statement</h2>
+          <p>
+            BrokerAnalysis participates in affiliate programs with some of the brokers featured on our website. 
+            This means we may receive compensation when you click on links to those brokers and open an account.
+          </p>
+
+          <h2 class="text-2xl font-bold mt-8 mb-4">Our Commitment</h2>
+          <p>
+            Despite these affiliate relationships, we maintain complete editorial independence. Our reviews and 
+            ratings are based solely on our objective methodology and are never influenced by compensation.
+          </p>
+
+          <h2 class="text-2xl font-bold mt-8 mb-4">How It Works</h2>
+          <p>
+            When you click on a broker link and subsequently open an account, the broker may pay us a commission. 
+            This commission helps us maintain and improve our free services for users.
+          </p>
+
+          <h2 class="text-2xl font-bold mt-8 mb-4">No Additional Cost</h2>
+          <p>
+            Using our affiliate links does not result in any additional cost to you. In fact, you may sometimes 
+            receive special offers or bonuses through our partnerships.
+          </p>
+        </div>
+      </div>
+    </div>
+  `, {
+    title: 'Affiliate Disclosure - Transparency Statement | BrokerAnalysis',
+    description: 'Our affiliate disclosure and transparency statement. Learn how we maintain independence while participating in affiliate programs.',
+    keywords: 'affiliate disclosure, transparency, broker partnerships',
+    canonicalUrl: '/affiliate-disclosure',
+    request: c.req.raw
+  }));
+});
+
+// Blog placeholder page
+pageRoutes.get('/blog', async (c) => {
+  return c.html(await renderLayout(`
+    <div class="max-w-6xl mx-auto py-12 px-4">
+      <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">Forex Trading Blog</h1>
+        <p class="text-xl text-gray-600">Coming Soon - Expert insights, market analysis, and trading strategies</p>
+      </div>
+      
+      <div class="bg-white rounded-lg shadow-sm p-8 text-center">
+        <div class="text-6xl mb-4">📝</div>
+        <h2 class="text-2xl font-semibold mb-4">Blog Under Construction</h2>
+        <p class="text-gray-600 mb-6">
+          We're working on bringing you valuable content about forex trading, broker reviews, 
+          market analysis, and trading strategies. Check back soon!
+        </p>
+        <a href="/" class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+          Return to Home
+        </a>
+      </div>
+    </div>
+  `, {
+    title: 'Forex Trading Blog - Coming Soon | BrokerAnalysis',
+    description: 'Stay tuned for our forex trading blog with expert insights, market analysis, and trading strategies.',
+    keywords: 'forex blog, trading insights, market analysis',
+    canonicalUrl: '/blog',
+    request: c.req.raw
+  }));
+});
+
+// Education Center placeholder page
+pageRoutes.get('/education', async (c) => {
+  return c.html(await renderLayout(`
+    <div class="max-w-6xl mx-auto py-12 px-4">
+      <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">Education Center</h1>
+        <p class="text-xl text-gray-600">Learn forex trading from basics to advanced strategies</p>
+      </div>
+      
+      <div class="bg-white rounded-lg shadow-sm p-8">
+        <div class="text-center mb-8">
+          <div class="text-6xl mb-4">🎓</div>
+          <h2 class="text-2xl font-semibold mb-4">Education Resources Coming Soon</h2>
+          <p class="text-gray-600">
+            We're developing comprehensive educational content including tutorials, guides, 
+            webinars, and courses to help you master forex trading.
+          </p>
+        </div>
+        
+        <div class="grid md:grid-cols-3 gap-6 mt-8">
+          <div class="text-center p-6 bg-blue-50 rounded-lg">
+            <div class="text-3xl mb-3">📚</div>
+            <h3 class="font-semibold mb-2">Trading Guides</h3>
+            <p class="text-sm text-gray-600">Step-by-step guides for beginners</p>
+          </div>
+          <div class="text-center p-6 bg-green-50 rounded-lg">
+            <div class="text-3xl mb-3">📊</div>
+            <h3 class="font-semibold mb-2">Technical Analysis</h3>
+            <p class="text-sm text-gray-600">Learn chart patterns and indicators</p>
+          </div>
+          <div class="text-center p-6 bg-purple-50 rounded-lg">
+            <div class="text-3xl mb-3">💡</div>
+            <h3 class="font-semibold mb-2">Trading Strategies</h3>
+            <p class="text-sm text-gray-600">Proven strategies for all levels</p>
+          </div>
+        </div>
+        
+        <div class="text-center mt-8">
+          <a href="/" class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+            Back to Home
+          </a>
+        </div>
+      </div>
+    </div>
+  `, {
+    title: 'Forex Education Center - Learn Trading | BrokerAnalysis',
+    description: 'Access free forex trading education resources, guides, tutorials, and strategies for all skill levels.',
+    keywords: 'forex education, trading tutorials, learn forex, trading guides',
+    canonicalUrl: '/education',
+    request: c.req.raw
+  }));
+});
+
+// Trading Glossary placeholder page
+pageRoutes.get('/glossary', async (c) => {
+  return c.html(await renderLayout(`
+    <div class="max-w-4xl mx-auto py-12 px-4">
+      <div class="bg-white rounded-lg shadow-sm p-8">
+        <h1 class="text-4xl font-bold text-gray-900 mb-6">Forex Trading Glossary</h1>
+        
+        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-8">
+          <p class="text-yellow-800">
+            <strong>Coming Soon:</strong> Complete A-Z glossary of forex trading terms and definitions.
+          </p>
+        </div>
+        
+        <div class="space-y-4">
+          <div class="border-l-4 border-blue-600 pl-4">
+            <h3 class="font-semibold">Spread</h3>
+            <p class="text-gray-600">The difference between the bid and ask price of a currency pair.</p>
+          </div>
+          
+          <div class="border-l-4 border-blue-600 pl-4">
+            <h3 class="font-semibold">Leverage</h3>
+            <p class="text-gray-600">The use of borrowed capital to increase potential returns.</p>
+          </div>
+          
+          <div class="border-l-4 border-blue-600 pl-4">
+            <h3 class="font-semibold">Pip</h3>
+            <p class="text-gray-600">The smallest price move in a currency pair, typically 0.0001.</p>
+          </div>
+          
+          <div class="border-l-4 border-blue-600 pl-4">
+            <h3 class="font-semibold">Margin</h3>
+            <p class="text-gray-600">The amount of money required to open a leveraged trading position.</p>
+          </div>
+        </div>
+        
+        <div class="text-center mt-8">
+          <p class="text-gray-600 mb-4">Full glossary with 100+ terms coming soon!</p>
+          <a href="/" class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+            Return to Home
+          </a>
+        </div>
+      </div>
+    </div>
+  `, {
+    title: 'Forex Trading Glossary - Terms & Definitions | BrokerAnalysis',
+    description: 'Complete glossary of forex trading terms, definitions, and concepts explained in simple language.',
+    keywords: 'forex glossary, trading terms, forex definitions, trading dictionary',
+    canonicalUrl: '/glossary',
+    request: c.req.raw
+  }));
+});
+
 export { pageRoutes };
