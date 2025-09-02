@@ -11,22 +11,22 @@ export function generateCompleteNavigation(): string {
     
     <!-- Redesigned Navigation Header 2025 - Enhanced for Accessibility -->
     <nav class="bg-white shadow-lg border-b border-gray-200" role="navigation" aria-label="Main navigation">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
+        <div class="nav-container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="nav-content flex justify-between items-center h-16">
                 <!-- Enhanced Logo with Tagline -->
                 <div class="flex items-center space-x-3">
-                    <a href="/" class="flex items-center space-x-2 hover:opacity-80 transition-opacity group focus:outline-none focus:ring-4 focus:ring-blue-300/50 rounded-lg" aria-label="BrokerAnalysis - Go to homepage">
-                        <i class="fas fa-chart-line text-blue-600 text-2xl group-hover:scale-110 transition-transform" aria-hidden="true"></i>
+                    <a href="/" class="logo-link flex items-center space-x-2 hover:opacity-80 transition-opacity group focus:outline-none focus:ring-4 focus:ring-blue-300/50 rounded-lg" aria-label="BrokerAnalysis - Go to homepage">
+                        <i class="logo-icon fas fa-chart-line text-blue-600 text-2xl group-hover:scale-110 transition-transform" aria-hidden="true"></i>
                         <div class="flex flex-col">
-                            <span class="text-xl font-bold text-blue-900">BrokerAnalysis</span>
-                            <span class="text-xs text-blue-600 hidden sm:block">Find Your Perfect Broker</span>
+                            <span class="logo-text text-xl font-bold text-blue-900">BrokerAnalysis</span>
+                            <span class="logo-tagline text-xs text-blue-600 hidden sm:block">Find Your Perfect Broker</span>
                         </div>
                     </a>
                 </div>
                 
                 <!-- Streamlined 4-Menu Navigation with Enhanced Accessibility -->
-                <div class="hidden lg:flex items-center justify-center flex-1" id="main-navigation" role="menubar">
-                    <div class="flex items-center space-x-2">
+                <div class="nav-menu hidden lg:flex items-center justify-center flex-1" id="main-navigation" role="menubar">
+                    <div class="nav-menu-items flex items-center space-x-2">
                         
                         <!-- 1. 🏢 Find Brokers (Mega Menu) -->
                         <div class="relative group" role="none">
@@ -263,15 +263,15 @@ export function generateCompleteNavigation(): string {
                 </div>
                 
                 <!-- Enhanced Authentication & User Menu -->
-                <div class="flex items-center space-x-3">
+                <div class="nav-auth flex items-center space-x-3">
                     <!-- Authentication Section -->
                     <div class="nav-auth-container flex items-center space-x-3" id="nav-auth-container">
                         <!-- Default: Not authenticated -->
                         <div id="nav-auth-signin" class="flex items-center space-x-3">
-                            <button onclick="window.smartRecommendation?.createAuthModal()" class="text-blue-600 hover:text-blue-800 font-medium transition-colors px-3 py-2 rounded-lg hover:bg-blue-50 border border-blue-200 hover:border-blue-300">
+                            <button onclick="window.smartRecommendation?.createAuthModal()" class="auth-button auth-button-secondary text-blue-600 hover:text-blue-800 font-medium transition-colors px-3 py-2 rounded-lg hover:bg-blue-50 border border-blue-200 hover:border-blue-300">
                                 <i class="fas fa-sign-in-alt mr-1"></i>Sign In
                             </button>
-                            <button onclick="window.smartRecommendation?.showSignUpForm()" class="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-5 py-2 rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 font-semibold shadow-md hover:shadow-lg transform hover:scale-105">
+                            <button onclick="window.smartRecommendation?.showSignUpForm()" class="auth-button auth-button-primary bg-gradient-to-r from-blue-600 to-blue-700 text-white px-5 py-2 rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 font-semibold shadow-md hover:shadow-lg transform hover:scale-105">
                                 <i class="fas fa-rocket mr-1"></i>Start Free Analysis
                             </button>
                         </div>
@@ -316,7 +316,7 @@ export function generateCompleteNavigation(): string {
                     </div>
                     
                     <!-- Mobile Menu Button -->
-                    <button id="mobile-menu-btn" class="lg:hidden p-2 text-blue-800 hover:text-blue-600 focus:text-blue-600 hover:bg-blue-50 focus:bg-blue-50 rounded-lg transition-colors focus:outline-none focus:ring-4 focus:ring-blue-300/50" aria-label="Open mobile navigation menu" aria-expanded="false" aria-controls="mobile-menu">
+                    <button id="mobile-menu-btn" class="mobile-menu-btn lg:hidden p-2 text-blue-800 hover:text-blue-600 focus:text-blue-600 hover:bg-blue-50 focus:bg-blue-50 rounded-lg transition-colors focus:outline-none focus:ring-4 focus:ring-blue-300/50" aria-label="Open mobile navigation menu" aria-expanded="false" aria-controls="mobile-menu">
                         <i class="fas fa-bars text-xl" aria-hidden="true"></i>
                     </button>
                 </div>
