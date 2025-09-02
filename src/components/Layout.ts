@@ -16,7 +16,8 @@ async function getInlineCompleteCSS(): Promise<string> {
   try {
     // Use fetch to get CSS from our own inline CSS route instead of fs.readFile
     // This works in Cloudflare Workers environment
-    const response = await fetch('http://localhost:3000/inline-css');
+    const currentDomain = getCurrentDomain();
+    const response = await fetch(`${currentDomain}/inline-css`);
     if (response.ok) {
       const cssContent = await response.text();
       completeCSS = `<style id="complete-tailwind">${cssContent}</style>`;
@@ -192,32 +193,41 @@ export async function renderLayout(content: string, options: LayoutOptions = {})
         <!-- Critical CSS - Loaded Immediately to Prevent FOUC -->
         ${getCriticalCSS()}
         
+        <!-- Load Full Tailwind CSS Directly -->
+        <link rel="stylesheet" href="/static/styles.css">
+        <link rel="stylesheet" href="/static/fontawesome.css">
+        
         <!-- Performance optimizations for Core Web Vitals -->
         <link rel="dns-prefetch" href="https://fonts.googleapis.com">
         <link rel="dns-prefetch" href="https://fonts.gstatic.com">
         <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         
-        <!-- Complete Tailwind CSS - Client-side injection to bypass Workers limitations -->
+        <!-- Backup: Complete Tailwind CSS - Client-side injection as fallback -->
         <script>
-        // Inject complete CSS on client-side to ensure all Tailwind classes are available
-        (async function() {
-          try {
-            const response = await fetch('/inline-css');
-            if (response.ok) {
-              const css = await response.text();
+        // Inject complete CSS on client-side as backup if stylesheet fails
+        window.addEventListener('DOMContentLoaded', function() {
+          // Check if styles are loaded
+          const testEl = document.createElement('div');
+          testEl.className = 'bg-blue-600';
+          document.body.appendChild(testEl);
+          const styles = window.getComputedStyle(testEl);
+          const bgColor = styles.backgroundColor;
+          document.body.removeChild(testEl);
+          
+          // If styles not loaded (no blue background), load via fetch
+          if (bgColor !== 'rgb(37, 99, 235)') {
+            fetch('/inline-css').then(response => response.text()).then(css => {
               const style = document.createElement('style');
               style.id = 'complete-tailwind-injected';
               style.textContent = css;
               document.head.appendChild(style);
-              console.log('✅ Complete Tailwind CSS loaded and injected');
-            } else {
-              console.log('Using fallback CSS - fetch failed:', response.status);
-            }
-          } catch (error) {
-            console.log('Using fallback CSS - fetch error:', error.message);
+              console.log('✅ Backup: Complete Tailwind CSS loaded and injected');
+            }).catch(error => {
+              console.error('Failed to load backup CSS:', error);
+            });
           }
-        })();
+        });
         </script>
         
         <!-- Immediate critical styles to prevent FOUC -->
