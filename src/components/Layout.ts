@@ -367,6 +367,7 @@ export async function renderLayout(content: string, options: LayoutOptions = {})
         ${generateCompleteFooter()}
         
         ${renderJavaScriptIncludes()}
+        <script src="/static/dashboard.js" defer></script>
     </body>
     </html>
   `;

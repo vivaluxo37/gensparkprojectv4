@@ -2277,81 +2277,150 @@ countryPages.forEach(country => {
 pageRoutes.get('/dashboard', async (c) => {
   const sessionId = getCookie(c, 'session_id');
   if (!sessionId) {
-    return c.redirect('/');
+    return c.redirect('/auth/login?redirect=/dashboard');
   }
 
-  return c.html(`
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Dashboard - BrokerAnalysis</title>
-        <link rel="stylesheet" href="/static/styles.css">
-        <link rel="stylesheet" href="/static/styles.css">
-    </head>
-    <body class="bg-gray-50">
-        ${generateNavigation()}
-        
-        <main class="max-w-6xl mx-auto py-12 px-4">
-            <h1 class="text-3xl font-bold text-gray-900 mb-8">Dashboard</h1>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <div class="flex items-center">
-                        <div class="flex-shrink-0">
-                            <i class="fas fa-star text-2xl text-yellow-500"></i>
-                        </div>
-                        <div class="ml-4">
-                            <p class="text-sm font-medium text-gray-500">Saved Matches</p>
-                            <p id="saved-matches-count" class="text-2xl font-bold text-gray-900">--</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <div class="flex items-center">
-                        <div class="flex-shrink-0">
-                            <i class="fas fa-eye text-2xl text-blue-500"></i>
-                        </div>
-                        <div class="ml-4">
-                            <p class="text-sm font-medium text-gray-500">Brokers Viewed</p>
-                            <p class="text-2xl font-bold text-gray-900">12+</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <div class="flex items-center">
-                        <div class="flex-shrink-0">
-                            <i class="fas fa-calculator text-2xl text-green-500"></i>
-                        </div>
-                        <div class="ml-4">
-                            <p class="text-sm font-medium text-gray-500">Cost Calculations</p>
-                            <p class="text-2xl font-bold text-gray-900">∞</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  try {
+    const { DB } = c.env;
+    
+    // Get user from session
+    const sessionResult = await DB.prepare(
+      'SELECT user_id, user_email, user_name FROM user_sessions WHERE session_id = ? AND expires_at > datetime("now")'
+    ).bind(sessionId).first();
 
-            <div class="bg-white rounded-lg shadow-sm p-6">
-                <h2 class="text-xl font-semibold mb-6">Your Broker Matches</h2>
-                <div id="user-matches">
-                    <!-- User matches will be loaded here -->
-                </div>
-            </div>
-        </main>
+    if (!sessionResult) {
+      // Session expired or invalid
+      return c.redirect('/auth/login?redirect=/dashboard');
+    }
 
-        ${generateFooter()}
-        
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                loadUserDashboard();
-            });
-        </script>
-    </body>
-    </html>
-  `);
+    const user = {
+      id: sessionResult.user_id,
+      email: sessionResult.user_email,
+      name: sessionResult.user_name || sessionResult.user_email.split('@')[0]
+    };
+
+    // Get user's broker matches
+    const brokerMatches = await DB.prepare(`
+      SELECT 
+        bm.*,
+        COUNT(br.id) as recommendation_count
+      FROM broker_matches bm
+      LEFT JOIN broker_recommendations br ON bm.id = br.match_id
+      WHERE bm.user_id = ?
+      GROUP BY bm.id
+      ORDER BY bm.created_at DESC
+      LIMIT 10
+    `).bind(user.id).all();
+
+    // Parse the latest match if exists
+    let latestMatch = null;
+    if (brokerMatches.results && brokerMatches.results.length > 0) {
+      const latest = brokerMatches.results[0];
+      
+      // Get recommendations for the latest match
+      const recommendations = await DB.prepare(`
+        SELECT 
+          br.*,
+          b.name as broker_name,
+          b.slug as broker_slug,
+          b.logo_url,
+          b.website_url,
+          b.rating,
+          b.min_deposit_usd,
+          b.max_leverage,
+          b.spread_type,
+          b.is_regulated
+        FROM broker_recommendations br
+        JOIN brokers b ON br.broker_id = b.id
+        WHERE br.match_id = ?
+        ORDER BY br.score DESC
+        LIMIT 3
+      `).bind(latest.id).all();
+
+      latestMatch = {
+        id: latest.id,
+        userProfile: JSON.parse(latest.user_profile || '{}'),
+        recommendations: recommendations.results?.map(r => ({
+          broker: {
+            id: r.broker_id,
+            name: r.broker_name,
+            slug: r.broker_slug,
+            logo_url: r.logo_url,
+            website_url: r.website_url,
+            rating: r.rating,
+            min_deposit_usd: r.min_deposit_usd,
+            max_leverage: r.max_leverage,
+            spread_type: r.spread_type,
+            is_regulated: r.is_regulated
+          },
+          score: r.score,
+          reasoning: r.reasoning
+        })) || [],
+        timestamp: latest.created_at,
+        created_at: latest.created_at
+      };
+    }
+
+    // Import and use the UserDashboard component
+    const { UserDashboard } = await import('../components/UserDashboard.js');
+    
+    return c.html(UserDashboard({
+      user,
+      latestMatch,
+      brokerMatches: brokerMatches.results || []
+    }));
+
+  } catch (error) {
+    console.error('Dashboard error:', error);
+    
+    // Fallback to simple dashboard if there's an error
+    return c.html(renderLayout({
+      title: 'Dashboard - BrokerAnalysis',
+      content: `
+        <div class="min-h-screen bg-gray-50 py-8">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-lg shadow p-6">
+              <h1 class="text-2xl font-bold text-gray-900 mb-4">Welcome to Your Dashboard</h1>
+              
+              <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+                <p class="text-yellow-800">
+                  <i class="fas fa-info-circle mr-2"></i>
+                  We're currently updating your dashboard. Some features may be temporarily unavailable.
+                </p>
+              </div>
+              
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <a href="/#recommendation-widget" class="block bg-blue-50 rounded-lg p-6 hover:bg-blue-100 transition-colors">
+                  <i class="fas fa-search text-3xl text-blue-600 mb-3"></i>
+                  <h3 class="font-semibold text-gray-900">Find Brokers</h3>
+                  <p class="text-sm text-gray-600 mt-1">Get personalized recommendations</p>
+                </a>
+                
+                <a href="/compare" class="block bg-green-50 rounded-lg p-6 hover:bg-green-100 transition-colors">
+                  <i class="fas fa-balance-scale text-3xl text-green-600 mb-3"></i>
+                  <h3 class="font-semibold text-gray-900">Compare Brokers</h3>
+                  <p class="text-sm text-gray-600 mt-1">Side-by-side comparisons</p>
+                </a>
+                
+                <a href="/simulator" class="block bg-purple-50 rounded-lg p-6 hover:bg-purple-100 transition-colors">
+                  <i class="fas fa-calculator text-3xl text-purple-600 mb-3"></i>
+                  <h3 class="font-semibold text-gray-900">Cost Calculator</h3>
+                  <p class="text-sm text-gray-600 mt-1">Calculate trading costs</p>
+                </a>
+              </div>
+              
+              <div class="text-center">
+                <a href="/" class="text-blue-600 hover:text-blue-700">
+                  <i class="fas fa-arrow-left mr-2"></i>Back to Home
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      `,
+      request: c.req.raw
+    }));
+  }
 });
 
 // SEO pages (robots.txt, sitemap.xml)

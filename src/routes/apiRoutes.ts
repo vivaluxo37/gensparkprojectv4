@@ -10,6 +10,25 @@ apiRoutes.post('/api/recommendations', async (c) => {
   try {
     const body = await c.req.json();
     const { country, experience, strategy, capital, accountType, riskTolerance, socialTrading } = body;
+    
+    // Check if user is logged in
+    const sessionId = c.req.header('Cookie')?.match(/session_id=([^;]+)/)?.[1];
+    let userId = null;
+    
+    if (sessionId) {
+      try {
+        const { DB } = c.env;
+        const session = await DB.prepare(
+          'SELECT user_id FROM user_sessions WHERE session_id = ? AND expires_at > datetime("now")'
+        ).bind(sessionId).first();
+        if (session) {
+          userId = session.user_id;
+        }
+      } catch (error) {
+        console.log('Session lookup error:', error);
+        // Continue without saving - recommendations still work
+      }
+    }
 
     // Use static broker data for now - this provides a working recommendation system
     const staticBrokers = [
@@ -181,6 +200,40 @@ apiRoutes.post('/api/recommendations', async (c) => {
     // Sort by match score and return top recommendations
     recommendations.sort((a, b) => b.matchScore - a.matchScore);
     const topRecommendations = recommendations.slice(0, 6);
+
+    // Save match for logged-in users
+    if (userId) {
+      try {
+        const { DB } = c.env;
+        
+        // Create broker match record
+        const matchResult = await DB.prepare(`
+          INSERT INTO broker_matches (user_id, user_profile, created_at)
+          VALUES (?, ?, datetime('now'))
+        `).bind(
+          userId,
+          JSON.stringify({ country, experience, strategy, capital, accountType, riskTolerance, socialTrading })
+        ).run();
+        
+        if (matchResult.meta.last_row_id) {
+          // Save individual recommendations
+          for (const rec of topRecommendations.slice(0, 3)) {
+            await DB.prepare(`
+              INSERT INTO broker_recommendations (match_id, broker_id, score, reasoning, created_at)
+              VALUES (?, ?, ?, ?, datetime('now'))
+            `).bind(
+              matchResult.meta.last_row_id,
+              rec.broker.id,
+              rec.matchScore,
+              rec.reasoning.join('\n')
+            ).run();
+          }
+        }
+      } catch (saveError) {
+        console.log('Error saving match:', saveError);
+        // Continue - don't fail the recommendation response
+      }
+    }
 
     return c.json({
       success: true,
