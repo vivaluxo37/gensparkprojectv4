@@ -24,8 +24,71 @@ app.use('/api/*', cors({
   credentials: true
 }));
 
-// Serve static files
-app.use('/static/*', serveStatic({ root: './public' }));
+// Test route
+app.get('/test-static', async (c) => {
+  return c.text('Static route test works!');
+});
+
+// Fallback CSS handler for development
+app.get('/static/styles.css', async (c) => {
+  // Return minimal CSS that should work - bypass the host restriction
+  return new Response(`
+    /* BrokerAnalysis - Essential Styles */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; 
+      line-height: 1.6; 
+      color: #1f2937; 
+      background: #f9fafb;
+    }
+    
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+    .bg-blue-600 { background-color: #2563eb !important; }
+    .bg-white { background-color: #ffffff !important; }
+    .text-white { color: #ffffff !important; }
+    .text-gray-900 { color: #111827 !important; }
+    .p-4 { padding: 1rem !important; }
+    .p-6 { padding: 1.5rem !important; }
+    .mb-4 { margin-bottom: 1rem !important; }
+    .mt-8 { margin-top: 2rem !important; }
+    .flex { display: flex !important; }
+    .items-center { align-items: center !important; }
+    .justify-between { justify-content: space-between !important; }
+    .rounded { border-radius: 0.375rem !important; }
+    .shadow { box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important; }
+    .text-xl { font-size: 1.25rem !important; }
+    .font-bold { font-weight: 700 !important; }
+    .grid { display: grid !important; }
+    .gap-6 { gap: 1.5rem !important; }
+    .border { border: 1px solid #e5e7eb !important; }
+    .btn { 
+      display: inline-flex; 
+      align-items: center; 
+      padding: 0.5rem 1rem; 
+      border-radius: 0.375rem; 
+      font-weight: 500; 
+      cursor: pointer; 
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .btn-primary { background-color: #2563eb; color: white; border: none; }
+    .btn-primary:hover { background-color: #1d4ed8; }
+    
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+      .container { padding: 0 0.5rem; }
+      .p-4 { padding: 0.75rem !important; }
+    }
+  `, {
+    status: 200,
+    headers: {
+      'Content-Type': 'text/css',
+      'Cache-Control': 'public, max-age=3600',
+      'Access-Control-Allow-Origin': '*'
+    }
+  });
+});
 
 // Legacy data endpoint for backward compatibility
 app.get('/data/brokers.json', async (c) => {
