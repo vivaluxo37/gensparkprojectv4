@@ -5,6 +5,7 @@ export function renderJavaScriptIncludes(): string {
     
     <!-- Core JavaScript Files - Non-blocking -->
     <script src="/static/smart-recommendation.js" defer></script>
+    <script src="/static/chatbot.js" defer></script>
     
     <!-- FontAwesome - Optimized Loading -->
     <script src="https://kit.fontawesome.com/your-kit-id.js" crossorigin="anonymous" defer></script>
@@ -33,86 +34,8 @@ export function renderJavaScriptIncludes(): string {
             });
         });
 
-        // Chatbot Functionality
-        const chatbotToggle = document.getElementById('chatbot-toggle');
-        const chatbotWindow = document.getElementById('chatbot-window');
-        const chatbotClose = document.getElementById('chatbot-close');
-        const chatbotInput = document.getElementById('chatbot-input');
-        const chatbotSend = document.getElementById('chatbot-send');
-        const chatbotMessages = document.getElementById('chatbot-messages');
-
-        if (chatbotToggle && chatbotWindow) {
-            chatbotToggle.addEventListener('click', function() {
-                const isHidden = chatbotWindow.classList.contains('hidden');
-                if (isHidden) {
-                    chatbotWindow.classList.remove('hidden');
-                    this.setAttribute('aria-expanded', 'true');
-                } else {
-                    chatbotWindow.classList.add('hidden');
-                    this.setAttribute('aria-expanded', 'false');
-                }
-            });
-
-            if (chatbotClose) {
-                chatbotClose.addEventListener('click', function() {
-                    chatbotWindow.classList.add('hidden');
-                    chatbotToggle.setAttribute('aria-expanded', 'false');
-                });
-            }
-
-            // Send message functionality
-            function sendMessage() {
-                const message = chatbotInput?.value.trim();
-                if (!message || !chatbotMessages) return;
-
-                // Add user message
-                const userMessageDiv = document.createElement('div');
-                userMessageDiv.className = 'flex items-start space-x-2 justify-end';
-                userMessageDiv.innerHTML = \`
-                    <div class="bg-blue-600 text-white p-3 rounded-lg max-w-xs">
-                        <p class="text-sm">\${message}</p>
-                    </div>
-                    <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
-                        <i class="fas fa-user text-gray-600 text-sm"></i>
-                    </div>
-                \`;
-                chatbotMessages.appendChild(userMessageDiv);
-
-                // Clear input
-                chatbotInput.value = '';
-
-                // Scroll to bottom
-                chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
-
-                // Simulate bot response (in real implementation, this would call an API)
-                setTimeout(() => {
-                    const botMessageDiv = document.createElement('div');
-                    botMessageDiv.className = 'flex items-start space-x-2';
-                    botMessageDiv.innerHTML = \`
-                        <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                            <i class="fas fa-robot text-blue-600 text-sm"></i>
-                        </div>
-                        <div class="bg-blue-50 p-3 rounded-lg max-w-xs">
-                            <p class="text-sm">I'd be happy to help you find the right broker! Let me search our database for recommendations based on your query.</p>
-                        </div>
-                    \`;
-                    chatbotMessages.appendChild(botMessageDiv);
-                    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
-                }, 1000);
-            }
-
-            if (chatbotSend) {
-                chatbotSend.addEventListener('click', sendMessage);
-            }
-
-            if (chatbotInput) {
-                chatbotInput.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        sendMessage();
-                    }
-                });
-            }
-        }
+        // Chatbot is now handled by the external chatbot.js script
+        // The enhanced chatbot provides database-driven responses and internal links
 
         // Mobile Menu Functionality
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
