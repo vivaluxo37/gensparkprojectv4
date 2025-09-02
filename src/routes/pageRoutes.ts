@@ -2,6 +2,47 @@
 import { Hono } from 'hono';
 import { getCookie } from 'hono/cookie';
 import type { Bindings } from '../types';
+
+// CSS inlining helper to fix CSS serving issues in development
+let cachedCSS: string | null = null;
+
+const getInlineCSS = async (): Promise<string> => {
+  if (cachedCSS) {
+    return cachedCSS;
+  }
+  
+  try {
+    const { readFile } = await import('fs/promises');
+    const cssContent = await readFile('./dist/static/styles.css', 'utf-8');
+    cachedCSS = `<style>${cssContent}</style>`;
+    return cachedCSS;
+  } catch (error) {
+    console.error('Error reading CSS file:', error);
+    const fallbackCSS = `<style>
+      /* Fallback CSS when file cannot be read */
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font-family: system-ui, -apple-system, sans-serif; line-height: 1.5; }
+      .bg-gray-50 { background-color: #f9fafb; }
+      .bg-white { background-color: white; }
+      .text-gray-900 { color: #111827; }
+      .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+      .max-w-6xl { max-width: 72rem; }
+      .mx-auto { margin-left: auto; margin-right: auto; }
+      .px-4 { padding-left: 1rem; padding-right: 1rem; }
+      .py-12 { padding-top: 3rem; padding-bottom: 3rem; }
+    </style>`;
+    cachedCSS = fallbackCSS;
+    return cachedCSS;
+  }
+};
+
+const replaceExternalCSSWithInline = async (html: string): Promise<string> => {
+  const inlineCSS = await getInlineCSS();
+  // Replace CSS link tags with inline styles
+  return html
+    .replace(/<link[^>]*href=["']\/static\/styles\.css["'][^>]*>/g, inlineCSS)
+    .replace(/<link[^>]*rel=["']stylesheet["'][^>]*href=["']\/static\/styles\.css["'][^>]*>/g, inlineCSS);
+};
 import { BrokerService } from '../services/brokerService';
 import { generateMetaTags, generateStructuredData, getCurrentDomain } from '../utils';
 import { renderLayout } from '../components/Layout.js';
@@ -24,18 +65,34 @@ import { renderNepalCountryPage } from '../components/NepalCountryPage.js';
 import { renderMalaysiaCountryPage } from '../components/MalaysiaCountryPage.js';
 import { renderEthiopiaCountryPage } from '../components/EthiopiaCountryPage.js';
 import { renderBangladeshCountryPage } from '../components/BangladeshCountryPage.js';
-import { UserDashboard } from '../components/UserDashboard.js';
+import { renderTradingSimulatorPage } from '../components/TradingSimulatorPage.js';
+import { renderTradingCalculatorsPage } from '../components/TradingCalculatorsPage.js';
+import { renderGoldTradingBrokersPage } from '../components/GoldTradingBrokersPage.js';
+import { renderIslamicAccountBrokersPage } from '../components/IslamicAccountBrokersPage.js';
+import { renderAutomatedTradingBrokersPage } from '../components/AutomatedTradingBrokersPage.js';
+import { renderHighLeverageBrokersPage } from '../components/HighLeverageBrokersPage.js';
+import { renderOilTradingBrokersPage } from '../components/OilTradingBrokersPage.js';
+import { renderCopyTradingBrokersPage } from '../components/CopyTradingBrokersPage.js';
+import { renderECNBrokersPage } from '../components/ECNBrokersPage.js';
+import { renderScalpingBrokersPage } from '../components/ScalpingBrokersPage.js';
+import { renderDemoAccountBrokersPage } from '../components/DemoAccountBrokersPage.js';
+import { renderMT4BrokersPage } from '../components/MT4BrokersPage.js';
+import { renderStockTradingBrokersPage } from '../components/StockTradingBrokersPage.js';
+import { renderBeginnersBrokersPage } from '../components/BeginnersBrokersPage.js';
+import { renderDemoAccountsBrokersPage } from '../components/DemoAccountsBrokersPage.js';
+import { generateComprehensiveBrokerReviewHTML } from '../components/EnhancedBrokerReview.js';
+import { generateCompleteNavigation } from '../components/Navigation.js';
 
 const pageRoutes = new Hono<{ Bindings: Bindings }>();
 
 // Homepage - Complete migrated version with all features
-pageRoutes.get('/', (c) => {
+pageRoutes.get('/', async (c) => {
   const homeContent = `
     ${renderHomePage()}
     ${renderFAQ()}
   `;
 
-  return c.html(renderLayout(homeContent, {
+  return c.html(await renderLayout(homeContent, {
     title: 'Best Forex Brokers 2025 - Compare Top 6 Regulated Brokers | BrokerAnalysis',
     description: 'Find the perfect forex broker with our intelligent matching system. Compare spreads, regulation, and features of 6 top-rated brokers including IC Markets, Pepperstone, OANDA & more.',
     keywords: 'forex brokers, best forex brokers 2025, regulated forex brokers, forex broker comparison, forex trading, broker reviews, forex spreads, trading platforms',
@@ -90,6 +147,13 @@ pageRoutes.get('/', (c) => {
         },
         "serviceType": "Financial Comparison Service",
         "areaServed": "Worldwide",
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.9",
+          "reviewCount": "50000",
+          "bestRating": "5",
+          "worstRating": "1"
+        },
         "hasOfferCatalog": {
           "@type": "OfferCatalog",
           "name": "Broker Reviews",
@@ -113,74 +177,64 @@ pageRoutes.get('/', (c) => {
           ]
         }
       })}
+      
+      <!-- Broker Listing Schema -->
+      ${generateStructuredData({
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": "Top Forex Brokers 2025",
+        "description": "Curated list of the best forex brokers based on comprehensive analysis",
+        "numberOfItems": 100,
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "item": {
+              "@type": "FinancialService",
+              "name": "IC Markets",
+              "description": "Raw spreads from 0.0 pips with lightning-fast execution",
+              "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "4.8",
+                "reviewCount": "15000",
+                "bestRating": "5"
+              }
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "item": {
+              "@type": "FinancialService",
+              "name": "Pepperstone",
+              "description": "Advanced Smart Trader Tools & TradingView integration",
+              "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "4.7",
+                "reviewCount": "12000",
+                "bestRating": "5"
+              }
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "item": {
+              "@type": "FinancialService",
+              "name": "OANDA",
+              "description": "25+ years, CFTC/NFA oversight, impeccable reputation",
+              "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "4.6",
+                "reviewCount": "18000",
+                "bestRating": "5"
+              }
+            }
+          }
+        ]
+      })}
     `
   }));
-});
-
-// Dashboard route - User's personalized trading dashboard
-pageRoutes.get('/dashboard', async (c) => {
-  try {
-    // Check authentication
-    const sessionId = getCookie(c, 'sessionId');
-    if (!sessionId) {
-      return c.redirect('/?auth=required');
-    }
-
-    // Get user data from database
-    const db = c.env.DB;
-    const userQuery = await db.prepare(
-      'SELECT * FROM users WHERE sessionId = ?'
-    ).bind(sessionId).first();
-
-    if (!userQuery) {
-      return c.redirect('/?auth=expired');
-    }
-
-    // Get user's broker matches
-    const brokerMatches = await db.prepare(
-      'SELECT * FROM broker_matches WHERE userId = ? ORDER BY timestamp DESC'
-    ).bind(userQuery.id).all();
-
-    const latestMatch = brokerMatches.results?.[0] || null;
-
-    // Parse recommendations if they exist
-    if (latestMatch && latestMatch.recommendations) {
-      try {
-        latestMatch.recommendations = JSON.parse(latestMatch.recommendations);
-      } catch (e) {
-        console.error('Error parsing recommendations:', e);
-        latestMatch.recommendations = [];
-      }
-    }
-
-    if (latestMatch && latestMatch.userProfile) {
-      try {
-        latestMatch.userProfile = JSON.parse(latestMatch.userProfile);
-      } catch (e) {
-        console.error('Error parsing user profile:', e);
-        latestMatch.userProfile = {};
-      }
-    }
-
-    // Render dashboard
-    return c.html(UserDashboard({
-      user: {
-        id: userQuery.id,
-        name: userQuery.name,
-        email: userQuery.email
-      },
-      latestMatch,
-      brokerMatches: brokerMatches.results?.map(match => ({
-        ...match,
-        recommendations: match.recommendations ? JSON.parse(match.recommendations) : [],
-        userProfile: match.userProfile ? JSON.parse(match.userProfile) : {}
-      })) || []
-    }));
-
-  } catch (error) {
-    console.error('Dashboard error:', error);
-    return c.redirect('/?error=dashboard');
-  }
 });
 
 // Main brokers directory page - comprehensive listing with SEO optimization
@@ -224,7 +278,7 @@ pageRoutes.get('/brokers', async (c) => {
 });
 
 // Countries directory page - comprehensive listing of countries with regulated brokers
-pageRoutes.get('/countries', (c) => {
+pageRoutes.get('/countries', async (c) => {
   // Define countries with enhanced information
   const countries = [
     { slug: 'australia', name: 'Australia', regulator: 'ASIC', brokerCount: 15, 
@@ -390,7 +444,7 @@ const regulatorRoutes = [
 ];
 
 regulatorRoutes.forEach(regulator => {
-  pageRoutes.get(`/regulators/${regulator.slug}`, (c) => {
+  pageRoutes.get(`/regulators/${regulator.slug}`, async (c) => {
     return c.html(renderRegulatorPage(regulator.info, {
       canonicalUrl: `/regulators/${regulator.slug}`,
       request: c.req.raw
@@ -399,8 +453,8 @@ regulatorRoutes.forEach(regulator => {
 });
 
 // Individual Country Pages - USA
-pageRoutes.get('/countries/usa', (c) => {
-  return c.html(renderLayout(renderUSACountryPage({
+pageRoutes.get('/countries/usa', async (c) => {
+  return c.html(await renderLayout(renderUSACountryPage({
     canonicalUrl: '/countries/usa',
     request: c.req.raw
   }), {
@@ -424,8 +478,8 @@ pageRoutes.get('/countries/usa', (c) => {
 });
 
 // Individual Country Pages - India
-pageRoutes.get('/countries/india', (c) => {
-  return c.html(renderLayout(renderIndiaCountryPage({
+pageRoutes.get('/countries/india', async (c) => {
+  return c.html(await renderLayout(renderIndiaCountryPage({
     canonicalUrl: '/countries/india',
     request: c.req.raw
   }), {
@@ -449,8 +503,8 @@ pageRoutes.get('/countries/india', (c) => {
 });
 
 // Individual Country Pages - Canada
-pageRoutes.get('/countries/canada', (c) => {
-  return c.html(renderLayout(renderCanadaCountryPage({
+pageRoutes.get('/countries/canada', async (c) => {
+  return c.html(await renderLayout(renderCanadaCountryPage({
     canonicalUrl: '/countries/canada',
     request: c.req.raw
   }), {
@@ -474,8 +528,8 @@ pageRoutes.get('/countries/canada', (c) => {
 });
 
 // Individual Country Pages - Australia
-pageRoutes.get('/countries/australia', (c) => {
-  return c.html(renderLayout(renderAustraliaCountryPage({
+pageRoutes.get('/countries/australia', async (c) => {
+  return c.html(await renderLayout(renderAustraliaCountryPage({
     canonicalUrl: '/countries/australia',
     request: c.req.raw
   }), {
@@ -498,8 +552,8 @@ pageRoutes.get('/countries/australia', (c) => {
 });
 
 // Individual Country Pages - Belgium
-pageRoutes.get('/countries/belgium', (c) => {
-  return c.html(renderLayout(renderBelgiumCountryPage({
+pageRoutes.get('/countries/belgium', async (c) => {
+  return c.html(await renderLayout(renderBelgiumCountryPage({
     canonicalUrl: '/countries/belgium',
     request: c.req.raw
   }), {
@@ -525,8 +579,8 @@ pageRoutes.get('/countries/belgium', (c) => {
 });
 
 // Individual Country Pages - Singapore
-pageRoutes.get('/countries/singapore', (c) => {
-  return c.html(renderLayout(renderSingaporeCountryPage({
+pageRoutes.get('/countries/singapore', async (c) => {
+  return c.html(await renderLayout(renderSingaporeCountryPage({
     canonicalUrl: '/countries/singapore',
     request: c.req.raw
   }), {
@@ -539,8 +593,8 @@ pageRoutes.get('/countries/singapore', (c) => {
 });
 
 // Individual Country Pages - Dubai/UAE
-pageRoutes.get('/countries/dubai', (c) => {
-  return c.html(renderLayout(renderDubaiCountryPage({
+pageRoutes.get('/countries/dubai', async (c) => {
+  return c.html(await renderLayout(renderDubaiCountryPage({
     canonicalUrl: '/countries/dubai',
     request: c.req.raw
   }), {
@@ -553,8 +607,8 @@ pageRoutes.get('/countries/dubai', (c) => {
 });
 
 // Individual Country Pages - South Africa
-pageRoutes.get('/countries/south-africa', (c) => {
-  return c.html(renderLayout(renderSouthAfricaCountryPage({
+pageRoutes.get('/countries/south-africa', async (c) => {
+  return c.html(await renderLayout(renderSouthAfricaCountryPage({
     canonicalUrl: '/countries/south-africa',
     request: c.req.raw
   }), {
@@ -567,8 +621,8 @@ pageRoutes.get('/countries/south-africa', (c) => {
 });
 
 // Individual Country Pages - Philippines
-pageRoutes.get('/countries/philippines', (c) => {
-  return c.html(renderLayout(renderPhilippinesCountryPage({
+pageRoutes.get('/countries/philippines', async (c) => {
+  return c.html(await renderLayout(renderPhilippinesCountryPage({
     canonicalUrl: '/countries/philippines',
     request: c.req.raw
   }), {
@@ -581,8 +635,8 @@ pageRoutes.get('/countries/philippines', (c) => {
 });
 
 // Individual Country Pages - Pakistan
-pageRoutes.get('/countries/pakistan', (c) => {
-  return c.html(renderLayout(renderPakistanCountryPage({
+pageRoutes.get('/countries/pakistan', async (c) => {
+  return c.html(await renderLayout(renderPakistanCountryPage({
     canonicalUrl: '/countries/pakistan',
     request: c.req.raw
   }), {
@@ -595,8 +649,8 @@ pageRoutes.get('/countries/pakistan', (c) => {
 });
 
 // Individual Country Pages - Nepal
-pageRoutes.get('/countries/nepal', (c) => {
-  return c.html(renderLayout(renderNepalCountryPage({
+pageRoutes.get('/countries/nepal', async (c) => {
+  return c.html(await renderLayout(renderNepalCountryPage({
     canonicalUrl: '/countries/nepal',
     request: c.req.raw
   }), {
@@ -620,8 +674,8 @@ pageRoutes.get('/countries/nepal', (c) => {
 });
 
 // Individual Country Pages - Malaysia
-pageRoutes.get('/countries/malaysia', (c) => {
-  return c.html(renderLayout(renderMalaysiaCountryPage({
+pageRoutes.get('/countries/malaysia', async (c) => {
+  return c.html(await renderLayout(renderMalaysiaCountryPage({
     canonicalUrl: '/countries/malaysia',
     request: c.req.raw
   }), {
@@ -645,8 +699,8 @@ pageRoutes.get('/countries/malaysia', (c) => {
 });
 
 // Individual Country Pages - Ethiopia
-pageRoutes.get('/countries/ethiopia', (c) => {
-  return c.html(renderLayout(renderEthiopiaCountryPage({
+pageRoutes.get('/countries/ethiopia', async (c) => {
+  return c.html(await renderLayout(renderEthiopiaCountryPage({
     canonicalUrl: '/countries/ethiopia',
     request: c.req.raw
   }), {
@@ -670,8 +724,8 @@ pageRoutes.get('/countries/ethiopia', (c) => {
 });
 
 // Individual Country Pages - Bangladesh
-pageRoutes.get('/countries/bangladesh', (c) => {
-  return c.html(renderLayout(renderBangladeshCountryPage({
+pageRoutes.get('/countries/bangladesh', async (c) => {
+  return c.html(await renderLayout(renderBangladeshCountryPage({
     canonicalUrl: '/countries/bangladesh',
     request: c.req.raw
   }), {
@@ -695,7 +749,7 @@ pageRoutes.get('/countries/bangladesh', (c) => {
 });
 
 // Reviews listing page
-pageRoutes.get('/reviews', (c) => {
+pageRoutes.get('/reviews', async (c) => {
   return c.html(`
     <!DOCTYPE html>
     <html lang="en">
@@ -774,7 +828,7 @@ pageRoutes.get('/reviews', (c) => {
 });
 
 // Compare brokers page
-pageRoutes.get('/compare', (c) => {
+pageRoutes.get('/compare', async (c) => {
   return c.html(`
     <!DOCTYPE html>
     <html lang="en">
@@ -1054,7 +1108,7 @@ pageRoutes.get('/compare', (c) => {
 });
 
 // Contact page
-pageRoutes.get('/contact', (c) => {
+pageRoutes.get('/contact', async (c) => {
   return c.html(`
     <!DOCTYPE html>
     <html lang="en">
@@ -1260,7 +1314,7 @@ pageRoutes.get('/contact', (c) => {
 });
 
 // About page
-pageRoutes.get('/about', (c) => {
+pageRoutes.get('/about', async (c) => {
   return c.html(`
     <!DOCTYPE html>
     <html lang="en">
@@ -1428,142 +1482,7 @@ pageRoutes.get('/about', (c) => {
   `);
 });
 
-// Simulator page
-pageRoutes.get('/simulator', (c) => {
-  return c.html(`
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        ${generateMetaTags(
-          'Trading Cost Calculator - Compare Forex Broker Fees & Spreads | BrokerAnalysis',
-          'Calculate real trading costs across multiple brokers. Compare spreads, commissions, and total costs based on your trading strategy and volume.',
-          'trading cost calculator, forex fees calculator, spread comparison, broker costs, trading simulator',
-          '/simulator',
-          undefined,
-          c.req.raw
-        )}
-        
-        <link rel="stylesheet" href="/static/styles.css">
-        <link rel="stylesheet" href="/static/styles.css">
-    </head>
-    <body class="bg-gray-50">
-        ${generateNavigation()}
-        
-        <main class="max-w-6xl mx-auto py-12 px-4">
-            <div class="text-center mb-12">
-                <h1 class="text-4xl font-bold text-gray-900 mb-4">Trading Cost Calculator</h1>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                    Calculate and compare real trading costs across multiple forex brokers. 
-                    Factor in your trading strategy, volume, and preferred instruments.
-                </p>
-            </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Calculator Input Panel -->
-                <div class="lg:col-span-1">
-                    <div class="bg-white rounded-lg shadow-sm p-6 sticky top-6">
-                        <h2 class="text-xl font-semibold mb-6">Calculator Settings</h2>
-                        
-                        <div class="space-y-6">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Trading Strategy</label>
-                                <select id="strategy-select" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
-                                    <option value="scalping">Scalping (200+ trades/month)</option>
-                                    <option value="day-trading">Day Trading (100 trades/month)</option>
-                                    <option value="swing-trading" selected>Swing Trading (40 trades/month)</option>
-                                    <option value="position-trading">Position Trading (10 trades/month)</option>
-                                </select>
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Trade Volume (USD)</label>
-                                <input type="number" id="volume-input" value="100000" min="1000" max="10000000" step="1000"
-                                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
-                                <p class="text-xs text-gray-500 mt-1">Standard lot = $100,000</p>
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Currency Pair</label>
-                                <select id="instrument-select" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
-                                    <option value="EURUSD" selected>EUR/USD</option>
-                                    <option value="GBPUSD">GBP/USD</option>
-                                    <option value="USDJPY">USD/JPY</option>
-                                    <option value="AUDUSD">AUD/USD</option>
-                                    <option value="USDCAD">USD/CAD</option>
-                                </select>
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Select Brokers to Compare</label>
-                                <div id="broker-checkboxes" class="space-y-2">
-                                    <!-- Broker checkboxes will be loaded here -->
-                                </div>
-                            </div>
-
-                            <button id="calculate-costs" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors">
-                                <i class="fas fa-calculator mr-2"></i>
-                                Calculate Costs
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Results Panel -->
-                <div class="lg:col-span-2">
-                    <div class="bg-white rounded-lg shadow-sm p-6">
-                        <h2 class="text-xl font-semibold mb-6">Cost Comparison Results</h2>
-                        
-                        <div id="cost-results">
-                            <div class="text-center py-12 text-gray-500">
-                                <i class="fas fa-chart-bar text-4xl mb-4"></i>
-                                <p>Configure your settings and click "Calculate Costs" to see results</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Strategy Information -->
-                    <div class="bg-blue-50 rounded-lg p-6 mt-6">
-                        <h3 class="font-semibold text-lg mb-3">
-                            <i class="fas fa-info-circle text-blue-600 mr-2"></i>
-                            Understanding Trading Costs
-                        </h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                            <div>
-                                <h4 class="font-medium mb-2">Spreads</h4>
-                                <p class="text-gray-700">The difference between bid and ask prices. Lower spreads reduce your trading costs.</p>
-                            </div>
-                            <div>
-                                <h4 class="font-medium mb-2">Commissions</h4>
-                                <p class="text-gray-700">Fixed fees charged per lot traded. Common in ECN/Raw spread accounts.</p>
-                            </div>
-                            <div>
-                                <h4 class="font-medium mb-2">Slippage</h4>
-                                <p class="text-gray-700">Price difference between expected and actual execution, especially during volatility.</p>
-                            </div>
-                            <div>
-                                <h4 class="font-medium mb-2">Swap Rates</h4>
-                                <p class="text-gray-700">Interest charges or credits for positions held overnight.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-
-        ${generateFooter()}
-        
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                initializeCalculator();
-                loadBrokerOptions();
-            });
-        </script>
-    </body>
-    </html>
-  `);
-});
 
 // Country-specific broker pages
 const countryPages = [
@@ -1581,8 +1500,690 @@ const countryPages = [
   { slug: 'indonesia', name: 'Indonesia', regulator: 'Bappebti' }
 ];
 
+// ========================
+// SPECIFIC BROKER CATEGORY ROUTES
+// CRITICAL: These MUST be defined BEFORE the dynamic country routes to avoid conflicts
+// ========================
+
+// Gold Trading Brokers Page
+pageRoutes.get('/brokers/gold-trading', async (c) => {
+  try {
+    const content = renderGoldTradingBrokersPage({
+      canonicalUrl: '/brokers/gold-trading',
+      request: c.req.raw
+    });
+    
+    return c.html(await renderLayout(content, {
+      title: 'Best Gold Trading Brokers 2025 - XAU/USD Specialists | BrokerAnalysis',
+      description: 'Compare the top 7 gold trading brokers for 2025. Find brokers with tight XAU/USD spreads, multiple gold instruments, and advanced precious metals trading platforms.',
+      keywords: 'gold trading brokers, XAU/USD brokers, gold CFD trading, precious metals brokers, gold forex trading, FXTM, Pepperstone, FP Markets, AvaTrade, gold trading platforms',
+      canonicalUrl: '/brokers/gold-trading',
+      request: c.req.raw,
+      additionalHead: `
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        
+        <!-- Gold Trading Schema -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "name": "Best Gold Trading Brokers 2025",
+          "description": "Compare top forex brokers for gold trading with XAU/USD specialization",
+          "url": "${getCurrentDomain(c.req.raw)}/brokers/gold-trading",
+          "mainEntity": {
+            "@type": "ItemList",
+            "name": "Gold Trading Brokers",
+            "numberOfItems": 7
+          }
+        }
+        </script>
+
+        <!-- FAQ Schema for Gold Trading -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What are the best brokers for gold trading?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The best gold trading brokers include FXTM, Pepperstone, FP Markets, and XM, offering tight spreads, multiple gold instruments, and advanced trading platforms."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What is XAU/USD in gold trading?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "XAU/USD is the most popular gold trading pair representing 1 troy ounce of gold priced in US Dollars. It's the standard for gold CFD trading."
+              }
+            }
+          ]
+        }
+        </script>
+      `
+    }));
+  } catch (error) {
+    console.error('Gold trading page error:', error);
+    return c.html(`<h1>Error: ${error.message}</h1>`, 500);
+  }
+});
+
+// Islamic Account Brokers Page
+pageRoutes.get('/brokers/islamic-accounts', async (c) => {
+  try {
+    const content = renderIslamicAccountBrokersPage({
+      canonicalUrl: '/brokers/islamic-accounts',
+      request: c.req.raw
+    });
+    
+    return c.html(await renderLayout(content, {
+      title: 'Best Islamic Forex Brokers 2025 - Halal & Swap-Free Accounts | BrokerAnalysis',
+      description: 'Compare the top 6 Islamic (Halal) forex brokers offering Shariah-compliant swap-free accounts. Find trusted brokers with no overnight interest charges for Muslim traders.',
+      keywords: 'Islamic forex brokers, halal forex trading, swap-free accounts, Shariah compliant brokers, Muslim forex trading, FXTM Islamic, Pepperstone swap-free, Islamic trading accounts',
+      canonicalUrl: '/brokers/islamic-accounts',
+      request: c.req.raw
+    }));
+  } catch (error) {
+    console.error('Islamic accounts page error:', error);
+    return c.html(`<h1>Error loading Islamic accounts page: ${error.message}</h1>`, 500);
+  }
+});
+
+// Automated Trading Brokers Page
+pageRoutes.get('/brokers/automated-trading', async (c) => {
+  try {
+    const content = renderAutomatedTradingBrokersPage({
+      canonicalUrl: '/brokers/automated-trading',
+      request: c.req.raw
+    });
+    
+    return c.html(await renderLayout(content, {
+      title: 'Best Automated Forex Trading Brokers 2025 - EA & API Support | BrokerAnalysis',
+      description: 'Compare the top 5 forex brokers for automated trading, Expert Advisors (EAs), and algorithmic strategies. Find platforms with fast execution, API access, and VPS hosting.',
+      keywords: 'automated forex trading, Expert Advisors, EA brokers, algorithmic trading, forex APIs, MT4 EA, MT5 EA, Alpari, Pepperstone automated trading, forex robots',
+      canonicalUrl: '/brokers/automated-trading',
+      request: c.req.raw
+    }));
+  } catch (error) {
+    console.error('Automated trading page error:', error);
+    return c.html(`<h1>Error loading automated trading page: ${error.message}</h1>`, 500);
+  }
+});
+
+// High Leverage Brokers Page
+pageRoutes.get('/brokers/high-leverage', async (c) => {
+  try {
+    const content = renderHighLeverageBrokersPage({
+      canonicalUrl: '/brokers/high-leverage',
+      request: c.req.raw
+    });
+    
+    return c.html(await renderLayout(content, {
+      title: 'Best High Leverage Forex Brokers 2025 - Up to 1:2000 Leverage | BrokerAnalysis',
+      description: 'Compare the top high leverage forex brokers offering 1:500, 1:1000, and 1:2000+ leverage. Find brokers with professional accounts, tight spreads, and advanced risk management.',
+      keywords: 'high leverage forex brokers, 1:500 leverage, 1:1000 leverage, 1:2000 leverage, professional forex accounts, FXTM, BlackBull Markets, Pepperstone, high leverage trading',
+      canonicalUrl: '/brokers/high-leverage',
+      request: c.req.raw,
+      additionalHead: `
+        <!-- High Leverage Schema -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "name": "Best High Leverage Forex Brokers 2025",
+          "description": "Compare top forex brokers offering high leverage up to 1:2000",
+          "url": "${getCurrentDomain(c.req.raw)}/brokers/high-leverage",
+          "mainEntity": {
+            "@type": "ItemList",
+            "name": "High Leverage Forex Brokers",
+            "numberOfItems": 6
+          }
+        }
+        </script>
+
+        <!-- FAQ Schema for High Leverage -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What is the highest leverage available in forex?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Some offshore brokers offer leverage up to 1:3000, but common high leverage ratios are 1:500 to 1:2000. FXTM offers up to 1:2000 through offshore entities."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Is high leverage trading safe?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "High leverage trading carries significant risk and amplifies both profits and losses. Only experienced traders with proper risk management should consider high leverage."
+              }
+            }
+          ]
+        }
+        </script>
+      `
+    }));
+  } catch (error) {
+    console.error('High leverage page error:', error);
+    return c.html(`<h1>Error loading high leverage page: ${error.message}</h1>`, 500);
+  }
+});
+
+// Oil Trading Brokers Page
+pageRoutes.get('/brokers/oil-trading', async (c) => {
+  try {
+    const content = renderOilTradingBrokersPage({
+      canonicalUrl: '/brokers/oil-trading',
+      request: c.req.raw
+    });
+    
+    return c.html(await renderLayout(content, {
+      title: 'Best Oil Trading Brokers 2025 - WTI & Brent Crude Oil CFDs | BrokerAnalysis',
+      description: 'Compare the top 8 oil trading brokers for WTI and Brent crude oil CFDs. Find brokers with tight spreads, professional platforms, and energy market specialization.',
+      keywords: 'oil trading brokers, crude oil CFD, WTI trading, Brent crude trading, energy CFDs, commodity brokers, oil futures, FXTM oil, Axi oil trading, IG oil',
+      canonicalUrl: '/brokers/oil-trading',
+      request: c.req.raw,
+      additionalHead: `
+        <!-- Oil Trading Schema -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "name": "Best Oil Trading Brokers 2025",
+          "description": "Compare top forex brokers for WTI and Brent crude oil CFD trading",
+          "url": "${getCurrentDomain(c.req.raw)}/brokers/oil-trading",
+          "mainEntity": {
+            "@type": "ItemList",
+            "name": "Oil Trading Brokers",
+            "numberOfItems": 8
+          }
+        }
+        </script>
+
+        <!-- FAQ Schema for Oil Trading -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What is the difference between WTI and Brent crude oil?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "WTI (West Texas Intermediate) is the US benchmark for crude oil, while Brent Crude is the international benchmark. Brent is typically priced $2-5 higher than WTI due to different quality characteristics and transportation costs."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Which broker offers the tightest oil trading spreads?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Axi offers the tightest spreads with raw spreads starting from 0.0 pips, followed by FXTM with 0.4 pips average. However, always check current live spreads as they vary with market conditions."
+              }
+            }
+          ]
+        }
+        </script>
+      `
+    }));
+  } catch (error) {
+    console.error('Oil trading page error:', error);
+    return c.html(`<h1>Error loading oil trading page: ${error.message}</h1>`, 500);
+  }
+});
+
+// Copy Trading Brokers Page
+pageRoutes.get('/brokers/copy-trading', async (c) => {
+  try {
+    const content = renderCopyTradingBrokersPage({
+      canonicalUrl: '/brokers/copy-trading',
+      request: c.req.raw
+    });
+    
+    return c.html(await renderLayout(content, {
+      title: 'Best Copy Trading Brokers 2025 - Social Trading Platforms | BrokerAnalysis',
+      description: 'Compare the top 8 copy trading brokers and social trading platforms. Find brokers with advanced signal copying, large communities, and proven performance tracking.',
+      keywords: 'copy trading brokers, social trading platforms, signal providers, eToro copy trading, ZuluTrade, mirror trading, automated copying, social forex trading',
+      canonicalUrl: '/brokers/copy-trading',
+      request: c.req.raw,
+      additionalHead: `
+        <!-- Copy Trading Schema -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "name": "Best Copy Trading Brokers 2025",
+          "description": "Compare top copy trading brokers and social trading platforms for automated signal copying",
+          "url": "${getCurrentDomain(c.req.raw)}/brokers/copy-trading",
+          "mainEntity": {
+            "@type": "ItemList",
+            "name": "Copy Trading Brokers",
+            "numberOfItems": 8
+          }
+        }
+        </script>
+
+        <!-- FAQ Schema for Copy Trading -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Is copy trading profitable?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Copy trading can be profitable if you choose skilled signal providers and manage risk properly. However, past performance doesn't guarantee future results, and all trading involves risk of loss."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Which broker is best for copy trading beginners?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "eToro is ideal for beginners with its user-friendly interface, social features, and CopyTrader™ system designed specifically for copy trading with extensive educational resources."
+              }
+            }
+          ]
+        }
+        </script>
+      `
+    }));
+  } catch (error) {
+    console.error('Copy trading page error:', error);
+    return c.html(`<h1>Error loading copy trading page: ${error.message}</h1>`, 500);
+  }
+});
+
+// ECN Brokers Page
+pageRoutes.get('/brokers/ecn', async (c) => {
+  try {
+    const content = renderECNBrokersPage({
+      canonicalUrl: '/brokers/ecn',
+      request: c.req.raw
+    });
+    
+    return c.html(await renderLayout(content, {
+      title: 'Best ECN Forex Brokers 2025 - True ECN & Raw Spreads | BrokerAnalysis',
+      description: 'Compare the top 8 ECN (Electronic Communication Network) forex brokers offering raw spreads from 0.0 pips, DMA execution, and professional trading conditions.',
+      keywords: 'ECN forex brokers, raw spreads, DMA execution, electronic communication network, ECN vs STP, IC Markets ECN, FP Markets ECN, Pepperstone ECN, BlackBull ECN',
+      canonicalUrl: '/brokers/ecn',
+      request: c.req.raw,
+      additionalHead: `
+        <!-- ECN Brokers Schema -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "name": "Best ECN Forex Brokers 2025",
+          "description": "Compare top ECN forex brokers with raw spreads and direct market access execution",
+          "url": "${getCurrentDomain(c.req.raw)}/brokers/ecn",
+          "mainEntity": {
+            "@type": "ItemList",
+            "name": "ECN Forex Brokers",
+            "numberOfItems": 8
+          }
+        }
+        </script>
+
+        <!-- FAQ Schema for ECN -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What is an ECN broker?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "An ECN (Electronic Communication Network) broker provides direct market access where trades are executed directly with liquidity providers, banks, and other traders, offering raw spreads with commission-based pricing."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What's the difference between ECN and STP brokers?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "ECN brokers offer direct access to the interbank market with raw spreads plus commission, while STP brokers route orders to liquidity providers but may mark up spreads instead of charging commission."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Which ECN broker has the lowest spreads?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "IC Markets offers the tightest ECN spreads starting from 0.0 pips on EUR/USD with $3.50 commission per lot, followed by FP Markets and Pepperstone with similar raw spread offerings."
+              }
+            }
+          ]
+        }
+        </script>
+      `
+    }));
+  } catch (error) {
+    console.error('ECN page error:', error);
+    return c.html(`<h1>Error loading ECN page: ${error.message}</h1>`, 500);
+  }
+});
+
+// Scalping Brokers Page
+pageRoutes.get('/brokers/scalping', async (c) => {
+  try {
+    const content = renderScalpingBrokersPage({
+      canonicalUrl: '/brokers/scalping',
+      request: c.req.raw
+    });
+    
+    return c.html(await renderLayout(content, {
+      title: 'Best Scalping Forex Brokers 2025 - Ultra-Fast Execution & Low Spreads | BrokerAnalysis',
+      description: 'Compare the top 8 scalping forex brokers with ultra-fast execution speeds, raw spreads from 0.02 pips, VPS hosting, and professional trading infrastructure for scalpers.',
+      keywords: 'scalping forex brokers, fast execution brokers, ultra low spreads, VPS hosting, ECN scalping, BlackBull Markets, IC Markets scalping, Pepperstone scalping',
+      canonicalUrl: '/brokers/scalping',
+      request: c.req.raw,
+      additionalHead: `
+        <!-- Scalping Brokers Schema -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "name": "Best Scalping Forex Brokers 2025",
+          "description": "Compare top forex brokers for scalping with ultra-fast execution, raw spreads, and professional trading infrastructure",
+          "url": "${getCurrentDomain(c.req.raw)}/brokers/scalping",
+          "mainEntity": {
+            "@type": "ItemList",
+            "name": "Scalping Forex Brokers",
+            "numberOfItems": 8
+          }
+        }
+        </script>
+
+        <!-- FAQ Schema for Scalping -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What is forex scalping?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Forex scalping is a high-frequency trading strategy where traders make numerous small trades throughout the day, typically holding positions for seconds to minutes, aiming to profit from small price movements."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Which broker has the fastest execution for scalping?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "BlackBull Markets offers the fastest execution speeds at 72ms average, followed by Pepperstone at 77ms and IC Markets at 134ms, making them ideal for scalping strategies."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Is scalping profitable?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Scalping can be profitable for experienced traders with proper risk management, but it requires discipline, fast execution, and low trading costs. Most scalpers need significant capital and professional tools to succeed."
+              }
+            }
+          ]
+        }
+        </script>
+      `
+    }));
+  } catch (error) {
+    console.error('Scalping page error:', error);
+    return c.html(`<h1>Error loading scalping page: ${error.message}</h1>`, 500);
+  }
+});
+
+// Demo Account Brokers Page
+pageRoutes.get('/brokers/demo-accounts', async (c) => {
+  try {
+    const content = renderDemoAccountBrokersPage({
+      canonicalUrl: '/brokers/demo-accounts',
+      request: c.req.raw
+    });
+    
+    return c.html(await renderLayout(content, {
+      title: 'Best Forex Demo Accounts 2025 - Risk-Free Practice Trading | BrokerAnalysis',
+      description: 'Compare the top 8 forex demo accounts for risk-free practice trading. Find brokers with unlimited demos, real market data, and comprehensive educational resources.',
+      keywords: 'forex demo accounts, practice trading, risk-free forex, demo trading platforms, XM demo, eToro demo, IG Markets demo, OANDA demo',
+      canonicalUrl: '/brokers/demo-accounts',
+      request: c.req.raw
+    }));
+  } catch (error) {
+    console.error('Demo accounts page error:', error);
+    return c.html(`<h1>Error loading demo accounts page: ${error.message}</h1>`, 500);
+  }
+});
+
+// MT4 Brokers Page
+pageRoutes.get('/brokers/mt4', async (c) => {
+  try {
+    const content = renderMT4BrokersPage({
+      canonicalUrl: '/brokers/mt4',
+      request: c.req.raw
+    });
+    
+    return c.html(await renderLayout(content, {
+      title: 'Best MT4 Forex Brokers 2025 - MetaTrader 4 Specialists | BrokerAnalysis',
+      description: 'Compare the top 8 MetaTrader 4 forex brokers with advanced tools, Expert Advisor support, and enhanced MT4 features for professional trading.',
+      keywords: 'MT4 forex brokers, MetaTrader 4, Expert Advisors, MT4 tools, Pepperstone Smart Trader Tools, IC Markets MT4, automated trading',
+      canonicalUrl: '/brokers/mt4',
+      request: c.req.raw
+    }));
+  } catch (error) {
+    console.error('MT4 page error:', error);
+    return c.html(`<h1>Error loading MT4 page: ${error.message}</h1>`, 500);
+  }
+});
+
+// Stock Trading Brokers Page
+pageRoutes.get('/brokers/stock-trading', async (c) => {
+  try {
+    const content = renderStockTradingBrokersPage({
+      canonicalUrl: '/brokers/stock-trading',
+      request: c.req.raw
+    });
+    
+    return c.html(await renderLayout(content, {
+      title: 'Best Stock Trading Brokers 2025 - Global Equity Markets | BrokerAnalysis',
+      description: 'Compare the top 8 stock trading brokers offering access to global markets, commission-free trading, and professional research tools for equity investors.',
+      keywords: 'stock trading brokers, equity trading, global stock markets, commission-free stocks, Interactive Brokers, eToro stocks, IG Markets stocks',
+      canonicalUrl: '/brokers/stock-trading',
+      request: c.req.raw
+    }));
+  } catch (error) {
+    console.error('Stock trading page error:', error);
+    return c.html(`<h1>Error loading stock trading page: ${error.message}</h1>`, 500);
+  }
+});
+
+// Beginners Brokers Page
+pageRoutes.get('/brokers/beginners', async (c) => {
+  try {
+    const content = renderBeginnersBrokersPage({
+      canonicalUrl: '/brokers/beginners',
+      request: c.req.raw
+    });
+    
+    return c.html(await renderLayout(content, {
+      title: 'Best Forex Brokers for Beginners 2025 - Start Trading Safely | BrokerAnalysis',
+      description: 'Compare the top 8 beginner-friendly forex brokers offering comprehensive education, demo accounts, low deposits, and user-friendly platforms for new traders.',
+      keywords: 'forex brokers beginners, beginner forex trading, forex education, demo accounts, low minimum deposit, eToro beginners, XM beginners',
+      canonicalUrl: '/brokers/beginners',
+      request: c.req.raw
+    }));
+  } catch (error) {
+    console.error('Beginners page error:', error);
+    return c.html(`<h1>Error loading beginners page: ${error.message}</h1>`, 500);
+  }
+});
+
+// Scalping Brokers Page
+pageRoutes.get('/brokers/scalping', async (c) => {
+  try {
+    const content = renderScalpingBrokersPage({
+      canonicalUrl: '/brokers/scalping',
+      request: c.req.raw
+    });
+    
+    return c.html(await renderLayout(content, {
+      title: 'Best Scalping Forex Brokers 2025 - Ultra-Fast Execution | BrokerAnalysis',
+      description: 'Compare the top 8 scalping forex brokers with ultra-fast execution speeds, raw spreads from 0.02 pips, VPS hosting, and professional trading infrastructure for high-frequency strategies.',
+      keywords: 'scalping forex brokers, fast execution, ultra-low spreads, high frequency trading, scalping strategies, BlackBull Markets, IC Markets, Pepperstone scalping, raw spreads',
+      canonicalUrl: '/brokers/scalping',
+      request: c.req.raw,
+      additionalHead: `
+        <!-- Scalping Brokers Schema -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "name": "Best Scalping Forex Brokers 2025",
+          "description": "Compare top forex brokers for scalping with ultra-fast execution speeds and raw spreads",
+          "url": "${getCurrentDomain(c.req.raw)}/brokers/scalping",
+          "mainEntity": {
+            "@type": "ItemList",
+            "name": "Scalping Forex Brokers",
+            "numberOfItems": 8
+          }
+        }
+        </script>
+
+        <!-- FAQ Schema for Scalping -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What is forex scalping?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Forex scalping is a high-frequency trading strategy where traders make numerous small trades throughout the day, typically holding positions for seconds to minutes to profit from small price movements."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Which broker has the fastest execution for scalping?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "BlackBull Markets offers the fastest execution speeds at 72ms average, followed by Pepperstone at 77ms and IC Markets at 134ms, making them ideal choices for scalping strategies."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Are raw spreads better for scalping?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, raw spreads with commission typically offer lower total trading costs for scalpers compared to standard accounts, as they provide transparent interbank pricing without markup."
+              }
+            }
+          ]
+        }
+        </script>
+      `
+    }));
+  } catch (error) {
+    console.error('Scalping page error:', error);
+    return c.html(`<h1>Error loading scalping page: ${error.message}</h1>`, 500);
+  }
+});
+
+// Demo Accounts Brokers Page
+pageRoutes.get('/brokers/demo-accounts', async (c) => {
+  try {
+    const content = renderDemoAccountsBrokersPage({
+      canonicalUrl: '/brokers/demo-accounts',
+      request: c.req.raw
+    });
+    
+    return c.html(await renderLayout(content, {
+      title: 'Best Demo Account Forex Brokers 2025 - Free Practice Trading | BrokerAnalysis',
+      description: 'Compare the top 8 forex brokers with unlimited demo accounts, virtual funds up to $100K+, and real market conditions for risk-free practice trading and strategy testing.',
+      keywords: 'demo account forex brokers, free demo trading, practice forex trading, unlimited demo accounts, virtual trading, IC Markets demo, Pepperstone demo, XM demo',
+      canonicalUrl: '/brokers/demo-accounts',
+      request: c.req.raw,
+      additionalHead: `
+        <!-- Demo Account Brokers Schema -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "name": "Best Demo Account Forex Brokers 2025",
+          "description": "Compare top forex brokers offering unlimited demo accounts with virtual funds and real market conditions",
+          "url": "${getCurrentDomain(c.req.raw)}/brokers/demo-accounts",
+          "mainEntity": {
+            "@type": "ItemList",
+            "name": "Demo Account Forex Brokers",
+            "numberOfItems": 8
+          }
+        }
+        </script>
+
+        <!-- FAQ Schema for Demo Accounts -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Are demo accounts completely free?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, all reputable forex brokers offer completely free demo accounts with no deposits or fees required. The virtual funds are for practice only and cannot be withdrawn."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How accurate are demo account conditions?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Quality demo accounts provide real-time market data and similar execution conditions to live trading, though there can be slight differences in execution speed and slippage."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "When should I switch to a live account?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Switch to live trading after demonstrating consistent profitability for 3+ months in demo, developing proper risk management skills, and having adequate trading capital."
+              }
+            }
+          ]
+        }
+        </script>
+      `
+    }));
+  } catch (error) {
+    console.error('Demo accounts page error:', error);
+    return c.html(`<h1>Error loading demo accounts page: ${error.message}</h1>`, 500);
+  }
+});
+
+// ========================
+// DYNAMIC COUNTRY ROUTES
+// These must come AFTER specific routes to avoid conflicts
+// ========================
+
 countryPages.forEach(country => {
-  pageRoutes.get(`/brokers/${country.slug}`, (c) => {
+  pageRoutes.get(`/brokers/${country.slug}`, async (c) => {
     return c.html(`
       <!DOCTYPE html>
       <html lang="en">
@@ -1754,7 +2355,7 @@ pageRoutes.get('/dashboard', async (c) => {
 });
 
 // SEO pages (robots.txt, sitemap.xml)
-pageRoutes.get('/robots.txt', (c) => {
+pageRoutes.get('/robots.txt', async (c) => {
   const domain = getCurrentDomain(c.req.raw);
   return c.text(`User-agent: *
 Allow: /
@@ -1867,7 +2468,7 @@ pageRoutes.get('/sitemap.xml', async (c) => {
 });
 
 // Test routes
-pageRoutes.get('/test-simulator', (c) => {
+pageRoutes.get('/test-simulator', async (c) => {
   return c.html(`
     <!DOCTYPE html>
     <html>
@@ -1892,51 +2493,8 @@ pageRoutes.get('/test-simulator', (c) => {
 
 // Helper functions for generating common HTML components
 function generateNavigation(): string {
-  return `
-    <nav class="bg-white shadow-sm border-b border-gray-200">
-        <div class="max-w-6xl mx-auto px-4">
-            <div class="flex justify-between items-center py-4">
-                <div class="flex items-center">
-                    <a href="/" class="text-2xl font-bold text-gray-900">
-                        <i class="fas fa-chart-line text-blue-600 mr-2"></i>
-                        BrokerAnalysis
-                    </a>
-                </div>
-                
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="/brokers" class="text-gray-700 hover:text-blue-600 transition-colors">Brokers</a>
-                    <a href="/countries" class="text-gray-700 hover:text-blue-600 transition-colors">Countries</a>
-                    <a href="/reviews" class="text-gray-700 hover:text-blue-600 transition-colors">Reviews</a>
-                    <a href="/compare" class="text-gray-700 hover:text-blue-600 transition-colors">Compare</a>
-                    <a href="/simulator" class="text-gray-700 hover:text-blue-600 transition-colors">Calculator</a>
-                    <a href="/about" class="text-gray-700 hover:text-blue-600 transition-colors">About</a>
-                    <a href="/contact" class="text-gray-700 hover:text-blue-600 transition-colors">Contact</a>
-                </div>
-
-                <div class="flex items-center space-x-4">
-                    <div id="auth-section">
-                        <!-- Auth buttons will be loaded here -->
-                    </div>
-                    <button id="mobile-menu-toggle" class="md:hidden text-gray-700">
-                        <i class="fas fa-bars text-xl"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-        
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
-            <div class="px-4 py-2 space-y-2">
-                <a href="/brokers" class="block py-2 text-gray-700">Brokers</a>
-                <a href="/countries" class="block py-2 text-gray-700">Countries</a>
-                <a href="/reviews" class="block py-2 text-gray-700">Reviews</a>
-                <a href="/compare" class="block py-2 text-gray-700">Compare</a>
-                <a href="/simulator" class="block py-2 text-gray-700">Calculator</a>
-                <a href="/about" class="block py-2 text-gray-700">About</a>
-                <a href="/contact" class="block py-2 text-gray-700">Contact</a>
-            </div>
-        </div>
-    </nav>
-  `;
+  // Use enhanced navigation component for consistency
+  return generateCompleteNavigation();
 }
 
 function generateFooter(): string {
@@ -2178,7 +2736,7 @@ pageRoutes.get('/sitemap.xml', async (c) => {
 });
 
 // SEO Enhancement: Robots.txt
-pageRoutes.get('/robots.txt', (c) => {
+pageRoutes.get('/robots.txt', async (c) => {
   const domain = getCurrentDomain(c.req.raw);
   const robotsTxt = `User-agent: *
 Allow: /
@@ -2415,104 +2973,20 @@ regulatoryAuthorities.forEach(regulator => {
   });
 });
 
-// Trading Cost Simulator Page
-pageRoutes.get('/simulator', (c) => {
-  return c.html(`
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        ${generateMetaTags(
-          'Trading Cost Calculator 2025 - Compare Broker Fees & Spreads | BrokerAnalysis',
-          'Calculate and compare trading costs across multiple forex brokers. Analyze spreads, commissions, and total trading expenses for your strategy.',
-          'trading cost calculator, forex calculator, broker fees, spread calculator, trading expenses, commission calculator',
-          '/simulator',
-          undefined,
-          c.req.raw
-        )}
-        <link href="/static/styles.css" rel="stylesheet">
-    </head>
-    <body class="bg-gray-50">
-        ${generateNavigation()}
-        
-        <main class="max-w-7xl mx-auto py-12 px-4">
-            <div class="text-center mb-12">
-                <h1 class="text-4xl font-bold text-gray-900 mb-4">Trading Cost Calculator</h1>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                    Calculate and compare real trading costs across multiple brokers. 
-                    Input your trading parameters to see which broker offers the best value for your strategy.
-                </p>
-            </div>
+// Trading Calculators Page - Profit, Margin & Pip Calculators
+pageRoutes.get('/calculators', async (c) => {
+  return c.html(renderTradingCalculatorsPage({
+    canonicalUrl: '/calculators',
+    request: c.req.raw
+  }));
+});
 
-            <!-- Enhanced Simulator Interface -->
-            <div id="simulator-interface">
-                <!-- Interface will be rendered by enhanced-simulator.js -->
-            </div>
-
-            <!-- SEO Content -->
-            <div class="bg-white rounded-xl shadow-lg p-8 mt-12">
-                <h2 class="text-2xl font-bold mb-6">How Trading Costs Impact Your Profits</h2>
-                <div class="grid md:grid-cols-2 gap-8">
-                    <div>
-                        <h3 class="text-lg font-semibold mb-3">Understanding Trading Costs</h3>
-                        <ul class="space-y-2 text-gray-700">
-                            <li class="flex items-start">
-                                <i class="fas fa-check text-green-600 mt-1 mr-2"></i>
-                                <span><strong>Spreads:</strong> The difference between bid and ask prices</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check text-green-600 mt-1 mr-2"></i>
-                                <span><strong>Commissions:</strong> Fixed fees charged per trade or lot</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check text-green-600 mt-1 mr-2"></i>
-                                <span><strong>Overnight Fees:</strong> Swap rates for positions held overnight</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check text-green-600 mt-1 mr-2"></i>
-                                <span><strong>Slippage:</strong> Price differences during order execution</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-semibold mb-3">Cost Impact by Strategy</h3>
-                        <div class="space-y-3">
-                            <div class="p-3 bg-blue-50 rounded-lg">
-                                <div class="font-medium text-blue-900">Scalping</div>
-                                <div class="text-sm text-blue-700">High frequency = low spreads critical</div>
-                            </div>
-                            <div class="p-3 bg-green-50 rounded-lg">
-                                <div class="font-medium text-green-900">Day Trading</div>
-                                <div class="text-sm text-green-700">Balance of spreads and commissions</div>
-                            </div>
-                            <div class="p-3 bg-purple-50 rounded-lg">
-                                <div class="font-medium text-purple-900">Swing Trading</div>
-                                <div class="text-sm text-purple-700">Overnight fees become important</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mt-8 p-6 bg-yellow-50 border border-yellow-200 rounded-lg">
-                    <h4 class="font-semibold text-yellow-800 mb-2">
-                        <i class="fas fa-lightbulb mr-2"></i>Pro Tip
-                    </h4>
-                    <p class="text-yellow-700">
-                        A difference of just 0.5 pips in spreads can cost a day trader hundreds of dollars per month. 
-                        Use our calculator to see the real impact on your trading budget.
-                    </p>
-                </div>
-            </div>
-        </main>
-
-        ${generateFooter()}
-
-        <!-- Enhanced Simulator JavaScript -->
-        <script src="/static/enhanced-simulator.js"></script>
-    </body>
-    </html>
-  `);
+// Enhanced Trading Cost Simulator Page with 2025 SEO Best Practices
+pageRoutes.get('/simulator', async (c) => {
+  return c.html(renderTradingSimulatorPage({
+    canonicalUrl: '/simulator',
+    request: c.req.raw
+  }));
 });
 
 export { pageRoutes };

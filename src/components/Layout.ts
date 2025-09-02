@@ -3,6 +3,118 @@ import { generateCompleteFooter } from './Footer.js';
 import { renderChatbot } from './Chatbot.js';
 import { renderJavaScriptIncludes } from './JavaScriptIncludes.js';
 import { generateMetaTags, getCurrentDomain } from '../utils/index.js';
+import { getCriticalCSS } from './CriticalCSS.js';
+
+// Cache for complete CSS to avoid repeated file reads - CLEARED FOR FRESH START
+let completeCSS: string | null = null;
+
+async function getInlineCompleteCSS(): Promise<string> {
+  if (completeCSS) {
+    return completeCSS;
+  }
+  
+  try {
+    // Use fetch to get CSS from our own inline CSS route instead of fs.readFile
+    // This works in Cloudflare Workers environment
+    const response = await fetch('http://localhost:3000/inline-css');
+    if (response.ok) {
+      const cssContent = await response.text();
+      completeCSS = `<style id="complete-tailwind">${cssContent}</style>`;
+      console.log('✅ Successfully loaded complete Tailwind CSS inline');
+      return completeCSS;
+    } else {
+      throw new Error(`Failed to fetch CSS: ${response.status}`);
+    }
+  } catch (error) {
+    console.error('Error reading complete CSS file:', error);
+    // Comprehensive fallback CSS with more Tailwind classes
+    const fallback = `<style id="complete-tailwind-fallback">
+      /* Comprehensive Tailwind CSS fallback */
+      *,:before,:after{box-sizing:border-box;border:0 solid #e5e7eb}*,:before,:after{--tw-content:''}html{line-height:1.5;-webkit-text-size-adjust:100%;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif}body{margin:0;line-height:inherit}
+      .bg-blue-50{background-color:#eff6ff}
+      .bg-white{background-color:#fff}
+      .bg-gray-50{background-color:#f9fafb}
+      .bg-blue-600{background-color:#2563eb}
+      .bg-blue-700{background-color:#1d4ed8}
+      .bg-blue-100{background-color:#dbeafe}
+      .text-blue-900{color:#1e3a8a}
+      .text-white{color:#fff}
+      .text-gray-900{color:#111827}
+      .text-gray-700{color:#374151}
+      .text-gray-600{color:#4b5563}
+      .text-blue-600{color:#2563eb}
+      .text-blue-800{color:#1e40af}
+      .shadow-lg{box-shadow:0 10px 15px -3px rgba(0,0,0,0.1),0 4px 6px -4px rgba(0,0,0,0.1)}
+      .border-b{border-bottom-width:1px}
+      .border-gray-200{border-color:#e5e7eb}
+      .max-w-7xl{max-width:80rem}
+      .max-w-6xl{max-width:72rem}
+      .mx-auto{margin-left:auto;margin-right:auto}
+      .px-4{padding-left:1rem;padding-right:1rem}
+      .px-6{padding-left:1.5rem;padding-right:1.5rem}
+      .py-2{padding-top:0.5rem;padding-bottom:0.5rem}
+      .py-3{padding-top:0.75rem;padding-bottom:0.75rem}
+      .py-4{padding-top:1rem;padding-bottom:1rem}
+      .py-12{padding-top:3rem;padding-bottom:3rem}
+      .min-h-screen{min-height:100vh}
+      .h-16{height:4rem}
+      .flex{display:flex}
+      .inline-flex{display:inline-flex}
+      .grid{display:grid}
+      .hidden{display:none}
+      .items-center{align-items:center}
+      .items-start{align-items:flex-start}
+      .justify-between{justify-content:space-between}
+      .justify-center{justify-content:center}
+      .space-x-1>:not([hidden])~:not([hidden]){margin-right:0.25rem}
+      .space-x-2>:not([hidden])~:not([hidden]){margin-right:0.5rem}
+      .space-x-3>:not([hidden])~:not([hidden]){margin-right:0.75rem}
+      .space-x-8>:not([hidden])~:not([hidden]){margin-right:2rem}
+      .space-y-4>:not([hidden])~:not([hidden]){margin-top:1rem}
+      .rounded{border-radius:0.25rem}
+      .rounded-lg{border-radius:0.5rem}
+      .font-bold{font-weight:700}
+      .font-semibold{font-weight:600}
+      .text-xl{font-size:1.25rem;line-height:1.75rem}
+      .text-2xl{font-size:1.5rem;line-height:2rem}
+      .hover\\:text-blue-600:hover{color:#2563eb}
+      .hover\\:bg-blue-700:hover{background-color:#1d4ed8}
+      .hover\\:bg-blue-100:hover{background-color:#dbeafe}
+      .hover\\:opacity-80:hover{opacity:0.8}
+      .focus\\:text-blue-600:focus{color:#2563eb}
+      .focus\\:bg-blue-100:focus{background-color:#dbeafe}
+      .focus\\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}
+      .focus\\:ring-4:focus{box-shadow:0 0 0 4px rgba(59,130,246,0.5)}
+      .transition-colors{transition:color,background-color,border-color,text-decoration-color,fill,stroke 150ms cubic-bezier(0.4,0,0.2,1)}
+      .transition-opacity{transition:opacity 150ms cubic-bezier(0.4,0,0.2,1)}
+      .transition-transform{transition:transform 150ms cubic-bezier(0.4,0,0.2,1)}
+      .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}
+      .focus\\:not-sr-only:focus{position:static;width:auto;height:auto;padding:0;margin:0;overflow:visible;clip:auto;white-space:normal}
+      .absolute{position:absolute}
+      .relative{position:relative}
+      .top-4{top:1rem}
+      .left-4{left:1rem}
+      .z-50{z-index:50}
+      .flex-col{flex-direction:column}
+      .group:hover .group-hover\\:scale-110{transform:scale(1.1)}
+      .mb-4{margin-bottom:1rem}
+      .mb-8{margin-bottom:2rem}
+      .mt-8{margin-top:2rem}
+      .w-full{width:100%}
+      .grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}
+      .grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+      .gap-4{gap:1rem}
+      .gap-6{gap:1.5rem}
+      .gap-8{gap:2rem}
+      @media (min-width: 640px){.sm\\:px-6{padding-left:1.5rem;padding-right:1.5rem}.sm\\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}}
+      @media (min-width: 768px){.md\\:flex{display:flex}.md\\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}}
+      @media (min-width: 1024px){.lg\\:px-8{padding-left:2rem;padding-right:2rem}.lg\\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}}
+    </style>`;
+    completeCSS = fallback;
+    return completeCSS;
+  }
+}
 
 interface LayoutOptions {
   title?: string;
@@ -15,7 +127,7 @@ interface LayoutOptions {
   request?: Request;
 }
 
-export function renderLayout(content: string, options: LayoutOptions = {}): string {
+export async function renderLayout(content: string, options: LayoutOptions = {}): Promise<string> {
   const {
     title = 'Best Forex Brokers 2025 - Compare 67+ Regulated Brokers | BrokerAnalysis',
     description = 'Find the perfect forex broker with our intelligent matching system. Compare spreads, regulation, and features of 67+ top-rated brokers. Get personalized recommendations now.',
@@ -36,11 +148,22 @@ export function renderLayout(content: string, options: LayoutOptions = {}): stri
     <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
         <title>${title}</title>
         <meta name="description" content="${description}">
         <meta name="keywords" content="${keywords}">
         <meta name="author" content="BrokerAnalysis">
+        
+        <!-- Performance and rendering hints -->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="theme-color" content="#2563eb">
+        <meta name="color-scheme" content="light">
+        <meta name="format-detection" content="telephone=no">
+        
+        <!-- Prefetch critical navigation routes -->
+        <link rel="prefetch" href="/reviews">
+        <link rel="prefetch" href="/compare">
+        <link rel="prefetch" href="/simulator">
         
         <!-- Canonical URL -->
         <link rel="canonical" href="${fullCanonicalUrl}">
@@ -66,11 +189,132 @@ export function renderLayout(content: string, options: LayoutOptions = {}): stri
         <link rel="icon" type="image/png" sizes="16x16" href="/static/images/favicon-16x16.png">
         <link rel="apple-touch-icon" href="/static/images/apple-touch-icon.png">
         
-        <!-- DNS prefetch for performance -->
-        <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+        <!-- Critical CSS - Loaded Immediately to Prevent FOUC -->
+        ${getCriticalCSS()}
         
-        <!-- Compiled CSS -->
-        <link href="/static/styles.css" rel="stylesheet">
+        <!-- Performance optimizations for Core Web Vitals -->
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+        <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+        <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        
+        <!-- Complete Tailwind CSS - Client-side injection to bypass Workers limitations -->
+        <script>
+        // Inject complete CSS on client-side to ensure all Tailwind classes are available
+        (async function() {
+          try {
+            const response = await fetch('/inline-css');
+            if (response.ok) {
+              const css = await response.text();
+              const style = document.createElement('style');
+              style.id = 'complete-tailwind-injected';
+              style.textContent = css;
+              document.head.appendChild(style);
+              console.log('✅ Complete Tailwind CSS loaded and injected');
+            } else {
+              console.log('Using fallback CSS - fetch failed:', response.status);
+            }
+          } catch (error) {
+            console.log('Using fallback CSS - fetch error:', error.message);
+          }
+        })();
+        </script>
+        
+        <!-- Immediate critical styles to prevent FOUC -->
+        <style>
+        /* Prevent FOUC with immediate basic styles */
+        *,:before,:after{box-sizing:border-box;border:0 solid #e5e7eb}*,:before,:after{--tw-content:''}html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal}body{margin:0;line-height:inherit}
+        .bg-blue-50{background-color:rgb(239 246 255)}
+        .bg-white{background-color:rgb(255 255 255)}
+        .bg-gray-50{background-color:rgb(249 250 251)}
+        .bg-blue-600{background-color:rgb(37 99 235)}
+        .text-blue-900{color:rgb(30 58 138)}
+        .text-white{color:rgb(255 255 255)}
+        .text-gray-900{color:rgb(17 24 39)}
+        .text-gray-700{color:rgb(55 65 81)}
+        .text-gray-600{color:rgb(75 85 99)}
+        .shadow-lg{box-shadow:0 10px 15px -3px rgba(0,0,0,0.1),0 4px 6px -4px rgba(0,0,0,0.1)}
+        .border-b{border-bottom-width:1px}
+        .border-gray-200{border-color:rgb(229 231 235)}
+        .max-w-7xl{max-width:80rem}
+        .max-w-6xl{max-width:72rem}
+        .mx-auto{margin-left:auto;margin-right:auto}
+        .px-4{padding-left:1rem;padding-right:1rem}
+        .px-6{padding-left:1.5rem;padding-right:1.5rem}
+        .py-2{padding-top:0.5rem;padding-bottom:0.5rem}
+        .py-4{padding-top:1rem;padding-bottom:1rem}
+        .py-12{padding-top:3rem;padding-bottom:3rem}
+        .min-h-screen{min-height:100vh}
+        .flex{display:flex}
+        .items-center{align-items:center}
+        .justify-between{justify-content:space-between}
+        .space-x-2>:not([hidden])~:not([hidden]){margin-right:0.5rem}
+        .space-x-3>:not([hidden])~:not([hidden]){margin-right:0.75rem}
+        .space-x-8>:not([hidden])~:not([hidden]){margin-right:2rem}
+        .rounded{border-radius:0.25rem}
+        .rounded-lg{border-radius:0.5rem}
+        .font-bold{font-weight:700}
+        .font-semibold{font-weight:600}
+        .text-xl{font-size:1.25rem;line-height:1.75rem}
+        .text-2xl{font-size:1.5rem;line-height:2rem}
+        .h-16{height:4rem}
+        .hover\:text-blue-600:hover{color:rgb(37 99 235)}
+        .hover\:bg-blue-700:hover{background-color:rgb(29 78 216)}
+        .hover\:opacity-80:hover{opacity:0.8}
+        .transition-colors{transition:color,background-color,border-color,text-decoration-color,fill,stroke 150ms cubic-bezier(0.4,0,0.2,1)}
+        .transition-opacity{transition:opacity 150ms cubic-bezier(0.4,0,0.2,1)}
+        .transition-transform{transition:transform 150ms cubic-bezier(0.4,0,0.2,1)}
+        .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}
+        .focus\:not-sr-only:focus{position:static;width:auto;height:auto;padding:0;margin:0;overflow:visible;clip:auto;white-space:normal}
+        .focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}
+        .focus\:ring-4:focus{box-shadow:0 0 0 4px rgba(59,130,246,0.5)}
+        .absolute{position:absolute}
+        .top-4{top:1rem}
+        .left-4{left:1rem}
+        .z-50{z-index:50}
+        .hidden{display:none}
+        .group:hover .group-hover\:scale-110{transform:scale(1.1)}
+        .flex-col{flex-direction:column}
+        @media (min-width: 640px){.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}}
+        @media (min-width: 768px){.md\:flex{display:flex}}
+        @media (min-width: 1024px){.lg\:px-8{padding-left:2rem;padding-right:2rem}}
+        </style>
+        
+        <!-- Font optimization for better LCP -->
+        <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"></noscript>
+        
+        <!-- Resource hints for performance -->
+        <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+        <link rel="dns-prefetch" href="https://kit.fontawesome.com">
+        
+        <!-- Progressive enhancement and loading optimization -->
+        <style>
+        /* Critical CSS for loading states */
+        .loading-skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        .lazy-load {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .lazy-load.loaded {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* Improved focus styles */
+        .focus-visible {
+            outline: 2px solid #3b82f6;
+            outline-offset: 2px;
+        }
+        </style>
         
         <!-- Structured Data - Organization -->
         <script type="application/ld+json">

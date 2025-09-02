@@ -15,7 +15,7 @@ authRoutes.get('/api/config', (c) => {
 
 // Check authentication status
 authRoutes.get('/api/auth/me', async (c) => {
-  const sessionId = getCookie(c, 'session_id');
+  const sessionId = getCookie(c, 'sessionId');
   
   if (!sessionId) {
     return c.json({ authenticated: false, user: null });
@@ -23,26 +23,41 @@ authRoutes.get('/api/auth/me', async (c) => {
 
   try {
     const { DB } = c.env;
-    const user = await DB.prepare(`
-      SELECT u.id, u.email, u.name, u.profile_picture, u.created_at,
-             COUNT(bm.id) as saved_matches
-      FROM users u
-      LEFT JOIN broker_matches bm ON u.id = bm.user_id
-      WHERE u.session_id = ?
-      GROUP BY u.id
+    
+    // Check if session exists and is valid
+    const session = await DB.prepare(`
+      SELECT us.user_id, us.expires_at
+      FROM user_sessions us
+      WHERE us.id = ? AND us.expires_at > datetime('now')
     `).bind(sessionId).first();
+    
+    if (!session) {
+      return c.json({ authenticated: false, user: null });
+    }
+    
+    // Get user data with saved matches count
+    const user = await DB.prepare(`
+      SELECT u.id, u.email, u.first_name, u.last_name, u.avatar_url, u.created_at,
+             COUNT(ubm.id) as saved_matches
+      FROM users u
+      LEFT JOIN user_broker_matches ubm ON u.id = ubm.user_id
+      WHERE u.id = ?
+      GROUP BY u.id
+    `).bind(session.user_id).first();
 
     if (!user) {
       return c.json({ authenticated: false, user: null });
     }
+
+    const fullName = `${user.first_name || ''} ${user.last_name || ''}`.trim();
 
     return c.json({
       authenticated: true,
       user: {
         id: user.id,
         email: user.email,
-        name: user.name,
-        profile_picture: user.profile_picture,
+        name: fullName,
+        avatar_url: user.avatar_url,
         created_at: user.created_at,
         saved_matches: user.saved_matches || 0
       }
@@ -85,15 +100,29 @@ authRoutes.post('/api/auth/signup', async (c) => {
       return c.json({ success: false, error: 'Email already registered' }, 409);
     }
 
-    // Create user
-    const sessionId = crypto.randomUUID();
+    // Create user (split name into first_name and last_name)
+    const nameParts = name.trim().split(' ');
+    const firstName = nameParts[0] || '';
+    const lastName = nameParts.slice(1).join(' ') || '';
+    
     const result = await DB.prepare(`
-      INSERT INTO users (email, password_hash, name, session_id, created_at)
+      INSERT INTO users (email, password_hash, first_name, last_name, created_at)
       VALUES (?, ?, ?, ?, datetime('now'))
-    `).bind(email, password, name, sessionId).run(); // Note: In production, hash the password!
+    `).bind(email, password, firstName, lastName).run(); // Note: In production, hash the password!
 
     if (result.success) {
-      setCookie(c, 'session_id', sessionId, {
+      const userId = result.meta.last_row_id;
+      
+      // Create session
+      const sessionId = crypto.randomUUID();
+      const sessionExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
+      
+      await DB.prepare(`
+        INSERT INTO user_sessions (id, user_id, expires_at, created_at)
+        VALUES (?, ?, ?, datetime('now'))
+      `).bind(sessionId, userId, sessionExpiry.toISOString()).run();
+      
+      setCookie(c, 'sessionId', sessionId, {
         httpOnly: true,
         secure: true,
         sameSite: 'Lax',
@@ -103,10 +132,10 @@ authRoutes.post('/api/auth/signup', async (c) => {
       return c.json({
         success: true,
         user: {
-          id: result.meta.last_row_id,
+          id: userId,
           email,
-          name,
-          session_id: sessionId
+          name: `${firstName} ${lastName}`.trim(),
+          sessionId
         }
       });
     } else {
@@ -132,7 +161,7 @@ authRoutes.post('/api/auth/signin', async (c) => {
     
     // Find user and verify password
     const user = await DB.prepare(`
-      SELECT id, email, name, password_hash, profile_picture, created_at
+      SELECT id, email, first_name, last_name, password_hash, avatar_url, created_at
       FROM users
       WHERE email = ?
     `).bind(email).first();
@@ -143,25 +172,36 @@ authRoutes.post('/api/auth/signin', async (c) => {
 
     // Generate new session
     const sessionId = crypto.randomUUID();
-    await DB.prepare('UPDATE users SET session_id = ? WHERE id = ?')
-      .bind(sessionId, user.id).run();
+    const sessionExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
+    
+    // Insert into user_sessions table
+    await DB.prepare(`
+      INSERT INTO user_sessions (id, user_id, expires_at, created_at)
+      VALUES (?, ?, ?, datetime('now'))
+    `).bind(sessionId, user.id, sessionExpiry.toISOString()).run();
+    
+    // Update last login
+    await DB.prepare('UPDATE users SET last_login_at = datetime(\'now\') WHERE id = ?')
+      .bind(user.id).run();
 
-    setCookie(c, 'session_id', sessionId, {
+    setCookie(c, 'sessionId', sessionId, {
       httpOnly: true,
       secure: true,
       sameSite: 'Lax',
       maxAge: 30 * 24 * 60 * 60 // 30 days
     });
 
+    const fullName = `${user.first_name || ''} ${user.last_name || ''}`.trim();
+
     return c.json({
       success: true,
       user: {
         id: user.id,
         email: user.email,
-        name: user.name,
-        profile_picture: user.profile_picture,
+        name: fullName,
+        avatar_url: user.avatar_url,
         created_at: user.created_at,
-        session_id: sessionId
+        sessionId
       }
     });
   } catch (error) {
@@ -196,49 +236,74 @@ authRoutes.post('/api/auth/google', async (c) => {
 
     if (user) {
       // Update existing user
+      const nameParts = name.trim().split(' ');
+      const firstName = nameParts[0] || '';
+      const lastName = nameParts.slice(1).join(' ') || '';
+      
       await DB.prepare(`
         UPDATE users 
-        SET google_id = ?, name = ?, profile_picture = ?, session_id = ?, last_login = datetime('now')
+        SET google_id = ?, first_name = ?, last_name = ?, avatar_url = ?, last_login_at = datetime('now')
         WHERE id = ?
-      `).bind(google_id, name, picture, sessionId, user.id).run();
+      `).bind(google_id, firstName, lastName, picture, user.id).run();
       
-      user.session_id = sessionId;
+      // Create new session
+      const sessionExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
+      await DB.prepare(`
+        INSERT INTO user_sessions (id, user_id, expires_at, created_at)
+        VALUES (?, ?, ?, datetime('now'))
+      `).bind(sessionId, user.id, sessionExpiry.toISOString()).run();
+      
     } else {
       // Create new user
+      const nameParts = name.trim().split(' ');
+      const firstName = nameParts[0] || '';
+      const lastName = nameParts.slice(1).join(' ') || '';
+      
       const result = await DB.prepare(`
-        INSERT INTO users (email, name, profile_picture, google_id, session_id, created_at, last_login)
+        INSERT INTO users (email, first_name, last_name, avatar_url, google_id, created_at, last_login_at)
         VALUES (?, ?, ?, ?, ?, datetime('now'), datetime('now'))
-      `).bind(email, name, picture, google_id, sessionId).run();
+      `).bind(email, firstName, lastName, picture, google_id).run();
 
       if (result.success) {
+        const userId = result.meta.last_row_id;
+        
+        // Create session for new user
+        const sessionExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
+        await DB.prepare(`
+          INSERT INTO user_sessions (id, user_id, expires_at, created_at)
+          VALUES (?, ?, ?, datetime('now'))
+        `).bind(sessionId, userId, sessionExpiry.toISOString()).run();
+        
         user = {
-          id: result.meta.last_row_id,
+          id: userId,
           email,
-          name,
-          profile_picture: picture,
-          google_id,
-          session_id: sessionId
+          first_name: firstName,
+          last_name: lastName,
+          avatar_url: picture,
+          google_id
         };
       } else {
         return c.json({ success: false, error: 'Failed to create user' }, 500);
       }
     }
 
-    setCookie(c, 'session_id', sessionId, {
+    setCookie(c, 'sessionId', sessionId, {
       httpOnly: true,
       secure: true,
       sameSite: 'Lax',
       maxAge: 30 * 24 * 60 * 60 // 30 days
     });
 
+    const fullName = `${user.first_name || ''} ${user.last_name || ''}`.trim();
+    
     return c.json({
       success: true,
       user: {
         id: user.id,
         email: user.email,
-        name: user.name,
-        profile_picture: user.profile_picture,
-        session_id: sessionId
+        name: fullName,
+        avatar_url: user.avatar_url,
+        sessionId
       }
     });
   } catch (error) {

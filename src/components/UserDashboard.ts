@@ -81,7 +81,7 @@ export function UserDashboard({ user, latestMatch, brokerMatches }: DashboardDat
     <script type="application/ld+json">${JSON.stringify(structuredData)}</script>
     
     <!-- CSS -->
-    <link rel="stylesheet" href="/static/css/tailwind-compiled.css">
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     
     <!-- Additional Dashboard Styles -->
@@ -163,7 +163,7 @@ export function UserDashboard({ user, latestMatch, brokerMatches }: DashboardDat
                             <div>
                                 <h3 class="font-semibold mb-1">Latest Broker Match</h3>
                                 <p class="text-sm opacity-90">
-                                    ${latestMatch.recommendations.length} perfect brokers found on ${new Date(latestMatch.timestamp).toLocaleDateString()}
+                                    ${latestMatch.recommendations?.length || 0} perfect brokers found on ${new Date(latestMatch.timestamp || latestMatch.created_at).toLocaleDateString()}
                                 </p>
                             </div>
                             <a href="#recommendations" class="bg-white text-blue-600 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors">
@@ -230,7 +230,7 @@ export function UserDashboard({ user, latestMatch, brokerMatches }: DashboardDat
             </div>
         </div>
 
-        <!-- Main Content Grid -->
+        <!-- Main Content -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Left Column - Recommendations & Tools -->
             <div class="lg:col-span-2 space-y-8">
@@ -240,8 +240,8 @@ export function UserDashboard({ user, latestMatch, brokerMatches }: DashboardDat
                         <i class="fas fa-star text-yellow-500 mr-3"></i>Your Broker Recommendations
                     </h2>
                     
-                    ${latestMatch && latestMatch.recommendations.length > 0 ? 
-                        this.renderRecommendations(latestMatch.recommendations) : 
+                    ${latestMatch && latestMatch.recommendations?.length > 0 ? 
+                        renderRecommendations(latestMatch.recommendations) : 
                         html`
                             <div class="text-center py-12">
                                 <i class="fas fa-search text-4xl text-gray-400 mb-4"></i>
@@ -351,10 +351,7 @@ export function UserDashboard({ user, latestMatch, brokerMatches }: DashboardDat
                                     <i class="fas fa-book mr-1"></i>Investopedia
                                 </a>
                                 <a href="https://www.babypips.com" target="_blank" rel="noopener" class="block text-blue-600 hover:text-blue-700">
-                                    <i class="fas fa-graduation-cap mr-1"></i>BabyPips Forex Course
-                                </a>
-                                <a href="https://www.tradingview.com/ideas/" target="_blank" rel="noopener" class="block text-blue-600 hover:text-blue-700">
-                                    <i class="fas fa-lightbulb mr-1"></i>TradingView Ideas
+                                    <i class="fas fa-graduation-cap mr-1"></i>BabyPips
                                 </a>
                             </div>
                         </div>
@@ -363,28 +360,10 @@ export function UserDashboard({ user, latestMatch, brokerMatches }: DashboardDat
                             <h3 class="font-semibold mb-2">Analysis Tools</h3>
                             <div class="space-y-2 text-sm">
                                 <a href="https://www.tradingview.com" target="_blank" rel="noopener" class="block text-blue-600 hover:text-blue-700">
-                                    <i class="fas fa-chart-area mr-1"></i>TradingView Charts
+                                    <i class="fas fa-chart-area mr-1"></i>TradingView
                                 </a>
                                 <a href="https://www.myfxbook.com" target="_blank" rel="noopener" class="block text-blue-600 hover:text-blue-700">
-                                    <i class="fas fa-calculator mr-1"></i>Myfxbook Calculator
-                                </a>
-                                <a href="https://www.forexfactory.com" target="_blank" rel="noopener" class="block text-blue-600 hover:text-blue-700">
-                                    <i class="fas fa-calendar mr-1"></i>Forex Factory Calendar
-                                </a>
-                            </div>
-                        </div>
-                        
-                        <div>
-                            <h3 class="font-semibold mb-2">Regulation & Safety</h3>
-                            <div class="space-y-2 text-sm">
-                                <a href="https://www.cftc.gov" target="_blank" rel="noopener" class="block text-blue-600 hover:text-blue-700">
-                                    <i class="fas fa-shield-alt mr-1"></i>CFTC (US)
-                                </a>
-                                <a href="https://www.fca.org.uk" target="_blank" rel="noopener" class="block text-blue-600 hover:text-blue-700">
-                                    <i class="fas fa-shield-alt mr-1"></i>FCA (UK)
-                                </a>
-                                <a href="https://www.esma.europa.eu" target="_blank" rel="noopener" class="block text-blue-600 hover:text-blue-700">
-                                    <i class="fas fa-shield-alt mr-1"></i>ESMA (EU)
+                                    <i class="fas fa-calculator mr-1"></i>Myfxbook
                                 </a>
                             </div>
                         </div>
@@ -402,10 +381,10 @@ export function UserDashboard({ user, latestMatch, brokerMatches }: DashboardDat
                             <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                                 <div>
                                     <p class="font-medium text-sm">Broker Match</p>
-                                    <p class="text-xs text-gray-500">${new Date(match.timestamp).toLocaleDateString()}</p>
+                                    <p class="text-xs text-gray-500">${new Date(match.created_at || match.timestamp).toLocaleDateString()}</p>
                                 </div>
                                 <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
-                                    ${match.recommendations.length} found
+                                    ${match.recommendations?.length || 0} found
                                 </span>
                             </div>
                         `)}
@@ -431,29 +410,12 @@ export function UserDashboard({ user, latestMatch, brokerMatches }: DashboardDat
     </footer>
 
     <!-- Scripts -->
-    <script src="/static/smart-recommendation.js"></script>
-    
-    <!-- Dashboard Analytics -->
-    <script>
-        // Track dashboard page view
-        if (typeof gtag !== 'undefined') {
-            gtag('config', 'GA_MEASUREMENT_ID', {
-                page_title: 'Trading Dashboard',
-                page_location: window.location.href
-            });
-        }
-        
-        // Initialize dashboard features
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('✅ Trading Dashboard loaded for user: ${user.name}');
-        });
-    </script>
 </body>
 </html>
     `;
 }
 
-UserDashboard.prototype.renderRecommendations = function(recommendations: any[]) {
+function renderRecommendations(recommendations: any[]) {
     const topRecommendations = recommendations.slice(0, 3);
     
     return html`
@@ -502,12 +464,6 @@ UserDashboard.prototype.renderRecommendations = function(recommendations: any[])
                             <p class="text-gray-700">${reasoning}</p>
                         </div>
 
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            ${broker.regulatedBy?.map((reg: string) => html`
-                                <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">${reg}</span>
-                            `)}
-                        </div>
-
                         <div class="flex space-x-3">
                             <a href="/brokers/${broker.slug}" 
                                class="flex-1 bg-blue-600 text-white text-center py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
@@ -544,4 +500,4 @@ UserDashboard.prototype.renderRecommendations = function(recommendations: any[])
             </div>
         </div>
     `;
-};
+}

@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "brokeranalysis",
+  "compatibility_date": "2025-08-29",
+  "pages_build_output_dir": "./dist",
+  "compatibility_flags": ["nodejs_compat"],
+  "build": {
+    "command": "npm run build"
+  },
+  "vars": {
+    "ENVIRONMENT": "production",
+    "GOOGLE_CLIENT_ID": "your-google-client-id-here.apps.googleusercontent.com"
+  }
+}

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Authentication Flow</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="p-8 bg-gray-50">
+    <h1 class="text-3xl font-bold mb-6">Test Authentication Flow</h1>
+    
+    <div class="mb-8">
+        <h2 class="text-xl font-semibold mb-4">Step 1: Click Get My Broker Match</h2>
+        <button data-action="broker-match" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
+            <i class="fas fa-rocket mr-2"></i>Get My Broker Match
+        </button>
+    </div>
+    
+    <!-- Broker Recommender Section -->
+    <div class="max-w-4xl mx-auto">
+        <div id="recommendation-widget" class="hidden">
+            <div class="bg-blue-50 rounded-xl p-8 shadow-lg">
+                <h2 class="text-2xl font-bold mb-6 text-center">Smart Broker Recommendation</h2>
+                <div id="questionnaire-form">
+                    <!-- Dynamic questionnaire will be loaded here -->
+                </div>
+                <div id="recommendations-results" class="hidden mt-8">
+                    <!-- Recommendations will be displayed here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="mt-8">
+        <h3 class="font-semibold mb-2">Console Output:</h3>
+        <div id="console-output" class="bg-gray-800 text-green-400 p-4 rounded font-mono text-sm h-40 overflow-y-auto"></div>
+    </div>
+    
+    <script>
+        // Capture console logs
+        const originalConsoleLog = console.log;
+        const originalConsoleError = console.error;
+        const consoleOutput = document.getElementById('console-output');
+        
+        function addToConsole(message, type = 'log') {
+            const div = document.createElement('div');
+            div.className = type === 'error' ? 'text-red-400' : 'text-green-400';
+            div.textContent = new Date().toLocaleTimeString() + ' - ' + message;
+            consoleOutput.appendChild(div);
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
+        
+        console.log = function(...args) {
+            addToConsole(args.join(' '), 'log');
+            originalConsoleLog.apply(console, args);
+        };
+        
+        console.error = function(...args) {
+            addToConsole(args.join(' '), 'error');
+            originalConsoleError.apply(console, args);
+        };
+    </script>
+    
+    <!-- Load the smart recommendation system -->
+    <script src="https://3000-iz06f1q0kw9r1svxgxaql-6532622b.e2b.dev/static/smart-recommendation.js"></script>
+</body>
+</html>
